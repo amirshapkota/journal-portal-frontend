@@ -71,7 +71,6 @@ export function ReaderSidebar() {
               const Icon = item.icon;
               // Mark active if current pathname matches the item's href
               const isActive = pathname === item.href;
-              console.log(pathname);
 
               return (
                 <SidebarMenuItem key={item.id}>

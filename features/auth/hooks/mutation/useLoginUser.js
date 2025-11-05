@@ -19,11 +19,10 @@ export const useLoginUser = () => {
       dispatch(authLogin({ userData }));
       broadcast("login");
       setTimeout(() => {
-        redirectUser(["READER", "AUTHOR", "REVIEWER", "EDITOR"]);
+        redirectUser(userData?.user?.roles || []);
       }, 700);
     },
     onError: (error) => {
-      console.log(error);
       toast.error("Login failed. Please check your credentials.");
     },
   });

@@ -37,8 +37,6 @@ const useCrossTabAuth = () => {
                 : null;
 
             if (access) {
-              console.log("Syncing login from another tab");
-
               // Update Redux state
               dispatch(
                 authLogin({
@@ -78,7 +76,6 @@ const useCrossTabAuth = () => {
 
           // Login detected
           if (access && !currentAuth) {
-            console.log("Login detected via storage event");
             dispatch(
               authLogin({
                 userData: {
@@ -95,7 +92,6 @@ const useCrossTabAuth = () => {
 
           // Logout detected
           if (!access && currentAuth) {
-            console.log("Logout detected via storage event");
             dispatch(authLogout());
             router.push("/login");
           }

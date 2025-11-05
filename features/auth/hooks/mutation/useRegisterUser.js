@@ -14,7 +14,6 @@ export const useRegisterUser = () => {
       }, 1000);
     },
     onError: (error) => {
-      console.log(error);
       toast.error(
         error?.response?.data?.email
           ? "Email already in use."

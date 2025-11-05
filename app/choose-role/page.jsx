@@ -61,8 +61,6 @@ export default function ChooseRole() {
   // Filter ROLES based on user's actual roles
   const availableRoles = ROLES.filter((role) => userRoles.includes(role.id));
 
-  console.log(availableRoles);
-
   const handleRoleSelect = async (roleId) => {
     setSelectedRole(roleId);
     setIsLoading(true);

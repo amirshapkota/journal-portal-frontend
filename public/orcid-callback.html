@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ORCID Authentication</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+          "Helvetica Neue", Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: #f2f7fb;
+        color: #1e293b;
+        padding: 20px;
+      }
+
+      .container {
+        background: white;
+        border-radius: 12px;
+        padding: 48px 40px;
+        max-width: 480px;
+        width: 100%;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+          0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        text-align: center;
+      }
+
+      .icon {
+        width: 64px;
+        height: 64px;
+        margin: 0 auto 24px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 32px;
+      }
+
+      .success-icon {
+        background: #dcfce7;
+        color: #16a34a;
+      }
+
+      .error-icon {
+        background: #fee2e2;
+        color: #dc2626;
+      }
+
+      h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: 12px;
+        color: #0f172a;
+      }
+
+      .subtitle {
+        font-size: 15px;
+        color: #64748b;
+        margin-bottom: 24px;
+        line-height: 1.6;
+      }
+
+      .orcid-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: #f1f5f9;
+        padding: 12px 20px;
+        border-radius: 8px;
+        margin: 24px 0;
+        font-family: "Monaco", "Menlo", "Courier New", monospace;
+        font-size: 14px;
+        color: #2377fc;
+        font-weight: 500;
+        border: 1px solid #e2e8f0;
+      }
+
+      .orcid-logo {
+        width: 20px;
+        height: 20px;
+      }
+
+      .info-text {
+        font-size: 13px;
+        color: #94a3b8;
+        margin-top: 24px;
+      }
+
+      .divider {
+        height: 1px;
+        background: #e2e8f0;
+        margin: 32px 0;
+      }
+
+      .details {
+        text-align: left;
+        background: #f8fafc;
+        padding: 16px;
+        border-radius: 8px;
+        margin-top: 24px;
+      }
+
+      .detail-row {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px 0;
+        font-size: 14px;
+      }
+
+      .detail-label {
+        color: #64748b;
+        font-weight: 500;
+      }
+
+      .detail-value {
+        color: #0f172a;
+        font-weight: 500;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .container {
+        animation: fadeIn 0.3s ease-out;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container" id="content">
+      <div class="icon success-icon">
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2.5"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+      </div>
+      <h1>ORCID Connected!</h1>
+      <p class="subtitle">
+        Your ORCID iD has been successfully linked to your account
+      </p>
+      <div class="orcid-badge">
+        <svg
+          class="orcid-logo"
+          viewBox="0 0 24 24"
+          fill="currentColor"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zM7.369 8.24c.48 0 .87.39.87.87s-.39.87-.87.87-.87-.39-.87-.87.39-.87.87-.87zm.54 8.52H6.36V9.72h1.548v7.04zm3.132 0V9.72h3.168c1.98 0 3.42 1.32 3.42 3.42 0 2.1-1.44 3.42-3.42 3.42H11.04zm1.548-5.76v4.5h1.62c1.2 0 1.92-.78 1.92-2.1 0-1.32-.72-2.1-1.92-2.1h-1.62z"
+          />
+        </svg>
+        <span id="orcid-display"></span>
+      </div>
+      <p class="info-text">
+        You can close this tab and return to the application
+      </p>
+    </div>
+
+    <script>
+      // Parse the response from URL
+      const urlParams = new URLSearchParams(window.location.search);
+
+      // Get parameters from URL
+      const success = urlParams.get("success");
+      const orcidId = urlParams.get("orcid_id");
+      const userEmail = urlParams.get("user_email");
+      const detail = urlParams.get("detail");
+      const message = urlParams.get("message");
+
+      console.log("Callback page loaded");
+      console.log("URL params:", {
+        success,
+        orcidId,
+        userEmail,
+        detail,
+        message,
+      });
+      console.log("window.opener exists:", !!window.opener);
+
+      // Display ORCID ID in the UI
+      const orcidDisplay = document.getElementById("orcid-display");
+      const contentContainer = document.getElementById("content");
+
+      if ((success === "true" || detail) && orcidId) {
+        // Update UI with ORCID ID
+        orcidDisplay.textContent = orcidId;
+
+        const messageData = {
+          type: "ORCID_SUCCESS",
+          data: {
+            detail: detail || "ORCID connected successfully",
+            orcid_id: orcidId,
+            user_email: userEmail,
+            message: message || "ORCID linked successfully",
+            status: "Connected",
+          },
+        };
+
+        // Store in localStorage as fallback
+        try {
+          localStorage.setItem(
+            "orcid_auth_result",
+            JSON.stringify(messageData)
+          );
+          console.log("Saved to localStorage:", messageData);
+        } catch (e) {
+          console.error("Failed to save to localStorage:", e);
+        }
+
+        // Send success message to parent window
+        if (window.opener && !window.opener.closed) {
+          console.log("Sending ORCID_SUCCESS message to opener");
+          console.log("Message data:", messageData);
+          console.log("Target origin:", window.location.origin);
+
+          try {
+            window.opener.postMessage(messageData, window.location.origin);
+            console.log("Message sent successfully via postMessage");
+          } catch (e) {
+            console.error("Error sending postMessage:", e);
+          }
+        } else {
+          console.error("window.opener is not available or closed");
+        }
+
+        // Don't auto-close for new tab
+        console.log(
+          "ORCID data saved to localStorage. User can close this tab."
+        );
+      } else {
+        // Show error state
+        contentContainer.innerHTML = `
+          <div class="icon error-icon">
+            <svg
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="15" y1="9" x2="9" y2="15"></line>
+              <line x1="9" y1="9" x2="15" y2="15"></line>
+            </svg>
+          </div>
+          <h1>Connection Failed</h1>
+          <p class="subtitle">Unable to connect your ORCID iD. Please try again or contact support if the issue persists.</p>
+          <p class="info-text">You can close this tab and return to the application</p>
+        `;
+
+        const errorData = {
+          type: "ORCID_ERROR",
+          data: {
+            message: "ORCID authentication failed",
+          },
+        };
+
+        // Store error in localStorage
+        try {
+          localStorage.setItem("orcid_auth_result", JSON.stringify(errorData));
+        } catch (e) {
+          console.error("Failed to save error to localStorage:", e);
+        }
+
+        // Send error message
+        if (window.opener && !window.opener.closed) {
+          console.log("Sending ORCID_ERROR message to opener");
+          window.opener.postMessage(errorData, window.location.origin);
+        }
+
+        console.log(
+          "ORCID error saved to localStorage. User can close this tab."
+        );
+      }
+    </script>
+  </body>
+</html>

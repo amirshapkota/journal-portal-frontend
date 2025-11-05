@@ -28,14 +28,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 const RoleRequestForm = () => {
   const [submittingRole, setSubmittingRole] = useState(null);
-  //   const availableRoles = [
-  //     { id: "AUTHOR", name: "Author" },
-  //     { id: "REVIEWER", name: "Reviewer" },
-  //     { id: "EDITOR", name: "Editor" },
-  //   ];
 
   const { data: RoleLists } = useGetRoleList();
-  console.log(RoleLists);
 
   const defaultRoles = ["READER", "AUTHOR", "REVIEWER", "EDITOR"];
 
@@ -48,8 +42,6 @@ const RoleRequestForm = () => {
       value: roleName,
       label: roleName,
     }));
-
-  console.log(availableRoles);
 
   const roleForm = useForm({
     resolver: zodResolver(roleRequestSchema),

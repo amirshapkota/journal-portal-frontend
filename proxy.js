@@ -5,6 +5,11 @@ export function proxy(request) {
   const url = request.nextUrl.clone();
   const publicPaths = ["/login", "/register", "/unauthorized", "/choose-role"];
 
+  if (url.pathname === "/") {
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
+  }
+
   // No token: redirect to login
   if (!token && !publicPaths.includes(url.pathname)) {
     url.pathname = "/login";
