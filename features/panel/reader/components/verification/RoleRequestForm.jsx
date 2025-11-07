@@ -25,7 +25,7 @@ import { roleRequestSchema } from "../../utils/FormSchema";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-  useGetVerificationRequests,
+  useGetMyVerificationRequests,
   useSubmitVerificationRequest,
 } from "../../hooks";
 import { toast } from "sonner";
@@ -39,7 +39,7 @@ const RoleRequestForm = () => {
   const RoleLists = useSelector((state) => state.auth?.userData?.roles);
 
   const { data: verificationRequests, isPending: isPendingRequests } =
-    useGetVerificationRequests();
+    useGetMyVerificationRequests();
   const { mutate: submitRequest, isPending: isSubmitting } =
     useSubmitVerificationRequest();
 
@@ -86,7 +86,7 @@ const RoleRequestForm = () => {
   return (
     <div className="space-y-6">
       <VerificationRequestList
-        requests={verificationRequests?.results}
+        requests={verificationRequests}
         isLoading={isPendingRequests}
       />
       {/* Role Request Form */}

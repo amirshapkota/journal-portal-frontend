@@ -1,12 +1,12 @@
 import { useGetOrcidUrl } from "./query/useGetOrcidUrl";
-import { useGetVerificationRequests } from "./query/useGetVerificationRequests";
+import { useGetMyVerificationRequests } from "./query/useGetMyVerificationRequests";
 import { useGetUserScoreStatus } from "./query/useGetUserScoreStatus";
 import { useSubmitVerificationRequest } from "./mutation/useSubmitVerificationRequest";
 import { useGetProfileData } from "./query/useGetProfileData";
 
 export {
   useGetOrcidUrl,
-  useGetVerificationRequests,
+  useGetMyVerificationRequests,
   useSubmitVerificationRequest,
   useGetUserScoreStatus,
   useGetProfileData,

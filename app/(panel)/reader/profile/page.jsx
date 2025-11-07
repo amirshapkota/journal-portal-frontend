@@ -8,23 +8,24 @@ import {
   LoadingScreen,
   ProfileForm,
   ProfileInfoCard,
-  useGetProfileData,
   VerificationStatusBadge,
 } from "@/features";
+import { useGetMe } from "@/features/shared/hooks/useGetMe";
+import { usePatchProfile } from "@/features/panel/reader/hooks/usePatchProfile";
 
 export default function ReaderProfilePage() {
   const {
-    data: ProfileData,
-    error: isProfileDataError,
-    isPending: isProfileDataPending,
+    data: meData,
+    error: isMeError,
+    isPending: isMePending,
     refetch,
-  } = useGetProfileData();
+  } = useGetMe();
   const [avatarPreview, setAvatarPreview] = useState("");
-  const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
   const fileInputRef = useRef(null);
+  const patchProfileMutation = usePatchProfile();
 
-  const profileData = ProfileData?.results?.[0];
+  const profileData = meData?.profile;
 
   const defaultValues = {
     user_name: profileData?.user_name || "",
@@ -34,8 +35,8 @@ export default function ReaderProfilePage() {
     affiliation_name: profileData?.affiliation_name || "",
     orcid_id: profileData?.orcid_id || "",
     expertise_areas: Array.isArray(profileData?.expertise_areas)
-      ? profileData.expertise_areas.join(", ")
-      : "",
+      ? profileData.expertise_areas
+      : [],
   };
 
   const handleAvatarChange = (e) => {
@@ -50,28 +51,13 @@ export default function ReaderProfilePage() {
   };
 
   const onSubmit = async (data) => {
-    setIsSaving(true);
+    if (!profileData?.id) return;
     try {
-      // Simulate API call to update profile
-      // const response = await fetch(`/api/v1/users/${userId}/profile/`, {
-      //   method: "PUT",
-      //   headers: {
-      //     Authorization: "Bearer {access_token}",
-      //     "Content-Type": "application/json"
-      //   },
-      //   body: JSON.stringify(data),
-      // })
-
-      console.log("[v0] Profile update submitted:", data);
-
-      setTimeout(() => {
-        setSaveSuccess(true);
-        setIsSaving(false);
-        setTimeout(() => setSaveSuccess(false), 3000);
-      }, 1000);
+      await patchProfileMutation.mutateAsync({ id: profileData.id, data });
+      setSaveSuccess(true);
+      setTimeout(() => setSaveSuccess(false), 3000);
     } catch (error) {
       console.error("Profile update error:", error);
-      setIsSaving(false);
     }
   };
 
@@ -82,20 +68,18 @@ export default function ReaderProfilePage() {
     }
   };
 
-  if (isProfileDataPending) {
+  if (isMePending) {
     return <LoadingScreen />;
   }
 
-  if (isProfileDataError) {
+  if (isMeError) {
     return (
       <ErrorCard
         title="Error loading profile"
         description="Please try again or contact support if the problem persists."
         details={
-          isProfileDataError?.message ||
-          (typeof isProfileDataError === "string"
-            ? isProfileDataError
-            : undefined)
+          isMeError?.message ||
+          (typeof isMeError === "string" ? isMeError : undefined)
         }
         onRetry={() => {
           refetch();
@@ -129,10 +113,10 @@ export default function ReaderProfilePage() {
         <CardContent>
           <ProfileForm
             defaultValues={defaultValues}
-            isSaving={isSaving}
             saveSuccess={saveSuccess}
             onSubmit={onSubmit}
             onCancel={onCancel}
+            isPending={patchProfileMutation.isPending}
           />
         </CardContent>
       </Card>

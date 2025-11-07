@@ -23,7 +23,7 @@ const OrcidConnection = () => {
     enabled: false,
   });
 
-  const { data: orcidStatus, isLoading: isLoadingStatus } = useGetOrcidStatus({
+  const { data: orcidStatus, isPending: isLoadingStatus } = useGetOrcidStatus({
     enabled: true,
   });
 

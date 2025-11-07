@@ -50,7 +50,7 @@ const VerificationRequestList = ({ requests, isLoading }) => {
   }
 
   function formatRoleRequest(requested_roles) {
-    if (!requested_roles || requested_roles.length === 0) return "";
+    if (!requested_roles || requested_roles?.length === 0) return "";
 
     // Convert all roles to capitalized form
     const formatted = requested_roles.map(
@@ -68,12 +68,12 @@ const VerificationRequestList = ({ requests, isLoading }) => {
     }
   }
 
-  if (!requests || requests.length === 0) return null;
+  if (!requests || requests?.length === 0) return null;
 
   return (
     <div className="space-y-4">
       <h3 className="text-lg font-semibold">Your Verification Requests</h3>
-      {requests.map((request) => (
+      {requests?.map((request) => (
         <Card key={request.id} className="gap-3">
           <CardHeader>
             <div className="flex items-start justify-between">

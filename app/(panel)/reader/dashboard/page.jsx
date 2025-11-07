@@ -9,7 +9,7 @@ import {
 import { Loader2 } from "lucide-react";
 
 export default function ReaderDashboard() {
-  const { data: scoreData, isLoading: isLoadingScore } =
+  const { data: scoreData, isPending: isLoadingScore } =
     useGetUserScoreStatus();
 
   const userDatas = {

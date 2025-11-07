@@ -14,7 +14,7 @@ export const submitVerificationRequest = async (data) => {
  * Get all verification requests for the current user
  * @returns {Promise} API response with pagination
  */
-export const getVerificationRequests = async () => {
-  const response = await instance.get("verification-requests/");
+export const getUserVerificationRequests = async () => {
+  const response = await instance.get("verification-requests/my_requests");
   return response.data;
 };

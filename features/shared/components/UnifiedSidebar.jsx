@@ -14,7 +14,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
 
-export function UnifiedSidebar({ menuItems, userRole, userName, userAvatar }) {
+export function UnifiedSidebar({ menuItems }) {
   const pathname = usePathname();
   const { resolvedTheme } = useTheme();
 

@@ -1,23 +1,11 @@
 "use client";
 
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
+import { ChangePassword } from "@/features";
 
-export default function AccountPage() {
+export default function AccountTab() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Account Settings</CardTitle>
-        <CardDescription>Manage your account information</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-muted-foreground">Account settings coming soon...</p>
-      </CardContent>
-    </Card>
+    <div className="space-y-6">
+      <ChangePassword />
+    </div>
   );
 }

@@ -23,13 +23,7 @@ const roleRouteMap = {
   ADMIN: "/admin/overview",
 };
 
-export function UnifiedAppbar({
-  userName,
-  roles,
-  userDetails,
-  userRole,
-  userAvatar,
-}) {
+export function UnifiedAppbar({ userName, roles, userRole }) {
   const [currentRole, setCurrentRole] = useState(
     userRole || roles?.[0] || "READER"
   );

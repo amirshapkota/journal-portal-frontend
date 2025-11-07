@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { getVerificationRequests } from "../../api/VerificationApiSlice";
+import { getUserVerificationRequests } from "../../api/VerificationApiSlice";
 
-export const useGetVerificationRequests = (options = {}) => {
+export const useGetMyVerificationRequests = (options = {}) => {
   return useQuery({
     queryKey: ["verification-requests"],
-    queryFn: () => getVerificationRequests(),
+    queryFn: () => getUserVerificationRequests(),
     staleTime: 2 * 60 * 1000, // 2 minutes - requests status can change when admin approves/rejects
     gcTime: 5 * 60 * 1000, // 5 minutes - keep in cache
     refetchOnWindowFocus: true, // Refetch when user returns to check for status updates

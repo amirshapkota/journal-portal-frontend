@@ -21,11 +21,7 @@ const settingsNav = [
     path: "/settings/account",
     icon: UserIcon,
   },
-  {
-    name: "Security",
-    path: "/settings/security",
-    icon: Lock,
-  },
+
   {
     name: "Appearance",
     path: "/settings/appearance",
@@ -46,11 +42,11 @@ export default function SettingsLayout({ children }) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="space-y-6">
         {/* Settings Navigation */}
-        <Card className="md:col-span-1 h-fit">
-          <CardContent className="p-4">
-            <nav className="space-y-1">
+        <Card className="py-4">
+          <CardContent className="px-4">
+            <nav className="space-y-1 grid grid-cols-1 md:grid-cols-2 rounded-lg overflow-hidden lg:w-fit lg:flex  ">
               {settingsNav.map((item) => {
                 const Icon = item.icon;
                 const isActive = pathname === item.path;
@@ -59,10 +55,10 @@ export default function SettingsLayout({ children }) {
                   <Link
                     key={item.path}
                     href={item.path}
-                    className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                    className={`flex items-center gap-3 px-3 py-2 m-0 border-r last:border-r-0 border-border transition-colors ${
                       isActive
                         ? "bg-primary text-primary-foreground"
-                        : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                        : "text-muted-foreground bg-muted hover:text-foreground"
                     }`}
                   >
                     <Icon className="h-4 w-4" />
@@ -75,7 +71,7 @@ export default function SettingsLayout({ children }) {
         </Card>
 
         {/* Settings Content */}
-        <div className="md:col-span-3">{children}</div>
+        <div className="">{children}</div>
       </div>
     </div>
   );

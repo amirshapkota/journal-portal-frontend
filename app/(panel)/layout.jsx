@@ -129,7 +129,6 @@ export default function PanelLayout({ children }) {
     ? `${userData.first_name || ""} ${userData.last_name || ""}`.trim() ||
       "User"
     : "User";
-  const userAvatar = userData?.avatar || null;
 
   // Get menu items for the current role
   const menuItems = sidebarConfig[userRole] || sidebarConfig.READER;
@@ -141,17 +140,11 @@ export default function PanelLayout({ children }) {
     <RoleBasedRoute allowedRoles={allowedRoles}>
       <SidebarProvider>
         <div className="flex h-screen w-full bg-background">
-          <UnifiedSidebar
-            menuItems={menuItems}
-            userRole={userRole}
-            userName={userName}
-            userAvatar={userAvatar}
-          />
-          <div className="flex-1 pt-3 flex flex-col overflow-auto px-2">
+          <UnifiedSidebar menuItems={menuItems} />
+          <div className="flex-1 pt-3 flex flex-col  px-2">
             <UnifiedAppbar
               userRole={userRole}
               userName={userName}
-              userAvatar={userAvatar}
               roles={userData?.roles || []}
               userDetails={userData}
             />
