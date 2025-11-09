@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLogout } from "@/features/auth/hooks/useLogout";
 import { ChevronDown, LogOut, Moon, Sun, Laptop, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
@@ -13,32 +14,43 @@ import {
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { SidebarTrigger } from "@/components/ui/sidebar";
+import { ConfirmationPopup } from ".";
 
 // Role to route mapping
 const roleRouteMap = {
   READER: "/reader/dashboard",
-  AUTHOR: "/author/overview",
-  REVIEWER: "/reviewer/overview",
-  EDITOR: "/editor/overview",
-  ADMIN: "/admin/overview",
+  AUTHOR: "/author/dashboard",
+  REVIEWER: "/reviewer/dashboard",
+  EDITOR: "/editor/dashboard",
+  ADMIN: "/admin/dashboard",
 };
 
-export function UnifiedAppbar({ userName, roles, userRole }) {
+export function UnifiedAppbar({ userName, roles, userRole, setNewRole }) {
   const [currentRole, setCurrentRole] = useState(
     userRole || roles?.[0] || "READER"
   );
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const {
+    mutate: logoutMutate,
+    isPending: isLogoutPending,
+    isSuccess: isLogoutSuccess,
+  } = useLogout();
 
   const handleRoleChange = (role) => {
+    setNewRole(role);
     setCurrentRole(role);
     const route = roleRouteMap[role] || "/reader/dashboard";
     router.push(route);
   };
 
-  const handleLogout = () => {
-    // TODO: Implement logout logic
-    router.push("/login");
+  const handleLogoutConfirm = () => {
+    logoutMutate();
+  };
+
+  const handleLogoutClick = () => {
+    setIsLogoutOpen(true);
   };
 
   const handleProfileClick = () => {
@@ -69,7 +81,10 @@ export function UnifiedAppbar({ userName, roles, userRole }) {
           {/* Theme Toggle */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="gap-2 bg-transparent">
+              <Button
+                variant="outline"
+                className="gap-2 bg-transparent hover:bg-secondary!"
+              >
                 {theme === "dark" ? (
                   <Moon className="h-4 w-4" />
                 ) : theme === "light" ? (
@@ -82,14 +97,26 @@ export function UnifiedAppbar({ userName, roles, userRole }) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-40">
-              <DropdownMenuItem onClick={() => setTheme("light")}>
-                <Sun className="h-4 w-4 mr-2" /> Light
+              <DropdownMenuItem
+                className={"group"}
+                onClick={() => setTheme("light")}
+              >
+                <Sun className="h-4 w-4 mr-2 group-hover:text-primary-foreground" />{" "}
+                Light
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("dark")}>
-                <Moon className="h-4 w-4 mr-2" /> Dark
+              <DropdownMenuItem
+                className={"group"}
+                onClick={() => setTheme("dark")}
+              >
+                <Moon className="h-4 w-4 mr-2 group-hover:text-primary-foreground" />{" "}
+                Dark
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setTheme("system")}>
-                <Laptop className="h-4 w-4 mr-2" /> System
+              <DropdownMenuItem
+                className={"group"}
+                onClick={() => setTheme("system")}
+              >
+                <Laptop className="h-4 w-4 mr-2 group-hover:text-primary-foreground" />{" "}
+                System
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -125,8 +152,12 @@ export function UnifiedAppbar({ userName, roles, userRole }) {
           {/* Profile Menu */}
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button variant="ghost" size="icon" className="rounded-full">
-                <div className="h-8 w-8 bg-primary rounded-full flex items-center justify-center">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-full hover:bg-transparent!"
+              >
+                <div className="h-8 w-8 bg-primary rounded-full flex items-center justify-center ">
                   <span className="text-primary-foreground text-sm font-semibold">
                     {getUserInitials()}
                   </span>
@@ -138,22 +169,41 @@ export function UnifiedAppbar({ userName, roles, userRole }) {
                 {userName}
               </div>
               <DropdownMenuSeparator />
-              <DropdownMenuItem onClick={handleProfileClick}>
-                <User className="h-4 w-4 mr-2" />
+              <DropdownMenuItem
+                className=" hover:text-primary-foreground group"
+                onClick={handleProfileClick}
+              >
+                <User className="h-4 w-4 mr-2 group-hover:text-primary-foreground" />
                 <span>Profile</span>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
-                className="text-destructive"
-                onClick={handleLogout}
+                className="text-destructive hover:text-primary-foreground group"
+                onClick={handleLogoutClick}
               >
-                <LogOut className="h-4 w-4 mr-2" />
+                <LogOut className="h-4 w-4 mr-2 group-hover:text-primary-foreground " />
                 <span>Logout</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
       </div>
+      {/* Logout Confirmation Popup */}
+      <ConfirmationPopup
+        open={isLogoutOpen}
+        onOpenChange={setIsLogoutOpen}
+        title="Logout"
+        description="Are you sure you want to logout from your account?"
+        confirmText="Logout"
+        cancelText="Cancel"
+        variant="danger"
+        onConfirm={handleLogoutConfirm}
+        isPending={isLogoutPending}
+        isSuccess={isLogoutSuccess}
+        autoClose={true}
+        loadingText="Logging out..."
+        icon={<LogOut className="h-6 w-6 text-red-500" />}
+      />
     </nav>
   );
 }

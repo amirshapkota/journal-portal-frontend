@@ -1,3 +1,5 @@
+"use client";
+
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -38,7 +40,7 @@ export default function ChangePassword() {
     passwordForm.reset();
     setTimeout(() => setPasswordSaved(false), 3000);
   };
-  
+
   return (
     <Card className="p-6 ">
       <h3 className="text-lg font-semibold text-foreground">Change Password</h3>

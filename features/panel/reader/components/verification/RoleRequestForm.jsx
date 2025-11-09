@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -32,14 +34,21 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import VerificationRequestList from "./VerificationRequestList";
 import { useSelector } from "react-redux";
+import { LoadingScreen, ErrorCard } from "@/features/shared/components";
 
 const RoleRequestForm = () => {
   const queryClient = useQueryClient();
 
   const RoleLists = useSelector((state) => state.auth?.userData?.roles);
 
-  const { data: verificationRequests, isPending: isPendingRequests } =
-    useGetMyVerificationRequests();
+  const {
+    data: verificationRequests,
+    isPending: isPendingRequests,
+    isError: isVerificationError,
+    error: verificationError,
+    refetch: refetchVerificationRequests,
+  } = useGetMyVerificationRequests();
+
   const { mutate: submitRequest, isPending: isSubmitting } =
     useSubmitVerificationRequest();
 
@@ -83,12 +92,31 @@ const RoleRequestForm = () => {
     });
   };
 
+  // Loading state for verification requests
+  if (isPendingRequests) {
+    return <LoadingScreen />;
+  }
+
+  // Error state for verification requests
+  if (isVerificationError) {
+    return (
+      <ErrorCard
+        title="Error loading verification requests"
+        description="Unable to fetch your verification requests. Please try again."
+        details={
+          verificationError?.message ||
+          (typeof verificationError === "string"
+            ? verificationError
+            : undefined)
+        }
+        onRetry={refetchVerificationRequests}
+      />
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <VerificationRequestList
-        requests={verificationRequests}
-        isLoading={isPendingRequests}
-      />
+      <VerificationRequestList requests={verificationRequests} />
       {/* Role Request Form */}
       <Card className="border-border dark:border-slate-700">
         <CardHeader>

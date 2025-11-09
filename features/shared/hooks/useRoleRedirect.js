@@ -11,6 +11,11 @@ const useRoleRedirect = () => {
       return;
     }
 
+    if (roles && roles.includes("ADMIN")) {
+      router.push("/admin/dashboard");
+      return;
+    }
+
     // Reader only
     if (roles.length === 1 && roles.includes("READER")) {
       router.push("/reader/dashboard");

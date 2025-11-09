@@ -1,58 +1,34 @@
 "use client";
 
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-import { Doughnut } from "react-chartjs-2";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import { useMemo } from "react";
-
-ChartJS.register(ArcElement, Tooltip, Legend);
 
 export function AutoScoreChart({ scoreBreakdown, totalScore }) {
   // Compute chart data efficiently
   const chartData = useMemo(() => {
     if (!scoreBreakdown || scoreBreakdown.length === 0) {
-      return {
-        labels: ["No Data"],
-        datasets: [
-          {
-            data: [100],
-            backgroundColor: ["hsl(var(--muted))"],
-            hoverOffset: 0,
-          },
-        ],
-      };
+      return [{ name: "No Data", value: 100 }];
     }
 
     const completedItems = scoreBreakdown.filter(
       (item) => item.status === "completed"
     );
-    const earnedPoints = completedItems.map((item) => item.points_earned);
-    const earnedLabels = completedItems.map((item) => item.criterion);
     const maxPossibleScore = scoreBreakdown.reduce(
       (sum, item) => sum + item.points_possible,
       0
     );
     const remainingPoints = maxPossibleScore - totalScore;
 
-    return {
-      labels: [...earnedLabels, "Remaining"],
-      datasets: [
-        {
-          data: [...earnedPoints, remainingPoints > 0 ? remainingPoints : 0],
-          backgroundColor: [
-            "hsl(142, 76%, 36%)",
-            "hsl(142, 70%, 45%)",
-            "hsl(142, 65%, 50%)",
-            "hsl(160, 60%, 45%)",
-            "hsl(173, 58%, 39%)",
-            "hsl(197, 71%, 33%)",
-            "hsl(221, 83%, 53%)",
-            "hsl(262, 83%, 58%)",
-            "hsl(var(--muted))",
-          ],
-          hoverOffset: 8,
-        },
-      ],
-    };
+    const data = completedItems.map((item) => ({
+      name: item.criterion,
+      value: item.points_earned,
+    }));
+
+    if (remainingPoints > 0) {
+      data.push({ name: "Remaining", value: remainingPoints });
+    }
+
+    return data;
   }, [scoreBreakdown, totalScore]);
 
   const maxPossibleScore = useMemo(() => {
@@ -60,38 +36,53 @@ export function AutoScoreChart({ scoreBreakdown, totalScore }) {
     return scoreBreakdown.reduce((sum, item) => sum + item.points_possible, 0);
   }, [scoreBreakdown]);
 
-  // Chart options
-  const chartOptions = useMemo(
-    () => ({
-      responsive: true,
-      maintainAspectRatio: true,
-      cutout: "70%",
-      plugins: {
-        legend: {
-          display: false,
-        },
-        tooltip: {
-          backgroundColor: "hsl(var(--popover))",
-          borderWidth: 1,
-          padding: 12,
-          displayColors: true,
-          callbacks: {
-            label: function (context) {
-              const label = context.label || "";
-              const value = context.parsed || 0;
-              return `${label}: ${value} points`;
-            },
-          },
-        },
-      },
-    }),
-    []
-  );
+  // Color palette
+  const COLORS = [
+    "hsl(142, 76%, 36%)",
+    "hsl(142, 70%, 45%)",
+    "hsl(142, 65%, 50%)",
+    "hsl(160, 60%, 45%)",
+    "hsl(173, 58%, 39%)",
+    "hsl(197, 71%, 33%)",
+    "hsl(221, 83%, 53%)",
+    "hsl(262, 83%, 58%)",
+    "hsl(var(--muted))",
+  ];
+
+  // Get color for a segment
+  const getColor = (index) => COLORS[index % COLORS.length];
 
   return (
-    <div className="relative">
-      {/* Doughnut chart */}
-      <Doughnut data={chartData} options={chartOptions} />
+    <div className="relative w-full h-[300px]">
+      {/* Recharts Doughnut */}
+      <ResponsiveContainer width="100%" height="100%">
+        <PieChart>
+          <Pie
+            data={chartData}
+            cx="50%"
+            cy="50%"
+            innerRadius="65%"
+            outerRadius="90%"
+            paddingAngle={0}
+            dataKey="value"
+            stroke="none"
+            isAnimationActive={true}
+            activeShape={null}
+          >
+            {chartData.map((entry, index) => (
+              <Cell key={`cell-${index}`} fill={getColor(index)} />
+            ))}
+          </Pie>
+          <Tooltip
+            contentStyle={{
+              backgroundColor: "var(--card)",
+              border: "1px solid var(--border)",
+            }}
+            itemStyle={{ color: "var(--popover-foreground)" }}
+            labelStyle={{ color: "var(--muted-foreground)" }}
+          />
+        </PieChart>
+      </ResponsiveContainer>
 
       {/* Center label */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">

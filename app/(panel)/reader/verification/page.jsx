@@ -4,7 +4,7 @@ import { OrcidConnection, RoleRequestForm } from "@/features";
 
 export default function VerificationPage() {
   return (
-    <div className="min-h-screen bg-background p-5 px-0 ">
+    <div className="min-h-screen bg-background px-0 ">
       <div className=" mx-auto space-y-5">
         {/* Page Header */}
         <div className="space-y-2">

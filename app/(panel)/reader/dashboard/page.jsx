@@ -1,5 +1,6 @@
 "use client";
 
+import { LoadingScreen, RoleBasedRoute } from "@/features";
 import {
   ProfileCompletionCard,
   ProfileLinksCard,
@@ -29,28 +30,36 @@ export default function ReaderDashboard() {
       ? (completedItems / scoreBreakdown.length) * 100
       : 0;
 
+  if (isLoadingScore) {
+    return <LoadingScreen />;
+  }
+
   return (
-    <div className=" mx-auto space-y-5">
-      {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"> */}
-      <div>
-        <div className="lg:col-span-2">
-          <ProfileCompletionCard completionPercentage={completionPercentage} />
-        </div>
-        {/* <div>
+    <RoleBasedRoute allowedRoles={["READER"]}>
+      <div className=" mx-auto space-y-5">
+        {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"> */}
+        <div>
+          <div className="lg:col-span-2">
+            <ProfileCompletionCard
+              completionPercentage={completionPercentage}
+            />
+          </div>
+          {/* <div>
           <ProfileLinksCard links={userDatas.links} />
         </div> */}
-      </div>
-
-      {isLoadingScore ? (
-        <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 animate-spin" />
-          <span className="ml-2 text-muted-foreground">
-            Loading score data...
-          </span>
         </div>
-      ) : (
-        <ScoreCard scoreData={scoreData} />
-      )}
-    </div>
+
+        {isLoadingScore ? (
+          <div className="flex items-center justify-center py-8">
+            <Loader2 className="w-6 h-6 animate-spin" />
+            <span className="ml-2 text-muted-foreground">
+              Loading score data...
+            </span>
+          </div>
+        ) : (
+          <ScoreCard scoreData={scoreData} />
+        )}
+      </div>
+    </RoleBasedRoute>
   );
 }

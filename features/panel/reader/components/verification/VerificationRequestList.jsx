@@ -37,18 +37,7 @@ const getStatusBadge = (status) => {
   }
 };
 
-const VerificationRequestList = ({ requests, isLoading }) => {
-  if (isLoading) {
-    return (
-      <div className="flex items-center gap-2 py-8">
-        <Loader2 className="w-4 h-4 animate-spin" />
-        <span className="text-sm text-muted-foreground">
-          Loading verification requests...
-        </span>
-      </div>
-    );
-  }
-
+const VerificationRequestList = ({ requests }) => {
   function formatRoleRequest(requested_roles) {
     if (!requested_roles || requested_roles?.length === 0) return "";
 

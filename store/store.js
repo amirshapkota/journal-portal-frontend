@@ -1,3 +1,4 @@
+import { persistAuthReducer } from "@/features/auth/redux/authSlice";
 import { configureStore } from "@reduxjs/toolkit";
 import {
   FLUSH,
@@ -8,7 +9,6 @@ import {
   REHYDRATE,
 } from "redux-persist";
 import persistStore from "redux-persist/es/persistStore";
-import { persistAuthReducer } from "@/lib/authPersist";
 
 // Configure the store
 export const store = configureStore({

@@ -23,7 +23,6 @@ const verificationStatusConfig = {
 };
 
 export default function VerificationStatusBadge({ status }) {
-  console.log("status", status);
   const config =
     verificationStatusConfig[status] || verificationStatusConfig.PENDING;
   return (

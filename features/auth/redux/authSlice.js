@@ -1,4 +1,7 @@
+import { clearStoredRole } from "@/features/shared";
 import { createSlice } from "@reduxjs/toolkit";
+import persistReducer from "redux-persist/es/persistReducer";
+import storage from "redux-persist/lib/storage";
 
 const initialState = {
   status: false,
@@ -33,12 +36,23 @@ const authSlice = createSlice({
       state.userData = null;
       state.access = null;
       document.cookie = "auth-token=; path=/; max-age=0";
+      clearStoredRole();
       if (typeof window !== "undefined") {
         localStorage.removeItem("persist:auth");
       }
     },
   },
 });
+
+const authPersistConfig = {
+  key: "auth",
+  storage: storage,
+};
+
+export const persistAuthReducer = persistReducer(
+  authPersistConfig,
+  authSlice.reducer
+);
 
 export const { login, logout } = authSlice.actions;
 export default authSlice.reducer;

@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Info } from "lucide-react";
@@ -19,6 +21,7 @@ export function ProfileCompletionCard({ completionPercentage }) {
     }, 100);
     return () => clearTimeout(timeout);
   }, [completionPercentage]);
+
   return (
     <Card className="bg-linear-to-r from-amber-50 to-amber-50 border-amber-200 dark:from-amber-950/30 dark:to-amber-900/20 dark:border-amber-900/40">
       <CardContent className="pt-6">

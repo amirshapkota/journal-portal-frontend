@@ -1,137 +1,27 @@
 "use client";
 
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { RoleBasedRoute } from "@/features";
-import { useSelector } from "react-redux";
-import { UnifiedSidebar } from "@/features/shared/components/UnifiedSidebar";
-import { UnifiedAppbar } from "@/features/shared/components/UnifiedAppbar";
 import {
-  LayoutDashboard,
-  User,
-  CheckCircle,
-  Settings,
-  FileText,
-  UserCheck,
-  Users,
-  BookOpen,
-  BarChart,
-} from "lucide-react";
-
-// Sidebar configuration for each role
-const sidebarConfig = {
-  READER: [
-    {
-      name: "Overview",
-      path: "/reader/dashboard",
-      icon: LayoutDashboard,
-    },
-    { name: "Profile", path: "/reader/profile", icon: User },
-    {
-      name: "Verification",
-      path: "/reader/verification",
-      icon: CheckCircle,
-    },
-    {
-      name: "Settings",
-      path: "/settings/email-preferences",
-      icon: Settings,
-    },
-  ],
-  AUTHOR: [
-    {
-      name: "Overview",
-      path: "/author/overview",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Submissions",
-      path: "/author/submissions",
-      icon: FileText,
-    },
-    { name: "Profile", path: "/author/profile", icon: User },
-    {
-      name: "Settings",
-      path: "/settings/email-preferences",
-      icon: Settings,
-    },
-  ],
-  REVIEWER: [
-    {
-      name: "Overview",
-      path: "/reviewer/overview",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Assignments",
-      path: "/reviewer/assignments",
-      icon: UserCheck,
-    },
-    { name: "Profile", path: "/reviewer/profile", icon: User },
-    {
-      name: "Settings",
-      path: "/settings/email-preferences",
-      icon: Settings,
-    },
-  ],
-  EDITOR: [
-    {
-      name: "Overview",
-      path: "/editor/overview",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Manuscripts",
-      path: "/editor/manuscripts",
-      icon: BookOpen,
-    },
-    {
-      name: "Reviewers",
-      path: "/editor/reviewers",
-      icon: Users,
-    },
-    { name: "Profile", path: "/editor/profile", icon: User },
-    {
-      name: "Settings",
-      path: "/settings/email-preferences",
-      icon: Settings,
-    },
-  ],
-  ADMIN: [
-    {
-      name: "Overview",
-      path: "/admin/overview",
-      icon: LayoutDashboard,
-    },
-    {
-      name: "Users",
-      path: "/admin/users",
-      icon: Users,
-    },
-    {
-      name: "Analytics",
-      path: "/admin/analytics",
-      icon: BarChart,
-    },
-    {
-      name: "Settings",
-      path: "/settings/email-preferences",
-      icon: Settings,
-    },
-  ],
-};
+  RoleBasedRoute,
+  sidebarConfig,
+  UnifiedAppbar,
+  UnifiedSidebar,
+  useCurrentRole,
+} from "@/features";
+import { useSelector } from "react-redux";
 
 export default function PanelLayout({ children }) {
   const userData = useSelector((state) => state.auth?.userData);
+  const { setCurrentRole, userRoles, currentRole } = useCurrentRole();
 
   // Get the primary role (first role in the array)
-  const userRole = userData?.roles?.[0] || "READER";
   const userName = userData
     ? `${userData.first_name || ""} ${userData.last_name || ""}`.trim() ||
       "User"
     : "User";
 
   // Get menu items for the current role
-  const menuItems = sidebarConfig[userRole] || sidebarConfig.READER;
+  const menuItems = sidebarConfig[currentRole] || sidebarConfig.READER;
 
   // Allowed roles - user can access if they have any role
   const allowedRoles = ["READER", "AUTHOR", "REVIEWER", "EDITOR", "ADMIN"];
@@ -143,10 +33,11 @@ export default function PanelLayout({ children }) {
           <UnifiedSidebar menuItems={menuItems} />
           <div className="flex-1 pt-3 flex flex-col  px-2">
             <UnifiedAppbar
-              userRole={userRole}
+              userRole={currentRole}
               userName={userName}
-              roles={userData?.roles || []}
+              roles={userRoles}
               userDetails={userData}
+              setNewRole={setCurrentRole}
             />
             <main className="flex-1 p-5 px-0">{children}</main>
           </div>

@@ -7,6 +7,9 @@ import { MultiSelect } from "./MultiSelect";
 import RoleBasedRoute from "./RoleBasedAuth";
 import { UnifiedSidebar } from "./UnifiedSidebar";
 import { UnifiedAppbar } from "./UnifiedAppbar";
+import ConfirmationPopup from "./ConfirmationPopup";
+import DataTable from "./DataTable";
+import StatsCard from "./StatsCard";
 
 export {
   FormInputField,
@@ -18,4 +21,7 @@ export {
   ErrorCard,
   UnifiedSidebar,
   UnifiedAppbar,
+  ConfirmationPopup,
+  DataTable,
+  StatsCard,
 };

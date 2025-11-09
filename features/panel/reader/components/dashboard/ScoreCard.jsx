@@ -1,3 +1,5 @@
+"use client";
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { TrendingUp } from "lucide-react";
 import { ScoreBreakdownList } from "./score/ScoreBreakDownList";
