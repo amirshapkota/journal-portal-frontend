@@ -110,16 +110,16 @@ export function UserTable({ users, onViewDetails, onEdit, onDelete }) {
               <Eye className="h-4 w-4 group-hover:text-primary-foreground" />
               View Details
             </DropdownMenuItem>
-            <DropdownMenuItem
+            {/* <DropdownMenuItem
               onClick={() => onEdit(row)}
               className="gap-2 group"
             >
               <Edit2 className="h-4 w-4 group-hover:text-primary-foreground" />
               Edit Info
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
             {row.is_active ? (
               <DropdownMenuItem
-                onClick={() => onDelete(row.id)}
+                onClick={() => onDelete(row)}
                 className="gap-2 text-destructive group"
               >
                 <Trash2 className="h-4 w-4 group-hover:text-primary-foreground" />

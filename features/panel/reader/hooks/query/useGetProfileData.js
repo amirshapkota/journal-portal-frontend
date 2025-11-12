@@ -3,7 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getProfileData } from "../../api/ProfileApiSlice";
 
 export const useGetProfileData = (options = {}) => {
-  const userId = useSelector((state) => state.auth.userData?.id);
+  const userId = useSelector((state) => state.auth?.userData?.id);
   return useQuery({
     queryKey: ["user-profile", userId],
     queryFn: () => getProfileData(userId),

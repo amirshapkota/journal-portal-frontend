@@ -34,7 +34,11 @@ import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import VerificationRequestList from "./VerificationRequestList";
 import { useSelector } from "react-redux";
-import { LoadingScreen, ErrorCard } from "@/features/shared/components";
+import {
+  LoadingScreen,
+  ErrorCard,
+  CardSkeleton,
+} from "@/features/shared/components";
 
 const RoleRequestForm = () => {
   const queryClient = useQueryClient();
@@ -52,7 +56,7 @@ const RoleRequestForm = () => {
   const { mutate: submitRequest, isPending: isSubmitting } =
     useSubmitVerificationRequest();
 
-  const defaultRoles = ["READER", "AUTHOR", "REVIEWER", "EDITOR"];
+  const defaultRoles = ["READER", "AUTHOR", "REVIEWER"];
 
   const existingRoleNames =
     RoleLists?.map((role) => role?.trim().toUpperCase()) || [];
@@ -92,11 +96,6 @@ const RoleRequestForm = () => {
     });
   };
 
-  // Loading state for verification requests
-  if (isPendingRequests) {
-    return <LoadingScreen />;
-  }
-
   // Error state for verification requests
   if (isVerificationError) {
     return (
@@ -116,116 +115,125 @@ const RoleRequestForm = () => {
 
   return (
     <div className="space-y-6">
-      <VerificationRequestList requests={verificationRequests} />
+      {isPendingRequests && <LoadingScreen />}
+      {isPendingRequests ? (
+        <CardSkeleton />
+      ) : (
+        verificationRequests.length > 0 && (
+          <VerificationRequestList requests={verificationRequests} />
+        )
+      )}
       {/* Role Request Form */}
-      <Card className="border-border dark:border-slate-700">
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <BookOpen className="w-5 h-5" />
-            Request Additional Roles
-          </CardTitle>
-          <CardDescription>
-            Fill out the form below to request access to specific roles. Admin
-            approval required.
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <Form {...roleForm}>
-            <form
-              onSubmit={roleForm.handleSubmit(onRoleSubmit)}
-              className=" grid grid-cols-1 lg:grid-cols-2 gap-4"
-            >
-              <FormField
-                control={roleForm.control}
-                name="requested_roles"
-                render={({ field }) => (
-                  <FormItem className={"flex flex-col"}>
-                    <FormLabel>Select Role</FormLabel>
+      {RoleLists.length >= 3 ? null : (
+        <Card className="border-border dark:border-slate-700">
+          <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+              <BookOpen className="w-5 h-5" />
+              Request Additional Roles
+            </CardTitle>
+            <CardDescription>
+              Fill out the form below to request access to specific roles. Admin
+              approval required.
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <Form {...roleForm}>
+              <form
+                onSubmit={roleForm.handleSubmit(onRoleSubmit)}
+                className=" grid grid-cols-1 lg:grid-cols-2 gap-4"
+              >
+                <FormField
+                  control={roleForm.control}
+                  name="requested_roles"
+                  render={({ field }) => (
+                    <FormItem className={"flex flex-col"}>
+                      <FormLabel>Select Role</FormLabel>
 
-                    <MultiSelect
-                      options={availableRoles}
-                      selected={field.value}
-                      onChange={field.onChange}
-                      error={roleForm.formState.errors.requested_roles}
-                      placeholder="Choose a role to request"
-                    />
+                      <MultiSelect
+                        options={availableRoles}
+                        selected={field.value}
+                        onChange={field.onChange}
+                        error={roleForm.formState.errors.requested_roles}
+                        placeholder="Choose a role to request"
+                      />
 
-                    <FormMessage className="text-destructive" />
-                  </FormItem>
-                )}
-              />
-
-              <FormInputField
-                control={roleForm.control}
-                name="affiliation"
-                label="Institution/Organization"
-                placeholder="e.g., Harvard University, MIT"
-                description="Your current academic or research institution"
-              />
-
-              <FormInputField
-                control={roleForm.control}
-                name="affiliation_email"
-                label="Institutional Email"
-                placeholder="your.name@institution.edu"
-                description="Your verified institutional email address"
-              />
-
-              <FormInputField
-                control={roleForm.control}
-                name="academic_position"
-                label="Academic Position"
-                placeholder="e.g., PhD, Professor, Postdoctoral Researcher"
-                description="Your current academic position or title"
-              />
-
-              <FormTextareaField
-                control={roleForm.control}
-                name="research_interests"
-                label="Research Interests"
-                placeholder="Describe your research interests and areas of expertise..."
-                description="Help us understand your research focus"
-                form_classname="lg:col-span-2"
-              />
-
-              <FormTextareaField
-                control={roleForm.control}
-                name="supporting_letter"
-                label="Supporting Letter"
-                placeholder="Provide a supporting letter explaining why you should be approved for this role..."
-                description="Help admins make an informed decision about your request"
-                form_classname="lg:col-span-2"
-              />
-
-              <div className="flex gap-3 mt-2">
-                <Button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-fit"
-                  size="md"
-                >
-                  {isSubmitting && (
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      <FormMessage className="text-destructive" />
+                    </FormItem>
                   )}
-                  {isSubmitting ? "Submitting..." : "Submit Role Request"}
-                </Button>
+                />
 
-                <Button
-                  type="button"
-                  onClick={() => {
-                    roleForm.reset();
-                  }}
-                  className="w-fit"
-                  size="md"
-                  variant="muted"
-                >
-                  Clear Form
-                </Button>
-              </div>
-            </form>
-          </Form>
-        </CardContent>
-      </Card>
+                <FormInputField
+                  control={roleForm.control}
+                  name="affiliation"
+                  label="Institution/Organization"
+                  placeholder="e.g., Harvard University, MIT"
+                  description="Your current academic or research institution"
+                />
+
+                <FormInputField
+                  control={roleForm.control}
+                  name="affiliation_email"
+                  label="Institutional Email"
+                  placeholder="your.name@institution.edu"
+                  description="Your verified institutional email address"
+                />
+
+                <FormInputField
+                  control={roleForm.control}
+                  name="academic_position"
+                  label="Academic Position"
+                  placeholder="e.g., PhD, Professor, Postdoctoral Researcher"
+                  description="Your current academic position or title"
+                />
+
+                <FormTextareaField
+                  control={roleForm.control}
+                  name="research_interests"
+                  label="Research Interests"
+                  placeholder="Describe your research interests and areas of expertise..."
+                  description="Help us understand your research focus"
+                  form_classname="lg:col-span-2"
+                />
+
+                <FormTextareaField
+                  control={roleForm.control}
+                  name="supporting_letter"
+                  label="Supporting Letter"
+                  placeholder="Provide a supporting letter explaining why you should be approved for this role..."
+                  description="Help admins make an informed decision about your request"
+                  form_classname="lg:col-span-2"
+                />
+
+                <div className="flex gap-3 mt-2">
+                  <Button
+                    type="submit"
+                    disabled={isSubmitting}
+                    className="w-fit"
+                    size="md"
+                  >
+                    {isSubmitting && (
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    )}
+                    {isSubmitting ? "Submitting..." : "Submit Role Request"}
+                  </Button>
+
+                  <Button
+                    type="button"
+                    onClick={() => {
+                      roleForm.reset();
+                    }}
+                    className="w-fit"
+                    size="md"
+                    variant="muted"
+                  >
+                    Clear Form
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

@@ -6,20 +6,39 @@ import {
   CardTitle,
   CardDescription,
 } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
-export default function ProfileInfoCard({ profileData }) {
+export default function ProfileInfoCard({
+  profileData,
+  setShowEditForm,
+  showEditForm,
+}) {
   if (!profileData) return null;
 
   return (
-    <Card className="">
+    <Card className="w-full">
       <CardHeader>
-        <CardTitle>Profile Information</CardTitle>
-        <CardDescription>
-          Last updated:{" "}
-          {profileData.updated_at
-            ? new Date(profileData.updated_at).toLocaleDateString()
-            : "-"}
-        </CardDescription>
+        <div className="flex items-start justify-between">
+          <div>
+            <CardTitle className={"pb-1"}>Profile Information</CardTitle>
+            <CardDescription>
+              {" "}
+              Last updated:{" "}
+              {profileData.updated_at
+                ? new Date(profileData.updated_at).toLocaleDateString()
+                : "-"}
+            </CardDescription>
+          </div>
+          <Button
+            className=""
+            variant="secondary"
+            onClick={() => setShowEditForm(true)}
+            disabled={showEditForm}
+            size={"sm"}
+          >
+            Edit Profile
+          </Button>
+        </div>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

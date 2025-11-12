@@ -2,6 +2,7 @@
  * EmailLogStats - Displays user email log statistics
  * @module features/panel/settings/components/email/EmailLogStats
  */
+import { StatsErrorCard } from "@/features/shared";
 import StatsCard from "@/features/shared/components/StatsCard";
 import { Mail, CheckCircle, Clock, XCircle, TrendingUp } from "lucide-react";
 import React from "react";
@@ -18,12 +19,7 @@ export default function EmailLogStats({ data, isPending, isError, error }) {
           <StatsCard
             key={i}
             icon={Mail}
-            title={" "}
-            value={
-              <span className="h-8 bg-muted rounded w-2/3 block animate-pulse" />
-            }
-            valueClass=""
-            iconClass="text-muted-foreground"
+            isLoading={true}
             cardClass="animate-pulse"
           />
         ))}
@@ -33,17 +29,10 @@ export default function EmailLogStats({ data, isPending, isError, error }) {
 
   if (isError) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
-        <StatsCard
-          icon={XCircle}
-          title="Error"
-          value={
-            <span className="text-red-600 text-sm">
-              {error?.message || "Unknown error"}
-            </span>
-          }
-        />
-      </div>
+      <StatsErrorCard
+        title="Failed to load email stats"
+        message={error?.message || "Unknown error"}
+      />
     );
   }
 

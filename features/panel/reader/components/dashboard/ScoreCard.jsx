@@ -6,7 +6,8 @@ import { ScoreBreakdownList } from "./score/ScoreBreakDownList";
 import { AutoScoreChart } from "./score/AutoScoreChart";
 import { useEffect, useState } from "react";
 
-export function ScoreCard({ scoreData }) {
+export function ScoreCard({ scoreData, pending }) {
+  // Hooks must always be called
   const totalScore = scoreData?.latest_request?.auto_score || 0;
   const scoreBreakdown = scoreData?.latest_request?.score_breakdown || [];
   const maxPossibleScore = scoreBreakdown.reduce(
@@ -29,6 +30,52 @@ export function ScoreCard({ scoreData }) {
     }, 100);
     return () => clearTimeout(timeout);
   }, [completionPercentage]);
+
+  if (pending) {
+    return (
+      <Card className="w-full animate-pulse opacity-80">
+        <CardHeader>
+          <div className="flex items-start justify-between">
+            <div>
+              <div className="h-6 w-32 bg-muted rounded mb-2" />
+              <div className="h-4 w-40 bg-muted rounded" />
+            </div>
+            <div className="flex items-center gap-2 px-3 py-2 bg-primary/10 rounded-lg">
+              <div className="h-8 w-16 bg-muted rounded" />
+            </div>
+          </div>
+          <div className="mt-4 space-y-2">
+            <div className="flex justify-between text-sm">
+              <div className="h-4 w-24 bg-muted rounded" />
+              <div className="h-4 w-10 bg-muted rounded" />
+            </div>
+            <div className="w-full bg-primary/20 rounded-full h-2 overflow-hidden">
+              <div className="bg-primary/40 h-2 rounded-full w-1/3" />
+            </div>
+          </div>
+        </CardHeader>
+        <CardContent>
+          <div className="grid lg:grid-cols-[1.3fr_1fr] gap-6">
+            <div className="order-2 lg:order-1">
+              <div className="h-5 w-32 bg-muted rounded mb-3" />
+              <div className="space-y-2">
+                <div className="h-4 w-full bg-muted rounded" />
+                <div className="h-4 w-3/4 bg-muted rounded" />
+                <div className="h-4 w-1/2 bg-muted rounded" />
+              </div>
+            </div>
+            <div className="order-1 lg:order-2 flex items-center justify-center">
+              <div className="w-full max-w-[280px] h-32 bg-muted rounded" />
+            </div>
+          </div>
+          <div className="mt-6 p-4 rounded-lg bg-muted/50 border border-border">
+            <div className="h-4 w-3/4 bg-muted rounded mb-2" />
+            <div className="h-4 w-1/2 bg-muted rounded" />
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="w-full">

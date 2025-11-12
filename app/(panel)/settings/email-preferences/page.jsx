@@ -78,10 +78,6 @@ export default function EmailPreferencesTab() {
     reset();
   };
 
-  if (isEmailPreferencesPending) {
-    return <LoadingScreen />;
-  }
-
   if (isError) {
     return (
       <ErrorCard
@@ -93,6 +89,8 @@ export default function EmailPreferencesTab() {
 
   return (
     <Form {...form}>
+      {isEmailPreferencesPending && <LoadingScreen />}
+      
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
         <div className="md:flex md:items-center md:justify-between gap-4">
           <h2 className="text-xl font-semibold text-foreground ">

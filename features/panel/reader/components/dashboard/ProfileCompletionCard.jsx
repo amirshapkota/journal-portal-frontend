@@ -12,15 +12,51 @@ import {
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export function ProfileCompletionCard({ completionPercentage }) {
-  const [width, setWidth] = useState(0);
+export function ProfileCompletionCard({ completionPercentage, pending }) {
+  // For animation, only animate when not pending
+  const [width, setWidth] = useState(pending ? 0 : completionPercentage);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setWidth(completionPercentage);
-    }, 100);
-    return () => clearTimeout(timeout);
-  }, [completionPercentage]);
+    if (!pending) {
+      const timeout = setTimeout(() => {
+        setWidth(completionPercentage);
+      }, 100);
+      return () => clearTimeout(timeout);
+    }
+    // If pending, do not update width (leave as 0)
+  }, [completionPercentage, pending]);
+
+  if (pending) {
+    return (
+      <Card className="bg-linear-to-r from-amber-50 to-amber-50 border-amber-200 dark:from-amber-950/30 dark:to-amber-900/20 dark:border-amber-900/40 animate-pulse opacity-80">
+        <CardContent className="pt-6">
+          <div className="flex flex-col lg:flex-row items-start gap-8">
+            <div className="flex flex-col items-start min-w-fit">
+              <div className="flex items-baseline gap-2">
+                <span className="h-12 w-24 bg-amber-100 dark:bg-amber-900 rounded mb-2" />
+              </div>
+              <div className="h-6 w-32 bg-amber-100 dark:bg-amber-900 rounded mb-2" />
+            </div>
+            <div className="flex-1">
+              <div className="mb-4">
+                <div className="w-full bg-amber-200 dark:bg-slate-700 rounded-full h-2 overflow-hidden">
+                  <div className="bg-amber-300 dark:bg-amber-700 h-2 rounded-full w-1/3" />
+                </div>
+              </div>
+              <div className="space-y-3">
+                <div className="h-4 w-40 bg-amber-100 dark:bg-amber-900 rounded mb-2" />
+                <div className="h-4 w-3/4 bg-amber-100 dark:bg-amber-900 rounded" />
+              </div>
+              <div className="flex items-center gap-3 mt-4">
+                <div className="h-8 w-32 bg-amber-200 dark:bg-amber-900 rounded" />
+                <div className="h-8 w-40 bg-amber-200 dark:bg-amber-900 rounded" />
+              </div>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card className="bg-linear-to-r from-amber-50 to-amber-50 border-amber-200 dark:from-amber-950/30 dark:to-amber-900/20 dark:border-amber-900/40">

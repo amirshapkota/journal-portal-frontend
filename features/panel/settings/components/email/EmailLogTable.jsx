@@ -22,7 +22,12 @@ const statusColors = {
  * @param {Array<Object>} props.emails - Array of email log objects
  * @param {Function} props.onViewEmail - Callback to view email details
  */
-export default function EmailLogTable({ emails, onViewEmail }) {
+export default function EmailLogTable({
+  emails,
+  onViewEmail,
+  isPending,
+  error,
+}) {
   const columns = [
     {
       key: "created_at",
@@ -86,6 +91,8 @@ export default function EmailLogTable({ emails, onViewEmail }) {
       emptyMessage="No emails found"
       hoverable={true}
       tableClassName="bg-card border flex justify-center"
+      isPending={isPending}
+      error={error}
     />
   );
 }

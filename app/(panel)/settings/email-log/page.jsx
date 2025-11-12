@@ -81,15 +81,15 @@ export default function EmailLogTab() {
     return true;
   });
 
-  if (isEmailLogError) {
-    return (
-      <ErrorCard
-        title="Failed to load email logs"
-        error={emailLogError}
-        onRetry={refetchEmailLogStats}
-      />
-    );
-  }
+  // if (isEmailLogError) {
+  //   return (
+  //     <ErrorCard
+  //       title="Failed to load email logs"
+  //       error={emailLogError}
+  //       onRetry={refetchEmailLogStats}
+  //     />
+  //   );
+  // }
 
   return (
     <div className="space-y-4">
@@ -119,6 +119,8 @@ export default function EmailLogTab() {
         <EmailLogTable
           emails={EmailLogData?.recent_emails}
           onViewEmail={setSelectedEmail}
+          isPending={isEmailLogPending}
+          error={emailLogError}
         />
       </div>
       {/* Pagination Section */}

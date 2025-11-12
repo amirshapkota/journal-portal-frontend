@@ -3,6 +3,7 @@
 import React, { useState, useRef } from "react";
 import { toast } from "sonner";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import CardSkeleton from "@/features/shared/components/CardSkeleton";
 import {
   AvatarUpload,
   ErrorCard,
@@ -13,6 +14,7 @@ import {
 } from "@/features";
 import { useGetMe } from "@/features/shared/hooks/useGetMe";
 import { usePatchProfile } from "@/features/panel/reader/hooks/usePatchProfile";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ReaderProfilePage() {
   const {
@@ -22,9 +24,10 @@ export default function ReaderProfilePage() {
     refetch,
   } = useGetMe();
   const [avatarPreview, setAvatarPreview] = useState("");
-  const [saveSuccess, setSaveSuccess] = useState(false);
   const fileInputRef = useRef(null);
   const patchProfileMutation = usePatchProfile();
+  const queryClient = useQueryClient();
+  const [showEditForm, setShowEditForm] = useState(false);
 
   const profileData = meData?.profile;
 
@@ -55,9 +58,9 @@ export default function ReaderProfilePage() {
     if (!profileData?.id) return;
     try {
       await patchProfileMutation.mutateAsync({ id: profileData.id, data });
-      setSaveSuccess(true);
       toast.success("Profile updated successfully!");
-      setTimeout(() => setSaveSuccess(false), 3000);
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+      setShowEditForm(false);
     } catch (error) {
       console.error("Profile update error:", error);
     }
@@ -68,10 +71,24 @@ export default function ReaderProfilePage() {
     if (profileData?.avatar) {
       setAvatarPreview(profileData.avatar);
     }
+    setShowEditForm(false);
   };
 
   if (isMePending) {
-    return <LoadingScreen />;
+    return (
+      <div className="space-y-6">
+        <LoadingScreen />
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-foreground">
+            Profile Settings
+          </h1>
+          <p className="text-muted-foreground">
+            Manage your account information and academic profile
+          </p>
+        </div>
+        <CardSkeleton />
+      </div>
+    );
   }
 
   if (isMeError) {
@@ -105,23 +122,31 @@ export default function ReaderProfilePage() {
       <div className="mt-4">
         <VerificationStatusBadge status={profileData?.verification_status} />
       </div>
-      <ProfileInfoCard profileData={profileData} />
+      <div className="flex items-center flex-col  gap-4">
+        <ProfileInfoCard
+          profileData={profileData}
+          showEditForm={showEditForm}
+          setShowEditForm={setShowEditForm}
+        />
+      </div>
 
       {/* Edit Profile Form */}
-      <Card className="gap-3">
-        <CardHeader>
-          <CardTitle>Edit Profile</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <ProfileForm
-            defaultValues={defaultValues}
-            saveSuccess={saveSuccess}
-            onSubmit={onSubmit}
-            onCancel={onCancel}
-            isPending={patchProfileMutation.isPending}
-          />
-        </CardContent>
-      </Card>
+      {showEditForm && (
+        <Card className="gap-3">
+          <CardHeader>
+            <CardTitle>Edit Profile</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ProfileForm
+              defaultValues={defaultValues}
+              saveSuccess={patchProfileMutation?.isPending}
+              onSubmit={onSubmit}
+              onCancel={onCancel}
+              isPending={patchProfileMutation.isPending}
+            />
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }

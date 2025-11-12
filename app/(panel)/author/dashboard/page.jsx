@@ -1,7 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AuthorDashboardStats, AuthorDashboardTable } from "@/features";
+import {
+  AuthorDashboardStats,
+  AuthorDashboardTable,
+  RoleBasedRoute,
+} from "@/features";
 import { Plus } from "lucide-react";
 import Link from "next/link";
 
@@ -88,34 +92,36 @@ export default function AuthorDashboard() {
   const counts = getStatusCounts();
 
   return (
-    <div className="">
-      <div className="space-y-5">
-        {/* Header */}
-        <div className="">
-          <h1 className="text-3xl font-bold mb-2">Author Dashboard</h1>
-          <p className="text-muted-foreground">
-            Manage and track your manuscript submissions
-          </p>
-        </div>
+    <RoleBasedRoute allowedRoles={["AUTHOR"]}>
+      <div className="">
+        <div className="space-y-5">
+          {/* Header */}
+          <div className="">
+            <h1 className="text-3xl font-bold mb-2">Author Dashboard</h1>
+            <p className="text-muted-foreground">
+              Manage and track your manuscript submissions
+            </p>
+          </div>
 
-        {/* Stats Cards */}
-        <AuthorDashboardStats counts={counts} />
+          {/* Stats Cards */}
+          <AuthorDashboardStats counts={counts} />
 
-        {/* Submissions Table Section */}
-        <div className="flex items-center justify-between ">
-          <h2 className="text-xl font-bold">Recent Submissions</h2>
-          <Button>
-            <Plus className="w-4 h-4 mr-2" />
-            New Submission
-          </Button>
+          {/* Submissions Table Section */}
+          <div className="flex items-center justify-between ">
+            <h2 className="text-xl font-bold">Recent Submissions</h2>
+            <Button>
+              <Plus className="w-4 h-4 mr-2" />
+              New Submission
+            </Button>
+          </div>
+          <AuthorDashboardTable submissions={MOCK_SUBMISSIONS.results} />
+          <Link href="/author/submissions/">
+            <Button variant="secondary" className="mx-auto ">
+              View All Submissions
+            </Button>
+          </Link>
         </div>
-        <AuthorDashboardTable submissions={MOCK_SUBMISSIONS.results} />
-        <Link href="/author/submissions/">
-          <Button variant="secondary" className="mx-auto ">
-            View All Submissions
-          </Button>
-        </Link>
       </div>
-    </div>
+    </RoleBasedRoute>
   );
 }

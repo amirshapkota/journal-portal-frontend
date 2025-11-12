@@ -8,15 +8,17 @@ import { ThemeProvider } from "next-themes";
 import { Toaster } from "@/components/ui/sonner";
 import store, { persistor } from "@/store/store";
 import { useRouter } from "next/navigation";
-import { setAxiosRouter } from "@/lib/instance";
+import { setAxiosRouter, setStoreReference } from "@/lib/instance";
 import { useCrossTabAuth } from "@/features/auth/hooks";
+import { logout } from "@/features/auth/redux/authSlice";
 
 const AuthSetupWrapper = ({ children }) => {
   const router = useRouter();
 
-  // Setup axios router
+  // Setup axios router and store reference
   useEffect(() => {
     setAxiosRouter(router);
+    setStoreReference(store, logout);
   }, [router]);
 
   // Setup cross-tab auth

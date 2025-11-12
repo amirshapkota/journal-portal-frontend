@@ -8,6 +8,7 @@ import {
   RecentActivityFeed,
   RoleBasedRoute,
   StatsCard,
+  StatsErrorCard,
   SubmissionTrendsChart,
   UserGrowthChart,
 } from "@/features";
@@ -57,18 +58,27 @@ export default function AdminDashboard() {
         </div>
 
         {/* Global Statistics Cards */}
-        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-          {statistics.map((stat) => (
-            <StatsCard
-              key={stat.title}
-              title={stat.title}
-              value={stat.value}
-              icon={stat.icon}
-              valueClass={stat.valueClass}
-              iconClass={stat.iconClass}
-            />
-          ))}
-        </div>
+        {/* Example error state: set isStatsError and statsError as needed */}
+        {false ? (
+          <StatsErrorCard
+            title="Failed to load admin stats"
+            message={"An error occurred while loading admin statistics."}
+          />
+        ) : (
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+            {statistics.map((stat) => (
+              <StatsCard
+                key={stat.title}
+                title={stat.title}
+                value={stat.value}
+                icon={stat.icon}
+                valueClass={stat.valueClass}
+                iconClass={stat.iconClass}
+                isLoading={false} // Set to true to show loading skeleton
+              />
+            ))}
+          </div>
+        )}
 
         {/* Charts Section */}
         <div className="space-y-4">

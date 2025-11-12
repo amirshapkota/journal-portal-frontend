@@ -16,7 +16,7 @@ export default function ErrorCard({
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className="min-h-screen bg-card/70 rounded-lg border flex items-center justify-center p-4 ">
+    <div className=" bg-card/70 rounded-lg border flex items-center justify-center p-5">
       <div className="relative">
         {/* Animated gradient orb background */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-3xl">
@@ -26,7 +26,7 @@ export default function ErrorCard({
         <Card
           onMouseEnter={() => setIsHovered(true)}
           onMouseLeave={() => setIsHovered(false)}
-          className={`relative max-w-md w-full border transition-all duration-300 ${
+          className={`relative py-0 max-w-md w-full border transition-all duration-300 ${
             isHovered
               ? "border-red-400/50 dark:border-red-500/50 shadow-lg shadow-red-500/10"
               : "border-red-200/50 dark:border-red-900/50 shadow-md"

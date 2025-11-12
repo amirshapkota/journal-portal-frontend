@@ -1,24 +1,22 @@
 "use client";
 
 import { LoadingScreen, RoleBasedRoute } from "@/features";
+import ErrorCard from "@/features/shared/components/ErrorCard";
 import {
   ProfileCompletionCard,
   ProfileLinksCard,
   ScoreCard,
   useGetUserScoreStatus,
 } from "@/features/panel";
-import { Loader2 } from "lucide-react";
 
 export default function ReaderDashboard() {
-  const { data: scoreData, isPending: isLoadingScore } =
-    useGetUserScoreStatus();
-
-  const userDatas = {
-    links: {
-      googleScholar: "https://scholar.google.com/citations?user=...",
-      researchGate: "https://www.researchgate.net/profile/...",
-    },
-  };
+  const {
+    data: scoreData,
+    isPending: isLoadingScore,
+    isError,
+    error,
+    refetch,
+  } = useGetUserScoreStatus();
 
   // Calculate completion percentage from score breakdown
   const scoreBreakdown = scoreData?.latest_request?.score_breakdown || [];
@@ -30,35 +28,50 @@ export default function ReaderDashboard() {
       ? (completedItems / scoreBreakdown.length) * 100
       : 0;
 
+  // Error state
+  if (isError) {
+    return (
+      <RoleBasedRoute allowedRoles={["READER"]}>
+        <ErrorCard
+          title="Failed to load dashboard"
+          description="We couldn't load your dashboard data. Please try again."
+          details={error?.message || error?.toString()}
+          onRetry={refetch}
+        />
+      </RoleBasedRoute>
+    );
+  }
+
+  // Pending state for ProfileCompletionCard and ScoreCard
   if (isLoadingScore) {
-    return <LoadingScreen />;
+    return (
+      <RoleBasedRoute allowedRoles={["READER"]}>
+        <LoadingScreen />
+        <div className="mx-auto space-y-5">
+          <div>
+            <div className="lg:col-span-2">
+              <ProfileCompletionCard completionPercentage={0} pending />
+            </div>
+          </div>
+
+          <ScoreCard pending />
+        </div>
+      </RoleBasedRoute>
+    );
   }
 
   return (
     <RoleBasedRoute allowedRoles={["READER"]}>
-      <div className=" mx-auto space-y-5">
-        {/* <div className="grid grid-cols-1 lg:grid-cols-3 gap-6"> */}
+      <div className="mx-auto space-y-5">
         <div>
           <div className="lg:col-span-2">
             <ProfileCompletionCard
               completionPercentage={completionPercentage}
+              pending={false}
             />
           </div>
-          {/* <div>
-          <ProfileLinksCard links={userDatas.links} />
-        </div> */}
         </div>
-
-        {isLoadingScore ? (
-          <div className="flex items-center justify-center py-8">
-            <Loader2 className="w-6 h-6 animate-spin" />
-            <span className="ml-2 text-muted-foreground">
-              Loading score data...
-            </span>
-          </div>
-        ) : (
-          <ScoreCard scoreData={scoreData} />
-        )}
+        <ScoreCard scoreData={scoreData} pending={false} />
       </div>
     </RoleBasedRoute>
   );

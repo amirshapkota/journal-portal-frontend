@@ -3,6 +3,7 @@
  * @module features/shared/components/DataTable
  */
 import React from "react";
+import TableSkeleton from "@/features/shared/components/TableSkeleton";
 import {
   Table,
   TableBody,
@@ -11,6 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Info } from "lucide-react";
 
 /**
  * DataTable Component
@@ -131,6 +133,17 @@ export default function DataTable({
     return `${baseClass} ${hoverClass} ${stripedClass} ${clickableClass} ${customClass}`.trim();
   };
 
+  if (isPending) {
+    return (
+      <TableSkeleton
+        columns={columns.length}
+        rows={pendingRows}
+        headers={columns.map((col) => col.header)}
+        className={tableClassName}
+      />
+    );
+  }
+
   return (
     <div className={`w-full overflow-x-auto rounded-lg ${tableClassName}`}>
       <Table className={" "}>
@@ -149,32 +162,20 @@ export default function DataTable({
           </TableRow>
         </TableHeader>
         <TableBody>
-          {isPending ? (
-            [...Array(pendingRows)].map((_, i) => (
-              <TableRow
-                key={i}
-                className="border-b border-border animate-pulse"
-              >
-                {columns.map((column) => (
-                  <TableCell
-                    key={column.key}
-                    className={`${getAlignClass(column.align)} ${
-                      column.cellClassName || ""
-                    }`}
-                  >
-                    <span className="h-6 bg-muted rounded w-2/3 block" />
-                  </TableCell>
-                ))}
-              </TableRow>
-            ))
-          ) : error ? (
+          {error ? (
             <TableRow>
-              <TableCell
-                colSpan={columns.length}
-                className="text-center text-red-600 py-8"
-              >
-                {errorMessage}{" "}
-                {typeof error === "string" ? error : error?.message}
+              <TableCell colSpan={columns.length} className="py-8">
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <div className="flex items-center gap-2 text-red-600">
+                    <Info />
+                    <span className="font-semibold text-lg">
+                      {errorMessage}
+                    </span>
+                  </div>
+                  <div className="text-sm text-red-500 text-center max-w-md">
+                    {typeof error === "string" ? error : error?.message}
+                  </div>
+                </div>
               </TableCell>
             </TableRow>
           ) : data.length > 0 ? (

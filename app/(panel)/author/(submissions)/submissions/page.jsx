@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/select";
 import { Card } from "@/components/ui/card";
 import { Search, Plus } from "lucide-react";
-import { AuthorSubmissionsTable } from "@/features";
+import { AuthorSubmissionsTable, RoleBasedRoute } from "@/features";
 
 const MOCK_SUBMISSIONS = [
   {
@@ -98,67 +98,72 @@ export default function SubmissionsPage() {
   };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-foreground">My Submissions</h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Manage and track your manuscript submissions
-          </p>
-        </div>
-        <Button
-          onClick={() => router.push("/author/new-submission/")}
-          className="gap-2"
-        >
-          <Plus className="h-4 w-4" />
-          New Submission
-        </Button>
-      </div>
-
-      {/* Filters */}
-      <Card className="p-4 bg-background border border-border">
-        <div className="flex flex-col md:flex-row gap-4">
-          <div className="flex-1">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <Input
-                placeholder="Search by title..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-10"
-              />
-            </div>
+    <RoleBasedRoute allowedRoles={["AUTHOR"]}>
+      {" "}
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-3xl font-bold text-foreground">
+              My Submissions
+            </h1>
+            <p className="text-sm text-muted-foreground mt-1">
+              Manage and track your manuscript submissions
+            </p>
           </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full md:w-40">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {STATUSES.map((status) => (
-                <SelectItem key={status} value={status}>
-                  {status}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-          <Select value={journalFilter} onValueChange={setJournalFilter}>
-            <SelectTrigger className="w-full md:w-48">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {JOURNALS.map((journal) => (
-                <SelectItem key={journal} value={journal}>
-                  {journal}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Button
+            onClick={() => router.push("/author/new-submission/")}
+            className="gap-2"
+          >
+            <Plus className="h-4 w-4" />
+            New Submission
+          </Button>
         </div>
-      </Card>
 
-      {/* Table */}
-      <AuthorSubmissionsTable submissions={filteredSubmissions} />
-    </div>
+        {/* Filters */}
+        <Card className="p-4 bg-background border border-border">
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  placeholder="Search by title..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger className="w-full md:w-40">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {STATUSES.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+            <Select value={journalFilter} onValueChange={setJournalFilter}>
+              <SelectTrigger className="w-full md:w-48">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {JOURNALS.map((journal) => (
+                  <SelectItem key={journal} value={journal}>
+                    {journal}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </Card>
+
+        {/* Table */}
+        <AuthorSubmissionsTable submissions={filteredSubmissions} />
+      </div>
+    </RoleBasedRoute>
   );
 }

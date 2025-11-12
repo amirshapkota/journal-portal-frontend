@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import { useGetOrcidUrl } from "../../hooks";
 import { useGetOrcidStatus } from "../../hooks/query/useGetOrcidStatus";
+import ErrorCard from "@/features/shared/components/ErrorCard";
 import { useDisconnectOrcid } from "../../hooks/mutation/useDisconnectOrcid";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
@@ -25,7 +26,12 @@ const OrcidConnection = () => {
     enabled: false,
   });
 
-  const { data: orcidStatus, isPending: isLoadingStatus } = useGetOrcidStatus({
+  const {
+    data: orcidStatus,
+    isPending: isLoadingStatus,
+    isError: isErrorStatus,
+    error: errorStatus,
+  } = useGetOrcidStatus({
     enabled: true,
   });
 
@@ -148,6 +154,14 @@ const OrcidConnection = () => {
               Loading ORCID status...
             </span>
           </div>
+        ) : isErrorStatus ? (
+          <ErrorCard
+            title="Failed to load ORCID status"
+            description={
+              errorStatus?.message ||
+              "An error occurred while fetching your ORCID connection status."
+            }
+          />
         ) : orcidStatus?.connected ? (
           <div className="space-y-4">
             <div className="bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200 dark:border-emerald-900/50 rounded-lg p-4">
@@ -169,7 +183,7 @@ const OrcidConnection = () => {
                 <p className="text-sm font-medium text-muted-foreground">
                   ORCID iD
                 </p>
-                <p className="text-lg font-mono text-foreground">
+                <p className="text-md  text-foreground">
                   {orcidStatus.orcid_id}
                 </p>
               </div>

@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useToggle } from "@/features/shared/hooks/useToggle";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -11,59 +11,67 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
-import { Search, Download, Mail } from "lucide-react";
+import { Search } from "lucide-react";
 import {
+  ConfirmationPopup,
   LoadingScreen,
+  useDeleteUser,
   useGetUsers,
   UserDetailsModal,
   UserTable,
   useUpdateUser,
 } from "@/features";
+import { useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 
 export default function UserManagementPage() {
+  const queryClient = useQueryClient();
+
   const {
     data: users,
     isPending: isUsersDataPending,
     error: UserDataError,
   } = useGetUsers();
+
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
   const [verificationFilter, setVerificationFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [userNameToDelete, setUserNameToDelete] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const toggleDeleteDialog = () =>
+    setDeleteDialogOpen((prevState) => !prevState);
 
-  const handleExportCSV = () => {
-    const headers = [
-      "Name",
-      "Email",
-      "Verification Status",
-      "Account Status",
-      "Joined",
-      "Last Login",
-    ];
-    const csvContent = [
-      headers.join(","),
-      ...users?.results.map((user) =>
-        [
-          user.profile.display_name || `${user.first_name} ${user.last_name}`,
-          user.email,
-          user.profile.verification_status,
-          user.is_active ? "Active" : "Inactive",
-          new Date(user.date_joined).toLocaleDateString(),
-          user.last_login
-            ? new Date(user.last_login).toLocaleDateString()
-            : "Never",
-        ].join(",")
-      ),
-    ].join("\n");
+  const deleteUserMutation = useDeleteUser({
+    onSuccess: () => {
+      toast.success("User deleted successfully");
+      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      setDeleteDialogOpen(false);
+      setUserIdToDelete(null);
+      setUserNameToDelete(null);
+      deleteUserMutation.reset();
+    },
+    onError: (error) => {
+      toast.error(
+        `Error deleting user: ${error.message}` || "Failed to delete user"
+      );
+    },
+  });
 
-    const blob = new Blob([csvContent], { type: "text/csv" });
-    const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "users.csv";
-    a.click();
-    window.URL.revokeObjectURL(url);
+  // Delete user handler with confirmation popup
+  const handleDeleteUser = (user) => {
+    setUserIdToDelete(user.id);
+    setUserNameToDelete(
+      user.profile.display_name || `${user.first_name} ${user.last_name}`
+    );
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDeleteUser = async () => {
+    if (!userIdToDelete) return;
+    await deleteUserMutation.mutateAsync(userIdToDelete);
   };
 
   if (isUsersDataPending) {
@@ -149,7 +157,30 @@ export default function UserManagementPage() {
           setSelectedUser(user);
           setIsDetailsOpen(true);
         }}
-        
+        onDelete={(user) => handleDeleteUser(user)}
+      />
+
+      {/* Delete Confirmation Popup */}
+      <ConfirmationPopup
+        open={deleteDialogOpen}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) {
+            setTimeout(() => {
+              setUserIdToDelete(null);
+              setUserNameToDelete(null);
+            }, 500);
+          }
+        }}
+        title={`Delete ${userNameToDelete?.toUpperCase()} `}
+        description={`Are you sure you want to delete this user? This action cannot be undone.`}
+        confirmText="Delete"
+        cancelText="Cancel"
+        variant="danger"
+        isPending={deleteUserMutation.isPending || false}
+        isSuccess={deleteUserMutation.isSuccess || false}
+        onConfirm={confirmDeleteUser}
+        autoClose={true}
       />
 
       {/* Details Modal */}

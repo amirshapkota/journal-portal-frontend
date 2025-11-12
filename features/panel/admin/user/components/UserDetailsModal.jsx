@@ -13,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent } from "@/components/ui/card";
 import { format } from "date-fns";
 import InfoItem from "../../verification-requests/components/InfoItem";
+import { DialogDescription } from "@radix-ui/react-dialog";
 
 export function UserDetailsModal({ user, isOpen, onClose, onEdit }) {
   if (!user) return null;
@@ -22,6 +23,9 @@ export function UserDetailsModal({ user, isOpen, onClose, onEdit }) {
       <DialogContent className="md:max-w-[85%] lg:max-w-[60%] max-h-[90vh] overflow-y-auto ">
         <DialogHeader>
           <DialogTitle>User Details</DialogTitle>
+          <DialogDescription className="text-sm text-muted-foreground">
+            Detailed information about the selected user.
+          </DialogDescription>
         </DialogHeader>
 
         <div className="space-y-5">

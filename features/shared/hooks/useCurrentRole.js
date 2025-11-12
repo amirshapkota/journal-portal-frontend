@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * useCurrentRole Hook
  * @module hooks/useCurrentRole
@@ -42,7 +44,7 @@ export function useCurrentRole() {
     const routeRole = pathSegments[0]?.toUpperCase();
 
     if (VALID_ROLES.includes(routeRole) && userRoles.includes(routeRole)) {
-        if (typeof window !== "undefined") {
+      if (typeof window !== "undefined") {
         const savedRole = localStorage.getItem(ROLE_STORAGE_KEY);
         if (savedRole !== routeRole) {
           localStorage.setItem(ROLE_STORAGE_KEY, routeRole);

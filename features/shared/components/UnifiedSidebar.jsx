@@ -55,6 +55,7 @@ export function UnifiedSidebar({ menuItems }) {
               src="/omway-white.png"
               alt="logo"
               className="w-[130px]"
+              loading="eager"
             />
           ) : (
             <Image
@@ -63,6 +64,7 @@ export function UnifiedSidebar({ menuItems }) {
               src="/omway-logo.png"
               alt="logo"
               className="w-[130px]"
+              loading="eager"
             />
           )}
         </div>

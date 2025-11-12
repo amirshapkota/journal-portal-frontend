@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Dialog,
   DialogContent,
@@ -81,7 +83,10 @@ const ConfirmationPopup = ({
    */
   useEffect(() => {
     if (isSuccess && autoClose) {
-      onOpenChange?.(false);
+      const timer = setTimeout(() => {
+        onOpenChange?.(false);
+      }, 0);
+      return () => clearTimeout(timer);
     }
   }, [isSuccess, onOpenChange, autoClose]);
 

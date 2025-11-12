@@ -1,3 +1,12 @@
+// DELETE user
+export const deleteUser = async (userId) => {
+  try {
+    const response = await instance.delete(`users/${userId}/`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 import { instance } from "@/lib/instance";
 
 export const getAllUsers = async () => {
