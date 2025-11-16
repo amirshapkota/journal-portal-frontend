@@ -45,8 +45,6 @@ export function AutoScoreChart({ scoreBreakdown, totalScore }) {
     "hsl(173, 58%, 39%)",
     "hsl(197, 71%, 33%)",
     "hsl(221, 83%, 53%)",
-    "hsl(262, 83%, 58%)",
-    "hsl(var(--muted))",
   ];
 
   // Get color for a segment

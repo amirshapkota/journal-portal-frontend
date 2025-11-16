@@ -3,7 +3,7 @@ import { getUserVerificationRequests } from "../../api/VerificationApiSlice";
 
 export const useGetMyVerificationRequests = (options = {}) => {
   return useQuery({
-    queryKey: ["verification-requests"],
+    queryKey: ["my-verification-requests"],
     queryFn: () => getUserVerificationRequests(),
     staleTime: 2 * 60 * 1000, // 2 minutes - requests status can change when admin approves/rejects
     gcTime: 5 * 60 * 1000, // 5 minutes - keep in cache

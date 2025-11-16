@@ -4,11 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Users,
   BookOpen,
-  FileText,
   CheckCircle,
   Settings,
   ArrowRight,
 } from "lucide-react";
+import Link from "next/link";
 
 const quickLinks = [
   {
@@ -22,6 +22,16 @@ const quickLinks = [
     iconColor: "text-blue-600 dark:text-blue-400",
   },
   {
+    title: "Verification Requests",
+    description: "Review submissions",
+    icon: CheckCircle,
+    href: "/admin/submissions",
+    color:
+      "from-amber-500/20 to-amber-600/20 dark:from-amber-500/10 dark:to-amber-600/10",
+    iconBg: "bg-amber-500/20 dark:bg-amber-500/10",
+    iconColor: "text-amber-600 dark:text-amber-400",
+  },
+  {
     title: "Journal Management",
     description: "Configure journals",
     icon: BookOpen,
@@ -31,31 +41,21 @@ const quickLinks = [
     iconBg: "bg-purple-500/20 dark:bg-purple-500/10",
     iconColor: "text-purple-600 dark:text-purple-400",
   },
-  {
-    title: "Submissions",
-    description: "Review submissions",
-    icon: FileText,
-    href: "/admin/submissions",
-    color:
-      "from-amber-500/20 to-amber-600/20 dark:from-amber-500/10 dark:to-amber-600/10",
-    iconBg: "bg-amber-500/20 dark:bg-amber-500/10",
-    iconColor: "text-amber-600 dark:text-amber-400",
-  },
-  {
-    title: "Reviews",
-    description: "Manage reviews",
-    icon: CheckCircle,
-    href: "/admin/reviews",
-    color:
-      "from-green-500/20 to-green-600/20 dark:from-green-500/10 dark:to-green-600/10",
-    iconBg: "bg-green-500/20 dark:bg-green-500/10",
-    iconColor: "text-green-600 dark:text-green-400",
-  },
+  // {
+  //   title: "Reviews",
+  //   description: "Manage reviews",
+  //   icon: CheckCircle,
+  //   href: "/admin/reviews",
+  //   color:
+  //     "from-green-500/20 to-green-600/20 dark:from-green-500/10 dark:to-green-600/10",
+  //   iconBg: "bg-green-500/20 dark:bg-green-500/10",
+  //   iconColor: "text-green-600 dark:text-green-400",
+  // },
   {
     title: "Settings",
     description: "Platform settings",
     icon: Settings,
-    href: "/admin/settings",
+    href: "/settings/email-preferences",
     color:
       "from-slate-500/20 to-slate-600/20 dark:from-slate-500/10 dark:to-slate-600/10",
     iconBg: "bg-slate-500/20 dark:bg-slate-500/10",
@@ -70,9 +70,9 @@ export function QuickLinksPanel() {
         <CardTitle className="text-xl">Quick Links</CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <div className="space-y-2 px-4">
+        <div className="space-y-2 xl:space-y-0 px-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
           {quickLinks.map((link) => (
-            <a
+            <Link
               key={link.title}
               href={link.href}
               className={`group relative block overflow-hidden rounded-lg border border-border/50 p-4 transition-all duration-200 hover:border-primary/50 hover:shadow-md dark:hover:shadow-lg bg-linear-to-br ${link.color}`}
@@ -95,7 +95,7 @@ export function QuickLinksPanel() {
                 </div>
                 <ArrowRight className="h-4 w-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-primary" />
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </CardContent>

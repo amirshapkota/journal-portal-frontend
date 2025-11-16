@@ -233,11 +233,6 @@ export const sidebarConfig = {
       icon: Settings,
       children: [
         {
-          name: "Email Preferences",
-          path: "/settings/email-preferences",
-          icon: Mail,
-        },
-        {
           name: "Email Logs",
           path: "/settings/email-log",
           icon: FileText,
@@ -251,11 +246,6 @@ export const sidebarConfig = {
           name: "Appearance",
           path: "/settings/appearance",
           icon: Palette,
-        },
-        {
-          name: "Security",
-          path: "/settings/security",
-          icon: Shield,
         },
       ],
     },

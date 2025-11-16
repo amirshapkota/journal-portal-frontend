@@ -4,8 +4,12 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
-import { JournalDetailsDrawer, JournalFormModal } from "@/features";
-import JournalsTable from "@/features/panel/admin/journals/components/JournalsTable";
+import {
+  JournalDetailsDrawer,
+  JournalFormModal,
+  JournalsTable,
+  useGetJournals,
+} from "@/features";
 import { FilterToolbar } from "@/features/shared";
 
 const mockJournals = [
@@ -88,8 +92,13 @@ export default function JournalsPage() {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingJournal, setEditingJournal] = useState(null);
   // Simulate loading and error state for demonstration
-  const [isPending, setIsPending] = useState(false); // Set to true to show loading
   const [error, setError] = useState(null); // Set to error object/string to show error
+
+  const {
+    data: JournalData,
+    isPending: isJournalDataPending,
+    error: JournalDataError,
+  } = useGetJournals();
 
   const itemsPerPage = 10;
 
@@ -258,7 +267,7 @@ export default function JournalsPage() {
 
       {/* Journals Table */}
       <JournalsTable
-        journals={paginatedJournals}
+        journals={JournalData?.results || []}
         onViewDetails={(row) => {
           setSelectedJournal(row);
           setIsDetailsOpen(true);
@@ -268,8 +277,8 @@ export default function JournalsPage() {
           setIsFormOpen(true);
         }}
         onDelete={handleDelete}
-        isPending={isPending}
-        error={error}
+        isPending={isJournalDataPending}
+        error={JournalDataError}
         sortColumn={sortColumn}
         sortOrder={sortOrder}
         onSort={handleSort}

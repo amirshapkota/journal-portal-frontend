@@ -9,7 +9,7 @@ import {
 import { Checkbox } from "@/components/ui/checkbox";
 import { useWatch } from "react-hook-form";
 
-export default function ReviewStep({ form, uploadedFiles }) {
+export default function ReviewStep({ form }) {
   const formData = useWatch({
     control: form.control,
   });
@@ -51,15 +51,6 @@ export default function ReviewStep({ form, uploadedFiles }) {
           )}
         </div>
         <div className="h-px bg-border" />
-        <div>
-          <h4 className="font-semibold text-foreground mb-2">Files</h4>
-          <p className="text-sm text-muted-foreground">
-            {uploadedFiles.manuscript.length} manuscript
-            {uploadedFiles.cover_letter.length > 0 && ", cover letter"}
-            {uploadedFiles.supplementary.length > 0 &&
-              `, ${uploadedFiles.supplementary.length} supplementary`}
-          </p>
-        </div>
       </Card>
       <FormField
         control={form.control}

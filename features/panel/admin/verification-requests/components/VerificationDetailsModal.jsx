@@ -12,12 +12,6 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
-import { FormTextareaField } from "@/features/shared/components";
 import {
   CheckCircle2,
   XCircle,
@@ -29,6 +23,7 @@ import {
   Award,
   FileText,
   Lightbulb,
+  Info,
 } from "lucide-react";
 import InfoItem from "./InfoItem";
 
@@ -47,6 +42,7 @@ export function VerificationDetailsModal({
   onClose,
   onApprove,
   onReject,
+  onRequestInfo,
   isLoading = false,
 }) {
   if (!verification) return null;
@@ -303,6 +299,15 @@ export function VerificationDetailsModal({
               >
                 <XCircle className="h-4 w-4" />
                 Reject
+              </Button>
+              <Button
+                variant=""
+                onClick={onRequestInfo}
+                disabled={isLoading}
+                className="gap-2"
+              >
+                <Info className="h-4 w-4" />
+                Request Info
               </Button>
               <Button
                 variant="default"

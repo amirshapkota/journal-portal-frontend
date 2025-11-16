@@ -12,6 +12,7 @@ import {
   useGetVerificationRequests,
   useApproveVerification,
   useRejectVerification,
+  useRequestInfoVerification,
 } from "@/features";
 import {
   Select,
@@ -38,6 +39,8 @@ export default function VerificationsPage() {
     useApproveVerification();
   const { mutate: rejectVerification, isPending: isRejecting } =
     useRejectVerification();
+  const { mutate: requestInfoVerification, isPending: isRequestingInfo } =
+    useRequestInfoVerification();
 
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -56,6 +59,11 @@ export default function VerificationsPage() {
     setIsConfirmOpen(true);
   };
 
+  const handleRequestInfo = () => {
+    setConfirmAction("request-info");
+    setIsConfirmOpen(true);
+  };
+
   const handleReject = () => {
     setConfirmAction("reject");
     setIsConfirmOpen(true);
@@ -66,6 +74,24 @@ export default function VerificationsPage() {
     if (!selectedVerification?.id) return;
 
     approveVerification(
+      {
+        id: selectedVerification.id,
+        data: values,
+      },
+      {
+        onSuccess: () => {
+          setIsConfirmOpen(false);
+          setConfirmAction(null);
+          setIsDetailsOpen(false);
+        },
+      }
+    );
+  };
+
+  const handleRequestInfoConfirm = (values) => {
+    if (!selectedVerification?.id) return;
+
+    requestInfoVerification(
       {
         id: selectedVerification.id,
         data: values,
@@ -98,12 +124,9 @@ export default function VerificationsPage() {
     );
   };
 
-  if (isVerificationRequestsPending) {
-    return <LoadingScreen />;
-  }
-
   return (
     <div className="space-y-6">
+      {isVerificationRequestsPending && <LoadingScreen />}
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">
@@ -151,7 +174,8 @@ export default function VerificationsPage() {
         onClose={() => setIsDetailsOpen(false)}
         onApprove={handleApprove}
         onReject={handleReject}
-        isLoading={isApproving || isRejecting}
+        onRequestInfo={handleRequestInfo}
+        isLoading={isApproving || isRejecting || isRequestingInfo}
       />
 
       <ActionConfirmationPopup
@@ -160,11 +184,12 @@ export default function VerificationsPage() {
         userName={selectedVerification?.profile_name || ""}
         onApprove={handleApproveConfirm}
         onReject={handleRejectConfirm}
+        onRequestInfo={handleRequestInfoConfirm}
         onCancel={() => {
           setIsConfirmOpen(false);
           setConfirmAction(null);
         }}
-        isLoading={isApproving || isRejecting}
+        isLoading={isApproving || isRejecting || isRequestingInfo}
       />
     </div>
   );

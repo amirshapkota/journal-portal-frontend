@@ -23,6 +23,10 @@ const rejectionSchema = z.object({
 const approveSchema = z.object({
   admin_notes: z.string().optional(),
 });
+const requestInfoSchema = z.object({
+  additional_info_requested: z.string().min(1, "Message to user is required"),
+  admin_notes: z.string().optional(),
+});
 
 export function ActionConfirmationPopup({
   isOpen,
@@ -30,17 +34,29 @@ export function ActionConfirmationPopup({
   userName,
   onApprove,
   onReject,
+  onRequestInfo,
   onCancel,
   isLoading = false,
 }) {
   const isReject = action === "reject";
   const isApprove = action === "approve";
+  const isRequestInfo = action === "request-info";
 
   // Use correct schema and default values
   const form = useForm({
-    resolver: zodResolver(isReject ? rejectionSchema : approveSchema),
+    resolver: zodResolver(
+      isReject
+        ? rejectionSchema
+        : isApprove
+        ? approveSchema
+        : isRequestInfo
+        ? requestInfoSchema
+        : approveSchema
+    ),
     defaultValues: isReject
       ? { rejection_reason: "", admin_notes: "" }
+      : isRequestInfo
+      ? { additional_info_requested: "", admin_notes: "" }
       : { admin_notes: "" },
   });
 
@@ -49,6 +65,8 @@ export function ActionConfirmationPopup({
       onReject(values);
     } else if (isApprove) {
       onApprove(values);
+    } else if (isRequestInfo) {
+      onRequestInfo(values);
     }
     form.reset();
   };
@@ -58,8 +76,8 @@ export function ActionConfirmationPopup({
     onCancel();
   };
 
-  // Only render dialog content if action is approve or reject
-  const shouldShowForm = isApprove || isReject;
+  // Only render dialog content if action is approve, reject, or request-info
+  const shouldShowForm = isApprove || isReject || isRequestInfo;
 
   return (
     <AlertDialog open={isOpen && shouldShowForm} onOpenChange={handleCancel}>
@@ -67,12 +85,18 @@ export function ActionConfirmationPopup({
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              {isReject ? "Reject Verification?" : "Approve Verification?"}
+              {isReject
+                ? "Reject Verification?"
+                : isApprove
+                ? "Approve Verification?"
+                : "Request Additional Information"}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {isReject
                 ? `You are about to reject ${userName}'s verification request.`
-                : `You are about to approve ${userName}'s verification request.`}
+                : isApprove
+                ? `You are about to approve ${userName}'s verification request.`
+                : `You are about to request additional information from ${userName}.`}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -93,8 +117,23 @@ export function ActionConfirmationPopup({
                   rows={3}
                 />
               )}
+              {isRequestInfo && (
+                <FormTextareaField
+                  name="additional_info_requested"
+                  label={
+                    <span>
+                      Message to User
+                      <span className="text-destructive ml-1">*</span>
+                    </span>
+                  }
+                  control={form.control}
+                  required
+                  placeholder="Please provide the additional information you need."
+                  rows={3}
+                />
+              )}
 
-              {/* Admin notes for both */}
+              {/* Admin notes for all */}
               <FormTextareaField
                 name="admin_notes"
                 label="Admin Notes (Optional)"
@@ -115,13 +154,19 @@ export function ActionConfirmationPopup({
                   disabled={isLoading}
                   onClick={form.handleSubmit(onFormSubmit)}
                   className={
-                    isReject ? "bg-destructive hover:bg-destructive/90" : ""
+                    isReject
+                      ? "bg-destructive hover:bg-destructive/90"
+                      : isRequestInfo
+                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      : ""
                   }
                 >
                   {isLoading
                     ? "Processing..."
                     : isReject
                     ? "Reject"
+                    : isRequestInfo
+                    ? "Send Request"
                     : "Approve"}
                 </AlertDialogAction>
               </div>

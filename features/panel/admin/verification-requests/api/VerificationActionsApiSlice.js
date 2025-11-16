@@ -27,3 +27,17 @@ export const rejectVerification = async (id, data) => {
   );
   return response.data;
 };
+
+/**
+ * Request additional information for a verification request
+ * @param {string} id - Verification request ID
+ * @param {Object} data - Request info data (info_requested, admin_notes)
+ * @returns {Promise}
+ */
+export const requestInfoVerification = async (id, data) => {
+  const response = await instance.post(
+    `/admin/verifications/${id}/request_info/`,
+    data
+  );
+  return response.data;
+};

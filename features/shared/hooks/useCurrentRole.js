@@ -8,7 +8,7 @@
  * Automatically detects role from URL and persists user's role selection.
  */
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
 

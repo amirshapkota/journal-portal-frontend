@@ -86,7 +86,7 @@ const RoleRequestForm = () => {
     submitRequest(data, {
       onSuccess: () => {
         toast.success("Role request submitted successfully!");
-        queryClient.invalidateQueries(["verification-requests"]);
+        queryClient.invalidateQueries(["my-verification-requests"]);
         roleForm.reset();
       },
       onError: (error) => {
@@ -126,7 +126,10 @@ const RoleRequestForm = () => {
         )
       )}
       {/* Role Request Form */}
-      {defaultRoles.every((role) => RoleLists?.includes(role)) ? null : (
+      {defaultRoles.every((role) => RoleLists?.includes(role)) ||
+      (verificationRequests && verificationRequests[0].status === "PENDING") ||
+      (verificationRequests &&
+        verificationRequests[0].status === "INFO_REQUESTED") ? null : (
         <Card className="border-border dark:border-slate-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">

@@ -71,11 +71,6 @@ const fullFormSchema = z.object({
 
 export default function NewSubmissionForm() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [uploadedFiles, setUploadedFiles] = useState({
-    manuscript: [],
-    supplementary: [],
-    cover_letter: [],
-  });
 
   const {
     data: meData,
@@ -115,7 +110,6 @@ export default function NewSubmissionForm() {
     { title: "Journal Selection", description: "Choose your target journal" },
     { title: "Manuscript Info", description: "Add manuscript details" },
     { title: "Authors", description: "Manage author information" },
-    { title: "Documents", description: "Upload files" },
     { title: "Review", description: "Final review and submit" },
   ];
 
@@ -130,22 +124,6 @@ export default function NewSubmissionForm() {
       );
     }
   }, [profile, form]);
-
-  const handleFileUpload = (category, files) => {
-    if (files) {
-      setUploadedFiles((prev) => ({
-        ...prev,
-        [category]: [...prev[category], ...Array.from(files)],
-      }));
-    }
-  };
-
-  const handleRemoveFile = (category, index) => {
-    setUploadedFiles((prev) => ({
-      ...prev,
-      [category]: prev[category].filter((_, i) => i !== index),
-    }));
-  };
 
   const handleAddCoauthor = () => {
     const currentCoAuthors = form.getValues("co_authors") || [];
@@ -225,11 +203,8 @@ export default function NewSubmissionForm() {
           values.corresponding_author.institution.trim() !== ""
         );
       }
+
       case 3: {
-        // At least one manuscript file required
-        return uploadedFiles.manuscript.length > 0;
-      }
-      case 4: {
         // Terms must be accepted
         return values.terms_accepted === true;
       }
@@ -321,6 +296,7 @@ export default function NewSubmissionForm() {
                   />
                 </motion.div>
               )}
+
               {currentStep === 3 && (
                 <motion.div
                   key="step-3"
@@ -328,22 +304,7 @@ export default function NewSubmissionForm() {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
                 >
-                  <DocumentsStep
-                    uploadedFiles={uploadedFiles}
-                    handleFileUpload={handleFileUpload}
-                    handleRemoveFile={handleRemoveFile}
-                  />
-                </motion.div>
-              )}
-
-              {currentStep === 4 && (
-                <motion.div
-                  key="step-4"
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: -20 }}
-                >
-                  <ReviewStep form={form} uploadedFiles={uploadedFiles} />
+                  <ReviewStep form={form} />
                 </motion.div>
               )}
             </AnimatePresence>

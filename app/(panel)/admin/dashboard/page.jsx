@@ -13,6 +13,8 @@ import {
   TrendingUp,
 } from "lucide-react";
 import {
+  ErrorCard,
+  LoadingScreen,
   QuickLinksPanel,
   RecentActivityFeed,
   RoleBasedRoute,
@@ -33,9 +35,47 @@ export default function AdminDashboard() {
   const {
     data: analyticsData,
     isPending,
-    isError,
+    isError: AnalyticsDataError,
     error,
+    refetch,
   } = useDashboardAnalytics();
+
+  const analyticsDatas = {
+    overview: {
+      total_submissions: 0,
+      pending_submissions: 0,
+      submissions_last_30_days: 0,
+      acceptance_rate: 0,
+      total_reviews: 0,
+      pending_reviews: 0,
+      avg_review_time_days: null,
+    },
+    submissions: {
+      total: 5,
+      pending: 3,
+      accepted: 1,
+      rejected: 1,
+      under_review: 1,
+    },
+    reviews: {
+      total: 6,
+      pending: 3,
+      completed: 2,
+      declined: 1,
+    },
+    users: {
+      total: 7,
+      verified: 1,
+      pending_verifications: 1,
+      authors: 1,
+      reviewers: 1,
+    },
+    journals: {
+      total: 4,
+      active: 3,
+      inactive: 1,
+    },
+  };
 
   const statistics = analyticsData
     ? [
@@ -102,8 +142,20 @@ export default function AdminDashboard() {
       ]
     : [];
 
+  if (AnalyticsDataError) {
+    return (
+      <ErrorCard
+        title="Failed to load admin analytics data"
+        description="We couldn't load the analytics data for the admin dashboard. Please try again."
+        details={error?.message || error?.toString()}
+        onRetry={refetch}
+      />
+    );
+  }
+
   return (
     <RoleBasedRoute allowedRoles={["ADMIN"]}>
+      {isPending && <LoadingScreen />}
       <div className="space-y-5 ">
         {/* Header */}
         <div className="space-y-2">
@@ -113,16 +165,19 @@ export default function AdminDashboard() {
         </div>
 
         {/* KPI Cards */}
-        {isError ? (
-          <StatsErrorCard
-            title="Failed to load admin stats"
-            message={
-              error?.message ||
-              "An error occurred while loading admin statistics."
-            }
-          />
+        {isPending ? (
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <StatsCard
+                key={`skeleton-${i}`}
+                title="Loading..."
+                value="-"
+                isLoading={isPending}
+              />
+            ))}
+          </div>
         ) : (
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {statistics.map((stat) => (
               <StatsCard
                 key={stat.title}
@@ -131,60 +186,44 @@ export default function AdminDashboard() {
                 icon={stat.icon}
                 valueClass={stat.valueClass}
                 iconClass={stat.iconClass}
-                isLoading={isPending}
               />
             ))}
           </div>
         )}
 
         {/* Analytics Charts Section */}
-        <div className="space-y-4">
+        <div className="space-y-5">
           <h2 className="text-xl font-semibold text-foreground">
             Analytics Overview
           </h2>
 
           {/* Submission and Review Status Charts */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <SubmissionStatusChart data={analyticsData?.submissions || {}} />
-            <ReviewStatusChart data={analyticsData?.reviews || {}} />
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <SubmissionStatusChart
+              data={analyticsData?.submissions || {}}
+              isPending={isPending}
+            />
+            <ReviewStatusChart
+              data={analyticsData?.reviews || {}}
+              isPending={isPending}
+            />
           </div>
 
           {/* User and Journal Distribution Charts */}
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <UserDistributionChart data={analyticsData?.users || {}} />
-            <JournalDistributionChart data={analyticsData?.journals || {}} />
+          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
+            <UserDistributionChart
+              data={analyticsData?.users || {}}
+              isPending={isPending}
+            />
+            <JournalDistributionChart
+              data={analyticsData?.journals || {}}
+              isPending={isPending}
+            />
           </div>
         </div>
 
-        {/* Trends Section
-        <div className="space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-semibold text-foreground">Trends</h2>
-            <div className="flex gap-2">
-              {["7d", "30d"].map((range) => (
-                <Button
-                  key={range}
-                  variant={dateRange === range ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setDateRange(range)}
-                >
-                  {range === "7d" ? "7 Days" : "30 Days"}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <UserGrowthChart dateRange={dateRange} />
-            <SubmissionTrendsChart dateRange={dateRange} />
-          </div>
-        </div> */}
-
         {/* Recent Activity and Quick Links */}
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          <div className="lg:col-span-2">
-            <RecentActivityFeed />
-          </div>
+        <div className="">
           <QuickLinksPanel />
         </div>
       </div>

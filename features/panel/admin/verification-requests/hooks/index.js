@@ -2,3 +2,4 @@ export { useGetPendingVerificationRequests } from "./query/useGetPendingVerifica
 export { useGetVerificationRequests } from "./query/useGetVerificationRequests";
 export { useApproveVerification } from "./mutation/useApproveVerification";
 export { useRejectVerification } from "./mutation/useRejectVerification";
+export { useRequestInfoVerification } from "./mutation/useRequestInfoVerification";

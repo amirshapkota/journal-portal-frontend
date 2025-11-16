@@ -65,13 +65,10 @@ export default function UserManagementPage() {
     await deleteUserMutation.mutateAsync(userIdToDelete);
   };
 
-  if (isUsersDataPending) {
-    return <LoadingScreen />;
-  }
-
   return (
     <div className="space-y-5">
       {/* Header */}
+      {isUsersDataPending && <LoadingScreen />}
       <div className="space-y-2">
         <h1 className="text-3xl font-bold text-foreground">User Management</h1>
         <p className="text-muted-foreground">
@@ -122,6 +119,8 @@ export default function UserManagementPage() {
           setIsDetailsOpen(true);
         }}
         onDelete={(user) => handleDeleteUser(user)}
+        isPending={isUsersDataPending}
+        error={UserDataError}
       />
 
       {/* Delete Confirmation Popup */}

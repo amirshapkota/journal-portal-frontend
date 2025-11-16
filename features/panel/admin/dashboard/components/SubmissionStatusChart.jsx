@@ -9,11 +9,10 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  Legend,
   Cell,
 } from "recharts";
 
-export function SubmissionStatusChart({ data }) {
+export function SubmissionStatusChart({ data, isPending }) {
   const chartData = [
     { name: "Pending", value: data?.pending || 0 },
     { name: "Accepted", value: data?.accepted || 0 },
@@ -22,11 +21,13 @@ export function SubmissionStatusChart({ data }) {
   ];
 
   const COLORS = [
-    "var(--chart-1)",
+    "var(--chart-4)",
     "var(--chart-3)",
     "var(--chart-2)",
-    "var(--chart-4)",
+    "var(--chart-1)",
   ];
+
+  const allZero = chartData.every((d) => d.value === 0);
 
   return (
     <Card className="shadow-new">
@@ -34,25 +35,39 @@ export function SubmissionStatusChart({ data }) {
         <CardTitle>Submission Status Distribution</CardTitle>
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-            <XAxis dataKey="name" stroke="var(--muted-foreground)" />
-            <YAxis stroke="var(--muted-foreground)" />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "var(--card)",
-                border: "1px solid var(--border)",
-              }}
-            />
-            <Legend />
-            <Bar dataKey="value" radius={[8, 8, 0, 0]} name="Submission Status">
-              {chartData.map((entry, index) => (
-                <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
+        {isPending ? (
+          <div className="flex items-center justify-center h-[260px] text-muted-foreground animate-pulse">
+            Loading chart...
+          </div>
+        ) : allZero ? (
+          <div className="flex items-center justify-center h-[260px] text-muted-foreground">
+            No submission status data to display at this time.
+          </div>
+        ) : (
+          <ResponsiveContainer width="100%" height={300}>
+            <BarChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
+              <XAxis dataKey="name" stroke="var(--muted-foreground)" />
+              <YAxis stroke="var(--muted-foreground)" />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "var(--card)",
+                  border: "1px solid var(--border)",
+                }}
+                itemStyle={{ color: "var(--popover-foreground)" }}
+              />
+              <Bar
+                dataKey="value"
+                radius={[8, 8, 0, 0]}
+                name="Submission Status"
+              >
+                {chartData.map((entry, index) => (
+                  <Cell key={entry.name} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </CardContent>
     </Card>
   );

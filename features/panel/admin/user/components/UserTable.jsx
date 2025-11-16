@@ -13,7 +13,14 @@ import {
 import { MoreVertical, Eye, Edit2, Trash2 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
-export function UserTable({ users, onViewDetails, onEdit, onDelete }) {
+export function UserTable({
+  users,
+  onViewDetails,
+  onEdit,
+  onDelete,
+  isPending,
+  error,
+}) {
   const getVerificationColor = (status) => {
     switch (status) {
       case "GENUINE":
@@ -141,7 +148,9 @@ export function UserTable({ users, onViewDetails, onEdit, onDelete }) {
     <DataTable
       data={users}
       columns={columns}
+      isPending={isPending}
       tableClassName="bg-card border flex justify-center"
+      error={error}
     />
   );
 }

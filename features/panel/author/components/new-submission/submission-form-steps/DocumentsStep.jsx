@@ -3,11 +3,27 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { X, Upload } from "lucide-react";
 
-export default function DocumentsStep({
-  uploadedFiles,
-  handleFileUpload,
-  handleRemoveFile,
-}) {
+export default function DocumentsStep() {
+  const [uploadedFiles, setUploadedFiles] = useState({
+    manuscript: [],
+    supplementary: [],
+    cover_letter: [],
+  });
+  const handleFileUpload = (category, files) => {
+    if (files) {
+      setUploadedFiles((prev) => ({
+        ...prev,
+        [category]: [...prev[category], ...Array.from(files)],
+      }));
+    }
+  };
+
+  const handleRemoveFile = (category, index) => {
+    setUploadedFiles((prev) => ({
+      ...prev,
+      [category]: prev[category].filter((_, i) => i !== index),
+    }));
+  };
   return (
     <div className="space-y-6">
       {["manuscript", "cover_letter", "supplementary"].map((category) => (
