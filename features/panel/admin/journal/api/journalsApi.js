@@ -5,7 +5,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response
  */
 export const getJournals = async () => {
-  const response = await instance.get("journals/journals");
+  const response = await instance.get("journals/journals/");
   return response.data;
 };
 
@@ -283,5 +283,39 @@ export const updateJournalStaff = async ({ journalId, userId, ...staffData }) =>
  */
 export const removeJournalStaff = async ({ journalId, userId }) => {
   const response = await instance.delete(`journals/journals/${journalId}/staff/${userId}/`);
+  return response.data;
+};
+
+// ==================== SUBMISSION SETTINGS APIs ====================
+
+/**
+ * Get submission settings for a journal
+ * @param {string} journalId - Journal ID
+ * @returns {Promise} API response
+ */
+export const getSubmissionSettings = async (journalId) => {
+  const response = await instance.get(`journals/journals/${journalId}/`);
+  return response.data.settings || {};
+};
+
+/**
+ * Update submission settings for a journal
+ * @param {string} journalId - Journal ID
+ * @param {Object} settings - Submission settings
+ * @returns {Promise} API response
+ */
+export const updateSubmissionSettings = async ({ journalId, settings }) => {
+  const response = await instance.patch(`journals/journals/${journalId}/`, { settings });
+  return response.data;
+};
+
+// ==================== USERS APIs ====================
+
+/**
+ * Get all users/profiles
+ * @returns {Promise} API response
+ */
+export const getUsers = async () => {
+  const response = await instance.get("profiles/");
   return response.data;
 };

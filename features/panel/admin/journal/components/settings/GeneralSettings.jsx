@@ -58,6 +58,7 @@ export function GeneralSettings({ journal }) {
       return;
     }
 
+    console.log("Saving journal data:", { id: journal.id, ...formData });
     updateJournalMutation.mutate({
       id: journal.id,
       ...formData,

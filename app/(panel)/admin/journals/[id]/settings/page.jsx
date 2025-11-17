@@ -15,6 +15,7 @@ import {
   TaxonomySettings,
   StaffSettings,
   SubmissionSettings,
+  ContactSettings,
 } from "@/features/panel/admin/journal/components/settings";
 import { useGetJournalById } from "@/features";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -92,10 +93,11 @@ export default function JournalSettingsPage() {
 
       {/* Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 lg:w-[600px]">
+        <TabsList className="grid w-full grid-cols-5 lg:w-[750px]">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="taxonomy">Taxonomy</TabsTrigger>
           <TabsTrigger value="staff">Staff</TabsTrigger>
+          <TabsTrigger value="contact">Contact</TabsTrigger>
           <TabsTrigger value="submissions">Submissions</TabsTrigger>
         </TabsList>
 
@@ -109,6 +111,10 @@ export default function JournalSettingsPage() {
 
         <TabsContent value="staff" className="space-y-4">
           <StaffSettings journalId={journalId} />
+        </TabsContent>
+
+        <TabsContent value="contact" className="space-y-4">
+          <ContactSettings journal={journal} />
         </TabsContent>
 
         <TabsContent value="submissions" className="space-y-4">

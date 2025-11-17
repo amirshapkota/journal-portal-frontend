@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,9 +15,16 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "sonner";
-import { Save } from "lucide-react";
+import { Save, Loader2 } from "lucide-react";
+import { useGetJournalById } from "@/features";
+import { useQueryClient, useMutation } from "@tanstack/react-query";
+import { updateSubmissionSettings } from "../../api/journalsApi";
 
 export function SubmissionSettings({ journalId }) {
+  // Fetch journal data to get current settings
+  const { data: journal, isPending, error } = useGetJournalById(journalId);
+  const queryClient = useQueryClient();
+
   const [formData, setFormData] = useState({
     // Submission Guidelines
     submission_guidelines: "",
@@ -45,20 +52,54 @@ export function SubmissionSettings({ journalId }) {
     require_funding_info: true,
   });
 
-  const [isSaving, setIsSaving] = useState(false);
+  // Update form when journal data loads
+  useEffect(() => {
+    if (journal?.settings) {
+      setFormData(prev => ({ ...prev, ...journal.settings }));
+    }
+  }, [journal]);
+
+  const updateSettingsMutation = useMutation({
+    mutationFn: updateSubmissionSettings,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["journal", journalId] });
+      toast.success("Submission settings saved successfully");
+    },
+    onError: (error) => {
+      console.error("Error saving submission settings:", error);
+      toast.error("Failed to save submission settings");
+    },
+  });
 
   const handleSave = async () => {
-    setIsSaving(true);
-    try {
-      // TODO: API call to save submission settings
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-      toast.success("Submission settings saved successfully");
-    } catch (error) {
-      toast.error("Failed to save submission settings");
-    } finally {
-      setIsSaving(false);
-    }
+    updateSettingsMutation.mutate({
+      journalId,
+      settings: formData,
+    });
   };
+
+  if (isPending) {
+    return (
+      <Card>
+        <CardContent className="flex items-center justify-center py-12">
+          <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card>
+        <CardContent className="py-12">
+          <div className="text-center text-destructive">
+            <p>Failed to load submission settings</p>
+            <p className="text-sm mt-1">{error.message}</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -361,9 +402,12 @@ export function SubmissionSettings({ journalId }) {
 
       {/* Save Button */}
       <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={isSaving}>
-          {isSaving ? (
-            <>Saving...</>
+        <Button onClick={handleSave} disabled={updateSettingsMutation.isPending}>
+          {updateSettingsMutation.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Saving...
+            </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
