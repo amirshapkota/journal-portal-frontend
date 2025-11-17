@@ -4,12 +4,7 @@ import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
   GeneralSettings,
   TaxonomySettings,
@@ -17,7 +12,8 @@ import {
   SubmissionSettings,
   ContactSettings,
 } from "@/features/panel/admin/journal/components/settings";
-import { useGetJournalById } from "@/features";
+import { LoadingScreen, useGetJournalById } from "@/features";
+import ErrorCard from "@/features/shared/components/ErrorCard";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function JournalSettingsPage() {
@@ -32,6 +28,7 @@ export default function JournalSettingsPage() {
   if (isPending) {
     return (
       <div className="space-y-6">
+        <LoadingScreen />
         <div className="flex items-start justify-between">
           <div className="space-y-2">
             <Skeleton className="h-10 w-64" />
@@ -46,23 +43,11 @@ export default function JournalSettingsPage() {
 
   if (error) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.push("/admin/journals")}
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">Error</h1>
-            <p className="text-destructive mt-1">
-              Failed to load journal: {error.message}
-            </p>
-          </div>
-        </div>
-      </div>
+      <ErrorCard
+        title="Failed to load journal"
+        description={error.message}
+        onBack={() => router.push("/admin/journals")}
+      />
     );
   }
 
@@ -92,7 +77,11 @@ export default function JournalSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+      <Tabs
+        value={activeTab}
+        onValueChange={setActiveTab}
+        className="space-y-6"
+      >
         <TabsList className="grid w-full grid-cols-5 lg:w-[750px]">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="taxonomy">Taxonomy</TabsTrigger>

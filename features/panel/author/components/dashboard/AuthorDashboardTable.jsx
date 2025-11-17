@@ -80,7 +80,11 @@ function StatusBadge({ status }) {
   );
 }
 
-export default function AuthorDashboardTable({ submissions = [] }) {
+export default function AuthorDashboardTable({
+  submissions = [],
+  isPending = false,
+  error = null,
+}) {
   return (
     <DataTable
       data={submissions}
@@ -88,6 +92,9 @@ export default function AuthorDashboardTable({ submissions = [] }) {
       emptyMessage="No submissions yet. Create your first submission to get started."
       tableClassName="bg-card border flex justify-center"
       hoverable
+      isPending={isPending}
+      error={error}
+      errorMessage="Error loading submissions"
     />
   );
 }

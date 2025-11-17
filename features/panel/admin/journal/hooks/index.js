@@ -4,6 +4,7 @@ export { useGetTaxonomyTree } from "./query/useGetTaxonomyTree";
 export { useGetJournalStaff } from "./query/useGetJournalStaff";
 export { useGetUsers } from "./query/useGetUsers";
 
+export { useGetTaxonomyTree } from "./query/useGetTaxonomyTree";
 export { useCreateJournal } from "./mutation/useCreateJournal";
 export { useUpdateJournal } from "./mutation/useUpdateJournal";
 export { useCreateSection, useUpdateSection, useDeleteSection } from "./mutation/useSectionMutations";

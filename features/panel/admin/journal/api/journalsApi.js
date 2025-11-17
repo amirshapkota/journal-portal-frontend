@@ -51,7 +51,9 @@ export const getJournalById = async (id) => {
  * @returns {Promise} API response
  */
 export const getSections = async (journalId) => {
-  const response = await instance.get(`journals/sections/?journal=${journalId}`);
+  const response = await instance.get(
+    `journals/sections/?journal=${journalId}`
+  );
   return response.data;
 };
 
@@ -72,7 +74,10 @@ export const createSection = async (sectionData) => {
  * @returns {Promise} API response
  */
 export const updateSection = async ({ id, ...sectionData }) => {
-  const response = await instance.patch(`journals/sections/${id}/`, sectionData);
+  const response = await instance.patch(
+    `journals/sections/${id}/`,
+    sectionData
+  );
   return response.data;
 };
 
@@ -98,7 +103,7 @@ export const getCategories = async ({ sectionId, journalId }) => {
   if (sectionId) params.append("section", sectionId);
   if (journalId) params.append("journal", journalId);
   if (params.toString()) url += `?${params.toString()}`;
-  
+
   const response = await instance.get(url);
   return response.data;
 };
@@ -120,7 +125,10 @@ export const createCategory = async (categoryData) => {
  * @returns {Promise} API response
  */
 export const updateCategory = async ({ id, ...categoryData }) => {
-  const response = await instance.patch(`journals/categories/${id}/`, categoryData);
+  const response = await instance.patch(
+    `journals/categories/${id}/`,
+    categoryData
+  );
   return response.data;
 };
 
@@ -146,7 +154,7 @@ export const getResearchTypes = async ({ categoryId, journalId }) => {
   if (categoryId) params.append("category", categoryId);
   if (journalId) params.append("journal", journalId);
   if (params.toString()) url += `?${params.toString()}`;
-  
+
   const response = await instance.get(url);
   return response.data;
 };
@@ -157,7 +165,10 @@ export const getResearchTypes = async ({ categoryId, journalId }) => {
  * @returns {Promise} API response
  */
 export const createResearchType = async (researchTypeData) => {
-  const response = await instance.post("journals/research-types/", researchTypeData);
+  const response = await instance.post(
+    "journals/research-types/",
+    researchTypeData
+  );
   return response.data;
 };
 
@@ -168,7 +179,10 @@ export const createResearchType = async (researchTypeData) => {
  * @returns {Promise} API response
  */
 export const updateResearchType = async ({ id, ...researchTypeData }) => {
-  const response = await instance.patch(`journals/research-types/${id}/`, researchTypeData);
+  const response = await instance.patch(
+    `journals/research-types/${id}/`,
+    researchTypeData
+  );
   return response.data;
 };
 
@@ -194,7 +208,7 @@ export const getAreas = async ({ researchTypeId, journalId }) => {
   if (researchTypeId) params.append("research_type", researchTypeId);
   if (journalId) params.append("journal", journalId);
   if (params.toString()) url += `?${params.toString()}`;
-  
+
   const response = await instance.get(url);
   return response.data;
 };
@@ -236,7 +250,9 @@ export const deleteArea = async (id) => {
  * @returns {Promise} API response
  */
 export const getTaxonomyTree = async (journalId) => {
-  const response = await instance.get(`journals/areas/taxonomy-tree/?journal_id=${journalId}`);
+  const response = await instance.get(
+    `journals/areas/taxonomy-tree/?journal_id=${journalId}`
+  );
   return response.data;
 };
 
@@ -259,7 +275,10 @@ export const getJournalStaff = async (journalId) => {
  * @returns {Promise} API response
  */
 export const addJournalStaff = async ({ journalId, ...staffData }) => {
-  const response = await instance.post(`journals/journals/${journalId}/add_staff/`, staffData);
+  const response = await instance.post(
+    `journals/journals/${journalId}/add_staff/`,
+    staffData
+  );
   return response.data;
 };
 
@@ -270,8 +289,15 @@ export const addJournalStaff = async ({ journalId, ...staffData }) => {
  * @param {Object} staffData - Staff member data
  * @returns {Promise} API response
  */
-export const updateJournalStaff = async ({ journalId, userId, ...staffData }) => {
-  const response = await instance.patch(`journals/journals/${journalId}/staff/${userId}/update/`, staffData);
+export const updateJournalStaff = async ({
+  journalId,
+  userId,
+  ...staffData
+}) => {
+  const response = await instance.patch(
+    `journals/journals/${journalId}/staff/${userId}/update/`,
+    staffData
+  );
   return response.data;
 };
 
@@ -282,7 +308,9 @@ export const updateJournalStaff = async ({ journalId, userId, ...staffData }) =>
  * @returns {Promise} API response
  */
 export const removeJournalStaff = async ({ journalId, userId }) => {
-  const response = await instance.delete(`journals/journals/${journalId}/staff/${userId}/`);
+  const response = await instance.delete(
+    `journals/journals/${journalId}/staff/${userId}/`
+  );
   return response.data;
 };
 

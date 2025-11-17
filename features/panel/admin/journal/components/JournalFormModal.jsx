@@ -27,7 +27,6 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Loader2 } from "lucide-react";
 import { useCreateJournal } from "../hooks/mutation/useCreateJournal";
-import { useUpdateJournal } from "../hooks/mutation/useUpdateJournal";
 
 const journalSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -65,16 +64,13 @@ const defaultValues = {
 
 export function JournalFormModal({
   isOpen,
-  journal,
   onClose,
   onSave,
   isLoading = false,
 }) {
-  const isEditMode = !!journal;
-
   const form = useForm({
     resolver: zodResolver(journalSchema),
-    defaultValues: journal || defaultValues,
+    defaultValues,
   });
 
   // Integrate create journal mutation
@@ -85,28 +81,15 @@ export function JournalFormModal({
     },
   });
 
-  // Integrate update journal mutation
-  const updateJournalMutation = useUpdateJournal({
-    onSuccess: (data) => {
-      onSave?.(data);
-      onClose?.();
-    },
-  });
-
-  // Reset form when modal opens/closes or journal changes
+  // Reset form when modal opens/closes
   useEffect(() => {
     if (isOpen) {
-      form.reset(journal || defaultValues);
+      form.reset(defaultValues);
     }
-  }, [isOpen, journal, form]);
+  }, [isOpen, form]);
 
   const handleSubmit = async (data) => {
-    if (!isEditMode) {
-      createJournalMutation.mutate(data);
-    } else {
-      updateJournalMutation.mutate({ id: journal.id, ...data });
-    }
-    // Parent component should close modal and handle success
+    createJournalMutation.mutate(data);
   };
 
   const handleClose = () => {
@@ -114,22 +97,15 @@ export function JournalFormModal({
     onClose();
   };
 
-  const isMutating =
-    isLoading ||
-    createJournalMutation.isLoading ||
-    updateJournalMutation.isLoading;
+  const isMutating = isLoading || createJournalMutation.isLoading;
 
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="md:max-w-[85%] lg:max-w-[60%] max-h-[90vh] p-0">
         <DialogHeader className="px-6 pt-6">
-          <DialogTitle className="text-xl">
-            {isEditMode ? "Edit Journal" : "Create New Journal"}
-          </DialogTitle>
+          <DialogTitle className="text-xl">Create New Journal</DialogTitle>
           <DialogDescription>
-            {isEditMode
-              ? "Update the journal information below."
-              : "Fill in the details to create a new journal."}
+            Fill in the details to create a new journal.
           </DialogDescription>
         </DialogHeader>
 
@@ -299,10 +275,8 @@ export function JournalFormModal({
             {isMutating ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                {isEditMode ? "Updating..." : "Creating..."}
+                Creating...
               </>
-            ) : isEditMode ? (
-              "Update Journal"
             ) : (
               "Create Journal"
             )}

@@ -10,13 +10,14 @@ export default function ErrorCard({
   description = "An unexpected error occurred. Please try again or contact support.",
   details = "",
   onRetry,
+  onBack,
   showDetails: initialShowDetails = false,
 }) {
   const [showDetails, setShowDetails] = useState(initialShowDetails);
   const [isHovered, setIsHovered] = useState(false);
 
   return (
-    <div className=" bg-card/70 rounded-lg border flex items-center justify-center p-5">
+    <div className="bg-card/70 rounded-lg border flex items-center justify-center p-5">
       <div className="relative">
         {/* Animated gradient orb background */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-3xl">
@@ -33,7 +34,7 @@ export default function ErrorCard({
           }`}
         >
           <CardContent className="pt-8 pb-6 px-6">
-            {/* Header with icon and close button */}
+            {/* Header with icon and back button */}
             <div className="flex items-start justify-between mb-5">
               <div className="flex items-start gap-4">
                 {/* Animated icon */}
@@ -59,6 +60,18 @@ export default function ErrorCard({
                   </p>
                 </div>
               </div>
+              {/* Back button */}
+              {onBack && (
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={onBack}
+                  className="ml-2"
+                  aria-label="Back"
+                >
+                  <X className="h-5 w-5" />
+                </Button>
+              )}
             </div>
 
             {/* Details section */}
@@ -83,12 +96,10 @@ export default function ErrorCard({
             {/* Action buttons */}
             {onRetry && (
               <div className="flex gap-2 mt-5 pt-5 border-t items-center justify-center border-border/30">
-                {onRetry && (
-                  <Button onClick={onRetry} variant="destructive" size="lg">
-                    <RotateCw className="w-4 h-4" />
-                    Retry
-                  </Button>
-                )}
+                <Button onClick={onRetry} variant="destructive" size="lg">
+                  <RotateCw className="w-4 h-4" />
+                  Retry
+                </Button>
               </div>
             )}
           </CardContent>

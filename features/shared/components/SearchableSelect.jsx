@@ -38,7 +38,7 @@ export const SearchableSelect = ({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-full justify-between font-normal",
+            "w-full justify-between font-normal hover:bg-secondary/60",
             !value && "text-muted-foreground",
             className
           )}
@@ -50,8 +50,8 @@ export const SearchableSelect = ({
       <PopoverContent align="start" className="w-full p-0">
         <Command>
           <CommandInput placeholder={searchPlaceholder} />
-          <CommandEmpty>{emptyText}</CommandEmpty>
-          <CommandGroup className="max-h-60 overflow-y-auto">
+          <CommandEmpty className="px-4 py-2 text-sm">{emptyText}</CommandEmpty>
+          <CommandGroup className="max-h-60 overflow-y-auto px-4!">
             {options.map((option) => (
               <CommandItem
                 key={option.value}
