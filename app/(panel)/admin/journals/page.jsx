@@ -13,76 +13,8 @@ import {
 } from "@/features";
 import { FilterToolbar } from "@/features/shared";
 
-const mockJournals = [
-  {
-    id: "1",
-    title: "Journal of Computer Science",
-    short_name: "JCS",
-    publisher: "TechPress",
-    is_active: true,
-    is_accepting_submissions: true,
-    submission_count: 42,
-    editor_in_chief: {
-      id: "101",
-      name: "Dr. Alice Johnson",
-      email: "alice.johnson@example.com",
-    },
-    issn_print: "1234-5678",
-    issn_online: "8765-4321",
-    description:
-      "A peer-reviewed journal focusing on computational theory and AI applications.",
-    website: "https://jcs.techpress.org",
-    contact_email: "contact@jcs.org",
-    created_at: "2025-10-20T10:00:00Z",
-  },
-  {
-    id: "2",
-    title: "International Journal of AI Research",
-    short_name: "IJAR",
-    publisher: "OpenAI Publishing",
-    is_active: false,
-    is_accepting_submissions: false,
-    submission_count: 12,
-    editor_in_chief: {
-      id: "102",
-      name: "Dr. Bob Smith",
-      email: "bob.smith@example.com",
-    },
-    issn_print: "2345-6789",
-    issn_online: "9876-5432",
-    description:
-      "Covers advances in artificial intelligence, deep learning, and related fields.",
-    website: "https://ijar.openai.org",
-    contact_email: "editor@ijar.org",
-    created_at: "2025-10-22T12:30:00Z",
-  },
-  {
-    id: "3",
-    title: "Journal of Environmental Studies",
-    short_name: "JES",
-    publisher: "EcoWorld",
-    is_active: true,
-    is_accepting_submissions: false,
-    submission_count: 8,
-    editor_in_chief: {
-      id: "103",
-      name: "Dr. Carol Davis",
-      email: "carol.davis@example.com",
-    },
-    issn_print: "3456-7890",
-    issn_online: "0987-6543",
-    description:
-      "Publishes interdisciplinary research on environmental science and sustainability.",
-    website: "https://jes.ecoworld.org",
-    contact_email: "info@jes.org",
-    created_at: "2025-11-01T08:15:00Z",
-  },
-];
-
 export default function JournalsPage() {
   const router = useRouter();
-  const [journals, setJournals] = useState(mockJournals);
-  const [filteredJournals, setFilteredJournals] = useState(mockJournals);
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [acceptingFilter, setAcceptingFilter] = useState("all");
@@ -92,9 +24,6 @@ export default function JournalsPage() {
   const [selectedJournal, setSelectedJournal] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [editingJournal, setEditingJournal] = useState(null);
-  // Simulate loading and error state for demonstration
-  const [error, setError] = useState(null); // Set to error object/string to show error
 
   const {
     data: JournalData,
@@ -103,76 +32,6 @@ export default function JournalsPage() {
   } = useGetJournals();
 
   const itemsPerPage = 10;
-
-  // Filter and sort journals
-  useEffect(() => {
-    let filtered = journals;
-
-    // Search filter
-    if (searchTerm) {
-      filtered = filtered.filter(
-        (j) =>
-          j.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          j.short_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          j.publisher.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Active filter
-    if (activeFilter !== "all") {
-      filtered = filtered.filter((j) =>
-        activeFilter === "active" ? j.is_active : !j.is_active
-      );
-    }
-
-    // Accepting submissions filter
-    if (acceptingFilter !== "all") {
-      filtered = filtered.filter((j) =>
-        acceptingFilter === "accepting"
-          ? j.is_accepting_submissions
-          : !j.is_accepting_submissions
-      );
-    }
-
-    // Sorting
-    filtered.sort((a, b) => {
-      let aVal = "";
-      let bVal = "";
-
-      switch (sortColumn) {
-        case "title":
-          aVal = a.title.toLowerCase();
-          bVal = b.title.toLowerCase();
-          break;
-        case "publisher":
-          aVal = a.publisher.toLowerCase();
-          bVal = b.publisher.toLowerCase();
-          break;
-        case "submissions":
-          aVal = a.submission_count;
-          bVal = b.submission_count;
-          break;
-        case "created_at":
-          aVal = new Date(a.created_at).getTime();
-          bVal = new Date(b.created_at).getTime();
-          break;
-      }
-
-      if (aVal < bVal) return sortOrder === "asc" ? -1 : 1;
-      if (aVal > bVal) return sortOrder === "asc" ? 1 : -1;
-      return 0;
-    });
-
-    setFilteredJournals(filtered);
-    setCurrentPage(1);
-  }, [
-    journals,
-    searchTerm,
-    activeFilter,
-    acceptingFilter,
-    sortColumn,
-    sortOrder,
-  ]);
 
   const handleSort = (column) => {
     if (sortColumn === column) {
@@ -185,19 +44,19 @@ export default function JournalsPage() {
 
   const handleSaveJournal = () => {
     setIsFormOpen(false);
-    setEditingJournal(null);
   };
 
   const handleDelete = (id) => {
-    setJournals(journals.filter((j) => j.id !== id));
-    toast.success("Journal deleted successfully");
+    console.log("Delete journal:", id);
+    // TODO: Implement delete API call
   };
 
-  const paginatedJournals = filteredJournals.slice(
+  const journals = JournalData?.results || [];
+  const totalPages = Math.ceil(journals.length / itemsPerPage);
+  const paginatedJournals = journals.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
-  const totalPages = Math.ceil(filteredJournals.length / itemsPerPage);
 
   return (
     <div className="space-y-5">
@@ -213,10 +72,7 @@ export default function JournalsPage() {
         </div>
         <Button
           variant="secondary"
-          onClick={() => {
-            setEditingJournal(null);
-            setIsFormOpen(true);
-          }}
+          onClick={() => setIsFormOpen(true)}
           className="gap-2"
         >
           <Plus className="h-4 w-4" />
@@ -258,14 +114,13 @@ export default function JournalsPage() {
 
       {/* Journals Table */}
       <JournalsTable
-        journals={JournalData?.results || []}
+        journals={journals}
         onViewDetails={(row) => {
           setSelectedJournal(row);
           setIsDetailsOpen(true);
         }}
         onEdit={(row) => {
-          setEditingJournal(row);
-          setIsFormOpen(true);
+          router.push(`/admin/journals/${row.id}/settings`);
         }}
         onSettings={(row) => {
           router.push(`/admin/journals/${row.id}/settings`);
@@ -285,8 +140,8 @@ export default function JournalsPage() {
           {paginatedJournals.length === 0
             ? 0
             : (currentPage - 1) * itemsPerPage + 1}{" "}
-          to {Math.min(currentPage * itemsPerPage, filteredJournals.length)} of{" "}
-          {filteredJournals.length} journals
+          to {Math.min(currentPage * itemsPerPage, journals.length)} of{" "}
+          {journals.length} journals
         </p>
         <div className="flex gap-2">
           <Button
@@ -313,13 +168,7 @@ export default function JournalsPage() {
       {/* Modals */}
       <JournalFormModal
         isOpen={isFormOpen}
-        journal={editingJournal}
-        onClose={() => {
-          setIsFormOpen(false);
-          setTimeout(() => {
-            setEditingJournal(null);
-          }, 500);
-        }}
+        onClose={() => setIsFormOpen(false)}
         onSave={handleSaveJournal}
       />
 

@@ -1,86 +1,31 @@
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  ReviewerDashboardStats,
-  ReviewRecommendationsChart,
-  ReviewSummaryCard,
   ReviewAssignmentsTable,
+  ReviewerStatsChart,
 } from "@/features/panel/reviewer/components/dashboard";
 import { RoleBasedRoute } from "@/features";
-
-// Mock data for review statistics
-const REVIEW_STATISTICS = {
-  total_assignments: 12,
-  accepted: 4,
-  declined: 1,
-  completed: 3,
-  pending: 3,
-  overdue: 1,
-  average_review_time: {
-    avg_days: 8,
-  },
-  recommendations_given: {
-    Accept: 3,
-    "Minor Revision": 1,
-    Reject: 1,
-  },
-};
-
-// Mock data for review assignments
-const REVIEW_ASSIGNMENTS = [
-  {
-    id: "1",
-    submission_title: "Machine Learning in Healthcare",
-    journal_name: "AI & Medicine Journal",
-    status: "PENDING",
-    due_date: "2025-11-20T11:09:00.122Z",
-    days_remaining: 8,
-    is_overdue: false,
-  },
-  {
-    id: "2",
-    submission_title: "Quantum Computing Review",
-    journal_name: "Physics Letters",
-    status: "ACCEPTED",
-    due_date: "2025-11-15T11:09:00.122Z",
-    days_remaining: 3,
-    is_overdue: false,
-  },
-  {
-    id: "3",
-    submission_title: "Environmental Policy Reform",
-    journal_name: "Sustainability Studies",
-    status: "COMPLETED",
-    due_date: "2025-11-05T11:09:00.122Z",
-    days_remaining: 0,
-    is_overdue: true,
-  },
-  {
-    id: "4",
-    submission_title: "Blockchain in Supply Chain",
-    journal_name: "Tech Innovation Quarterly",
-    status: "ACCEPTED",
-    due_date: "2025-11-18T11:09:00.122Z",
-    days_remaining: 5,
-    is_overdue: false,
-  },
-  {
-    id: "5",
-    submission_title: "Climate Change Modeling",
-    journal_name: "Environmental Science",
-    status: "OVERDUE",
-    due_date: "2025-10-20T11:09:00.122Z",
-    days_remaining: -17,
-    is_overdue: true,
-  },
-];
+import { useGetMyAnalytics } from "@/features/shared/hooks";
+import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/useGetReviewAssignments";
+import ErrorCard from "@/features/shared/components/ErrorCard";
+import StatsCard from "@/features/shared/components/StatsCard";
+import { Clock, FileText, CheckCircle2, TrendingUp } from "lucide-react";
 
 export default function ReviewerDashboard() {
-  // TODO: Replace with actual API calls
-  const isLoading = false;
-  const isError = false;
-  const error = null;
+  const {
+    data: analytics,
+    isPending: isAnalyticsPending,
+    error: analyticsError,
+  } = useGetMyAnalytics();
+  const {
+    data: assignments,
+    isPending: isAssignmentsPending,
+    error: assignmentsError,
+  } = useGetReviewAssignments();
+
+  const reviewerStats = analytics?.reviewer_stats || {};
+  const isLoading = isAnalyticsPending;
+  const hasError = analyticsError && !analytics;
 
   // Event handlers for table actions
   const handleAcceptReview = (review) => {
@@ -116,41 +61,85 @@ export default function ReviewerDashboard() {
           </p>
         </div>
 
-        {/* Statistics Cards Grid */}
-        <ReviewerDashboardStats
-          statistics={REVIEW_STATISTICS}
-          isLoading={isLoading}
-          isError={isError}
-          error={error}
-        />
-
-        {/* Charts and Analytics Section */}
-        {REVIEW_STATISTICS.recommendations_given && (
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-            <ReviewRecommendationsChart
-              recommendations={REVIEW_STATISTICS.recommendations_given}
-              isLoading={isLoading}
-            />
-            <ReviewSummaryCard
-              statistics={REVIEW_STATISTICS}
-              isLoading={isLoading}
-            />
-          </div>
+        {hasError && (
+          <ErrorCard
+            title="Failed to load dashboard"
+            description={
+              analyticsError?.message || "Unable to fetch analytics data"
+            }
+            onRetry={() => window.location.reload()}
+          />
         )}
 
+        {/* Statistics Cards */}
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-5">
+          <StatsCard
+            icon={FileText}
+            title="Total Assignments"
+            value={reviewerStats.total_assignments || 0}
+            iconClass="text-blue-500"
+            valueClass="text-foreground"
+            isLoading={isLoading}
+          />
+          <StatsCard
+            icon={Clock}
+            title="Pending"
+            value={reviewerStats.pending || 0}
+            iconClass="text-amber-500"
+            valueClass="text-foreground"
+            isLoading={isLoading}
+          />
+          <StatsCard
+            icon={CheckCircle2}
+            title="Accepted"
+            value={reviewerStats.accepted || 0}
+            iconClass="text-green-500"
+            valueClass="text-foreground"
+            isLoading={isLoading}
+          />
+          <StatsCard
+            icon={CheckCircle2}
+            title="Completed"
+            value={reviewerStats.completed || 0}
+            iconClass="text-green-600"
+            valueClass="text-foreground"
+            isLoading={isLoading}
+          />
+          <StatsCard
+            icon={TrendingUp}
+            title="Avg. Time (Days)"
+            value={
+              reviewerStats.avg_completion_time_days
+                ? reviewerStats.avg_completion_time_days.toFixed(1)
+                : "0"
+            }
+            iconClass="text-purple-500"
+            valueClass="text-foreground"
+            isLoading={isLoading}
+          />
+        </div>
+
+        {/* Charts Section */}
+        <div className="grid gap-6 md:grid-cols-1">
+          <ReviewerStatsChart
+            reviewerStats={reviewerStats}
+            isLoading={isLoading}
+          />
+        </div>
+
         {/* Review Assignments Table */}
-        <div>
-          <div className="mb-4">
+        <div className="space-y-4">
+          <div>
             <h2 className="text-xl font-bold">Review Assignments</h2>
           </div>
           <ReviewAssignmentsTable
-            assignments={REVIEW_ASSIGNMENTS}
+            assignments={assignments || []}
             onAcceptReview={handleAcceptReview}
             onDeclineReview={handleDeclineReview}
             onStartReview={handleStartReview}
             onDownloadFiles={handleDownloadFiles}
-            isPending={isLoading}
-            error={error}
+            isPending={isAssignmentsPending}
+            error={assignmentsError}
           />
         </div>
       </div>

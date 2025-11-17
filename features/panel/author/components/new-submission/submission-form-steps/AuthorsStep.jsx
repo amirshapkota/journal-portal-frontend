@@ -26,9 +26,7 @@ export default function AuthorsStep({
   return (
     <div className="space-y-6">
       <Card className="p-4 bg-muted/50 border border-border">
-        <h3 className="font-semibold text-foreground mb-4">
-          Corresponding Author
-        </h3>
+        <h3 className="font-semibold text-foreground">Corresponding Author</h3>
         <div className="space-y-4">
           <FormField
             control={form.control}
@@ -85,8 +83,8 @@ export default function AuthorsStep({
           </Button>
         </div>
         {coAuthors?.map((_, index) => (
-          <Card key={index} className="p-4 bg-muted/30 border border-border">
-            <div className="flex items-start justify-between mb-4">
+          <Card key={index} className="p-4 gap-2 bg-muted/30 border border-border">
+            <div className="flex items-start justify-between ">
               <h4 className="font-medium text-foreground">
                 Co-Author {index + 1}
               </h4>
