@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
@@ -79,6 +80,7 @@ const mockJournals = [
 ];
 
 export default function JournalsPage() {
+  const router = useRouter();
   const [journals, setJournals] = useState(mockJournals);
   const [filteredJournals, setFilteredJournals] = useState(mockJournals);
   const [searchTerm, setSearchTerm] = useState("");
@@ -264,6 +266,9 @@ export default function JournalsPage() {
         onEdit={(row) => {
           setEditingJournal(row);
           setIsFormOpen(true);
+        }}
+        onSettings={(row) => {
+          router.push(`/admin/journals/${row.id}/settings`);
         }}
         onDelete={handleDelete}
         isPending={isJournalDataPending}

@@ -2,7 +2,7 @@
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Eye, Edit2, Trash2, MoreVertical, ArrowUpDown } from "lucide-react";
+import { Eye, Edit2, Trash2, Settings, MoreVertical, ArrowUpDown } from "lucide-react";
 import { DataTable } from "@/features/shared";
 import {
   DropdownMenu,
@@ -26,6 +26,7 @@ export default function JournalsTable({
   onViewDetails,
   onEdit,
   onDelete,
+  onSettings,
   isPending = false,
   error = null,
   sortColumn,
@@ -141,6 +142,9 @@ export default function JournalsTable({
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onEdit(row)} className="gap-2">
               <Edit2 className="h-4 w-4" /> Edit
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onSettings(row)} className="gap-2">
+              <Settings className="h-4 w-4" /> Settings
             </DropdownMenuItem>
             <DropdownMenuItem
               onClick={() => onDelete(row.id)}

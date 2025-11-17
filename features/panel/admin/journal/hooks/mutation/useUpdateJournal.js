@@ -8,16 +8,25 @@ export const useUpdateJournal = (options = {}) => {
   return useMutation({
     mutationFn: ({ id, ...journalData }) => updateJournal({ id, journalData }),
     onSuccess: (data, variables, context) => {
+      // Invalidate both the journal list and the specific journal
       queryClient.invalidateQueries({ queryKey: ["admin-journals"] });
-      toast.success("Journal updated successfully!");
+      queryClient.invalidateQueries({ queryKey: ["journal", variables.id] });
+      
+      // Don't show toast here if custom onSuccess is provided
+      if (!options.onSuccess) {
+        toast.success("Journal updated successfully!");
+      }
       options.onSuccess?.(data, variables, context);
     },
     onError: (error, variables, context) => {
-      const errorMessage =
-        error?.response?.data?.message ||
-        error?.response?.data?.detail ||
-        "Failed to update journal";
-      toast.error(errorMessage);
+      // Don't show toast here if custom onError is provided
+      if (!options.onError) {
+        const errorMessage =
+          error?.response?.data?.message ||
+          error?.response?.data?.detail ||
+          "Failed to update journal";
+        toast.error(errorMessage);
+      }
       options.onError?.(error, variables, context);
     },
   });
