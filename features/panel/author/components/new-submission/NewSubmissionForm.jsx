@@ -142,7 +142,7 @@ export default function NewSubmissionForm() {
 
     createSubmission(submissionData, {
       onSuccess: (response) => {
-        router.push("/author/submissions");
+        router.push("/author/submissions/drafts");
       },
     });
   };

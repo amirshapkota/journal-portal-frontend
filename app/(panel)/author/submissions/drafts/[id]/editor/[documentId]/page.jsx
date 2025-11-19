@@ -27,7 +27,7 @@ import {
   submitUpdatedDocument,
   getReviewComments,
 } from "@/features/panel/author/api/superdocApi";
-import { SuperDocEditor, useCurrentRole } from "@/features";
+import { LoadingScreen, SuperDocEditor, useCurrentRole } from "@/features";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useSubmitUpdatedDocument } from "@/features/panel/author/hooks/mutation/useSubmitUpdatedDocument";
 
@@ -148,6 +148,7 @@ export default function SuperDocEditorPage() {
 
   return (
     <Card className=" flex flex-col">
+      {isLoading && <LoadingScreen />}
       <CardContent>
         {/* Header */}
         <CardHeader className="border-b pb-3! px-0 ">
@@ -248,7 +249,7 @@ export default function SuperDocEditorPage() {
           )}
 
           {documentData && (
-            <div className=" gap-4 ">
+            <div className="mt-4 gap-4 ">
               {/* Main Editor Area */}
               <div className="col-span-3 flex flex-col gap-4 overflow-hidden">
                 {/* Document Info */}

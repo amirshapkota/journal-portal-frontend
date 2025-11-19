@@ -101,7 +101,7 @@ export default function ChooseRole() {
                 key={role.id}
                 onClick={() => !isLoading && handleRoleSelect(role.id)}
                 disabled={isLoading && !isSelected}
-                className="relative group text-left transition-all duration-300 transform hover:scale-105 disabled:cursor-not-allowed"
+              className="relative flex-1 group text-left transition-all duration-300 transform hover:scale-105 disabled:cursor-not-allowed"
               >
                 <Card
                   className={`h-full p-6 border-2 transition-all duration-300 relative backdrop-blur-sm

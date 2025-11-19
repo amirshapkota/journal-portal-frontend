@@ -143,10 +143,10 @@ const columns = [
           <DropdownMenuContent align="end">
             <DropdownMenuItem>
               <Link
-                href={row.viewUrl || '#'}
+                href={row.viewUrl || "#"}
                 className={"flex items-center text-sm gap-2 "}
               >
-                <Eye className=" h-4 w-4  text-primary-foreground" />
+                <Eye className=" h-4 w-4 text-foreground hover:text-primary-foreground" />
                 View Submission
               </Link>
             </DropdownMenuItem>
@@ -174,7 +174,7 @@ export default function AuthorSubmissionsTable({
   onViewDocuments,
   onSubmit,
   onDelete,
-  viewUrl
+  viewUrl,
 }) {
   // Attach action handlers to each submission row
   const submissionsWithActions = submissions.map((submission) => ({
@@ -183,7 +183,7 @@ export default function AuthorSubmissionsTable({
     onViewDocuments,
     onSubmit,
     onDelete,
-    viewUrl: typeof viewUrl === 'function' ? viewUrl(submission) : viewUrl,
+    viewUrl: typeof viewUrl === "function" ? viewUrl(submission) : viewUrl,
   }));
   return (
     <DataTable

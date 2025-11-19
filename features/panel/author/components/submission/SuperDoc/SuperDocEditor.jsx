@@ -148,7 +148,7 @@ export default function SuperDocEditor({
   }, [editorRef, onSave, onUnsavedChanges]);
 
   return (
-    <div className={`${className} flex flex-col items-center`}>
+    <div className={`${className} bg-white! flex flex-col items-center`}>
       {/* Toolbar container with styling */}
       <div
         id="toolbar"

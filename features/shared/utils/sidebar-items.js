@@ -15,6 +15,7 @@ import {
   FilePlus2Icon,
   File,
   Inbox,
+  Book,
 } from "lucide-react";
 
 // Sidebar configuration for each role
@@ -76,7 +77,7 @@ export const sidebarConfig = {
       children: [
         {
           name: "Submissions",
-          path: "/author/submissions",
+          path: "/author/submissions/drafts",
           icon: Files,
         },
         {
@@ -161,9 +162,9 @@ export const sidebarConfig = {
       icon: LayoutDashboard,
     },
     {
-      name: "Manuscripts",
-      path: "/editor/manuscripts",
-      icon: BookOpen,
+      name: "Journals",
+      path: "/editor/journals",
+      icon: Book,
     },
     {
       name: "Reviewers",
