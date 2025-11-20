@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useLogout } from "@/features/auth/hooks/useLogout";
 import { ChevronDown, LogOut, Moon, Sun, Laptop, User } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -32,6 +33,7 @@ export function UnifiedAppbar({ userName, roles, userRole, setNewRole }) {
   const [isLogoutOpen, setIsLogoutOpen] = useState(false);
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const queryClient = useQueryClient();
   const {
     mutate: logoutMutate,
     isPending: isLogoutPending,
@@ -39,6 +41,12 @@ export function UnifiedAppbar({ userName, roles, userRole, setNewRole }) {
   } = useLogout();
 
   const handleRoleChange = (role) => {
+    // Only clear cache if role is actually changing
+    if (role !== currentRole) {
+      // Clear all cached queries when switching roles to prevent data leakage
+      queryClient.clear();
+    }
+
     setNewRole(role);
     setCurrentRole(role);
     const route = roleRouteMap[role] || "/reader/dashboard";
@@ -54,8 +62,7 @@ export function UnifiedAppbar({ userName, roles, userRole, setNewRole }) {
   };
 
   const handleProfileClick = () => {
-    const role = currentRole.toLowerCase();
-    router.push(`/${role}/profile`);
+    router.push("/profile");
   };
 
   // Get user initials for avatar

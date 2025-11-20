@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Loader2, Check, X, Plus } from "lucide-react";
-import { profileSchema } from "../../utils/FormSchema";
+import { profileSchema } from "../../reader/utils/FormSchema";
 import { Badge } from "@/components/ui/badge";
 
 export default function ProfileForm({

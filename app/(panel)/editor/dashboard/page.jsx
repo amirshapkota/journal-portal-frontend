@@ -5,6 +5,7 @@ import {
   EditorJournalsDoughnutChart,
   EditorSubmissionsChart,
   ErrorCard,
+  LoadingScreen,
   RoleBasedRoute,
   useGetMyAnalytics,
 } from "@/features";
@@ -38,6 +39,7 @@ export default function EditorDashboard() {
 
   return (
     <RoleBasedRoute allowedRoles={["EDITOR"]}>
+      {isAnalyticsPending && <LoadingScreen />}
       <div className="space-y-5">
         {/* Header */}
         <div className="space-y-2">

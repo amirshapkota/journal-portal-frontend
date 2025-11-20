@@ -4,7 +4,7 @@ import {
   ReviewAssignmentsTable,
   ReviewerStatsChart,
 } from "@/features/panel/reviewer/components/dashboard";
-import { RoleBasedRoute } from "@/features";
+import { LoadingScreen, RoleBasedRoute } from "@/features";
 import { useGetMyAnalytics } from "@/features/shared/hooks";
 import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/useGetReviewAssignments";
 import ErrorCard from "@/features/shared/components/ErrorCard";
@@ -50,6 +50,7 @@ export default function ReviewerDashboard() {
 
   return (
     <RoleBasedRoute allowedRoles={["REVIEWER"]}>
+      {(isAssignmentsPending || isAnalyticsPending) && <LoadingScreen />}
       <div className="space-y-5">
         {/* Header */}
         <div className="space-y-2">

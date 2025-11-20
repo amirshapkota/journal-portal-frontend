@@ -181,7 +181,7 @@ export default function SuperDocEditor({
         <div className="flex flex-col items-center relative">
           <div
             id="superdoc-toolbar"
-            className="bg-white border-b sticky top-0 z-10  border-gray-200  overflow-x-auto max-w-5xl w-fit"
+            className="bg-white border-b sticky top-0 z-1  border-gray-200  overflow-x-auto max-w-5xl w-fit"
           />
           <div
             id="superdoc-editor"

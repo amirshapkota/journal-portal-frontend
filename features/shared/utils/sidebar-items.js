@@ -28,7 +28,7 @@ export const sidebarConfig = {
     },
     {
       name: "Profile",
-      path: "/reader/profile",
+      path: "/profile",
       icon: User,
     },
     {
@@ -70,6 +70,7 @@ export const sidebarConfig = {
       path: "/author/dashboard",
       icon: LayoutDashboard,
     },
+
     {
       name: "Submissions",
       path: "/author/submissions",
@@ -121,6 +122,7 @@ export const sidebarConfig = {
       path: "/reviewer/dashboard",
       icon: LayoutDashboard,
     },
+
     {
       name: "Assignments",
       path: "/reviewer/assignments",
@@ -161,6 +163,7 @@ export const sidebarConfig = {
       path: "/editor/dashboard",
       icon: LayoutDashboard,
     },
+
     {
       name: "Journals",
       path: "/editor/journals",
@@ -206,6 +209,7 @@ export const sidebarConfig = {
       path: "/admin/dashboard",
       icon: LayoutDashboard,
     },
+
     {
       name: "Users",
       path: "/admin/users",

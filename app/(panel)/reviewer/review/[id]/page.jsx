@@ -44,11 +44,17 @@ export default function ReviewDetailPage() {
 
   const getStatusBadge = (status) => {
     const variants = {
-      PENDING: { variant: "outline", className: "border-yellow-500 text-yellow-600" },
+      PENDING: {
+        variant: "outline",
+        className: "border-yellow-500 text-yellow-600",
+      },
       ACCEPTED: { variant: "default", className: "bg-blue-600" },
       DECLINED: { variant: "destructive", className: "" },
       COMPLETED: { variant: "secondary", className: "bg-green-600 text-white" },
-      CANCELLED: { variant: "outline", className: "border-gray-500 text-gray-600" },
+      CANCELLED: {
+        variant: "outline",
+        className: "border-gray-500 text-gray-600",
+      },
     };
 
     return variants[status] || variants.PENDING;
@@ -142,7 +148,9 @@ export default function ReviewDetailPage() {
                   </div>
                 </div>
               </div>
-              <Badge {...badgeProps}>{assignment.status_display || assignment.status}</Badge>
+              <Badge {...badgeProps}>
+                {assignment.status_display || assignment.status}
+              </Badge>
             </div>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -181,24 +189,25 @@ export default function ReviewDetailPage() {
             </div>
 
             {/* Days Remaining / Overdue */}
-            {assignment.days_remaining != null && assignment.status === "ACCEPTED" && (
-              <div
-                className={`flex items-center gap-2 p-3 rounded-lg ${
-                  assignment.is_overdue
-                    ? "bg-destructive/10 border border-destructive/20 text-destructive"
-                    : assignment.days_remaining <= 3
-                    ? "bg-amber-50 border border-amber-200 text-amber-700"
-                    : "bg-green-50 border border-green-200 text-green-700"
-                }`}
-              >
-                <AlertCircle className="h-5 w-5" />
-                <span className="font-medium">
-                  {assignment.is_overdue
-                    ? `${Math.abs(assignment.days_remaining)} days overdue`
-                    : `${assignment.days_remaining} days remaining`}
-                </span>
-              </div>
-            )}
+            {assignment.days_remaining != null &&
+              assignment.status === "ACCEPTED" && (
+                <div
+                  className={`flex items-center gap-2 p-3 rounded-lg ${
+                    assignment.is_overdue
+                      ? "bg-destructive/10 border border-destructive/20 text-destructive"
+                      : assignment.days_remaining <= 3
+                      ? "bg-amber-50 border border-amber-200 text-amber-700"
+                      : "bg-green-50 border border-green-200 text-green-700"
+                  }`}
+                >
+                  <AlertCircle className="h-5 w-5" />
+                  <span className="font-medium">
+                    {assignment.is_overdue
+                      ? `${Math.abs(assignment.days_remaining)} days overdue`
+                      : `${assignment.days_remaining} days remaining`}
+                  </span>
+                </div>
+              )}
 
             {/* Invitation Message */}
             {assignment.invitation_message && (
@@ -241,7 +250,8 @@ export default function ReviewDetailPage() {
                   <div className="flex items-center gap-3">
                     <div>
                       <p className="font-medium">
-                        {assignment.assigned_by_info.display_name || assignment.assigned_by_info.full_name}
+                        {assignment.assigned_by_info.display_name ||
+                          assignment.assigned_by_info.full_name}
                       </p>
                       {assignment.assigned_by_info.user_email && (
                         <p className="text-sm text-muted-foreground flex items-center gap-2">
@@ -312,11 +322,13 @@ export default function ReviewDetailPage() {
                       <div>
                         <h3 className="font-semibold mb-2">Keywords</h3>
                         <div className="flex flex-wrap gap-2">
-                          {submission.metadata_json.keywords.map((keyword, index) => (
-                            <Badge key={index} variant="outline">
-                              {keyword}
-                            </Badge>
-                          ))}
+                          {submission.metadata_json.keywords.map(
+                            (keyword, index) => (
+                              <Badge key={index} variant="outline">
+                                {keyword}
+                              </Badge>
+                            )
+                          )}
                         </div>
                       </div>
                     </>
@@ -345,31 +357,36 @@ export default function ReviewDetailPage() {
                     </div>
                   </div>
 
-                  {submission.author_contributions && submission.author_contributions.length > 0 && (
-                    <>
-                      <Separator />
-                      <div>
-                        <h3 className="font-semibold mb-3">Co-Authors</h3>
-                        <div className="space-y-2">
-                          {submission.author_contributions.map((author, index) => (
-                            <div
-                              key={index}
-                              className="p-3 border rounded-lg flex items-center justify-between"
-                            >
-                              <div>
-                                <p className="font-medium">
-                                  {author.profile?.display_name || "Unknown Author"}
-                                </p>
-                                <p className="text-sm text-muted-foreground">
-                                  {author.contrib_role_display} • Order: {author.order}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
+                  {submission.author_contributions &&
+                    submission.author_contributions.length > 0 && (
+                      <>
+                        <Separator />
+                        <div>
+                          <h3 className="font-semibold mb-3">Co-Authors</h3>
+                          <div className="space-y-2">
+                            {submission.author_contributions.map(
+                              (author, index) => (
+                                <div
+                                  key={index}
+                                  className="p-3 border rounded-lg flex items-center justify-between"
+                                >
+                                  <div>
+                                    <p className="font-medium">
+                                      {author.profile?.display_name ||
+                                        "Unknown Author"}
+                                    </p>
+                                    <p className="text-sm text-muted-foreground">
+                                      {author.contrib_role_display} • Order:{" "}
+                                      {author.order}
+                                    </p>
+                                  </div>
+                                </div>
+                              )
+                            )}
+                          </div>
                         </div>
-                      </div>
-                    </>
-                  )}
+                      </>
+                    )}
                 </CardContent>
               </Card>
             </TabsContent>
@@ -383,7 +400,8 @@ export default function ReviewDetailPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {!submission.documents || submission.documents.length === 0 ? (
+                  {!submission.documents ||
+                  submission.documents.length === 0 ? (
                     <div className="text-center py-12 border-2 border-dashed rounded-lg">
                       <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
                       <h3 className="font-semibold mb-2">No documents found</h3>
@@ -410,7 +428,8 @@ export default function ReviewDetailPage() {
                                   <>
                                     <span>•</span>
                                     <span>
-                                      {(doc.file_size / 1024 / 1024).toFixed(2)} MB
+                                      {(doc.file_size / 1024 / 1024).toFixed(2)}{" "}
+                                      MB
                                     </span>
                                   </>
                                 )}
@@ -418,21 +437,25 @@ export default function ReviewDetailPage() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2">
-                            {doc.file_url && (
-                              <Button
-                                variant="ghost"
-                                size="sm"
-                                onClick={() => window.open(doc.file_url, "_blank")}
-                              >
-                                <Eye className="h-4 w-4 mr-2" />
-                                View
-                              </Button>
-                            )}
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() =>
+                                router.push(
+                                  `/reviewer/review/${assignmentId}/document/${doc.id}`
+                                )
+                              }
+                            >
+                              <Eye className="h-4 w-4 mr-2" />
+                              View in Editor
+                            </Button>
                             {doc.original_file && (
                               <Button
                                 variant="outline"
                                 size="sm"
-                                onClick={() => window.open(doc.original_file, "_blank")}
+                                onClick={() =>
+                                  window.open(doc.original_file, "_blank")
+                                }
                               >
                                 <Download className="h-4 w-4 mr-2" />
                                 Download
@@ -459,7 +482,9 @@ export default function ReviewDetailPage() {
                   <CardContent>
                     <div className="text-center py-12 border-2 border-dashed rounded-lg">
                       <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                      <h3 className="font-semibold mb-2">Review Form Coming Soon</h3>
+                      <h3 className="font-semibold mb-2">
+                        Review Form Coming Soon
+                      </h3>
                       <p className="text-sm text-muted-foreground mb-4">
                         The review submission form will be available here
                       </p>

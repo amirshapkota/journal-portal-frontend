@@ -11,6 +11,7 @@
 import { useState, useMemo } from "react";
 import { usePathname } from "next/navigation";
 import { useSelector } from "react-redux";
+import { useQueryClient } from "@tanstack/react-query";
 
 const VALID_ROLES = ["READER", "AUTHOR", "REVIEWER", "EDITOR", "ADMIN"];
 const ROLE_STORAGE_KEY = "currentRole";
@@ -34,6 +35,7 @@ export function useCurrentRole() {
   const pathname = usePathname();
   const userData = useSelector((state) => state.auth?.userData);
   const userRoles = useMemo(() => userData?.roles || [], [userData]);
+  const queryClient = useQueryClient();
 
   /**
    * Derive role from pathname, localStorage, or first user role
@@ -69,10 +71,17 @@ export function useCurrentRole() {
 
   /**
    * Custom setter that updates localStorage and manual override
+   * Clears React Query cache when role changes to prevent stale data
    * Manual role takes precedence over derived role
    */
   const setCurrentRole = (newRole) => {
     if (VALID_ROLES.includes(newRole) && userRoles.includes(newRole)) {
+      // Only clear cache if role is actually changing
+      if (newRole !== activeRole) {
+        // Clear all cached queries when switching roles
+        queryClient.clear();
+      }
+
       setManualRole(newRole);
       if (typeof window !== "undefined") {
         localStorage.setItem(ROLE_STORAGE_KEY, newRole);
@@ -80,9 +89,7 @@ export function useCurrentRole() {
     } else {
       console.warn(`Invalid role: ${newRole}. User doesn't have this role.`);
     }
-  };
-
-  // Return manual role if set, otherwise use derived role
+  }; // Return manual role if set, otherwise use derived role
   const activeRole = manualRole || currentRole;
 
   return {

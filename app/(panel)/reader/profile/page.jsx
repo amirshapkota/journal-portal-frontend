@@ -10,10 +10,10 @@ import {
   LoadingScreen,
   ProfileForm,
   ProfileInfoCard,
+  useGetMe,
   VerificationStatusBadge,
 } from "@/features";
-import { useGetMe } from "@/features/shared/hooks/useGetMe";
-import { usePatchProfile } from "@/features/panel/reader/hooks/usePatchProfile";
+import { usePatchProfile } from "@/features/panel/profile/hooks/mutation/usePatchProfile";
 import { useQueryClient } from "@tanstack/react-query";
 
 export default function ReaderProfilePage() {

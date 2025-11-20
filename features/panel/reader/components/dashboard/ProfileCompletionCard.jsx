@@ -119,7 +119,7 @@ export function ProfileCompletionCard({ completionPercentage, pending }) {
 
             {/* Button and info icon */}
             <div className="flex items-center gap-3 mt-4">
-              <Link href="/reader/profile">
+              <Link href="/profile">
                 <Button
                   className="bg-amber-600 text-white hover:bg-amber-700 dark:bg-amber-700 dark:hover:bg-amber-800"
                   size="sm"

@@ -1,7 +1,11 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { AuthorDashboardTable, RoleBasedRoute } from "@/features";
+import {
+  AuthorDashboardTable,
+  LoadingScreen,
+  RoleBasedRoute,
+} from "@/features";
 import AuthorSubmissionsChart from "@/features/panel/author/components/dashboard/AuthorSubmissionsChart";
 import { useGetMyAnalytics } from "@/features/shared/hooks";
 import { useGetSubmissions } from "@/features/panel/author/hooks/query/useGetSubmissions";
@@ -41,6 +45,7 @@ export default function AuthorDashboard() {
 
   return (
     <RoleBasedRoute allowedRoles={["AUTHOR"]}>
+      {(isAnalyticsPending || isSubmissionsPending) && <LoadingScreen />}
       <div className="space-y-5">
         {/* Header */}
         <div className="space-y-2">

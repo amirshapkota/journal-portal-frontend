@@ -32,8 +32,16 @@ const journalSchema = z.object({
   title: z.string().min(1, "Title is required"),
   short_name: z.string().min(1, "Short name is required"),
   publisher: z.string().optional(),
-  issn_print: z.string().optional(),
-  issn_online: z.string().optional(),
+  issn_print: z
+    .string()
+    .regex(/^\d{4}-\d{4}$/, "ISSN must be in format: 1234-5678")
+    .optional()
+    .or(z.literal("")),
+  issn_online: z
+    .string()
+    .regex(/^\d{4}-\d{4}$/, "Online ISSN must be in format: 1234-5678")
+    .optional()
+    .or(z.literal("")),
   description: z.string().optional(),
   website_url: z
     .string()
@@ -78,6 +86,16 @@ export function JournalFormModal({
     onSuccess: (data) => {
       onSave?.(data);
       onClose?.();
+    },
+    onError: (error) => {
+      const data = error?.response?.data;
+      if (data && typeof data === "object") {
+        Object.entries(data).forEach(([field, messages]) => {
+          if (Array.isArray(messages)) {
+            form.setError(field, { message: messages.join(" ") });
+          }
+        });
+      }
     },
   });
 
@@ -158,17 +176,59 @@ export function JournalFormModal({
                   ISSN Information
                 </h3>
                 <div className="grid grid-cols-2 gap-4">
-                  <FormInputField
+                  <FormField
                     control={form.control}
                     name="issn_print"
-                    label="ISSN Print"
-                    placeholder="0000-0000"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>ISSN Print</FormLabel>
+                        <FormControl>
+                          <input
+                            {...field}
+                            type="text"
+                            placeholder="1234-5678"
+                            maxLength={9}
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            onChange={(e) => {
+                              let value = e.target.value.replace(/[^0-9]/g, "");
+                              if (value.length > 4) {
+                                value =
+                                  value.slice(0, 4) + "-" + value.slice(4, 8);
+                              }
+                              field.onChange(value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
-                  <FormInputField
+                  <FormField
                     control={form.control}
                     name="issn_online"
-                    label="ISSN Online"
-                    placeholder="0000-0000"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>ISSN Online</FormLabel>
+                        <FormControl>
+                          <input
+                            {...field}
+                            type="text"
+                            placeholder="1234-5678"
+                            maxLength={9}
+                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                            onChange={(e) => {
+                              let value = e.target.value.replace(/[^0-9]/g, "");
+                              if (value.length > 4) {
+                                value =
+                                  value.slice(0, 4) + "-" + value.slice(4, 8);
+                              }
+                              field.onChange(value);
+                            }}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
                   />
                 </div>
               </div>

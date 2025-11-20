@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { useQuery } from "@tanstack/react-query";
-import { getProfileData } from "../../api/ProfileApiSlice";
+import { getProfileData } from "../../../reader/api/ProfileApiSlice";
 
 export const useGetProfileData = (options = {}) => {
   const userId = useSelector((state) => state.auth?.userData?.id);

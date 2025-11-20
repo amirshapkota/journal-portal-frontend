@@ -18,8 +18,8 @@ import { useRouter } from "next/navigation";
 import SubmissionGuidelines from "./submission-form-steps/SubmissionGuidelines";
 import ManuscriptInfoStep from "./submission-form-steps/ManuscriptInfoStep";
 import AuthorsStep from "./submission-form-steps/AuthorsStep";
-import { useGetMe } from "@/features/shared/hooks/useGetMe";
 import { useCreateSubmission } from "../../hooks/mutation/useCreateSubmission";
+import { useGetMe } from "@/features/shared";
 
 const fullFormSchema = z.object({
   journal_id: z.string().min(1, "Journal is required"),
