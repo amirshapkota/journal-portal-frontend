@@ -14,6 +14,7 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import { useSelector } from "react-redux";
+import { useState } from "react";
 import {
   loadDocument,
   downloadDocx,
@@ -22,6 +23,7 @@ import {
   LoadingScreen,
   SuperDocEditor,
   useSubmitUpdatedDocument,
+  ConfirmationInputPopup,
 } from "@/features";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
@@ -31,6 +33,7 @@ export default function SuperDocEditorPage() {
   const documentId = params.documentId;
   const submissionId = params.id;
   const userData = useSelector((state) => state.auth.userData);
+  const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
 
   // Load document data
   const {
@@ -41,6 +44,8 @@ export default function SuperDocEditorPage() {
     queryKey: ["superdoc-document", documentId],
     queryFn: () => loadDocument(documentId),
     enabled: !!documentId,
+    staleTime: 5 * 60 * 1000, // 5 minutes
+    gcTime: 10 * 60 * 1000, // 10 minutes
   });
 
   // Download mutation
@@ -65,13 +70,14 @@ export default function SuperDocEditorPage() {
   // Submit mutation
   const submitMutation = useSubmitUpdatedDocument({
     documentId,
-    submissionId,
     onSuccess: () => {
-      toast.success("Document submitted for review");
+      toast.success("Document version created successfully");
       router.push(`/author/submissions/drafts/${submissionId}`);
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.detail || "Failed to submit document");
+      toast.error(
+        error?.response?.data?.detail || "Failed to create document version"
+      );
     },
   });
 
@@ -80,22 +86,17 @@ export default function SuperDocEditorPage() {
     downloadMutation.mutate();
   };
 
-  const handleSubmit = () => {
-    submitMutation.mutate();
+  const handleSubmitClick = () => {
+    setIsSubmitDialogOpen(true);
+  };
+
+  const handleSubmitConfirm = (changeSummary) => {
+    submitMutation.mutate(changeSummary);
   };
 
   const handleBack = () => {
     router.push(`/author/submissions/drafts/${submissionId}`);
   };
-
-  const handleSaveSuccess = (data) => {
-    // Optionally refresh document data or update cache
-    console.log("Document saved:", data);
-  };
-
-  if (isLoading) {
-    return <LoadingScreen />;
-  }
 
   if (loadError) {
     return (
@@ -118,6 +119,7 @@ export default function SuperDocEditorPage() {
 
   return (
     <Card className="flex flex-col">
+      {isLoading && <LoadingScreen />}
       <CardContent>
         {/* Header */}
         <CardHeader className="border-b pb-3 px-0">
@@ -157,7 +159,7 @@ export default function SuperDocEditorPage() {
               {documentData.can_edit && (
                 <Button
                   size="sm"
-                  onClick={handleSubmit}
+                  onClick={handleSubmitClick}
                   disabled={submitMutation.isPending}
                 >
                   {submitMutation.isPending ? (
@@ -171,6 +173,25 @@ export default function SuperDocEditorPage() {
             </div>
           </div>
         </CardHeader>
+
+        {/* Submit Confirmation Dialog */}
+        <ConfirmationInputPopup
+          open={isSubmitDialogOpen}
+          onOpenChange={setIsSubmitDialogOpen}
+          title="Submit for Review"
+          description="Please provide a summary of the changes you made to this document."
+          inputLabel="Change Summary"
+          inputPlaceholder="Describe the changes made in this version..."
+          confirmText="Submit"
+          cancelText="Cancel"
+          variant="primary"
+          required={true}
+          onConfirm={handleSubmitConfirm}
+          isPending={submitMutation.isPending}
+          isSuccess={submitMutation.isSuccess}
+          loadingText="Submitting..."
+          icon={<Send className="h-8 w-8 text-primary" />}
+        />
 
         {/* Main Content */}
         <div className="overflow-hidden">
@@ -197,7 +218,6 @@ export default function SuperDocEditorPage() {
             <SuperDocEditor
               documentData={documentData}
               userData={userData}
-              onSaveSuccess={handleSaveSuccess}
               className="border rounded-lg"
             />
           </div>

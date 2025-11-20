@@ -66,6 +66,22 @@ export const downloadDocx = async (documentId) => {
 };
 
 /**
+ * Create new document version with change summary
+ * @param {string} documentId - Document ID
+ * @param {string} changeSummary - Summary of changes made
+ * @returns {Promise} API response
+ */
+export const createDocumentVersion = async (documentId, changeSummary) => {
+  const response = await instance.post(
+    `submissions/documents/${documentId}/create-version/`,
+    {
+      change_summary: changeSummary,
+    }
+  );
+  return response.data;
+};
+
+/**
  * Submit updated document and notify reviewer
  * @param {string} documentId - Document ID
  * @param {string} submissionId - Submission ID

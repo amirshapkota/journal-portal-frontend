@@ -5,6 +5,7 @@ import { useToggle } from "./useToggle";
 import { useGetJournals } from "./useGetJournals";
 import { useGetTaxonomyTree } from "./useGetTaxonomyTree";
 import { useGetMyAnalytics } from "./useGetMyAnalytics";
+import { useSaveSuperdocDocument } from "./mutation/useSaveSuperdocDocument";
 
 export {
   useToggle,
@@ -15,4 +16,5 @@ export {
   useGetJournals,
   useGetTaxonomyTree,
   useGetMyAnalytics,
+  useSaveSuperdocDocument,
 };

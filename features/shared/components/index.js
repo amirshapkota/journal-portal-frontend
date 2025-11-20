@@ -9,6 +9,7 @@ import RoleBasedRoute from "./RoleBasedAuth";
 import { UnifiedSidebar } from "./UnifiedSidebar";
 import { UnifiedAppbar } from "./UnifiedAppbar";
 import ConfirmationPopup from "./ConfirmationPopup";
+import ConfirmationInputPopup from "./ConfirmationInputPopup";
 import DataTable from "./DataTable";
 import StatsCard from "./StatsCard";
 import CardSkeleton from "./CardSkeleton";
@@ -29,6 +30,7 @@ export {
   UnifiedSidebar,
   UnifiedAppbar,
   ConfirmationPopup,
+  ConfirmationInputPopup,
   DataTable,
   StatsCard,
   CardSkeleton,

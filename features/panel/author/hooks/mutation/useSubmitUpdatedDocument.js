@@ -1,26 +1,20 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { submitUpdatedDocument } from "@/features/panel/author/api/superdocApi";
-import { useRouter } from "next/navigation";
+import { createDocumentVersion } from "@/features/panel/author/api/superdocApi";
 
 /**
- * Custom hook for submitting an updated document and notifying reviewers.
+ * Custom hook for creating a document version with change summary.
  * @param {Object} options
  * @param {string} options.documentId - Document ID
  * @param {string} options.submissionId - Submission ID
  * @param {function} [options.onSuccess] - Success callback
  * @param {function} [options.onError] - Error callback
  */
-export function useSubmitUpdatedDocument({
-  documentId,
-  submissionId,
-  onSuccess,
-  onError,
-}) {
+export function useSubmitUpdatedDocument({ documentId, onSuccess, onError }) {
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
-    mutationFn: () => submitUpdatedDocument(documentId, submissionId),
+    mutationFn: (changeSummary) =>
+      createDocumentVersion(documentId, changeSummary),
     onSuccess: (data, ...args) => {
       queryClient.invalidateQueries({ queryKey: ["submissions"] });
       queryClient.invalidateQueries({

@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useMutation } from "@tanstack/react-query";
+import { useSaveSuperdocDocument } from "../../hooks/mutation/useSaveSuperdocDocument";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, Save } from "lucide-react";
 import "@harbour-enterprises/superdoc/style.css";
+import { useCurrentRole } from "../../hooks";
 
 /**
  * SuperDoc Editor Component - Self-contained with save functionality
@@ -15,78 +16,53 @@ import "@harbour-enterprises/superdoc/style.css";
 export default function SuperDocEditor({
   documentData,
   userData,
-  onSaveSuccess,
   className = "",
 }) {
   const superDocInstanceRef = useRef(null);
   const isInitializedRef = useRef(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
-  // Save mutation
-  const saveMutation = useMutation({
-    mutationFn: async () => {
-      if (!superDocInstanceRef.current) {
-        throw new Error("Editor not initialized");
-      }
+  const { currentRole } = useCurrentRole();
 
-      if (!superDocInstanceRef.current.activeEditor) {
-        throw new Error("Editor not ready");
-      }
-
-      // Get document content in different formats
-      const json = superDocInstanceRef.current.activeEditor.getJSON();
-      const html = superDocInstanceRef.current.activeEditor.getHTML();
-
-      // Export as DOCX blob
-      const blob = await superDocInstanceRef.current.export({
-        isFinalDoc: false,
-        commentsType: "external",
-        triggerDownload: false,
-      });
-
-      // Create FormData to send to backend
-      const formData = new FormData();
-      formData.append("document", blob, documentData.file_name);
-      formData.append("json", JSON.stringify(json));
-      formData.append("html", html);
-
-      // Use instance for authenticated requests
-      const { instance } = await import("@/lib/instance");
-      const response = await instance.post(
-        `submissions/documents/${documentData.id}/export/`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-
-      return response.data;
-    },
-    onSuccess: (data) => {
+  // Save mutation using custom hook
+  const saveMutation = useSaveSuperdocDocument({
+    onSuccess: () => {
       setHasUnsavedChanges(false);
       toast.success("Document saved successfully");
-      if (onSaveSuccess) {
-        onSaveSuccess(data);
-      }
-    },
-    onError: (error) => {
-      const message =
-        error?.message ||
-        error?.response?.data?.detail ||
-        "Failed to save document";
-      toast.error(message);
     },
   });
 
   // Handle save button click
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!superDocInstanceRef.current) {
       toast.error("Editor not ready");
       return;
     }
-    saveMutation.mutate();
+
+    if (!superDocInstanceRef.current.activeEditor) {
+      toast.error("Editor not initialized");
+      return;
+    }
+
+    try {
+      // Export as DOCX blob
+      const blob = await superDocInstanceRef.current.export({
+        commentsType: "external",
+        triggerDownload: false,
+      });
+
+      // Save using mutation hook
+      saveMutation.mutate({
+        documentId: documentData.id,
+        payload: {
+          blob,
+          fileName: documentData.file_name,
+        },
+      });
+    } catch (error) {
+      console.error("Error preparing document:", error);
+      toast.error("Failed to prepare document for saving");
+    }
   };
 
   // Initialize SuperDoc editor
@@ -195,14 +171,17 @@ export default function SuperDocEditor({
           Save Document
         </Button>
       </div>
-      <div className={`${className} bg-white flex flex-col`}>
+      <div
+        className={`${className} bg-white flex overflow-y-auto max-h-[95vh] flex-col`}
+        id="superdoc__container"
+      >
         {/* Save Button Header */}
 
         {/* Editor Container */}
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center relative">
           <div
             id="superdoc-toolbar"
-            className="bg-white border-b border-gray-200 overflow-x-auto max-w-5xl w-fit"
+            className="bg-white border-b sticky top-0 z-10  border-gray-200  overflow-x-auto max-w-5xl w-fit"
           />
           <div
             id="superdoc-editor"
