@@ -21,6 +21,9 @@ import {
   useUpdateSubmissionStatus,
   useAssignReviewer,
 } from "@/features/panel/admin/submission";
+import { useGetSubmissionReviews } from "@/features/panel/editor/submission/hooks/useGetSubmissionReviews";
+import { useGetSubmissionDecisions } from "@/features/panel/editor/submission/hooks/useGetSubmissionDecisions";
+import EditorialDecisionForm from "@/features/panel/editor/submission/components/EditorialDecisionForm";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -63,6 +66,23 @@ export default function AdminSubmissionDetailPage() {
     isLoading: isRecommendationsPending,
     error: recommendationsError,
   } = useGetReviewerRecommendations(submissionId, !!submission);
+
+  // Fetch submitted reviews
+  const {
+    data: reviewsData,
+    isLoading: isReviewsLoading,
+  } = useGetSubmissionReviews(submissionId);
+
+  // Fetch editorial decisions
+  const {
+    data: decisionsData,
+    isLoading: isDecisionsLoading,
+  } = useGetSubmissionDecisions(submissionId);
+
+  const reviews = reviewsData?.results || [];
+  const decisions = decisionsData?.results || [];
+  const hasDecision = decisions.length > 0;
+  const latestDecision = decisions[0]; // Assuming sorted by created_at desc
 
   // Update status mutation
   const updateStatusMutation = useUpdateSubmissionStatus();
@@ -654,6 +674,260 @@ export default function AdminSubmissionDetailPage() {
                   </div>
                 </div>
               ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Submitted Reviews Section */}
+      {reviews.length > 0 && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Submitted Reviews</CardTitle>
+                <CardDescription>
+                  Reviews completed by assigned reviewers
+                </CardDescription>
+              </div>
+              {isReviewsLoading && (
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {reviews.map((review, index) => (
+                <div
+                  key={review.id}
+                  className="p-4 border rounded-lg space-y-3"
+                >
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <h4 className="font-semibold">Review {index + 1}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Submitted on {format(new Date(review.submitted_at), "PPP")}
+                      </p>
+                    </div>
+                    <div className="text-right">
+                      <Badge
+                        variant={
+                          review.recommendation === "ACCEPT"
+                            ? "default"
+                            : review.recommendation === "REJECT"
+                            ? "destructive"
+                            : review.recommendation === "MINOR_REVISION"
+                            ? "secondary"
+                            : "outline"
+                        }
+                        className="mb-1"
+                      >
+                        {review.recommendation.replace("_", " ")}
+                      </Badge>
+                      <p className="text-xs text-muted-foreground">
+                        Confidence: {review.confidence_level}/5
+                      </p>
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  {/* Quality Scores */}
+                  {review.quality_scores && (
+                    <div>
+                      <h5 className="text-sm font-semibold mb-2">Quality Assessment</h5>
+                      <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+                        <div className="text-center p-2 bg-muted/50 rounded">
+                          <p className="text-xs text-muted-foreground">Novelty</p>
+                          <p className="text-lg font-semibold">{review.quality_scores.novelty}/10</p>
+                        </div>
+                        <div className="text-center p-2 bg-muted/50 rounded">
+                          <p className="text-xs text-muted-foreground">Methodology</p>
+                          <p className="text-lg font-semibold">{review.quality_scores.methodology}/10</p>
+                        </div>
+                        <div className="text-center p-2 bg-muted/50 rounded">
+                          <p className="text-xs text-muted-foreground">Clarity</p>
+                          <p className="text-lg font-semibold">{review.quality_scores.clarity}/10</p>
+                        </div>
+                        <div className="text-center p-2 bg-muted/50 rounded">
+                          <p className="text-xs text-muted-foreground">Significance</p>
+                          <p className="text-lg font-semibold">{review.quality_scores.significance}/10</p>
+                        </div>
+                        <div className="text-center p-2 bg-muted/50 rounded">
+                          <p className="text-xs text-muted-foreground">Originality</p>
+                          <p className="text-lg font-semibold">{review.quality_scores.originality}/10</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  <Separator />
+
+                  {/* Review Text */}
+                  <div>
+                    <h5 className="text-sm font-semibold mb-2">Detailed Review</h5>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                      {review.review_text}
+                    </p>
+                  </div>
+
+                  {/* Confidential Comments (for editor only) */}
+                  {review.confidential_comments && (
+                    <>
+                      <Separator />
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <h5 className="text-sm font-semibold mb-2 text-yellow-800">
+                          Confidential Comments (For Editor Only)
+                        </h5>
+                        <p className="text-sm text-yellow-900 whitespace-pre-wrap">
+                          {review.confidential_comments}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Editorial Decision Section - Only for final publishing after reviewers accept */}
+      {reviews.length > 0 && submission.status === 'ACCEPTED' && (
+        <Card>
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <div>
+                <CardTitle>Editorial Decision</CardTitle>
+                <CardDescription>
+                  {hasDecision
+                    ? "Final publishing decision has been made"
+                    : "Make final decision for publication (submission has been accepted by reviewers)"}
+                </CardDescription>
+              </div>
+              {isDecisionsLoading && (
+                <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
+              )}
+            </div>
+          </CardHeader>
+          <CardContent>
+            {hasDecision ? (
+              <div className="space-y-4">
+                <div className="p-4 border rounded-lg bg-muted/30">
+                  <div className="flex items-start justify-between mb-3">
+                    <div>
+                      <h4 className="font-semibold">Decision</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Made on {format(new Date(latestDecision.created_at), "PPP")}
+                      </p>
+                    </div>
+                    <Badge
+                      variant={
+                        latestDecision.decision_type === "ACCEPT"
+                          ? "default"
+                          : latestDecision.decision_type === "REJECT"
+                          ? "destructive"
+                          : "secondary"
+                      }
+                    >
+                      {latestDecision.decision_type.replace("_", " ")}
+                    </Badge>
+                  </div>
+
+                  <Separator className="my-3" />
+
+                  <div>
+                    <h5 className="text-sm font-semibold mb-2">Decision Letter</h5>
+                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                      {latestDecision.decision_letter}
+                    </p>
+                  </div>
+
+                  {latestDecision.revision_deadline && (
+                    <>
+                      <Separator className="my-3" />
+                      <div className="flex items-center gap-2 text-sm">
+                        <Calendar className="h-4 w-4 text-muted-foreground" />
+                        <span className="font-medium">Revision Deadline:</span>
+                        <span className="text-muted-foreground">
+                          {format(new Date(latestDecision.revision_deadline), "PPP")}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  {latestDecision.confidential_notes && (
+                    <>
+                      <Separator className="my-3" />
+                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                        <h5 className="text-sm font-semibold mb-2 text-yellow-800">
+                          Confidential Notes (Internal Only)
+                        </h5>
+                        <p className="text-sm text-yellow-900 whitespace-pre-wrap">
+                          {latestDecision.confidential_notes}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              </div>
+            ) : (
+              <EditorialDecisionForm submissionId={submissionId} reviews={reviews} />
+            )}
+          </CardContent>
+        </Card>
+      )}
+
+      {/* Status Information for Other Cases */}
+      {reviews.length > 0 && submission.status !== 'ACCEPTED' && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Current Status</CardTitle>
+            <CardDescription>
+              Submission status based on reviewer feedback
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="p-4 border rounded-lg bg-muted/30">
+              {submission.status === 'REVISION_REQUIRED' && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="bg-orange-100 text-orange-700">
+                      Revision Required
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Reviewers have requested revisions. The author has been notified and can upload a revised manuscript. 
+                    Once the author submits revisions, you can assign the same or new reviewers for re-evaluation.
+                  </p>
+                </div>
+              )}
+              
+              {submission.status === 'REJECTED' && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="destructive">
+                      Rejected
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    This submission has been rejected based on reviewer recommendations. The author has been notified.
+                  </p>
+                </div>
+              )}
+
+              {submission.status === 'UNDER_REVIEW' && (
+                <div className="space-y-3">
+                  <div className="flex items-center gap-2">
+                    <Badge variant="outline" className="bg-yellow-100 text-yellow-700">
+                      Under Review
+                    </Badge>
+                  </div>
+                  <p className="text-sm text-muted-foreground">
+                    Waiting for all reviewers to complete their reviews. Status will automatically update once all reviews are submitted.
+                  </p>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>
