@@ -70,11 +70,6 @@ export function StaffSettings({ journalId }) {
   const addStaffMutation = useAddJournalStaff();
   const removeStaffMutation = useRemoveJournalStaff();
 
-  console.log("StaffSettings - journalId:", journalId);
-  console.log("StaffSettings - staffData:", staffData);
-  console.log("StaffSettings - isPending:", isPending);
-  console.log("StaffSettings - error:", error);
-
   const handleAddStaff = (data) => {
     console.log("Adding staff with data:", data);
     addStaffMutation.mutate(
@@ -230,6 +225,7 @@ export function StaffSettings({ journalId }) {
         isOpen={isAddStaffOpen}
         onClose={() => setIsAddStaffOpen(false)}
         onSubmit={handleAddStaff}
+        staffData={staffData}
       />
 
       {/* Edit Staff Dialog */}
@@ -248,7 +244,7 @@ export function StaffSettings({ journalId }) {
   );
 }
 
-function AddStaffDialog({ isOpen, onClose, onSubmit }) {
+function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
   const [formData, setFormData] = useState({
     profile_id: "",
     role: "",
@@ -292,8 +288,15 @@ function AddStaffDialog({ isOpen, onClose, onSubmit }) {
     setFormData({ profile_id: "", role: value });
   };
 
-  // Prepare options for SearchableSelect
-  const userOptions = profiles.map((profile) => ({
+  // Filter out users already present in staffData
+  const staffProfileIds = (staffData || []).map((s) => s.profile?.id);
+
+  console.log("staffProfileIds:", staffProfileIds);
+  const filteredProfiles = profiles.filter(
+    (profile) => !staffProfileIds.includes(profile.profile.id)
+  );
+
+  const userOptions = filteredProfiles.map((profile) => ({
     value: profile.profile.id,
     label: `${
       profile.profile.display_name || profile.profile.user_name || "No name"
