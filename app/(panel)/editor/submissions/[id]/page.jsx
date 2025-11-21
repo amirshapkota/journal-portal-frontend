@@ -110,6 +110,7 @@ export default function AdminSubmissionDetailPage() {
   };
 
   const handleAssignReviewer = (reviewerId) => {
+    console.log("Assigning reviewer ID:", reviewerId);
     // Get review deadline days from journal settings, default to 30 days
     const reviewDeadlineDays = submission?.journal_details?.settings?.review_deadline_days || 30;
     
@@ -118,24 +119,14 @@ export default function AdminSubmissionDetailPage() {
     dueDate.setDate(dueDate.getDate() + reviewDeadlineDays);
 
     assignReviewerMutation.mutate(
-      {
+           { 
         submission: submissionId,
         reviewer: reviewerId,
         due_date: dueDate.toISOString().split("T")[0],
         invitation_message: `You have been invited to review the manuscript "${submission.title}". Please review and provide your feedback within ${reviewDeadlineDays} days.`,
-      },
-      {
-        onSuccess: () => {
-          alert("Reviewer assigned successfully");
-        },
-        onError: (error) => {
-          console.error("Failed to assign reviewer:", error);
-          const errorMessage = error.response?.data?.detail || 
-                               error.response?.data?.non_field_errors?.[0] ||
-                               "Failed to assign reviewer";
-          alert(errorMessage);
-        },
-      }
+      
+           }
+      
     );
   };
 

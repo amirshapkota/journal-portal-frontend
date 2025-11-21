@@ -29,8 +29,9 @@ export const updateSubmissionStatus = async (id, data) => {
  * @param {Object} data - { reviewer_ids: string[] }
  * @returns {Promise} API response
  */
-export const assignReviewers = async (id, data) => {
-  const response = await instance.post(`submissions/${id}/assign_reviewers/`, data);
+export const assignReviewers = async ( data) => {
+  console.log("Assign Reviewers API - Data:", data);    
+  const response = await instance.post(`reviews/assignments/`, data);
   return response.data;
 };
 

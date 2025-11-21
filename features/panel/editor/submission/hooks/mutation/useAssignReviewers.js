@@ -9,7 +9,7 @@ export const useAssignReviewers = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, reviewer_ids }) => assignReviewers(id, { reviewer_ids }),
+    mutationFn: ( reviewer_ids) => assignReviewers(reviewer_ids),
     onSuccess: (data, variables) => {
       // Invalidate submission details
       queryClient.invalidateQueries({

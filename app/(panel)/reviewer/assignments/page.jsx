@@ -154,7 +154,7 @@ export default function ReviewerAssignmentsPage() {
                 {assignment.submission_number || "N/A"}
               </CardDescription>
             </div>
-            <Badge {...badgeProps}>{assignment.status_display || assignment.status}</Badge>
+            <Badge {...badgeProps}>{assignment?.submission_details?.status || ""}</Badge>
           </div>
         </CardHeader>
         <CardContent className="space-y-4">
