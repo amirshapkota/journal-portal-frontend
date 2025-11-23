@@ -17,6 +17,7 @@ import StatsErrorCard from "./StatsErrorCard";
 import { FilterToolbar } from "./FilterToolbar";
 import SuperDocEditor from "./SuperDoc/SuperDocEditor";
 import StatusBadge from "./StatusBadge";
+import DecisionBadge from "./DecisionBadge";
 export * from "./charts";
 
 export {
@@ -39,4 +40,5 @@ export {
   FilterToolbar,
   SuperDocEditor,
   StatusBadge,
+  DecisionBadge,
 };

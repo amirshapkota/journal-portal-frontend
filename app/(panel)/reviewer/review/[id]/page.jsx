@@ -91,7 +91,7 @@ export default function ReviewDetailPage() {
     );
   }
 
-  const submission = assignment.submission_details;
+  const submission = assignment?.submission_details;
 
   return (
     <RoleBasedRoute allowedRoles={["REVIEWER"]}>
@@ -155,7 +155,7 @@ export default function ReviewDetailPage() {
                 </div>
               )}
               {assignment.declined_at && (
-                <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                <div className="p-3 bg-destructive/10 dark:bg-destructive/20 border border-destructive/20 dark:border-destructive/30 rounded-lg">
                   <p className="text-sm font-medium mb-1">Declined At</p>
                   <p className="text-sm text-muted-foreground">
                     {format(new Date(assignment.declined_at), "PPP p")}
@@ -163,7 +163,7 @@ export default function ReviewDetailPage() {
                 </div>
               )}
               {assignment.completed_at && (
-                <div className="p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div className="p-3 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
                   <p className="text-sm font-medium mb-1">Completed At</p>
                   <p className="text-sm text-muted-foreground">
                     {format(new Date(assignment.completed_at), "PPP p")}
@@ -178,10 +178,10 @@ export default function ReviewDetailPage() {
                 <div
                   className={`flex items-center gap-2 p-3 rounded-lg ${
                     assignment.is_overdue
-                      ? "bg-destructive/10 border border-destructive/20 text-destructive"
+                      ? "bg-destructive/10 dark:bg-destructive/20 border border-destructive/20 dark:border-destructive/30 text-destructive dark:text-destructive"
                       : assignment.days_remaining <= 3
-                      ? "bg-amber-50 border border-amber-200 text-amber-700"
-                      : "bg-green-50 border border-green-200 text-green-700"
+                      ? "bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 text-amber-700 dark:text-amber-300"
+                      : "bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-700 dark:text-green-300"
                   }`}
                 >
                   <AlertCircle className="h-5 w-5" />
@@ -216,7 +216,7 @@ export default function ReviewDetailPage() {
                   <h3 className="font-semibold mb-2 text-destructive">
                     Decline Reason
                   </h3>
-                  <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-lg">
+                  <div className="p-3 bg-destructive/10 dark:bg-destructive/20 border border-destructive/20 dark:border-destructive/30 rounded-lg">
                     <p className="text-sm text-muted-foreground">
                       {assignment.decline_reason}
                     </p>
@@ -257,7 +257,7 @@ export default function ReviewDetailPage() {
             <TabsList>
               <TabsTrigger value="details">Submission Details</TabsTrigger>
               <TabsTrigger value="documents">Documents</TabsTrigger>
-              {assignment?.submission_details.status === "REVISION_REQUIRED" ||
+              {assignment?.submission_details.status === "UNDER_REVIEW" ||
               assignment?.submission_details.status === "REVISED" ? (
                 <TabsTrigger value="review">Submit Review</TabsTrigger>
               ) : null}
@@ -456,7 +456,7 @@ export default function ReviewDetailPage() {
             </TabsContent>
 
             <TabsContent value="review" className="space-y-4 mt-4">
-              {assignment?.submission_details.status === "REVISION_REQUIRED" ||
+              {assignment?.submission_details.status === "UNDER_REVIEW" ||
               assignment?.submission_details.status === "REVISED" ? (
                 <ReviewSubmissionForm assignment={assignment} />
               ) : (

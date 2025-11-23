@@ -31,10 +31,16 @@ import { useSubmitReview } from "../hooks/mutation/useSubmitReview";
 
 // Validation schema
 const reviewSchema = z.object({
-  recommendation: z.enum(["ACCEPT", "MINOR_REVISION", "MAJOR_REVISION", "REJECT"], {
-    required_error: "Please select a recommendation",
-  }),
-  confidence_level: z.number().min(1).max(5, "Confidence level must be between 1 and 5"),
+  recommendation: z.enum(
+    ["ACCEPT", "MINOR_REVISION", "MAJOR_REVISION", "REJECT"],
+    {
+      required_error: "Please select a recommendation",
+    }
+  ),
+  confidence_level: z
+    .number()
+    .min(1)
+    .max(5, "Confidence level must be between 1 and 5"),
   novelty: z.number().min(0).max(10),
   methodology: z.number().min(0).max(10),
   clarity: z.number().min(0).max(10),
@@ -52,29 +58,29 @@ const RECOMMENDATION_OPTIONS = [
     value: "ACCEPT",
     label: "Accept",
     description: "The manuscript is suitable for publication as is",
-    color: "text-green-600",
-    bg: "bg-green-50 border-green-200",
+    color: "text-green-600 dark:text-green-400",
+    bg: "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800",
   },
   {
     value: "MINOR_REVISION",
     label: "Minor Revision",
     description: "Accept pending minor changes that do not require re-review",
-    color: "text-blue-600",
-    bg: "bg-blue-50 border-blue-200",
+    color: "text-blue-600 dark:text-blue-400",
+    bg: "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",
   },
   {
     value: "MAJOR_REVISION",
     label: "Major Revision",
     description: "Requires substantial revisions and re-review",
-    color: "text-amber-600",
-    bg: "bg-amber-50 border-amber-200",
+    color: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800",
   },
   {
     value: "REJECT",
     label: "Reject",
     description: "The manuscript is not suitable for publication",
-    color: "text-red-600",
-    bg: "bg-red-50 border-red-200",
+    color: "text-red-600 dark:text-red-400",
+    bg: "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
   },
 ];
 
@@ -163,7 +169,7 @@ export function ReviewSubmissionForm({ assignment }) {
 
       await submitReviewMutation.mutateAsync(reviewData);
       setShowSuccess(true);
-      
+
       // Redirect after 2 seconds
       setTimeout(() => {
         router.push("/reviewer/assignments");
@@ -175,15 +181,17 @@ export function ReviewSubmissionForm({ assignment }) {
 
   if (showSuccess) {
     return (
-      <Card>
+      <Card className="border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20">
         <CardContent className="pt-6">
           <div className="text-center py-12">
-            <CheckCircle2 className="h-16 w-16 mx-auto text-green-600 mb-4" />
-            <h3 className="text-2xl font-bold mb-2">Review Submitted Successfully!</h3>
-            <p className="text-muted-foreground mb-4">
+            <CheckCircle2 className="h-16 w-16 mx-auto text-green-600 dark:text-green-400 mb-4" />
+            <h3 className="text-2xl font-bold mb-2 text-green-800 dark:text-green-300">
+              Review Submitted Successfully!
+            </h3>
+            <p className="text-green-600 dark:text-green-400 mb-4">
               Thank you for your valuable feedback
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-green-600 dark:text-green-400">
               Redirecting to assignments...
             </p>
           </div>
@@ -214,11 +222,12 @@ export function ReviewSubmissionForm({ assignment }) {
               >
                 {RECOMMENDATION_OPTIONS.map((option) => (
                   <div key={option.value}>
-                    <div
+                    <Label
+                      htmlFor={option.value}
                       className={`relative flex items-start p-4 border-2 rounded-lg cursor-pointer transition-all ${
                         field.value === option.value
-                          ? option.bg + " border-current"
-                          : "border-gray-200 hover:border-gray-300"
+                          ? option.bg
+                          : "border-border hover:border-muted-foreground/30"
                       }`}
                     >
                       <RadioGroupItem
@@ -227,19 +236,18 @@ export function ReviewSubmissionForm({ assignment }) {
                         className="mt-1"
                       />
                       <div className="ml-3 flex-1">
-                        <Label
-                          htmlFor={option.value}
-                          className={`font-semibold cursor-pointer ${
+                        <div
+                          className={`font-semibold ${
                             field.value === option.value ? option.color : ""
                           }`}
                         >
                           {option.label}
-                        </Label>
-                        <p className="text-sm text-muted-foreground mt-1">
+                        </div>
+                        <p className="text-sm text-muted-foreground mt-1 font-normal">
                           {option.description}
                         </p>
                       </div>
-                    </div>
+                    </Label>
                   </div>
                 ))}
               </RadioGroup>
@@ -275,7 +283,10 @@ export function ReviewSubmissionForm({ assignment }) {
                 </SelectTrigger>
                 <SelectContent>
                   {CONFIDENCE_LEVELS.map((level) => (
-                    <SelectItem key={level.value} value={level.value.toString()}>
+                    <SelectItem
+                      key={level.value}
+                      value={level.value.toString()}
+                    >
                       {level.label}
                     </SelectItem>
                   ))}
@@ -402,7 +413,10 @@ export function ReviewSubmissionForm({ assignment }) {
             Please ensure you have carefully reviewed the manuscript before
             submitting. Your recommendation is:{" "}
             <strong>
-              {RECOMMENDATION_OPTIONS.find((o) => o.value === recommendation)?.label}
+              {
+                RECOMMENDATION_OPTIONS.find((o) => o.value === recommendation)
+                  ?.label
+              }
             </strong>
           </AlertDescription>
         </Alert>

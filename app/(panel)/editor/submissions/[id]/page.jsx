@@ -28,74 +28,73 @@ import {
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useAssignReviewers,
   useGetAdminSubmissionById,
   useGetReviewerRecommendations,
-  useUpdateSubmissionStatus,
 } from "@/features/panel/editor/submission";
+import {
+  LoadingScreen,
+  StatusBadge,
+  statusConfig,
+  DecisionBadge,
+  decisionTypeConfig,
+  reviewRecommendationConfig,
+} from "@/features";
 
 export default function AdminSubmissionDetailPage() {
   const params = useParams();
   const router = useRouter();
   const submissionId = params?.id;
-
-  const [selectedStatus, setSelectedStatus] = useState("");
+  const [assigningReviewerId, setAssigningReviewerId] = useState(null);
 
   // Fetch submission details
   const {
     data: submission,
-    isLoading: isSubmissionLoading,
+    isPending: isSubmissionLoading,
     error: submissionError,
   } = useGetAdminSubmissionById(submissionId);
-
-  // Get review type from journal settings
-  const reviewType = submission?.journal_details?.settings?.review_type;
 
   // Fetch reviewer recommendations (admin always sees them)
   const {
     data: recommendations,
-    isLoading: isRecommendationsPending,
+    isPending: isRecommendationsPending,
     error: recommendationsError,
   } = useGetReviewerRecommendations(submissionId, !!submission);
 
   // Fetch submitted reviews
-  const { data: reviewsData, isLoading: isReviewsLoading } =
+  const { data: reviewsData, isPending: isReviewsPending } =
     useGetSubmissionReviews(submissionId);
 
   // Fetch editorial decisions
-  const { data: decisionsData, isLoading: isDecisionsLoading } =
+  const { data: decisionsData, isPending: isDecisionsPending } =
     useGetSubmissionDecisions(submissionId);
 
-  const reviews = Array.isArray(reviewsData)
-    ? reviewsData
-    : reviewsData?.results || [];
-  const decisions = Array.isArray(decisionsData)
-    ? decisionsData
-    : decisionsData?.results || [];
-  const hasDecision = decisions.length > 0;
-  const latestDecision = decisions[0]; // Assuming sorted by created_at desc
+  const reviews = React.useMemo(() => {
+    return Array.isArray(reviewsData)
+      ? reviewsData
+      : reviewsData?.results || [];
+  }, [reviewsData]);
+
+  console.log(reviews);
+
+  const decisions = React.useMemo(() => {
+    return Array.isArray(decisionsData)
+      ? decisionsData
+      : decisionsData?.results || [];
+  }, [decisionsData]);
+
+  const hasDecision = React.useMemo(() => decisions.length > 0, [decisions]);
+  const latestDecision = React.useMemo(() => decisions[0], [decisions]);
 
   // Assign reviewer mutation
   const assignReviewerMutation = useAssignReviewers();
 
-  // Set initial status when submission loads
-  React.useEffect(() => {
-    if (submission?.status) {
-      setSelectedStatus(submission.status);
-    }
-  }, [submission?.status]);
-
   const handleAssignReviewer = (reviewerId) => {
     console.log("Assigning reviewer ID:", reviewerId);
+    setAssigningReviewerId(reviewerId);
+
     // Get review deadline days from journal settings, default to 30 days
     const reviewDeadlineDays =
       submission?.journal_details?.settings?.review_deadline_days || 30;
@@ -104,12 +103,19 @@ export default function AdminSubmissionDetailPage() {
     const dueDate = new Date();
     dueDate.setDate(dueDate.getDate() + reviewDeadlineDays);
 
-    assignReviewerMutation.mutate({
-      submission: submissionId,
-      reviewer: reviewerId,
-      due_date: dueDate.toISOString().split("T")[0],
-      invitation_message: `You have been invited to review the manuscript "${submission.title}". Please review and provide your feedback within ${reviewDeadlineDays} days.`,
-    });
+    assignReviewerMutation.mutate(
+      {
+        submission: submissionId,
+        reviewer: reviewerId,
+        due_date: dueDate.toISOString().split("T")[0],
+        invitation_message: `You have been invited to review the manuscript "${submission.title}". Please review and provide your feedback within ${reviewDeadlineDays} days.`,
+      },
+      {
+        onSettled: () => {
+          setAssigningReviewerId(null);
+        },
+      }
+    );
   };
 
   if (isSubmissionLoading) {
@@ -155,17 +161,6 @@ export default function AdminSubmissionDetailPage() {
     );
   }
 
-  const statusOptions = [
-    { value: "DRAFT", label: "Draft" },
-    { value: "SUBMITTED", label: "Submitted" },
-    { value: "UNDER_REVIEW", label: "Under Review" },
-    { value: "REVISION_REQUESTED", label: "Revision Requested" },
-    { value: "ACCEPTED", label: "Accepted" },
-    { value: "REJECTED", label: "Rejected" },
-    { value: "PUBLISHED", label: "Published" },
-    { value: "WITHDRAWN", label: "Withdrawn" },
-  ];
-
   return (
     <div className=" space-y-6">
       {/* Header */}
@@ -200,7 +195,10 @@ export default function AdminSubmissionDetailPage() {
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <Badge variant="secondary">{submission.status_display}</Badge>
+              <StatusBadge
+                status={submission.status}
+                statusConfig={statusConfig}
+              />
             </div>
           </div>
         </CardHeader>
@@ -263,7 +261,7 @@ export default function AdminSubmissionDetailPage() {
               </p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {submission.documents.map((doc) => (
                 <div
                   key={doc.id}
@@ -391,7 +389,7 @@ export default function AdminSubmissionDetailPage() {
               </p>
             </div>
           ) : (
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {recommendations.recommendations
                 .slice(0, 5)
                 .map((reviewer, index) => {
@@ -493,9 +491,13 @@ export default function AdminSubmissionDetailPage() {
                           onClick={() =>
                             handleAssignReviewer(reviewer.reviewer_id)
                           }
-                          disabled={assignReviewerMutation.isPending}
+                          disabled={
+                            assigningReviewerId === reviewer.reviewer_id &&
+                            assignReviewerMutation.isPending
+                          }
                         >
-                          {assignReviewerMutation.isPending ? (
+                          {assigningReviewerId === reviewer.reviewer_id &&
+                          assignReviewerMutation.isPending ? (
                             <>
                               <Loader2 className="h-4 w-4 mr-2 animate-spin" />
                               Assigning...
@@ -524,7 +526,7 @@ export default function AdminSubmissionDetailPage() {
               </CardDescription>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-2">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
                 {submission.review_assignments.map((assignment) => (
                   <div
                     key={assignment.id}
@@ -661,7 +663,7 @@ export default function AdminSubmissionDetailPage() {
                   Reviews completed by assigned reviewers
                 </CardDescription>
               </div>
-              {isReviewsLoading && (
+              {isReviewsPending && (
                 <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               )}
             </div>
@@ -684,20 +686,11 @@ export default function AdminSubmissionDetailPage() {
                       </p>
                     </div>
                     <div className="text-right">
-                      <Badge
-                        variant={
-                          review.recommendation === "ACCEPT"
-                            ? "default"
-                            : review.recommendation === "REJECT"
-                            ? "destructive"
-                            : review.recommendation === "MINOR_REVISION"
-                            ? "secondary"
-                            : "outline"
-                        }
+                      <DecisionBadge
+                        decisionType={review.recommendation}
+                        config={reviewRecommendationConfig}
                         className="mb-1"
-                      >
-                        {review.recommendation.replace("_", " ")}
-                      </Badge>
+                      />
                       <p className="text-xs text-muted-foreground">
                         Confidence: {review.confidence_level}/5
                       </p>
@@ -773,11 +766,11 @@ export default function AdminSubmissionDetailPage() {
                   {review.confidential_comments && (
                     <>
                       <Separator />
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                        <h5 className="text-sm font-semibold mb-2 text-yellow-800">
+                      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                        <h5 className="text-sm font-semibold mb-2 text-yellow-800 dark:text-yellow-300">
                           Confidential Comments (For Editor Only)
                         </h5>
-                        <p className="text-sm text-yellow-900 whitespace-pre-wrap">
+                        <p className="text-sm text-yellow-900 dark:text-yellow-200 whitespace-pre-wrap">
                           {review.confidential_comments}
                         </p>
                       </div>
@@ -797,60 +790,79 @@ export default function AdminSubmissionDetailPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Editorial Decision</CardTitle>
-                <CardDescription>
+                <CardDescription className={"mt-1"}>
                   {hasDecision
                     ? "Final publishing decision has been made"
                     : "Make final decision for publication (submission has been accepted by reviewers)"}
                 </CardDescription>
               </div>
-              {isDecisionsLoading && (
+              {isDecisionsPending && (
                 <Loader2 className="h-5 w-5 animate-spin text-muted-foreground" />
               )}
             </div>
           </CardHeader>
           <CardContent>
-            {submission?.status === "UNDER_REVIEW" ? (
+            {hasDecision && latestDecision ? (
               <div className="space-y-4">
                 <div className="p-4 border rounded-lg bg-muted/30">
                   <div className="flex items-start justify-between mb-3">
-                    <div>
-                      <h4 className="font-semibold">Decision</h4>
+                    <div className="space-y-1">
+                      <h4 className="font-semibold">Editorial Decision</h4>
                       <p className="text-sm text-muted-foreground">
                         Made on{" "}
-                        {format(new Date(latestDecision.created_at), "PPP")}
+                        {format(
+                          new Date(
+                            latestDecision.decision_date ||
+                              latestDecision.created_at
+                          ),
+                          "PPP"
+                        )}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Decided by:{" "}
+                        {latestDecision.decided_by_name || "Unknown"}
                       </p>
                     </div>
-                    <Badge
-                      variant={
-                        latestDecision.decision_type === "ACCEPT"
-                          ? "default"
-                          : latestDecision.decision_type === "REJECT"
-                          ? "destructive"
-                          : "secondary"
-                      }
-                    >
-                      {latestDecision.decision_type.replace("_", " ")}
-                    </Badge>
+                    <div className="flex flex-col items-end gap-2">
+                      <DecisionBadge
+                        decisionType={latestDecision.decision_type}
+                        config={decisionTypeConfig}
+                        displayLabel={latestDecision.decision_type_display}
+                      />
+                      {latestDecision.notification_sent !== undefined && (
+                        <Badge variant="outline" className="text-xs">
+                          {latestDecision.notification_sent
+                            ? "Notification Sent"
+                            : "Notification Pending"}
+                        </Badge>
+                      )}
+                    </div>
                   </div>
 
                   <Separator className="my-3" />
 
-                  <div>
-                    <h5 className="text-sm font-semibold mb-2">
-                      Decision Letter
-                    </h5>
-                    <p className="text-sm text-muted-foreground whitespace-pre-wrap">
-                      {latestDecision.decision_letter}
-                    </p>
-                  </div>
+                  {latestDecision.decision_letter && (
+                    <>
+                      <div>
+                        <h5 className="text-sm font-semibold mb-2">
+                          Decision Letter
+                        </h5>
+                        <p className="text-sm text-muted-foreground whitespace-pre-wrap">
+                          {latestDecision.decision_letter}
+                        </p>
+                      </div>
+                      <Separator className="my-3" />
+                    </>
+                  )}
 
                   {latestDecision.revision_deadline && (
                     <>
-                      <Separator className="my-3" />
-                      <div className="flex items-center gap-2 text-sm">
-                        <Calendar className="h-4 w-4 text-muted-foreground" />
-                        <span className="font-medium">Revision Deadline:</span>
-                        <span className="text-muted-foreground">
+                      <div className="flex items-center gap-2 text-sm p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                        <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                        <span className="font-medium text-blue-900 dark:text-blue-300">
+                          Revision Deadline:
+                        </span>
+                        <span className="text-blue-700 dark:text-blue-400">
                           {format(
                             new Date(latestDecision.revision_deadline),
                             "PPP"
@@ -863,11 +875,11 @@ export default function AdminSubmissionDetailPage() {
                   {latestDecision.confidential_notes && (
                     <>
                       <Separator className="my-3" />
-                      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-                        <h5 className="text-sm font-semibold mb-2 text-yellow-800">
+                      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                        <h5 className="text-sm font-semibold mb-2 text-yellow-800 dark:text-yellow-300">
                           Confidential Notes (Internal Only)
                         </h5>
-                        <p className="text-sm text-yellow-900 whitespace-pre-wrap">
+                        <p className="text-sm text-yellow-900 dark:text-yellow-200 whitespace-pre-wrap">
                           {latestDecision.confidential_notes}
                         </p>
                       </div>
@@ -886,67 +898,70 @@ export default function AdminSubmissionDetailPage() {
       )}
 
       {/* Status Information for Other Cases */}
-      {reviews.length > 0 && submission.status !== "ACCEPTED" && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Current Status</CardTitle>
-            <CardDescription>
-              Submission status based on reviewer feedback
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <div className="p-4 border rounded-lg bg-muted/30">
-              {submission.status === "REVISION_REQUIRED" && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className="bg-orange-100 text-orange-700"
-                    >
-                      Revision Required
-                    </Badge>
+      {reviews.length > 0 &&
+        (submission.status === "REVISION_REQUIRED" ||
+          submission.status === "REJECTED" ||
+          submission.status === "UNDER_REVIEW") && (
+          <Card>
+            <CardHeader>
+              <CardTitle>Current Status</CardTitle>
+              <CardDescription>
+                Submission status based on reviewer feedback
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="p-4 border rounded-lg bg-muted/30">
+                {submission.status === "REVISION_REQUIRED" && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <StatusBadge
+                        status="REVISION_REQUIRED"
+                        statusConfig={statusConfig}
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Reviewers have requested revisions. The author has been
+                      notified and can upload a revised manuscript. Once the
+                      author submits revisions, you can assign the same or new
+                      reviewers for re-evaluation.
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Reviewers have requested revisions. The author has been
-                    notified and can upload a revised manuscript. Once the
-                    author submits revisions, you can assign the same or new
-                    reviewers for re-evaluation.
-                  </p>
-                </div>
-              )}
+                )}
 
-              {submission.status === "REJECTED" && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Badge variant="destructive">Rejected</Badge>
+                {submission.status === "REJECTED" && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <StatusBadge
+                        status="REJECTED"
+                        statusConfig={statusConfig}
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      This submission has been rejected based on reviewer
+                      recommendations. The author has been notified.
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    This submission has been rejected based on reviewer
-                    recommendations. The author has been notified.
-                  </p>
-                </div>
-              )}
+                )}
 
-              {submission.status === "UNDER_REVIEW" && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Badge
-                      variant="outline"
-                      className="bg-yellow-100 text-yellow-700"
-                    >
-                      Under Review
-                    </Badge>
+                {submission.status === "UNDER_REVIEW" && (
+                  <div className="space-y-3">
+                    <div className="flex items-center gap-2">
+                      <StatusBadge
+                        status="UNDER_REVIEW"
+                        statusConfig={statusConfig}
+                      />
+                    </div>
+                    <p className="text-sm text-muted-foreground">
+                      Waiting for all reviewers to complete their reviews.
+                      Status will automatically update once all reviews are
+                      submitted.
+                    </p>
                   </div>
-                  <p className="text-sm text-muted-foreground">
-                    Waiting for all reviewers to complete their reviews. Status
-                    will automatically update once all reviews are submitted.
-                  </p>
-                </div>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      )}
+                )}
+              </div>
+            </CardContent>
+          </Card>
+        )}
     </div>
   );
 }

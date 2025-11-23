@@ -25,7 +25,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -38,6 +37,7 @@ import {
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { Badge } from "@/components/ui/badge";
 
 export default function ReviewerAssignmentsPage() {
   const router = useRouter();
@@ -264,7 +264,9 @@ export default function ReviewerAssignmentsPage() {
                 </Button>
               </>
             )}
-            {assignment?.submission_details.status !== "REVISION_REQUIRED" && (
+            {(assignment?.status === "ACCEPTED" ||
+              (assignment?.status === "COMPLETED" &&
+                assignment?.submission_details.status === "REVISED")) && (
               <Button
                 size="sm"
                 onClick={() => handleViewSubmission(assignment)}
@@ -272,17 +274,6 @@ export default function ReviewerAssignmentsPage() {
               >
                 <Eye className="h-4 w-4 mr-2" />
                 Start Review
-              </Button>
-            )}
-            {assignment.status === "COMPLETED" && (
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleViewSubmission(assignment)}
-                className="flex-1"
-              >
-                <Eye className="h-4 w-4 mr-2" />
-                View Review
               </Button>
             )}
           </div>

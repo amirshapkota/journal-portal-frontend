@@ -30,6 +30,8 @@ import { useCreateEditorialDecision } from "../hooks/useCreateEditorialDecision"
 import { useGetDecisionLetterTemplates } from "../hooks/useGetDecisionLetterTemplates";
 import { Input } from "@/components/ui/input";
 import { toast } from "sonner";
+import { Badge } from "@/components/ui/badge";
+import { DecisionBadge, reviewRecommendationConfig } from "@/features";
 
 const decisionSchema = z.object({
   decision_type: z.enum(
@@ -51,25 +53,25 @@ const DECISION_OPTIONS = [
     value: "ACCEPT",
     label: "Accept",
     description: "Accept the submission for publication",
-    color: "text-green-600",
+    color: "text-green-600 dark:text-green-400",
   },
   {
     value: "REJECT",
     label: "Reject",
     description: "Reject the submission",
-    color: "text-red-600",
+    color: "text-red-600 dark:text-red-400",
   },
   {
     value: "MINOR_REVISION",
     label: "Minor Revision",
     description: "Request minor revisions",
-    color: "text-blue-600",
+    color: "text-blue-600 dark:text-blue-400",
   },
   {
     value: "MAJOR_REVISION",
     label: "Major Revision",
     description: "Request major revisions",
-    color: "text-orange-600",
+    color: "text-orange-600 dark:text-orange-400",
   },
 ];
 
@@ -131,18 +133,18 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
 
   if (showSuccess) {
     return (
-      <Card className="border-green-200 bg-green-50">
+      <Card className="border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-900/20">
         <CardContent className="pt-6">
           <div className="text-center">
-            <CheckCircle2 className="mx-auto h-16 w-16 text-green-600 mb-4" />
-            <h3 className="text-xl font-semibold text-green-800 mb-2">
+            <CheckCircle2 className="mx-auto h-16 w-16 text-green-600 dark:text-green-400 mb-4" />
+            <h3 className="text-xl font-semibold text-green-800 dark:text-green-300 mb-2">
               Editorial Decision Submitted Successfully!
             </h3>
-            <p className="text-green-600">
+            <p className="text-green-600 dark:text-green-400">
               The decision has been recorded and the submission status has been
               updated.
             </p>
-            <p className="text-sm text-green-600 mt-2">
+            <p className="text-sm text-green-600 dark:text-green-400 mt-2">
               Redirecting to submissions list...
             </p>
           </div>
@@ -155,41 +157,33 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
     <div className="space-y-6">
       {/* Reviews Summary */}
       {reviews.length > 0 && (
-        <Card>
-          <CardHeader>
+        <Card className={"gap-4"}>
+          <CardHeader className={"gap-0"}>
             <CardTitle className="text-lg">Reviews Summary</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {reviews.map((review, index) => (
                 <div
                   key={review.id}
-                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                  className="flex items-center justify-between p-3 border border-border rounded-lg"
                 >
                   <div>
                     <p className="font-medium">
                       Review {index + 1} {index + 1 === 1 ? "(Latest)" : ""}
                     </p>
-                    <p className="text-sm text-gray-600">
+                    <p className="text-sm ">
                       Submitted:{" "}
                       {new Date(review.submitted_at).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="text-right">
-                    <span
-                      className={`inline-flex items-center rounded-full px-3 py-1 text-sm font-medium ${
-                        review.recommendation === "ACCEPT"
-                          ? "bg-green-100 text-green-700"
-                          : review.recommendation === "REJECT"
-                          ? "bg-red-100 text-red-700"
-                          : review.recommendation === "MINOR_REVISION"
-                          ? "bg-blue-100 text-blue-700"
-                          : "bg-orange-100 text-orange-700"
-                      }`}
-                    >
-                      {review.recommendation.replace("_", " ")}
-                    </span>
-                    <p className="text-xs text-gray-500 mt-1">
+                    <DecisionBadge
+                      decisionType={review.recommendation}
+                      config={reviewRecommendationConfig}
+                      className="mb-1"
+                    />
+                    <p className="text-xs text-muted-foreground mt-1">
                       Confidence: {review.confidence_level}/5
                     </p>
                   </div>
@@ -226,9 +220,13 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
                       </FormControl>
                       <SelectContent>
                         {DECISION_OPTIONS.map((option) => (
-                          <SelectItem key={option.value} value={option.value}>
+                          <SelectItem
+                            key={option.value}
+                            value={option.value}
+                            className="cursor-pointer"
+                          >
                             <span className={option.color}>{option.label}</span>
-                            <span className="text-xs text-gray-500 ml-2">
+                            <span className="text-xs text-muted-foreground ml-2">
                               - {option.description}
                             </span>
                           </SelectItem>
@@ -257,7 +255,7 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
                             className="pl-10"
                             min={new Date().toISOString().split("T")[0]}
                           />
-                          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
+                          <Calendar className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                         </div>
                       </FormControl>
                       <FormDescription>
