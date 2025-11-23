@@ -75,8 +75,12 @@ export default function AdminSubmissionDetailPage() {
   const { data: decisionsData, isLoading: isDecisionsLoading } =
     useGetSubmissionDecisions(submissionId);
 
-  const reviews = reviewsData?.results || [];
-  const decisions = decisionsData?.results || [];
+  const reviews = Array.isArray(reviewsData)
+    ? reviewsData
+    : reviewsData?.results || [];
+  const decisions = Array.isArray(decisionsData)
+    ? decisionsData
+    : decisionsData?.results || [];
   const hasDecision = decisions.length > 0;
   const latestDecision = decisions[0]; // Assuming sorted by created_at desc
 

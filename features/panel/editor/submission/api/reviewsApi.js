@@ -9,7 +9,7 @@ import { instance } from "@/lib/instance";
  */
 export const getSubmissionReviews = async (submissionId) => {
   const response = await instance.get(
-    `reviews/reviews/?submission_id=${submissionId}`
+    `reviews/reviews/submission_reviews/?submission_id=${submissionId}`
   );
   return response.data;
 };
@@ -20,7 +20,7 @@ export const getSubmissionReviews = async (submissionId) => {
  * @returns {Promise} API response
  */
 export const getReviewById = async (reviewId) => {
-  const response = await instance.get(`reviews/${reviewId}/`);
+  const response = await instance.get(`reviews/reviews/${reviewId}/`);
   return response.data;
 };
 
