@@ -257,9 +257,10 @@ export default function ReviewDetailPage() {
             <TabsList>
               <TabsTrigger value="details">Submission Details</TabsTrigger>
               <TabsTrigger value="documents">Documents</TabsTrigger>
-              {assignment.status === "ACCEPTED" && (
+              {assignment?.submission_details.status === "REVISION_REQUIRED" ||
+              assignment?.submission_details.status === "REVISED" ? (
                 <TabsTrigger value="review">Submit Review</TabsTrigger>
-              )}
+              ) : null}
             </TabsList>
 
             <TabsContent value="details" className="space-y-4 mt-4">
@@ -455,7 +456,8 @@ export default function ReviewDetailPage() {
             </TabsContent>
 
             <TabsContent value="review" className="space-y-4 mt-4">
-              {assignment?.submission_details.status !== "REVISION_REQUIRED" ? (
+              {assignment?.submission_details.status === "REVISION_REQUIRED" ||
+              assignment?.submission_details.status === "REVISED" ? (
                 <ReviewSubmissionForm assignment={assignment} />
               ) : (
                 <Card>

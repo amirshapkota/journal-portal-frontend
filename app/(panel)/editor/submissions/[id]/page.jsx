@@ -723,7 +723,9 @@ export default function AdminSubmissionDetailPage() {
                 >
                   <div className="flex items-start justify-between">
                     <div>
-                      <h4 className="font-semibold">Review {index + 1}</h4>
+                      <h4 className="font-semibold">
+                        Review {index + 1} {index + 1 === 1 ? "(Latest)" : ""}
+                      </h4>
                       <p className="text-sm text-muted-foreground">
                         Submitted on{" "}
                         {format(new Date(review.submitted_at), "PPP")}
@@ -837,7 +839,7 @@ export default function AdminSubmissionDetailPage() {
       )}
 
       {/* Editorial Decision Section - Only for final publishing after reviewers accept */}
-      {reviews.length > 0 && submission.status === "ACCEPTED" && (
+      {reviews.length > 0 && (
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -855,7 +857,7 @@ export default function AdminSubmissionDetailPage() {
             </div>
           </CardHeader>
           <CardContent>
-            {hasDecision ? (
+            {submission?.status === "UNDER_REVIEW" ? (
               <div className="space-y-4">
                 <div className="p-4 border rounded-lg bg-muted/30">
                   <div className="flex items-start justify-between mb-3">

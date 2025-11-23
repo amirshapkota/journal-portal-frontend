@@ -29,12 +29,18 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCreateEditorialDecision } from "../hooks/useCreateEditorialDecision";
 import { useGetDecisionLetterTemplates } from "../hooks/useGetDecisionLetterTemplates";
 import { Input } from "@/components/ui/input";
+import { toast } from "sonner";
 
 const decisionSchema = z.object({
-  decision_type: z.enum(["ACCEPT", "REJECT", "MINOR_REVISION", "MAJOR_REVISION"], {
-    required_error: "Please select a decision type",
-  }),
-  decision_letter: z.string().min(50, "Decision letter must be at least 50 characters"),
+  decision_type: z.enum(
+    ["ACCEPT", "REJECT", "MINOR_REVISION", "MAJOR_REVISION"],
+    {
+      required_error: "Please select a decision type",
+    }
+  ),
+  decision_letter: z
+    .string()
+    .min(50, "Decision letter must be at least 50 characters"),
   confidential_notes: z.string().optional(),
   revision_deadline: z.string().optional(),
   template_id: z.string().optional(),
@@ -71,7 +77,8 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
   const router = useRouter();
   const [showSuccess, setShowSuccess] = useState(false);
   const { mutate: createDecision, isPending } = useCreateEditorialDecision();
-  const { data: templates, isLoading: templatesLoading } = useGetDecisionLetterTemplates();
+  const { data: templates, isLoading: templatesLoading } =
+    useGetDecisionLetterTemplates();
 
   const form = useForm({
     resolver: zodResolver(decisionSchema),
@@ -89,7 +96,9 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
 
   // Load template content when selected
   const handleTemplateSelect = (templateId) => {
-    const template = templates?.results?.find((t) => t.id.toString() === templateId);
+    const template = templates?.results?.find(
+      (t) => t.id.toString() === templateId
+    );
     if (template) {
       form.setValue("decision_letter", template.content);
     }
@@ -105,7 +114,8 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
 
     // Only add revision_deadline if decision type is revision
     if (
-      (data.decision_type === "MINOR_REVISION" || data.decision_type === "MAJOR_REVISION") &&
+      (data.decision_type === "MINOR_REVISION" ||
+        data.decision_type === "MAJOR_REVISION") &&
       data.revision_deadline
     ) {
       payload.revision_deadline = data.revision_deadline;
@@ -114,9 +124,7 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
     createDecision(payload, {
       onSuccess: () => {
         setShowSuccess(true);
-        setTimeout(() => {
-          router.push("/editor/submissions");
-        }, 2000);
+        toast.success("Editorial decision submitted successfully");
       },
     });
   };
@@ -131,7 +139,8 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
               Editorial Decision Submitted Successfully!
             </h3>
             <p className="text-green-600">
-              The decision has been recorded and the submission status has been updated.
+              The decision has been recorded and the submission status has been
+              updated.
             </p>
             <p className="text-sm text-green-600 mt-2">
               Redirecting to submissions list...
@@ -153,11 +162,17 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
           <CardContent>
             <div className="space-y-3">
               {reviews.map((review, index) => (
-                <div key={review.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div
+                  key={review.id}
+                  className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                >
                   <div>
-                    <p className="font-medium">Review {index + 1}</p>
+                    <p className="font-medium">
+                      Review {index + 1} {index + 1 === 1 ? "(Latest)" : ""}
+                    </p>
                     <p className="text-sm text-gray-600">
-                      Submitted: {new Date(review.submitted_at).toLocaleDateString()}
+                      Submitted:{" "}
+                      {new Date(review.submitted_at).toLocaleDateString()}
                     </p>
                   </div>
                   <div className="text-right">
@@ -200,7 +215,10 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Decision Type *</FormLabel>
-                    <Select onValueChange={field.onChange} value={field.value || ""}>
+                    <Select
+                      onValueChange={field.onChange}
+                      value={field.value || ""}
+                    >
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select a decision" />
@@ -273,7 +291,10 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
                       </FormControl>
                       <SelectContent>
                         {templates?.results?.map((template) => (
-                          <SelectItem key={template.id} value={template.id.toString()}>
+                          <SelectItem
+                            key={template.id}
+                            value={template.id.toString()}
+                          >
                             {template.name}
                           </SelectItem>
                         ))}
@@ -302,7 +323,8 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
                       />
                     </FormControl>
                     <FormDescription>
-                      This letter will be sent to the author. Minimum 50 characters required.
+                      This letter will be sent to the author. Minimum 50
+                      characters required.
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -324,7 +346,8 @@ export default function EditorialDecisionForm({ submissionId, reviews = [] }) {
                       />
                     </FormControl>
                     <FormDescription>
-                      These notes are for internal use only and will not be shared with the author
+                      These notes are for internal use only and will not be
+                      shared with the author
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
