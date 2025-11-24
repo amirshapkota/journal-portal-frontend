@@ -21,6 +21,7 @@ import {
   User,
   Edit,
   Send,
+  History,
 } from "lucide-react";
 import { format } from "date-fns";
 import {
@@ -29,6 +30,7 @@ import {
   useDeleteSubmission,
   DocumentUploadModal,
   useGetSubmissionById,
+  DocumentVersionsModal,
 } from "@/features";
 import {
   AlertDialog,
@@ -55,6 +57,10 @@ export default function DraftDetailPage() {
 
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [versionsDialogOpen, setVersionsDialogOpen] = useState(false);
+  const [selectedDocumentId, setSelectedDocumentId] = useState(null);
+
+  console.log("this is a log statement", selectedDocumentId);
 
   const deleteSubmissionMutation = useDeleteSubmission();
 
@@ -261,6 +267,17 @@ export default function DraftDetailPage() {
                       </div>
                     </div>
                     <div className="flex gap-2">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          setSelectedDocumentId(doc.id);
+                          setVersionsDialogOpen(true);
+                        }}
+                      >
+                        <History className="h-4 w-4 mr-1 stroke-[1.5px]" />
+                        Versions
+                      </Button>
                       <Link
                         href={`/author/submissions/drafts/${submissionId}/editor/${doc.id}`}
                       >
@@ -319,6 +336,13 @@ export default function DraftDetailPage() {
         open={uploadModalOpen}
         onOpenChange={setUploadModalOpen}
         submissionId={submissionId}
+      />
+
+      {/* Document Versions Modal */}
+      <DocumentVersionsModal
+        open={versionsDialogOpen}
+        onOpenChange={setVersionsDialogOpen}
+        documentId={selectedDocumentId}
       />
 
       {/* Delete Confirmation Dialog */}

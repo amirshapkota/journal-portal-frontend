@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import {
@@ -12,18 +12,15 @@ import {
   Send,
   ArrowLeft,
 } from "lucide-react";
-import { toast } from "sonner";
 import { useSelector } from "react-redux";
 import { useState } from "react";
-import {
-  loadDocument,
-  downloadDocx,
-} from "@/features/panel/author/api/superdocApi";
+import { loadDocument } from "@/features/panel/author/api/superdocApi";
 import {
   LoadingScreen,
   SuperDocEditor,
   useSubmitUpdatedDocument,
   ConfirmationInputPopup,
+  useDownloadDocument,
 } from "@/features";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
@@ -48,27 +45,14 @@ export default function SuperDocEditorPage() {
   });
 
   // Download mutation
-  const downloadMutation = useMutation({
-    mutationFn: () => downloadDocx(documentId),
-    onSuccess: (blob) => {
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = documentData?.file_name || "document.docx";
-      document.body.appendChild(link);
-      link.click();
-      URL.revokeObjectURL(url);
-      document.body.removeChild(link);
-      toast.success("Document downloaded successfully");
-    },
-    onError: () => {
-      toast.error("Failed to download document");
-    },
-  });
+  const downloadMutation = useDownloadDocument();
 
   // Handlers
   const handleDownload = () => {
-    downloadMutation.mutate();
+    downloadMutation.mutate({
+      url: `submissions/documents/${documentId}/download/`,
+      fileName: documentData?.file_name || "document.docx",
+    });
   };
 
   const handleBack = () => {

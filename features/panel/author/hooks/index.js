@@ -9,3 +9,4 @@ export { useSubmitUpdatedDocument } from "./mutation/useSubmitUpdatedDocument";
 export { useDeleteSubmission } from "./mutation/useDeleteSubmission";
 export { useGetSubmissionById } from "./query/useGetSubmissionById";
 export { useSubmitForReview } from "./mutation/useSubmitForReview";
+export { useGetDocumentVersions } from "./query/useGetDocumentVersions";
