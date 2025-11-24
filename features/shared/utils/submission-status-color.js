@@ -24,6 +24,16 @@ export const statusConfig = {
     text: "text-yellow-700 dark:text-primary-foreground",
     label: "Revision Requested",
   },
+  ACCEPTANCE_REQUESTED: {
+    bg: "bg-green-100 dark:bg-green-600",
+    text: "text-green-700 dark:text-primary-foreground",
+    label: "Acceptance Requested",
+  },
+  REJECTION_REQUESTED: {
+    bg: "bg-red-100 dark:bg-red-600",
+    text: "text-red-700 dark:text-primary-foreground",
+    label: "Rejection Requested",
+  },
   REVISED: {
     bg: "bg-indigo-100 dark:bg-indigo-600",
     text: "text-indigo-700 dark:text-primary-foreground",
