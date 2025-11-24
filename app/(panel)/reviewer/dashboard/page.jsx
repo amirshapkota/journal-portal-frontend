@@ -6,7 +6,7 @@ import {
 } from "@/features/panel/reviewer/components/dashboard";
 import { LoadingScreen, RoleBasedRoute } from "@/features";
 import { useGetMyAnalytics } from "@/features/shared/hooks";
-import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/useGetReviewAssignments";
+import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignments";
 import ErrorCard from "@/features/shared/components/ErrorCard";
 import StatsCard from "@/features/shared/components/StatsCard";
 import { Clock, FileText, CheckCircle2, TrendingUp } from "lucide-react";

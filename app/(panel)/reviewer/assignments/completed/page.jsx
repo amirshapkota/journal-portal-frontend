@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { FileText } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -11,51 +10,20 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useGetCompletedAssignments } from "@/features/panel/reviewer/hooks/useGetCompletedAssignments";
-import { useAcceptReviewAssignment } from "@/features/panel/reviewer/hooks/mutation/useAcceptReviewAssignment";
-import { useDeclineReviewAssignment } from "@/features/panel/reviewer/hooks/mutation/useDeclineReviewAssignment";
-import { AssignmentCard } from "../_components/AssignmentCard";
-import { DeclineDialog } from "../_components/DeclineDialog";
-import { EmptyState } from "../_components/EmptyState";
-import { toast } from "sonner";
+import { useGetCompletedAssignments } from "@/features/panel/reviewer/hooks/query/useGetCompletedAssignments";
+import { AssignmentCard } from "../../../../../features/panel/reviewer/components/assignments/AssignmentCard";
+import { EmptyState } from "../../../../../features/panel/reviewer/components/assignments/EmptyState";
 
 export default function CompletedAssignmentsPage() {
-  const [declineDialogOpen, setDeclineDialogOpen] = useState(false);
-  const [selectedAssignment, setSelectedAssignment] = useState(null);
-
   const {
     data: assignmentsData,
     isLoading,
     error,
   } = useGetCompletedAssignments();
-  const acceptMutation = useAcceptReviewAssignment();
-  const declineMutation = useDeclineReviewAssignment();
 
   const completedAssignments = Array.isArray(assignmentsData)
     ? assignmentsData
     : assignmentsData?.results || [];
-
-  const handleAccept = (assignment) => {
-    acceptMutation.mutate(assignment.id, {
-      onSuccess: () => {
-        toast.success("Review assignment accepted successfully!");
-      },
-      onError: (error) => {
-        toast.error(
-          `Failed to accept: ${error.response?.data?.error || error.message}`
-        );
-      },
-    });
-  };
-
-  const handleDeclineClick = (assignment) => {
-    setSelectedAssignment(assignment);
-    setDeclineDialogOpen(true);
-  };
-
-  const handleDeclineSuccess = () => {
-    setSelectedAssignment(null);
-  };
 
   if (isLoading) {
     return (
@@ -114,26 +82,11 @@ export default function CompletedAssignmentsPage() {
         ) : (
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {completedAssignments.map((assignment) => (
-              <AssignmentCard
-                key={assignment.id}
-                assignment={assignment}
-                onAccept={handleAccept}
-                onDeclineClick={handleDeclineClick}
-                acceptMutation={acceptMutation}
-                declineMutation={declineMutation}
-              />
+              <AssignmentCard key={assignment.id} assignment={assignment} />
             ))}
           </div>
         )}
       </div>
-
-      <DeclineDialog
-        open={declineDialogOpen}
-        onOpenChange={setDeclineDialogOpen}
-        selectedAssignment={selectedAssignment}
-        declineMutation={declineMutation}
-        onSuccess={handleDeclineSuccess}
-      />
     </>
   );
 }

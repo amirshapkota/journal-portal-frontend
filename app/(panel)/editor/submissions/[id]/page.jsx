@@ -31,7 +31,7 @@ import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   useAssignReviewers,
-  useGetAdminSubmissionById,
+  useGetEditorSubmissionById,
   useGetReviewerRecommendations,
 } from "@/features/panel/editor/submission";
 import {
@@ -54,7 +54,7 @@ export default function AdminSubmissionDetailPage() {
     data: submission,
     isPending: isSubmissionLoading,
     error: submissionError,
-  } = useGetAdminSubmissionById(submissionId);
+  } = useGetEditorSubmissionById(submissionId);
 
   // Fetch reviewer recommendations (admin always sees them)
   const {
@@ -669,72 +669,76 @@ export default function AdminSubmissionDetailPage() {
             </div>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4 mb-6">
-              <div className="p-4 border rounded-lg bg-muted/30">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="space-y-1">
-                    <h4 className="font-semibold">Editorial Decision</h4>
-                    <p className="text-sm text-muted-foreground">
-                      Made on{" "}
-                      {format(
-                        new Date(
-                          latestDecision.decision_date ||
-                            latestDecision.created_at
-                        ),
-                        "PPP"
-                      )}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      Decided by: {latestDecision.decided_by_name || "Unknown"}
-                    </p>
-                  </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <DecisionBadge
-                      decisionType={latestDecision.decision_type}
-                      config={decisionTypeConfig}
-                      displayLabel={latestDecision.decision_type_display}
-                    />
-                  </div>
-                </div>
-
-                <Separator className="my-3" />
-
-                {latestDecision.revision_deadline && (
-                  <>
-                    <div className="flex items-center gap-2 text-sm p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                      <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                      <span className="font-medium text-blue-900 dark:text-blue-300">
-                        Revision Deadline:
-                      </span>
-                      <span className="text-blue-700 dark:text-blue-400">
+            {hasDecision && latestDecision && (
+              <div className="space-y-4 mb-6">
+                <div className="p-4 border rounded-lg bg-muted/30">
+                  <div className="flex items-start justify-between mb-3">
+                    <div className="space-y-1">
+                      <h4 className="font-semibold">Editorial Decision</h4>
+                      <p className="text-sm text-muted-foreground">
+                        Made on{" "}
                         {format(
-                          new Date(latestDecision.revision_deadline),
+                          new Date(
+                            latestDecision.decision_date ||
+                              latestDecision.created_at
+                          ),
                           "PPP"
                         )}
-                      </span>
-                    </div>
-                  </>
-                )}
-
-                {latestDecision.confidential_notes && (
-                  <>
-                    <Separator className="my-3" />
-                    <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
-                      <h5 className="text-sm font-semibold mb-2 text-yellow-800 dark:text-yellow-300">
-                        Confidential Notes (Internal Only)
-                      </h5>
-                      <p className="text-sm text-yellow-900 dark:text-yellow-200 whitespace-pre-wrap">
-                        {latestDecision.confidential_notes}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        Decided by:{" "}
+                        {latestDecision.decided_by_name || "Unknown"}
                       </p>
                     </div>
-                  </>
-                )}
+                    <div className="flex flex-col items-end gap-2">
+                      <DecisionBadge
+                        decisionType={latestDecision.decision_type}
+                        config={decisionTypeConfig}
+                        displayLabel={latestDecision.decision_type_display}
+                      />
+                    </div>
+                  </div>
+
+                  <Separator className="my-3" />
+
+                  {latestDecision.revision_deadline && (
+                    <>
+                      <div className="flex items-center gap-2 text-sm p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                        <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                        <span className="font-medium text-blue-900 dark:text-blue-300">
+                          Revision Deadline:
+                        </span>
+                        <span className="text-blue-700 dark:text-blue-400">
+                          {format(
+                            new Date(latestDecision.revision_deadline),
+                            "PPP"
+                          )}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
+                  {latestDecision.confidential_notes && (
+                    <>
+                      <Separator className="my-3" />
+                      <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg p-3">
+                        <h5 className="text-sm font-semibold mb-2 text-yellow-800 dark:text-yellow-300">
+                          Confidential Notes (Internal Only)
+                        </h5>
+                        <p className="text-sm text-yellow-900 dark:text-yellow-200 whitespace-pre-wrap">
+                          {latestDecision.confidential_notes}
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
-            </div>
+            )}
 
             <EditorialDecisionForm
               submissionId={submissionId}
               reviews={reviews}
+              submission={submission}
             />
           </CardContent>
         </Card>

@@ -227,7 +227,7 @@ export default function ReviewDetailPage() {
           <CardHeader>
             <CardTitle>Quality Assessment Scores</CardTitle>
             <CardDescription>
-              Reviewer's assessment of various quality criteria
+              Reviewer&apos;s assessment of various quality criteria
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -268,7 +268,7 @@ export default function ReviewDetailPage() {
         <CardHeader>
           <CardTitle>Detailed Review Comments</CardTitle>
           <CardDescription>
-            Reviewer's detailed feedback for the authors
+            Reviewer&apos;s detailed feedback for the authors
           </CardDescription>
         </CardHeader>
         <CardContent>

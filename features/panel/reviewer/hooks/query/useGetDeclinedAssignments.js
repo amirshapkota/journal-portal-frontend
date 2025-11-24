@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getDeclinedReviewAssignments } from "../api/reviewsApi";
+import { getDeclinedReviewAssignments } from "../../api/reviewsApi";
 
 /**
  * Hook to get declined review assignments for the current user

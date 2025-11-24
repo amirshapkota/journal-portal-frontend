@@ -6,9 +6,9 @@ import { getSubmissionById } from "../../api";
  * @param {string} id - Submission ID
  * @returns {Object} React Query result
  */
-export const useGetAdminSubmissionById = (id) => {
+export const useGetEditorSubmissionById = (id) => {
   return useQuery({
-    queryKey: ["admin-submission", id],
+    queryKey: ["editor-submission", id],
     queryFn: () => getSubmissionById(id),
     enabled: !!id,
     staleTime: 2 * 60 * 1000, // 2 minutes

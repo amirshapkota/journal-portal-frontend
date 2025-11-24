@@ -87,15 +87,15 @@ const columns = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuItem>
-              <Link
-                href={row.viewUrl || "#"}
-                className={"flex items-center text-sm gap-2 "}
-              >
+            <Link
+              href={row.viewUrl || "#"}
+              className={"flex items-center text-sm gap-2 "}
+            >
+              <DropdownMenuItem>
                 <Eye className=" h-4 w-4 text-foreground hover:text-primary-foreground" />
                 View Submission
-              </Link>
-            </DropdownMenuItem>
+              </DropdownMenuItem>
+            </Link>
 
             <DropdownMenuSeparator />
             <DropdownMenuItem

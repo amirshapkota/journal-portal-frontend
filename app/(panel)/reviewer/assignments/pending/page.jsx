@@ -11,13 +11,15 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { useGetPendingAssignments } from "@/features/panel/reviewer/hooks/useGetPendingAssignments";
-import { useAcceptReviewAssignment } from "@/features/panel/reviewer/hooks/mutation/useAcceptReviewAssignment";
-import { useDeclineReviewAssignment } from "@/features/panel/reviewer/hooks/mutation/useDeclineReviewAssignment";
-import { AssignmentCard } from "../_components/AssignmentCard";
-import { DeclineDialog } from "../_components/DeclineDialog";
-import { EmptyState } from "../_components/EmptyState";
 import { toast } from "sonner";
+import {
+  AssignmentCard,
+  DeclineDialog,
+  EmptyState,
+  useAcceptReviewAssignment,
+  useDeclineReviewAssignment,
+  useGetPendingAssignments,
+} from "@/features";
 
 export default function PendingAssignmentsPage() {
   const [declineDialogOpen, setDeclineDialogOpen] = useState(false);

@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCompletedReviewAssignments } from "../api/reviewsApi";
+import { getCompletedReviewAssignments } from "../../api/reviewsApi";
 
 /**
  * Hook to get completed review assignments for the current user

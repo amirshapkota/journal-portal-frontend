@@ -24,7 +24,7 @@ import { Separator } from "@/components/ui/separator";
 import { LoadingScreen, ErrorCard, DecisionBadge } from "@/features/shared";
 import { reviewRecommendationConfig } from "@/features";
 import { useGetSubmissionReviews } from "@/features/panel/editor/submission/hooks/useGetSubmissionReviews";
-import { useGetAdminSubmissionById } from "@/features/panel/editor/submission";
+import { useGetEditorSubmissionById } from "@/features/panel/editor/submission";
 
 export default function SubmissionReviewsPage() {
   const params = useParams();
@@ -36,7 +36,7 @@ export default function SubmissionReviewsPage() {
     data: submission,
     isLoading: isSubmissionLoading,
     error: submissionError,
-  } = useGetAdminSubmissionById(submissionId);
+  } = useGetEditorSubmissionById(submissionId);
 
   // Fetch reviews
   const {

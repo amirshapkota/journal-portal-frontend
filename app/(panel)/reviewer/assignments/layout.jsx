@@ -10,7 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/useGetReviewAssignments";
+import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignments";
 
 export default function AssignmentsLayout({ children }) {
   const pathname = usePathname();

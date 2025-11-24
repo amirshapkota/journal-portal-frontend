@@ -17,7 +17,7 @@ import {
   CheckCircle2,
 } from "lucide-react";
 import { StatusBadge, statusConfig } from "@/features";
-import { useGetReviewAssignmentById } from "@/features/panel/reviewer/hooks/useGetReviewAssignmentById";
+import { useGetReviewAssignmentById } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignmentById";
 import { ReviewSubmissionForm } from "@/features/panel/reviewer/components";
 import { Button } from "@/components/ui/button";
 import {

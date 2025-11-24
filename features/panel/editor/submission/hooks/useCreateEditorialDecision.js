@@ -15,7 +15,8 @@ export const useCreateEditorialDecision = () => {
 
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["submissionDecisions"] });
-      queryClient.invalidateQueries({ queryKey: ["submissions"] });
+      queryClient.invalidateQueries({ queryKey: ["submissionReviews"] });
+      queryClient.invalidateQueries({ queryKey: ["editor-submission"] });
     },
     onError: (error) => {
       const errorMessage =

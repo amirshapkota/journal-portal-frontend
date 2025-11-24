@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getAcceptedReviewAssignments } from "../api/reviewsApi";
+import { getAcceptedReviewAssignments } from "../../api/reviewsApi";
 
 /**
  * Hook to get accepted review assignments for the current user

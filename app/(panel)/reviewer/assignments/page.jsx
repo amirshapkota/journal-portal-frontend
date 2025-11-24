@@ -19,7 +19,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/useGetReviewAssignments";
+import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignments";
 
 export default function ReviewerAssignmentsPage() {
   const router = useRouter();
