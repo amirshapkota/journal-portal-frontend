@@ -19,12 +19,16 @@ export default function SuperDocEditor({
   documentData,
   userData,
   className = "",
+  userRole = null,
+  readOnly = false,
+  commentsReadOnly = false,
 }) {
   const superDocInstanceRef = useRef(null);
   const isInitializedRef = useRef(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
 
   const { currentRole } = useCurrentRole();
+  const effectiveRole = userRole || currentRole;
   const [isSubmitDialogOpen, setIsSubmitDialogOpen] = useState(false);
 
   // Submit mutation
@@ -109,16 +113,20 @@ export default function SuperDocEditor({
           document: documentData.file_url,
           pagination: true,
           theme: "light",
+          role: readOnly ? "viewer" : "editor",
           user: {
-            name: userData?.name || "User",
+            name: userData?.first_name || "User",
             email: userData?.email || "user@example.com",
           },
+
           modules: {
-            comments: { enabled: true },
-            toolbar: {
-              selector: "#superdoc-toolbar",
-              excludeItems: ["documentMode"],
-            },
+            comments: { readOnly: commentsReadOnly },
+            toolbar: readOnly
+              ? false
+              : {
+                  selector: "#superdoc-toolbar",
+                  excludeItems: ["documentMode"],
+                },
           },
           onReady: () => {
             const superdocRoot = document.getElementById("superdoc-editor");
@@ -170,52 +178,64 @@ export default function SuperDocEditor({
 
   return (
     <>
-      <div className="flex items-center justify-between p-3 border-b bg-card">
-        <div className="flex items-center gap-2">
-          {hasUnsavedChanges && (
-            <Badge variant="outline" className="text-xs">
-              Unsaved Changes
-            </Badge>
-          )}
-          {saveMutation.isPending && (
-            <Badge variant="secondary" className="text-xs">
-              <Loader2 className="h-3 w-3 mr-1 animate-spin" />
-              Saving...
-            </Badge>
-          )}
-        </div>
-        <div>
-          <Button
-            variant="default"
-            size="sm"
-            className={"mr-2"}
-            onClick={handleSave}
-            disabled={saveMutation.isPending || !hasUnsavedChanges}
-          >
-            {saveMutation.isPending ? (
-              <Loader2 className="h-4 w-4 animate-spin mr-2" />
-            ) : (
-              <Save className="h-4 w-4 mr-2" />
+      {!readOnly && (
+        <div className="flex items-center justify-between p-3 border-b bg-card">
+          <div className="flex items-center gap-2">
+            {hasUnsavedChanges && (
+              <Badge variant="outline" className="text-xs">
+                Unsaved Changes
+              </Badge>
             )}
-            Save Document
-          </Button>
-          {documentData.can_edit && currentRole === "AUTHOR" && (
+            {saveMutation.isPending && (
+              <Badge variant="secondary" className="text-xs">
+                <Loader2 className="h-3 w-3 mr-1 animate-spin" />
+                Saving...
+              </Badge>
+            )}
+          </div>
+          <div>
             <Button
+              variant="default"
               size="sm"
-              variant={"secondary"}
-              onClick={handleSubmitClick}
-              disabled={submitMutation.isPending || hasUnsavedChanges}
+              className={"mr-2"}
+              onClick={handleSave}
+              disabled={saveMutation.isPending || !hasUnsavedChanges}
             >
-              {submitMutation.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin mr-4" />
+              {saveMutation.isPending ? (
+                <Loader2 className="h-4 w-4 animate-spin mr-2" />
               ) : (
-                <FileText className="h-4 w-4 mr-1" />
+                <Save className="h-4 w-4 mr-2" />
               )}
-              Confirm Document
+              Save Document
             </Button>
-          )}
+            {documentData.can_edit && effectiveRole === "AUTHOR" && (
+              <Button
+                size="sm"
+                variant={"secondary"}
+                onClick={handleSubmitClick}
+                disabled={submitMutation.isPending || hasUnsavedChanges}
+              >
+                {submitMutation.isPending ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-4" />
+                ) : (
+                  <FileText className="h-4 w-4 mr-1" />
+                )}
+                Confirm Document
+              </Button>
+            )}
+          </div>
         </div>
-      </div>
+      )}
+
+      {readOnly && (
+        <div className="flex items-center justify-between p-3 border-b bg-card">
+          <div className="flex items-center gap-2">
+            <Badge variant="secondary" className="text-xs">
+              View Only Mode
+            </Badge>
+          </div>
+        </div>
+      )}
 
       {/* Submit Confirmation Dialog */}
       <ConfirmationInputPopup

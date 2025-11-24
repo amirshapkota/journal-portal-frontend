@@ -175,7 +175,7 @@ export default function DocumentUploadModal({
             <Input
               id="file-input"
               type="file"
-              accept=".docx,.pdf,.doc"
+              accept=".docx,.doc"
               onChange={handleFileChange}
               disabled={isPending}
             />

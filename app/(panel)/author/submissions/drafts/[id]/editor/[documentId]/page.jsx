@@ -29,7 +29,7 @@ export default function SuperDocEditorPage() {
   const router = useRouter();
   const documentId = params.documentId;
   const submissionId = params.id;
-  const userData = useSelector((state) => state.auth.userData);
+  const userData = useSelector((state) => state?.auth?.userData);
 
   // Load document data
   const {

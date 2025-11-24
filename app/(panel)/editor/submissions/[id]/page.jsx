@@ -266,7 +266,7 @@ export default function AdminSubmissionDetailPage() {
                   className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
                 >
                   <div className="flex items-center gap-3">
-                    <FileText className="h-8 w-8 text-primary" />
+                    <FileText className="h-8 w-8 text-primary stroke-[1.5]" />
                     <div>
                       <p className="font-medium">{doc.title}</p>
                       <div className="flex items-center gap-3 text-sm text-muted-foreground">
@@ -289,7 +289,11 @@ export default function AdminSubmissionDetailPage() {
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() => window.open(doc.file_url, "_blank")}
+                        onClick={() =>
+                          router.push(
+                            `/editor/submissions/${submissionId}/documents/${doc.id}`
+                          )
+                        }
                       >
                         <Eye className="h-4 w-4 mr-2" />
                         View
