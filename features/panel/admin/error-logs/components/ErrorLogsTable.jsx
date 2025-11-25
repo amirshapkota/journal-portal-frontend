@@ -50,7 +50,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
       render: (row) => (
         <Badge variant={getLevelColor(row.level)} className="gap-1">
           {getLevelIcon(row.level)}
-          {row.level.toUpperCase()}
+          {row.level?.toUpperCase() || "UNKNOWN"}
         </Badge>
       ),
     },
@@ -59,7 +59,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
       header: "Error",
       render: (row) => (
         <div className="space-y-2 py-1">
-          {row.title.length > 40 ? (
+          {row.title && row.title.length > 40 ? (
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -73,7 +73,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
               </Tooltip>
             </TooltipProvider>
           ) : (
-            <div className="font-medium">{row.title}</div>
+            <div className="font-medium">{row.title || "Unknown Error"}</div>
           )}
           {row.culprit && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -125,7 +125,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
       header: "Type",
       render: (row) => (
         <Badge variant="outline" className="font-mono text-xs">
-          {row.type}
+          {row.metadata?.type || row.short_id || "Unknown"}
         </Badge>
       ),
     },
@@ -134,7 +134,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
       header: "Status",
       render: (row) => (
         <Badge variant={row.status === "resolved" ? "default" : "secondary"}>
-          {row.status}
+          {row.status || "unknown"}
         </Badge>
       ),
     },
@@ -145,11 +145,16 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
         <div className="space-y-1 text-xs">
           <div className="flex items-center gap-1 text-muted-foreground">
             <Hash className="h-3 w-3" />
-            <strong>{row.count}</strong> events
+            <strong>{row.count || 0}</strong> events
           </div>
           <div className="flex items-center gap-1 text-muted-foreground">
             <Users className="h-3 w-3" />
-            <strong>{row.userCount}</strong> users
+            <strong>
+              {row.user_count === "***REDACTED***"
+                ? "N/A"
+                : row.user_count || 0}
+            </strong>{" "}
+            users
           </div>
         </div>
       ),
@@ -157,12 +162,32 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
     {
       key: "lastSeen",
       header: "Last Seen",
-      render: (row) => (
-        <div className="flex items-center gap-1 text-sm text-muted-foreground">
-          <Clock className="h-3 w-3" />
-          {format(new Date(row.lastSeen), "PPp")}
-        </div>
-      ),
+      render: (row) => {
+        try {
+          const date = new Date(row.last_seen);
+          if (isNaN(date.getTime())) {
+            return (
+              <div className="flex items-center gap-1 text-sm text-muted-foreground">
+                <Clock className="h-3 w-3" />
+                Unknown
+              </div>
+            );
+          }
+          return (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <Clock className="h-3 w-3" />
+              {format(date, "PPp")}
+            </div>
+          );
+        } catch (err) {
+          return (
+            <div className="flex items-center gap-1 text-sm text-muted-foreground">
+              <Clock className="h-3 w-3" />
+              Invalid date
+            </div>
+          );
+        }
+      },
     },
     {
       key: "actions",

@@ -1,30 +1,67 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, AlertCircle } from "lucide-react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   ErrorLogsTable,
   ErrorDetailsModal,
   ErrorStatsCards,
   ErrorFilters,
-  mockErrorIssues,
 } from "@/features/panel/admin/error-logs";
+import {
+  useSentryProjects,
+  useSentryIssues,
+} from "@/features/panel/admin/error-logs/hooks/useSentry";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function ErrorLogsPage() {
-  const [issues, setIssues] = useState(mockErrorIssues);
+  const [selectedProject, setSelectedProject] = useState(null);
   const [statusFilter, setStatusFilter] = useState("unresolved");
   const [levelFilter, setLevelFilter] = useState("all");
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
-  const filteredIssues = issues.filter((issue) => {
-    const statusMatch =
-      statusFilter === "all" ? true : issue.status === statusFilter;
-    const levelMatch =
-      levelFilter === "all" ? true : issue.level === levelFilter;
-    return statusMatch && levelMatch;
+  // Fetch projects
+  const {
+    data: projectsData,
+    isLoading: projectsLoading,
+    error: projectsError,
+    refetch: refetchProjects,
+  } = useSentryProjects();
+
+  // Auto-select first project when projects load
+  useEffect(() => {
+    if (projectsData?.results?.length > 0 && !selectedProject) {
+      setSelectedProject(projectsData.results[0].slug);
+    }
+  }, [projectsData, selectedProject]);
+
+  // Fetch issues for selected project
+  const {
+    data: issuesData,
+    isLoading: issuesLoading,
+    error: issuesError,
+    refetch: refetchIssues,
+  } = useSentryIssues(selectedProject, {
+    status: statusFilter === "all" ? "unresolved" : statusFilter,
+    limit: 100,
   });
+
+  const issues = issuesData?.results || [];
+
+  // Filter issues by level (client-side filtering)
+  const filteredIssues = useMemo(() => {
+    if (levelFilter === "all") return issues;
+    return issues.filter((issue) => issue.level === levelFilter);
+  }, [issues, levelFilter]);
 
   const handleViewDetail = (issue) => {
     setSelectedIssue(issue);
@@ -32,17 +69,18 @@ export default function ErrorLogsPage() {
   };
 
   const handleRefresh = () => {
-    // In real implementation, this would fetch fresh data
-    console.log("Refreshing error logs...");
+    if (selectedProject) {
+      refetchIssues();
+    }
+    refetchProjects();
   };
 
-  const stats = {
-    total: issues.length,
-    unresolved: issues.filter((i) => i.status === "unresolved").length,
-    resolved: issues.filter((i) => i.status === "resolved").length,
-    totalEvents: issues.reduce((sum, i) => sum + i.count, 0),
-    affectedUsers: issues.reduce((sum, i) => sum + i.userCount, 0),
+  const handleProjectChange = (projectSlug) => {
+    setSelectedProject(projectSlug);
   };
+
+  const isLoading = projectsLoading || issuesLoading;
+  const error = projectsError || issuesError;
 
   return (
     <div className="space-y-6">
@@ -51,33 +89,86 @@ export default function ErrorLogsPage() {
         <div>
           <h1 className="text-3xl font-bold">Error Monitoring</h1>
           <p className="text-muted-foreground mt-1">
-            Track and manage application errors in real-time
+            Track and manage application errors in real-time via Sentry
           </p>
         </div>
-        <Button onClick={handleRefresh} variant="outline" className="gap-2">
-          <RefreshCw className="h-4 w-4" />
+        <Button
+          onClick={handleRefresh}
+          variant="outline"
+          className="gap-2"
+          disabled={isLoading}
+        >
+          <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
           Refresh
         </Button>
       </div>
 
-      {/* Stats Cards */}
-      <ErrorStatsCards stats={stats} />
+      {/* Project Selector */}
+      {projectsData?.results?.length > 0 && (
+        <div className="flex items-center gap-4">
+          <label className="text-sm font-medium">Project:</label>
+          <Select value={selectedProject} onValueChange={handleProjectChange}>
+            <SelectTrigger className="w-[300px]">
+              <SelectValue placeholder="Select a project" />
+            </SelectTrigger>
+            <SelectContent>
+              {projectsData.results.map((project) => (
+                <SelectItem key={project.id} value={project.slug}>
+                  {project.name} ({project.slug})
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+      )}
+
+      {/* Error Alert */}
+      {error && (
+        <Alert variant="destructive">
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            {error}. Please check your Sentry configuration and ensure the API
+            credentials are correct.
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Loading state for projects */}
+      {projectsLoading && (
+        <Alert>
+          <AlertDescription>Loading Sentry projects...</AlertDescription>
+        </Alert>
+      )}
+
+      {/* No projects found */}
+      {!projectsLoading && projectsData?.results?.length === 0 && (
+        <Alert>
+          <AlertDescription>
+            No Sentry projects found. Please check your Sentry organization
+            configuration.
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Filters */}
-      <ErrorFilters
-        statusFilter={statusFilter}
-        levelFilter={levelFilter}
-        onStatusChange={setStatusFilter}
-        onLevelChange={setLevelFilter}
-      />
+      {selectedProject && (
+        <ErrorFilters
+          statusFilter={statusFilter}
+          levelFilter={levelFilter}
+          onStatusChange={setStatusFilter}
+          onLevelChange={setLevelFilter}
+        />
+      )}
 
       {/* Error Logs Table */}
-      <ErrorLogsTable
-        issues={filteredIssues}
-        onViewDetails={handleViewDetail}
-        isPending={false}
-        error={null}
-      />
+      {selectedProject && (
+        <ErrorLogsTable
+          issues={filteredIssues}
+          onViewDetails={handleViewDetail}
+          isPending={issuesLoading}
+          error={issuesError}
+        />
+      )}
 
       {/* Issue Detail Modal */}
       <ErrorDetailsModal

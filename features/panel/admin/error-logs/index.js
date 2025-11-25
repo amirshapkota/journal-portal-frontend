@@ -1,2 +1,2 @@
 export * from "./components";
-export * from "./data/mockErrorIssues";
+// Mock data removed - now using real Sentry API
