@@ -16,6 +16,7 @@ import {
   File,
   Inbox,
   Book,
+  AlertTriangle,
 } from "lucide-react";
 
 // Sidebar configuration for each role
@@ -225,6 +226,11 @@ export const sidebarConfig = {
       name: "Journals",
       path: "/admin/journals",
       icon: BookOpen,
+    },
+    {
+      name: "Anomaly Detection",
+      path: "/admin/anomaly-detection",
+      icon: AlertTriangle,
     },
     {
       name: "Settings",
