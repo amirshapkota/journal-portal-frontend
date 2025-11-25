@@ -67,24 +67,26 @@ export function AssignmentCard({
             <Clock className="h-4 w-4" />
             <span>Due: {format(new Date(assignment.due_date), "PPP")}</span>
           </div>
-          {assignment.days_remaining != null && (
-            <div
-              className={`flex items-center gap-2 font-medium ${
-                assignment.is_overdue
-                  ? "text-destructive"
-                  : assignment.days_remaining <= 3
-                  ? "text-amber-600"
-                  : "text-green-600"
-              }`}
-            >
-              <AlertCircle className="h-4 w-4" />
-              <span>
-                {assignment.is_overdue
-                  ? `${Math.abs(assignment.days_remaining)} days overdue`
-                  : `${assignment.days_remaining} days remaining`}
-              </span>
-            </div>
-          )}
+          {assignment.days_remaining != null &&
+            (assignment?.submission_details?.status !== "ACCEPTED" ||
+              assignment.status !== "DECLINED") && (
+              <div
+                className={`flex items-center gap-2 font-medium ${
+                  assignment.is_overdue
+                    ? "text-destructive"
+                    : assignment.days_remaining <= 3
+                    ? "text-amber-600"
+                    : "text-green-600"
+                }`}
+              >
+                <AlertCircle className="h-4 w-4" />
+                <span>
+                  {assignment.is_overdue
+                    ? `${Math.abs(assignment.days_remaining)} days overdue`
+                    : `${assignment.days_remaining} days remaining`}
+                </span>
+              </div>
+            )}
           {assignment.assigned_by_info && (
             <div className="flex items-center gap-2 text-muted-foreground">
               <Mail className="h-4 w-4" />

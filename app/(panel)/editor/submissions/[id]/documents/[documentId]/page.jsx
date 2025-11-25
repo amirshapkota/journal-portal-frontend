@@ -2,11 +2,10 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft, Loader2, AlertCircle } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { SuperDocEditor, LoadingScreen, useCurrentRole } from "@/features";
+import { SuperDocEditor, LoadingScreen, ErrorCard } from "@/features";
 import { loadDocument } from "@/features/panel/author/api/superdocApi";
 import { useSelector } from "react-redux";
 
@@ -22,6 +21,7 @@ export default function EditorDocumentViewPage() {
     data: documentData,
     isPending: isLoading,
     error: loadError,
+    refetch,
   } = useQuery({
     queryKey: ["superdoc-document", documentId],
     queryFn: () => loadDocument(documentId),
@@ -32,24 +32,14 @@ export default function EditorDocumentViewPage() {
 
   if (loadError) {
     return (
-      <Card className="flex flex-col">
-        <CardContent className="p-8">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load document: {loadError.message}
-            </AlertDescription>
-          </Alert>
-          <Button
-            variant="outline"
-            className="mt-4"
-            onClick={() => router.push(`/editor/submissions/${submissionId}`)}
-          >
-            <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Submission
-          </Button>
-        </CardContent>
-      </Card>
+      <ErrorCard
+        title="Failed to Load Document"
+        description={
+          loadError?.message || "Unable to load the document. Please try again."
+        }
+        onRetry={refetch}
+        onBack={() => router.push(`/editor/submissions/${submissionId}`)}
+      />
     );
   }
 

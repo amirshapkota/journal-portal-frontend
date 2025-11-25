@@ -16,6 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { FormRichTextEditor } from "@/features";
 import { Loader2, Check, X, Plus } from "lucide-react";
 import { profileSchema } from "../../reader/utils/FormSchema";
 import { Badge } from "@/components/ui/badge";
@@ -222,25 +223,14 @@ export default function ProfileForm({
         {/* Bio Section */}
         <div className="space-y-4">
           <h3 className="font-semibold text-foreground">About</h3>
-          <FormField
+          <FormRichTextEditor
             control={form.control}
             name="bio"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Bio</FormLabel>
-                <FormControl>
-                  <Textarea
-                    placeholder="Tell us about yourself, your research interests, and professional background..."
-                    className="min-h-[120px]"
-                    {...field}
-                  />
-                </FormControl>
-                <FormDescription>
-                  {form.watch("bio").length}/500 characters
-                </FormDescription>
-                <FormMessage />
-              </FormItem>
-            )}
+            label="Bio"
+            placeholder="Tell us about yourself, your research interests, and professional background..."
+            description={`${
+              form.watch("bio")?.replace(/<[^>]*>/g, "").length || 0
+            }/500 characters`}
           />
         </div>
         {/* Action Buttons */}

@@ -19,6 +19,7 @@ import {
   useAcceptReviewAssignment,
   useDeclineReviewAssignment,
   useGetPendingAssignments,
+  ErrorCard,
 } from "@/features";
 
 export default function PendingAssignmentsPage() {
@@ -30,6 +31,7 @@ export default function PendingAssignmentsPage() {
     data: assignmentsData,
     isLoading,
     error,
+    refetch,
   } = useGetPendingAssignments();
 
   // Mutations
@@ -90,21 +92,15 @@ export default function PendingAssignmentsPage() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center py-12 mt-6">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-destructive">Error</CardTitle>
-            <CardDescription>
-              Failed to load pending assignments
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              {error?.message || "An error occurred"}
-            </p>
-            <Button onClick={() => window.location.reload()}>Retry</Button>
-          </CardContent>
-        </Card>
+      <div className="mt-6">
+        <ErrorCard
+          title="Failed to Load Pending Assignments"
+          description={
+            error?.message ||
+            "Unable to load your pending review assignments. Please try again."
+          }
+          onRetry={refetch}
+        />
       </div>
     );
   }

@@ -131,6 +131,7 @@ export default function RichTextEditor({
   className = "",
   autoFocus = false,
   debounceMs = 500,
+  editor_classname = "",
 }) {
   const { theme: currentTheme } = useTheme();
 
@@ -143,7 +144,7 @@ export default function RichTextEditor({
       <LexicalComposer initialConfig={editorConfig}>
         <div className="editor-inner">
           <ToolbarPlugin />
-          <div className="editor-wrapper bg-input/30">
+          <div className={`editor-wrapper bg-input/30 ${editor_classname}`}>
             <RichTextPlugin
               contentEditable={<ContentEditable className="editor-input" />}
               placeholder={<Placeholder placeholder={placeholder} />}

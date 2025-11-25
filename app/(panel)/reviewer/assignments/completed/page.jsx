@@ -13,12 +13,14 @@ import { Button } from "@/components/ui/button";
 import { useGetCompletedAssignments } from "@/features/panel/reviewer/hooks/query/useGetCompletedAssignments";
 import { AssignmentCard } from "../../../../../features/panel/reviewer/components/assignments/AssignmentCard";
 import { EmptyState } from "../../../../../features/panel/reviewer/components/assignments/EmptyState";
+import { ErrorCard } from "@/features";
 
 export default function CompletedAssignmentsPage() {
   const {
     data: assignmentsData,
     isLoading,
     error,
+    refetch,
   } = useGetCompletedAssignments();
 
   const completedAssignments = Array.isArray(assignmentsData)
@@ -51,21 +53,15 @@ export default function CompletedAssignmentsPage() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center py-12 mt-6">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-destructive">Error</CardTitle>
-            <CardDescription>
-              Failed to load completed assignments
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              {error?.message || "An error occurred"}
-            </p>
-            <Button onClick={() => window.location.reload()}>Retry</Button>
-          </CardContent>
-        </Card>
+      <div className="mt-6">
+        <ErrorCard
+          title="Failed to Load Completed Assignments"
+          description={
+            error?.message ||
+            "Unable to load your completed review assignments. Please try again."
+          }
+          onRetry={refetch}
+        />
       </div>
     );
   }

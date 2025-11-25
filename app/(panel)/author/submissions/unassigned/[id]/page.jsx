@@ -132,7 +132,7 @@ export default function UnassignedDetailPage() {
             <div>
               <h3 className="font-semibold mb-2">Journal</h3>
               <p className="text-muted-foreground">
-                {submission?.journal_name}
+                {submission?.journal.title}
               </p>
             </div>
 

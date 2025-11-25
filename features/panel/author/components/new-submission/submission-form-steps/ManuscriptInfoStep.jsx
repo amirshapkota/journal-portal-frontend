@@ -12,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { FormRichTextEditor } from "@/features/shared";
 
 export default function ManuscriptInfoStep({ form }) {
   const [keywordInput, setKeywordInput] = useState("");
@@ -53,23 +54,15 @@ export default function ManuscriptInfoStep({ form }) {
           </FormItem>
         )}
       />
-      <FormField
+
+      <FormRichTextEditor
         control={form.control}
         name="abstract"
-        render={({ field }) => (
-          <FormItem>
-            <FormLabel>Abstract</FormLabel>
-            <FormControl>
-              <Textarea
-                placeholder="Enter your abstract..."
-                rows={4}
-                {...field}
-              />
-            </FormControl>
-            <FormMessage />
-          </FormItem>
-        )}
+        label="Abstract"
+        placeholder="Enter your abstract..."
+        editor_classname="min-h-[400px]!"
       />
+
       <FormField
         control={form.control}
         name="keywords"

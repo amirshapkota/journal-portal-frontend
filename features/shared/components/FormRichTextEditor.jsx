@@ -31,6 +31,7 @@ export default function FormRichTextEditor({
   form_classname = "",
   debounceMs = 300,
   autoFocus = false,
+  editor_classname = "",
 }) {
   return (
     <Controller
@@ -46,6 +47,7 @@ export default function FormRichTextEditor({
               initialValue={field.value || ""}
               debounceMs={debounceMs}
               autoFocus={autoFocus}
+              editor_classname={editor_classname}
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}

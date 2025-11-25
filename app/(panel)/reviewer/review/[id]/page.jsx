@@ -16,7 +16,7 @@ import {
   Clock,
   CheckCircle2,
 } from "lucide-react";
-import { StatusBadge, statusConfig } from "@/features";
+import { StatusBadge, statusConfig, ErrorCard } from "@/features";
 import { useGetReviewAssignmentById } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignmentById";
 import { ReviewSubmissionForm } from "@/features/panel/reviewer/components";
 import { Button } from "@/components/ui/button";
@@ -42,6 +42,7 @@ export default function ReviewDetailPage() {
     data: assignment,
     isLoading,
     error,
+    refetch,
   } = useGetReviewAssignmentById(assignmentId);
 
   if (isLoading) {
@@ -66,24 +67,15 @@ export default function ReviewDetailPage() {
 
   if (error || !assignment) {
     return (
-      <div className="p-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <p className="text-destructive">
-                Failed to load review assignment details
-              </p>
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => router.back()}
-              >
-                Go Back
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <ErrorCard
+        title="Failed to Load Review Assignment"
+        description={
+          error?.message ||
+          "Unable to load review assignment details. Please try again."
+        }
+        onRetry={refetch}
+        onBack={() => router.back()}
+      />
     );
   }
 

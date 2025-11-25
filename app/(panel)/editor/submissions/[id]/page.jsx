@@ -36,6 +36,7 @@ import {
 } from "@/features/panel/editor/submission";
 import {
   LoadingScreen,
+  ErrorCard,
   StatusBadge,
   statusConfig,
   DecisionBadge,
@@ -54,6 +55,7 @@ export default function AdminSubmissionDetailPage() {
     data: submission,
     isPending: isSubmissionLoading,
     error: submissionError,
+    refetch: refetchSubmission,
   } = useGetEditorSubmissionById(submissionId);
 
   // Fetch reviewer recommendations (admin always sees them)
@@ -138,24 +140,15 @@ export default function AdminSubmissionDetailPage() {
 
   if (submissionError || !submission) {
     return (
-      <div className="p-6">
-        <Card>
-          <CardContent className="pt-6">
-            <div className="text-center">
-              <p className="text-destructive">
-                Failed to load submission details
-              </p>
-              <Button
-                variant="outline"
-                className="mt-4"
-                onClick={() => router.back()}
-              >
-                Go Back
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <ErrorCard
+        title="Failed to Load Submission"
+        description={
+          submissionError?.message ||
+          "Unable to load submission details. Please try again."
+        }
+        onRetry={refetchSubmission}
+        onBack={() => router.back()}
+      />
     );
   }
 

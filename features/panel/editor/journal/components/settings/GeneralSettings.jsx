@@ -1,34 +1,81 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import { Switch } from "@/components/ui/switch";
+import { FormRichTextEditor, FormInputField } from "@/features";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
 import { useUpdateJournal } from "@/features";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+
+const generalSettingsSchema = z.object({
+  title: z.string().min(1, "Title is required"),
+  short_name: z.string().min(1, "Short name is required"),
+  publisher: z.string().optional(),
+  description: z.string().optional(),
+  issn_print: z
+    .string()
+    .regex(/^\d{4}-\d{4}$/, "ISSN must be in format: 1234-5678")
+    .optional()
+    .or(z.literal("")),
+  issn_online: z
+    .string()
+    .regex(/^\d{4}-\d{4}$/, "Online ISSN must be in format: 1234-5678")
+    .optional()
+    .or(z.literal("")),
+  website_url: z
+    .string()
+    .url("Must be a valid URL")
+    .optional()
+    .or(z.literal("")),
+  contact_email: z
+    .string()
+    .email("Must be a valid email")
+    .optional()
+    .or(z.literal("")),
+  is_active: z.boolean().default(true),
+  is_accepting_submissions: z.boolean().default(true),
+});
 
 export function GeneralSettings({ journal }) {
-  const [formData, setFormData] = useState({
-    title: journal?.title || "",
-    short_name: journal?.short_name || "",
-    publisher: journal?.publisher || "",
-    description: journal?.description || "",
-    issn_print: journal?.issn_print || "",
-    issn_online: journal?.issn_online || "",
-    website_url: journal?.website_url || "",
-    contact_email: journal?.contact_email || "",
-    is_active: journal?.is_active ?? true,
-    is_accepting_submissions: journal?.is_accepting_submissions ?? true,
+  const form = useForm({
+    resolver: zodResolver(generalSettingsSchema),
+    defaultValues: {
+      title: "",
+      short_name: "",
+      publisher: "",
+      description: "",
+      issn_print: "",
+      issn_online: "",
+      website_url: "",
+      contact_email: "",
+      is_active: true,
+      is_accepting_submissions: true,
+    },
   });
 
   // Update form when journal data changes
   useEffect(() => {
     if (journal) {
-      setFormData({
+      form.reset({
         title: journal.title || "",
         short_name: journal.short_name || "",
         publisher: journal.publisher || "",
@@ -41,7 +88,7 @@ export function GeneralSettings({ journal }) {
         is_accepting_submissions: journal.is_accepting_submissions ?? true,
       });
     }
-  }, [journal]);
+  }, [journal, form]);
 
   const updateJournalMutation = useUpdateJournal({
     onSuccess: () => {
@@ -52,182 +99,221 @@ export function GeneralSettings({ journal }) {
     },
   });
 
-  const handleSave = async () => {
+  const handleSubmit = (data) => {
     if (!journal?.id) {
       toast.error("Journal ID not found");
       return;
     }
 
-    console.log("Saving journal data:", { id: journal.id, ...formData });
     updateJournalMutation.mutate({
       id: journal.id,
-      ...formData,
+      ...data,
     });
   };
 
   return (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle>Basic Information</CardTitle>
-          <CardDescription>
-            Update journal's basic details and identification
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="title">Journal Title</Label>
-              <Input
-                id="title"
-                value={formData.title}
-                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Basic Information</CardTitle>
+            <CardDescription>
+              Update journal&apos;s basic details and identification
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <FormInputField
+                control={form.control}
+                name="title"
+                label={
+                  <span>
+                    Journal Title <span className="text-destructive">*</span>
+                  </span>
+                }
                 placeholder="International Journal of..."
               />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="short_name">Short Name</Label>
-              <Input
-                id="short_name"
-                value={formData.short_name}
-                onChange={(e) => setFormData({ ...formData, short_name: e.target.value })}
+              <FormInputField
+                control={form.control}
+                name="short_name"
+                label={
+                  <span>
+                    Short Name <span className="text-destructive">*</span>
+                  </span>
+                }
                 placeholder="IJCS"
               />
             </div>
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="publisher">Publisher</Label>
-            <Input
-              id="publisher"
-              value={formData.publisher}
-              onChange={(e) => setFormData({ ...formData, publisher: e.target.value })}
+            <FormInputField
+              control={form.control}
+              name="publisher"
+              label="Publisher"
               placeholder="Academic Press"
             />
-          </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="description">Description</Label>
-            <Textarea
-              id="description"
-              value={formData.description}
-              onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+            <FormRichTextEditor
+              control={form.control}
+              name="description"
+              label="Description"
               placeholder="A peer-reviewed journal covering..."
-              rows={4}
             />
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>ISSN Numbers</CardTitle>
-          <CardDescription>
-            International Standard Serial Numbers for print and online
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="issn_print">ISSN Print</Label>
-              <Input
-                id="issn_print"
-                value={formData.issn_print}
-                onChange={(e) => setFormData({ ...formData, issn_print: e.target.value })}
-                placeholder="1234-5678"
+        <Card>
+          <CardHeader>
+            <CardTitle>ISSN Numbers</CardTitle>
+            <CardDescription>
+              International Standard Serial Numbers for print and online
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <FormField
+                control={form.control}
+                name="issn_print"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ISSN Print</FormLabel>
+                    <FormControl>
+                      <input
+                        {...field}
+                        type="text"
+                        placeholder="1234-5678"
+                        maxLength={9}
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        onChange={(e) => {
+                          let value = e.target.value.replace(/[^0-9]/g, "");
+                          if (value.length > 4) {
+                            value = value.slice(0, 4) + "-" + value.slice(4, 8);
+                          }
+                          field.onChange(value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="issn_online"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>ISSN Online</FormLabel>
+                    <FormControl>
+                      <input
+                        {...field}
+                        type="text"
+                        placeholder="1234-5678"
+                        maxLength={9}
+                        className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+                        onChange={(e) => {
+                          let value = e.target.value.replace(/[^0-9]/g, "");
+                          if (value.length > 4) {
+                            value = value.slice(0, 4) + "-" + value.slice(4, 8);
+                          }
+                          field.onChange(value);
+                        }}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
               />
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="issn_online">ISSN Online</Label>
-              <Input
-                id="issn_online"
-                value={formData.issn_online}
-                onChange={(e) => setFormData({ ...formData, issn_online: e.target.value })}
-                placeholder="8765-4321"
-              />
-            </div>
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Contact Information</CardTitle>
-          <CardDescription>
-            Journal's website and contact details
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="website_url">Website URL</Label>
-            <Input
-              id="website_url"
-              type="url"
-              value={formData.website_url}
-              onChange={(e) => setFormData({ ...formData, website_url: e.target.value })}
+        <Card>
+          <CardHeader>
+            <CardTitle>Contact Information</CardTitle>
+            <CardDescription>
+              Journal&apos;s website and contact details
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormInputField
+              control={form.control}
+              name="website_url"
+              label="Website URL"
               placeholder="https://journal.example.com"
+              type="url"
             />
-          </div>
-          <div className="space-y-2">
-            <Label htmlFor="contact_email">Contact Email</Label>
-            <Input
-              id="contact_email"
-              type="email"
-              value={formData.contact_email}
-              onChange={(e) => setFormData({ ...formData, contact_email: e.target.value })}
+            <FormInputField
+              control={form.control}
+              name="contact_email"
+              label="Contact Email"
               placeholder="editor@journal.com"
+              type="email"
             />
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Status Settings</CardTitle>
-          <CardDescription>
-            Control journal visibility and submission acceptance
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="is_active">Active Status</Label>
-              <p className="text-sm text-muted-foreground">
-                Make this journal visible and accessible
-              </p>
-            </div>
-            <Switch
-              id="is_active"
-              checked={formData.is_active}
-              onCheckedChange={(checked) =>
-                setFormData({ ...formData, is_active: checked })
-              }
+        <Card>
+          <CardHeader>
+            <CardTitle>Status Settings</CardTitle>
+            <CardDescription>
+              Control journal visibility and submission acceptance
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <FormField
+              control={form.control}
+              name="is_active"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between space-y-0">
+                  <div className="space-y-0.5">
+                    <FormLabel>Active Status</FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      Make this journal visible and accessible
+                    </p>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
             />
-          </div>
-          <div className="flex items-center justify-between">
-            <div className="space-y-0.5">
-              <Label htmlFor="is_accepting_submissions">Accept Submissions</Label>
-              <p className="text-sm text-muted-foreground">
-                Allow new manuscript submissions
-              </p>
-            </div>
-            <Switch
-              id="is_accepting_submissions"
-              checked={formData.is_accepting_submissions}
-              onCheckedChange={(checked) =>
-                setFormData({ ...formData, is_accepting_submissions: checked })
-              }
+            <FormField
+              control={form.control}
+              name="is_accepting_submissions"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between space-y-0">
+                  <div className="space-y-0.5">
+                    <FormLabel>Accept Submissions</FormLabel>
+                    <p className="text-sm text-muted-foreground">
+                      Allow new manuscript submissions
+                    </p>
+                  </div>
+                  <FormControl>
+                    <Switch
+                      checked={field.value}
+                      onCheckedChange={field.onChange}
+                    />
+                  </FormControl>
+                </FormItem>
+              )}
             />
-          </div>
-        </CardContent>
-      </Card>
+          </CardContent>
+        </Card>
 
-      <div className="flex justify-end">
-        <Button onClick={handleSave} disabled={updateJournalMutation.isPending}>
-          <Save className="h-4 w-4 mr-2" />
-          {updateJournalMutation.isPending ? "Saving..." : "Save Changes"}
-        </Button>
-      </div>
-    </div>
+        <div className="flex justify-end">
+          <Button
+            type="submit"
+            disabled={
+              updateJournalMutation.isPending || !form.formState.isDirty
+            }
+          >
+            <Save className="h-4 w-4 mr-2" />
+            {updateJournalMutation.isPending ? "Saving..." : "Save Changes"}
+          </Button>
+        </div>
+      </form>
+    </Form>
   );
 }

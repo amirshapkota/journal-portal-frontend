@@ -26,7 +26,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useCreateEditorialDecision } from "../hooks/useCreateEditorialDecision";
 import { useGetDecisionLetterTemplates } from "../hooks/useGetDecisionLetterTemplates";
 import { Input } from "@/components/ui/input";
-import { DecisionBadge, reviewRecommendationConfig } from "@/features";
+import {
+  DecisionBadge,
+  reviewRecommendationConfig,
+  FormRichTextEditor,
+} from "@/features";
 
 const decisionSchema = z.object({
   decision_type: z.enum(
@@ -368,49 +372,21 @@ export default function EditorialDecisionForm({
                 )}
 
                 {/* Decision Letter */}
-                <FormField
+                <FormRichTextEditor
                   control={form.control}
                   name="decision_letter"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Decision Letter *</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Write the decision letter to be sent to the author..."
-                          className="min-h-[200px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        This letter will be sent to the author. Minimum 50
-                        characters required.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Decision Letter *"
+                  placeholder="Write the decision letter to be sent to the author..."
+                  description="This letter will be sent to the author. Minimum 50 characters required."
                 />
 
                 {/* Confidential Notes */}
-                <FormField
+                <FormRichTextEditor
                   control={form.control}
                   name="confidential_notes"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Confidential Notes (Optional)</FormLabel>
-                      <FormControl>
-                        <Textarea
-                          placeholder="Internal notes not visible to authors..."
-                          className="min-h-[100px]"
-                          {...field}
-                        />
-                      </FormControl>
-                      <FormDescription>
-                        These notes are for internal use only and will not be
-                        shared with the author
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
+                  label="Confidential Notes (Optional)"
+                  placeholder="Internal notes not visible to authors..."
+                  description="These notes are for internal use only and will not be shared with the author"
                 />
 
                 <div className="flex justify-end space-x-4">

@@ -18,6 +18,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { ErrorCard } from "@/features";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignments";
 
@@ -25,7 +26,12 @@ export default function ReviewerAssignmentsPage() {
   const router = useRouter();
 
   // Fetch assignments
-  const { data: assignmentsData, isLoading, error } = useGetReviewAssignments();
+  const {
+    data: assignmentsData,
+    isPending,
+    error,
+    refetch,
+  } = useGetReviewAssignments();
 
   // Extract and filter assignments
   const assignments = Array.isArray(assignmentsData)
@@ -46,7 +52,7 @@ export default function ReviewerAssignmentsPage() {
   // Get recent assignments (last 6)
   const recentAssignments = assignments.slice(0, 6);
 
-  if (isLoading) {
+  if (isPending) {
     return (
       <div className="space-y-4 mt-6">
         <Skeleton className="h-40 w-full" />
@@ -58,19 +64,15 @@ export default function ReviewerAssignmentsPage() {
 
   if (error) {
     return (
-      <div className="flex items-center justify-center py-12 mt-6">
-        <Card className="w-full max-w-md">
-          <CardHeader>
-            <CardTitle className="text-destructive">Error</CardTitle>
-            <CardDescription>Failed to load review assignments</CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              {error?.message || "An error occurred"}
-            </p>
-            <Button onClick={() => window.location.reload()}>Retry</Button>
-          </CardContent>
-        </Card>
+      <div className="mt-6">
+        <ErrorCard
+          title="Failed to Load Review Assignments"
+          description={
+            error?.message ||
+            "Unable to load your review assignments. Please try again."
+          }
+          onRetry={refetch}
+        />
       </div>
     );
   }

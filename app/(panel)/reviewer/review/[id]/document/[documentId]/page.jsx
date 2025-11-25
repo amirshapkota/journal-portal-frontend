@@ -17,7 +17,7 @@ import {
   loadDocument,
   downloadDocx,
 } from "@/features/panel/author/api/superdocApi";
-import { LoadingScreen, SuperDocEditor } from "@/features";
+import { LoadingScreen, SuperDocEditor, ErrorCard } from "@/features";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 
 export default function ReviewerDocumentViewPage() {
@@ -32,6 +32,7 @@ export default function ReviewerDocumentViewPage() {
     data: documentData,
     isPending: isLoading,
     error: loadError,
+    refetch,
   } = useQuery({
     queryKey: ["superdoc-document", documentId],
     queryFn: () => loadDocument(documentId),
@@ -70,16 +71,14 @@ export default function ReviewerDocumentViewPage() {
 
   if (loadError) {
     return (
-      <Card className="flex flex-col">
-        <CardContent className="p-8">
-          <Alert variant="destructive">
-            <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load document: {loadError.message}
-            </AlertDescription>
-          </Alert>
-        </CardContent>
-      </Card>
+      <ErrorCard
+        title="Failed to Load Document"
+        description={
+          loadError?.message || "Unable to load the document. Please try again."
+        }
+        onRetry={refetch}
+        onBack={() => router.push(`/reviewer/review/${assignmentId}`)}
+      />
     );
   }
 

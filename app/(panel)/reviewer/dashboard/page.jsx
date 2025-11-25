@@ -16,6 +16,7 @@ export default function ReviewerDashboard() {
     data: analytics,
     isPending: isAnalyticsPending,
     error: analyticsError,
+    refetch: refetchAnalytics,
   } = useGetMyAnalytics();
   const {
     data: assignments,
@@ -68,7 +69,7 @@ export default function ReviewerDashboard() {
             description={
               analyticsError?.message || "Unable to fetch analytics data"
             }
-            onRetry={() => window.location.reload()}
+            onRetry={refetchAnalytics}
           />
         )}
 

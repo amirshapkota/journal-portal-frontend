@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { FormInputField } from "@/features/shared/components/FormInputField";
 import { FormTextareaField } from "@/features/shared/components/FormTextareaField";
+import { FormRichTextEditor } from "@/features";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -238,12 +239,11 @@ export function JournalFormModal({
                 <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
                   Description
                 </h3>
-                <FormTextareaField
+                <FormRichTextEditor
                   control={form.control}
                   name="description"
                   label="Journal Description"
                   placeholder="Brief description of the journal's scope and focus"
-                  rows={4}
                 />
               </div>
 
