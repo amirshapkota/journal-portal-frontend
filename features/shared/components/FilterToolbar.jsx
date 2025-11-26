@@ -90,6 +90,7 @@ FilterToolbar.Search = function FilterToolbarSearch({
 
     if (debouncedValue) {
       params.set(paramName, debouncedValue);
+      params.delete("page"); // Reset to first page when searching
     } else {
       params.delete(paramName);
     }
@@ -97,6 +98,7 @@ FilterToolbar.Search = function FilterToolbarSearch({
     router.push(`?${params.toString()}`, { scroll: false });
 
     onChange?.(debouncedValue);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedValue, paramName, router]);
 
   // Sync external controlled value → local state
@@ -104,6 +106,7 @@ FilterToolbar.Search = function FilterToolbarSearch({
     if (value !== undefined && value !== localValue) {
       setLocalValue(value);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [value]);
 
   return (
@@ -149,6 +152,7 @@ FilterToolbar.Select = function FilterToolbarSelect({
       } else {
         params.delete(paramName);
       }
+      params.delete("page"); // Reset to first page when filter changes
       router.push(`?${params.toString()}`, { scroll: false });
     }
     if (onChange) onChange(newValue);

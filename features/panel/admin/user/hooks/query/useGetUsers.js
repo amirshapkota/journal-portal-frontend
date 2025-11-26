@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAllUsers } from "../../api/UserApiSlice";
 
-export const useGetUsers = ({ userRole }, options = {}) => {
+export const useGetUsers = ({ userRole, params }, options = {}) => {
   return useQuery({
-    queryKey: ["admin-users", userRole],
-    queryFn: () => getAllUsers(userRole),
+    queryKey: ["admin-users", userRole, params],
+    queryFn: () => getAllUsers(userRole, params),
     staleTime: 2 * 60 * 1000, // 2 minutes - user list can change
     gcTime: 5 * 60 * 1000, // 5 minutes - keep in cache
     refetchOnWindowFocus: true, // Refetch when user returns

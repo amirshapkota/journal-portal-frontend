@@ -3,12 +3,17 @@ import { getCompletedReviewAssignments } from "../../api/reviewsApi";
 
 /**
  * Hook to get completed review assignments for the current user
+ * @param {Object} params - Query parameters (e.g., { page: 1 })
  */
-export const useGetCompletedAssignments = () => {
+export const useGetCompletedAssignments = (
+  { params = {} } = {},
+  options = {}
+) => {
   return useQuery({
-    queryKey: ["reviewAssignments", "completed"],
-    queryFn: getCompletedReviewAssignments,
+    queryKey: ["reviewAssignments", "completed", params],
+    queryFn: () => getCompletedReviewAssignments(params),
     staleTime: 1000 * 60 * 2, // 2 minutes
     refetchOnWindowFocus: true,
+    ...options,
   });
 };

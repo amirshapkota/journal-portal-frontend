@@ -9,9 +9,9 @@ export const deleteUser = async (userId) => {
 };
 import { instance } from "@/lib/instance";
 
-export const getAllUsers = async (userRole = "") => {
+export const getAllUsers = async (userRole = "", params = {}) => {
   try {
-    const response = await instance.get(`users/?role=${userRole}`);
+    const response = await instance.get(`users/?role=${userRole}`, { params });
     return response.data;
   } catch (error) {
     throw error;

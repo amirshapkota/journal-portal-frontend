@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/popover";
 import { Input } from "@/components/ui/input";
 import { searchRORInstitutions } from "../api/rorApi";
-import { useDebounce } from "../hooks/useDebounce";
+import { useDebounce } from "use-debounce";
 import { Badge } from "@/components/ui/badge";
 import { useQuery } from "@tanstack/react-query";
 import CountryFlag from "react-country-flag";
@@ -31,7 +31,7 @@ export function InstitutionSearchSelect({ value, onChange, placeholder }) {
   const [institutions, setInstitutions] = useState([]);
   const [manualEntry, setManualEntry] = useState(false);
   const [manualValue, setManualValue] = useState("");
-  const debouncedSearch = useDebounce(searchQuery, 500);
+  const [debouncedSearch] = useDebounce(searchQuery, 500);
 
   // Fetch institutions using useQuery
   const {
@@ -47,7 +47,10 @@ export function InstitutionSearchSelect({ value, onChange, placeholder }) {
   });
 
   useEffect(() => {
-    setInstitutions(queryData?.results || []);
+    const timeoutId = setTimeout(() => {
+      setInstitutions(queryData?.results || []);
+    }, 0);
+    return () => clearTimeout(timeoutId);
   }, [queryData]);
 
   const handleSelect = (institution) => {

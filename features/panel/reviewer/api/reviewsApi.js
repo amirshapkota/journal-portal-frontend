@@ -11,37 +11,49 @@ export const getReviewAssignments = async () => {
 
 /**
  * Get pending review assignments for the current user
+ * @param {Object} params - Query parameters (e.g., { page: 1, search: 'keyword' })
  * @returns {Promise} API response
  */
-export const getPendingReviewAssignments = async () => {
-  const response = await instance.get("/reviews/assignments/pending/");
+export const getPendingReviewAssignments = async (params = {}) => {
+  const response = await instance.get("/reviews/assignments/pending/", {
+    params,
+  });
   return response.data;
 };
 
 /**
  * Get accepted review assignments for the current user
+ * @param {Object} params - Query parameters (e.g., { page: 1, search: 'keyword' })
  * @returns {Promise} API response
  */
-export const getAcceptedReviewAssignments = async () => {
-  const response = await instance.get("/reviews/assignments/accepted/");
+export const getAcceptedReviewAssignments = async (params = {}) => {
+  const response = await instance.get("/reviews/assignments/accepted/", {
+    params,
+  });
   return response.data;
 };
 
 /**
  * Get completed review assignments for the current user
+ * @param {Object} params - Query parameters (e.g., { page: 1, search: 'keyword' })
  * @returns {Promise} API response
  */
-export const getCompletedReviewAssignments = async () => {
-  const response = await instance.get("/reviews/assignments/completed/");
+export const getCompletedReviewAssignments = async (params = {}) => {
+  const response = await instance.get("/reviews/assignments/completed/", {
+    params,
+  });
   return response.data;
 };
 
 /**
  * Get declined review assignments for the current user
+ * @param {Object} params - Query parameters (e.g., { page: 1, search: 'keyword' })
  * @returns {Promise} API response
  */
-export const getDeclinedReviewAssignments = async () => {
-  const response = await instance.get("/reviews/assignments/declined/");
+export const getDeclinedReviewAssignments = async (params = {}) => {
+  const response = await instance.get("/reviews/assignments/declined/", {
+    params,
+  });
   return response.data;
 };
 

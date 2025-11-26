@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import {
   AuthorSubmissionsTable,
@@ -14,17 +14,24 @@ import DocumentUploadModal from "@/features/panel/author/components/submission/D
 import DocumentViewModal from "@/features/panel/author/components/submission/DocumentViewModal";
 import { useSubmitForReview } from "@/features/panel/author/hooks/mutation/useSubmitForReview";
 import { useDeleteSubmission } from "@/features/panel/author/hooks/mutation/useDeleteSubmission";
-import { ConfirmationPopup } from "@/features/shared";
+import { ConfirmationPopup, Pagination } from "@/features/shared";
 import { useSubmissionById } from "@/features/panel/author/hooks/query/useGetSubmissionById";
 
 export default function DraftsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+
+  const params = {
+    page: currentPage,
+  };
 
   const {
     data: SubmissionsData,
     isPending: isSubmissionsPending,
     error,
-  } = useGetDraftSubmissions();
+  } = useGetDraftSubmissions({ params });
 
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);
@@ -34,6 +41,12 @@ export default function DraftsPage() {
 
   const submitForReviewMutation = useSubmitForReview();
   const deleteSubmissionMutation = useDeleteSubmission();
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   const handleAddDocuments = (submission) => {
     setSelectedSubmissionId(submission.id);
@@ -114,6 +127,18 @@ export default function DraftsPage() {
         isSuccess={deleteSubmissionMutation.isSuccess}
         icon={<Trash2 className="h-6 w-6 text-destructive" />}
       />
+
+      {/* Pagination */}
+      {SubmissionsData && SubmissionsData.count > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(SubmissionsData.count / 10)}
+          totalCount={SubmissionsData.count}
+          pageSize={10}
+          onPageChange={handlePageChange}
+          showPageSizeSelector={false}
+        />
+      )}
     </RoleBasedRoute>
   );
 }

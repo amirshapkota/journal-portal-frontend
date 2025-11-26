@@ -10,29 +10,36 @@ import {
   useGetUsers,
   UserDetailsModal,
   UserTable,
-  useUpdateUser,
 } from "@/features";
 import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
+import Pagination from "@/features/shared/components/Pagination";
 
 export default function UserManagementPage() {
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   const searchParams = useSearchParams();
   const statusParam = searchParams.get("account_status");
   const verificationParam = searchParams.get("verification_status");
   const searchParam = searchParams.get("search");
-  const is_active = statusParam === "active" ? true : false;
+  const pageParam = searchParams.get("page");
+  const is_active =
+    statusParam === "active" ? true : statusParam === "inactive" ? false : "";
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
   const params = {
     is_active: is_active,
+    search: searchParam || "",
+    profile__verification_status: verificationParam || "",
+    page: currentPage,
   };
-  console.log("data", statusParam, verificationParam, searchParam);
 
   const {
     data: users,
     isPending: isUsersDataPending,
     error: UserDataError,
-  } = useGetUsers({ userRole: "" });
+  } = useGetUsers({ userRole: "", params });
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
@@ -76,6 +83,12 @@ export default function UserManagementPage() {
     await deleteUserMutation.mutateAsync(userIdToDelete);
   };
 
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="space-y-5">
       {/* Header */}
@@ -105,7 +118,6 @@ export default function UserManagementPage() {
             { value: "all", label: "All" },
             { value: "GENUINE", label: "Genuine" },
             { value: "PENDING", label: "Pending" },
-            { value: "REJECTED", label: "Rejected" },
           ]}
         />
         <FilterToolbar.Select
@@ -170,6 +182,18 @@ export default function UserManagementPage() {
           setIsDetailsOpen(false);
         }}
       />
+
+      {/* Pagination */}
+      {users && users.count > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(users.count / 10)}
+          totalCount={users.count}
+          pageSize={10}
+          onPageChange={handlePageChange}
+          showPageSizeSelector={false}
+        />
+      )}
     </div>
   );
 }
