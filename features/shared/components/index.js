@@ -21,6 +21,7 @@ import DecisionBadge from "./DecisionBadge";
 import { RichTextEditor } from "./RichTextEditor";
 import FormRichTextEditor from "./FormRichTextEditor";
 import { SystemHealth } from "./SystemHealth";
+import { InstitutionSearchSelect } from "./InstitutionSearchSelect";
 export * from "./charts";
 
 export {
@@ -47,4 +48,5 @@ export {
   RichTextEditor,
   FormRichTextEditor,
   SystemHealth,
+  InstitutionSearchSelect,
 };

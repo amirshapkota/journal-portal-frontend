@@ -20,6 +20,7 @@ import { FormRichTextEditor } from "@/features";
 import { Loader2, Check, X, Plus } from "lucide-react";
 import { profileSchema } from "../../reader/utils/FormSchema";
 import { Badge } from "@/components/ui/badge";
+import { InstitutionSearchSelect } from "@/features";
 
 export default function ProfileForm({
   defaultValues,
@@ -160,10 +161,15 @@ export default function ProfileForm({
               <FormItem>
                 <FormLabel>Institution/Organization</FormLabel>
                 <FormControl>
-                  <Input placeholder="e.g., Stanford University" {...field} />
+                  <InstitutionSearchSelect
+                    value={field.value}
+                    onChange={field.onChange}
+                    placeholder="e.g., Stanford University"
+                  />
                 </FormControl>
                 <FormDescription>
-                  Your current academic or research institution
+                  Search and select your current academic or research
+                  institution
                 </FormDescription>
                 <FormMessage />
               </FormItem>
