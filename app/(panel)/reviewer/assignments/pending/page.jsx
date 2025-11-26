@@ -21,8 +21,19 @@ import {
   useGetPendingAssignments,
   ErrorCard,
 } from "@/features";
+import { Pagination } from "@/features/shared";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function PendingAssignmentsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+
+  const params = {
+    page: currentPage,
+  };
+
   const [declineDialogOpen, setDeclineDialogOpen] = useState(false);
   const [selectedAssignment, setSelectedAssignment] = useState(null);
 
@@ -32,7 +43,7 @@ export default function PendingAssignmentsPage() {
     isLoading,
     error,
     refetch,
-  } = useGetPendingAssignments();
+  } = useGetPendingAssignments({ params });
 
   // Mutations
   const acceptMutation = useAcceptReviewAssignment();
@@ -64,6 +75,12 @@ export default function PendingAssignmentsPage() {
 
   const handleDeclineSuccess = () => {
     setSelectedAssignment(null);
+  };
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   if (isLoading) {
@@ -137,6 +154,18 @@ export default function PendingAssignmentsPage() {
         declineMutation={declineMutation}
         onSuccess={handleDeclineSuccess}
       />
+
+      {/* Pagination */}
+      {assignmentsData && assignmentsData.count > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(assignmentsData.count / 10)}
+          totalCount={assignmentsData.count}
+          pageSize={10}
+          onPageChange={handlePageChange}
+          showPageSizeSelector={false}
+        />
+      )}
     </>
   );
 }

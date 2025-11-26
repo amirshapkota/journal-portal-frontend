@@ -14,18 +14,35 @@ import { useGetDeclinedAssignments } from "@/features/panel/reviewer/hooks/query
 import { AssignmentCard } from "../../../../../features/panel/reviewer/components/assignments/AssignmentCard";
 import { EmptyState } from "../../../../../features/panel/reviewer/components/assignments/EmptyState";
 import { ErrorCard } from "@/features";
+import { Pagination } from "@/features/shared";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function DeclinedAssignmentsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+
+  const params = {
+    page: currentPage,
+  };
+
   const {
     data: assignmentsData,
     isLoading,
     error,
     refetch,
-  } = useGetDeclinedAssignments();
+  } = useGetDeclinedAssignments({ params });
 
   const declinedAssignments = Array.isArray(assignmentsData)
     ? assignmentsData
     : assignmentsData?.results || [];
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   if (isLoading) {
     return (
@@ -83,6 +100,18 @@ export default function DeclinedAssignmentsPage() {
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {assignmentsData && assignmentsData.count > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(assignmentsData.count / 10)}
+          totalCount={assignmentsData.count}
+          pageSize={10}
+          onPageChange={handlePageChange}
+          showPageSizeSelector={false}
+        />
+      )}
     </>
   );
 }

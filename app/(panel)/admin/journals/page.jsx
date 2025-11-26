@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Plus, Trash2 } from "lucide-react";
 import {
@@ -14,16 +14,39 @@ import {
   FilterToolbar,
   RoleBasedRoute,
   ConfirmationPopup,
+  Pagination,
 } from "@/features/shared";
 
 export default function JournalsPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const searchParam = searchParams.get("search");
+  const statusParam = searchParams.get("status");
+  const submissionsParam = searchParams.get("submissions");
+
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+  const is_active =
+    statusParam === "active" ? true : statusParam === "inactive" ? false : "";
+  const is_accepting_submissions =
+    submissionsParam === "accepting"
+      ? true
+      : submissionsParam === "not-accepting"
+      ? false
+      : "";
+
+  const params = {
+    search: searchParam || "",
+    is_active: is_active,
+    is_accepting_submissions: is_accepting_submissions,
+    page: currentPage,
+  };
+
   const [searchTerm, setSearchTerm] = useState("");
   const [activeFilter, setActiveFilter] = useState("all");
   const [acceptingFilter, setAcceptingFilter] = useState("all");
   const [sortColumn, setSortColumn] = useState("title");
   const [sortOrder, setSortOrder] = useState("asc");
-  const [currentPage, setCurrentPage] = useState(1);
   const [selectedJournal, setSelectedJournal] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -34,11 +57,15 @@ export default function JournalsPage() {
     data: JournalData,
     isPending: isJournalDataPending,
     error: JournalDataError,
-  } = useGetJournals();
+  } = useGetJournals({ params });
 
   const deleteJournalMutation = useDeleteJournal();
 
-  const itemsPerPage = 10;
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   const handleSort = (column) => {
     if (sortColumn === column) {
@@ -70,11 +97,6 @@ export default function JournalsPage() {
   };
 
   const journals = JournalData?.results || [];
-  const totalPages = Math.ceil(journals.length / itemsPerPage);
-  const paginatedJournals = journals.slice(
-    (currentPage - 1) * itemsPerPage,
-    currentPage * itemsPerPage
-  );
 
   return (
     <RoleBasedRoute allowedRoles={["ADMIN"]}>
@@ -142,36 +164,16 @@ export default function JournalsPage() {
         />
 
         {/* Pagination */}
-        <div className="flex items-center justify-between">
-          <p className="text-sm text-muted-foreground">
-            Showing{" "}
-            {paginatedJournals.length === 0
-              ? 0
-              : (currentPage - 1) * itemsPerPage + 1}{" "}
-            to {Math.min(currentPage * itemsPerPage, journals.length)} of{" "}
-            {journals.length} journals
-          </p>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setCurrentPage(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() =>
-                setCurrentPage(Math.min(totalPages, currentPage + 1))
-              }
-              disabled={currentPage === totalPages}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+        {JournalData && JournalData.count > 0 && (
+          <Pagination
+            currentPage={currentPage}
+            totalPages={Math.ceil(JournalData.count / 10)}
+            totalCount={JournalData.count}
+            pageSize={10}
+            onPageChange={handlePageChange}
+            showPageSizeSelector={false}
+          />
+        )}
 
         <JournalDetailsDrawer
           journal={selectedJournal}

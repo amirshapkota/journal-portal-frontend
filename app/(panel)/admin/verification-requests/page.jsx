@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
-import { FilterToolbar } from "@/features/shared";
+import { FilterToolbar, Pagination } from "@/features/shared";
 import {
   ActionConfirmationPopup,
   VerificationDetailsModal,
@@ -21,13 +21,27 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function VerificationsPage() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+  const searchParam = searchParams.get("search");
+  const status = searchParams.get("status");
+
+  const params = {
+    search: searchParam,
+    status: status,
+    page: pageParam,
+  };
+
   const {
     data: verificationsData,
     isPending: isVerificationRequestsPending,
     error,
-  } = useGetVerificationRequests();
+  } = useGetVerificationRequests({ params });
 
   const verifications = useMemo(
     () => verificationsData?.results || [],
@@ -124,6 +138,12 @@ export default function VerificationsPage() {
     );
   };
 
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
+
   return (
     <div className="space-y-6">
       {isVerificationRequestsPending && <LoadingScreen />}
@@ -193,6 +213,18 @@ export default function VerificationsPage() {
         }}
         isLoading={isApproving || isRejecting || isRequestingInfo}
       />
+
+      {/* Pagination */}
+      {verificationsData && verificationsData.count > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(verificationsData.count / 10)}
+          totalCount={verificationsData.count}
+          pageSize={10}
+          onPageChange={handlePageChange}
+          showPageSizeSelector={false}
+        />
+      )}
     </div>
   );
 }

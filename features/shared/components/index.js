@@ -22,6 +22,7 @@ import { RichTextEditor } from "./RichTextEditor";
 import FormRichTextEditor from "./FormRichTextEditor";
 import { SystemHealth } from "./SystemHealth";
 import { InstitutionSearchSelect } from "./InstitutionSearchSelect";
+import Pagination from "./Pagination";
 export * from "./charts";
 
 export {
@@ -49,4 +50,5 @@ export {
   FormRichTextEditor,
   SystemHealth,
   InstitutionSearchSelect,
+  Pagination,
 };

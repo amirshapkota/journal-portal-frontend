@@ -2,7 +2,7 @@ import { instance } from "@/lib/instance";
 
 /**
  * Fetch all journals
- * @param {Object} params - Query parameters (e.g., { active_role: 'AUTHOR' })
+ * @param {Object} params - Query parameters (e.g., { active_role: 'AUTHOR', search: 'keyword', is_active: true, page: 1 })
  * @returns {Promise} API response
  */
 export const getJournals = async (params = {}) => {
@@ -374,7 +374,9 @@ export const getSubmissionSettings = async (journalId) => {
  * @returns {Promise} API response
  */
 export const updateSubmissionSettings = async ({ journalId, settings }) => {
-  const response = await instance.patch(`journals/journals/${journalId}/`, { settings });
+  const response = await instance.patch(`journals/journals/${journalId}/`, {
+    settings,
+  });
   return response.data;
 };
 
@@ -402,6 +404,8 @@ export const getJournalSubmissions = async (journalId, params = {}) => {
  * @returns {Promise} API response
  */
 export const getJournalStatistics = async (journalId) => {
-  const response = await instance.get(`journals/journals/${journalId}/statistics/`);
+  const response = await instance.get(
+    `journals/journals/${journalId}/statistics/`
+  );
   return response.data;
 };

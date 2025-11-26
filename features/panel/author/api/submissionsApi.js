@@ -21,10 +21,11 @@ export const getSubmissions = async () => {
 
 /**
  * Get draft submissions
+ * @param {Object} params - Query parameters (e.g., { page: 1, search: 'keyword' })
  * @returns {Promise} API response
  */
-export const getDraftSubmissions = async () => {
-  const response = await instance.get("submissions/drafts/");
+export const getDraftSubmissions = async (params = {}) => {
+  const response = await instance.get("submissions/drafts/", { params });
   return response.data;
 };
 
