@@ -12,13 +12,27 @@ import { useGetActiveSubmissions } from "@/features/panel/author/hooks/query/use
 import DocumentUploadModal from "@/features/panel/author/components/submission/DocumentUploadModal";
 import DocumentViewModal from "@/features/panel/author/components/submission/DocumentViewModal";
 import { useSubmitForReview } from "@/features/panel/author/hooks/mutation/useSubmitForReview";
+import { useSearchParams } from "next/navigation";
 
 export default function ActivePage() {
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+
+  const params = {
+    page: currentPage,
+  };
   const {
     data: SubmissionsData,
     isPending: isSubmissionsPending,
     error,
-  } = useGetActiveSubmissions();
+  } = useGetActiveSubmissions({ params });
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);

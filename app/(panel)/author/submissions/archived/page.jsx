@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { Trash2 } from "lucide-react";
 import {
   AuthorSubmissionsTable,
@@ -18,11 +18,26 @@ import { ConfirmationPopup, Pagination } from "@/features/shared";
 
 export default function ArchivedPage() {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+
+  const params = {
+    page: currentPage,
+  };
+
   const {
     data: SubmissionsData,
     isPending: isSubmissionsPending,
     error,
-  } = useGetArchivedSubmissions();
+  } = useGetArchivedSubmissions({ params });
+
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
+  };
 
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [viewModalOpen, setViewModalOpen] = useState(false);

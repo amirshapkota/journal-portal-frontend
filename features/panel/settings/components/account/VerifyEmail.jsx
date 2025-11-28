@@ -4,17 +4,15 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Mail, Loader2, Check } from "lucide-react";
-import { useVerifyEmail } from "@/features/auth/hooks";
-import { useSelector } from "react-redux";
+import { useResendVerificationEmail } from "@/features/auth/hooks";
 
 export default function VerifyEmail() {
   const [emailSent, setEmailSent] = useState(false);
-  const authData = useSelector((state) => state?.auth);
-  const token = authData?.access || null;
-  const { mutate: verifyEmail, isPending } = useVerifyEmail();
+  const { mutate: resendVerificationEmail, isPending } =
+    useResendVerificationEmail();
 
   const handleSendVerification = () => {
-    verifyEmail({
+    resendVerificationEmail(undefined, {
       onSuccess: () => {
         setEmailSent(true);
         setTimeout(() => setEmailSent(false), 5000);

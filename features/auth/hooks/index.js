@@ -4,6 +4,7 @@ import { useChangePassword } from "./mutation/useChangePassword";
 import { useVerifyEmail } from "./mutation/useVerifyEmail";
 import { useRequestPasswordReset } from "./mutation/useRequestPasswordReset";
 import { useConfirmPasswordReset } from "./mutation/useConfirmPasswordReset";
+import { useResendVerificationEmail } from "./mutation/useResendVerificationEmail";
 import useCrossTabAuth from "./useCrossTabAuth";
 
 export {
@@ -13,5 +14,6 @@ export {
   useVerifyEmail,
   useRequestPasswordReset,
   useConfirmPasswordReset,
+  useResendVerificationEmail,
   useCrossTabAuth,
 };

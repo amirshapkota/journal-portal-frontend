@@ -33,8 +33,8 @@ export const getDraftSubmissions = async (params = {}) => {
  * Get unassigned submissions (no reviewers assigned)
  * @returns {Promise} API response
  */
-export const getUnassignedSubmissions = async () => {
-  const response = await instance.get("submissions/unassigned/");
+export const getUnassignedSubmissions = async (params) => {
+  const response = await instance.get("submissions/unassigned/", { params });
   return response.data;
 };
 
@@ -42,8 +42,8 @@ export const getUnassignedSubmissions = async () => {
  * Get active submissions (with reviewers assigned)
  * @returns {Promise} API response
  */
-export const getActiveSubmissions = async () => {
-  const response = await instance.get("submissions/active/");
+export const getActiveSubmissions = async (params) => {
+  const response = await instance.get("submissions/active/", { params });
   return response.data;
 };
 
@@ -51,8 +51,8 @@ export const getActiveSubmissions = async () => {
  * Get archived submissions (completed)
  * @returns {Promise} API response
  */
-export const getArchivedSubmissions = async () => {
-  const response = await instance.get("submissions/archived/");
+export const getArchivedSubmissions = async (params) => {
+  const response = await instance.get("submissions/archived/", { params });
   return response.data;
 };
 

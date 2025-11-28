@@ -1,52 +1,59 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, AlertCircle } from "lucide-react";
 import {
   ActivityLogsTable,
   ActivityLogDetailsModal,
-  ActivityLogFilters,
   useActivityLogs,
 } from "@/features/panel/admin/activity-logs";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { LoadingScreen } from "@/features";
+import { LoadingScreen, FilterToolbar, Pagination } from "@/features";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function ActivityLogsPage() {
-  const [actionFilter, setActionFilter] = useState("all");
-  const [resourceFilter, setResourceFilter] = useState("all");
-  const [actorFilter, setActorFilter] = useState("all");
-  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get params from URL
+  const pageParam = searchParams.get("page");
+  const currentPage = pageParam ? parseInt(pageParam) : 1;
+  const searchParam = searchParams.get("search");
+  const actionType = searchParams.get("action_type");
+  const resourceType = searchParams.get("resource_type");
+  const actorType = searchParams.get("actor_type");
+
   const [selectedLog, setSelectedLog] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const [page, setPage] = useState(1);
 
-  // Build query parameters
+  // Build query parameters from URL
   const queryParams = useMemo(() => {
     const params = {
-      page,
+      page: currentPage,
       page_size: 10,
       ordering: "-created_at",
     };
 
-    if (actionFilter !== "all") {
-      params.action_type = actionFilter;
+    if (actionType && actionType !== "all") {
+      params.action_type = actionType;
     }
 
-    if (resourceFilter !== "all") {
-      params.resource_type = resourceFilter;
+    if (resourceType && resourceType !== "all") {
+      params.resource_type = resourceType;
     }
 
-    if (actorFilter !== "all") {
-      params.actor_type = actorFilter;
+    if (actorType && actorType !== "all") {
+      params.actor_type = actorType;
     }
 
-    if (searchQuery.trim()) {
-      params.search = searchQuery.trim();
+    if (searchParam?.trim()) {
+      params.search = searchParam.trim();
     }
 
     return params;
-  }, [actionFilter, resourceFilter, actorFilter, searchQuery, page]);
+  }, [actionType, resourceType, actorType, searchParam, currentPage]);
 
   // Fetch activity logs
   const {
@@ -67,9 +74,10 @@ export default function ActivityLogsPage() {
     refetch();
   };
 
-  const handleFilterChange = () => {
-    // Reset to page 1 when filters change
-    setPage(1);
+  const handlePageChange = (page) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", page.toString());
+    router.push(`?${params.toString()}`, { scroll: false });
   };
 
   return (
@@ -105,28 +113,54 @@ export default function ActivityLogsPage() {
       )}
 
       {/* Filters */}
-      <ActivityLogFilters
-        actionFilter={actionFilter}
-        resourceFilter={resourceFilter}
-        actorFilter={actorFilter}
-        searchQuery={searchQuery}
-        onActionChange={(value) => {
-          setActionFilter(value);
-          handleFilterChange();
-        }}
-        onResourceChange={(value) => {
-          setResourceFilter(value);
-          handleFilterChange();
-        }}
-        onActorChange={(value) => {
-          setActorFilter(value);
-          handleFilterChange();
-        }}
-        onSearchChange={(value) => {
-          setSearchQuery(value);
-          handleFilterChange();
-        }}
-      />
+      <FilterToolbar>
+        <FilterToolbar.Search
+          paramName="search"
+          placeholder="Search activity logs..."
+          label="Search"
+        />
+        <FilterToolbar.Select
+          paramName="action_type"
+          label="Action"
+          options={[
+            { value: "all", label: "All Actions" },
+            { value: "CREATE", label: "Create" },
+            { value: "UPDATE", label: "Update" },
+            { value: "DELETE", label: "Delete" },
+            { value: "LOGIN", label: "Login" },
+            { value: "LOGOUT", label: "Logout" },
+            { value: "VIEW", label: "View" },
+            { value: "DOWNLOAD", label: "Download" },
+            { value: "SUBMIT", label: "Submit" },
+            { value: "APPROVE", label: "Approve" },
+            { value: "REJECT", label: "Reject" },
+          ]}
+        />
+        <FilterToolbar.Select
+          paramName="resource_type"
+          label="Resource"
+          options={[
+            { value: "all", label: "All Resources" },
+            { value: "USER", label: "User" },
+            { value: "SUBMISSION", label: "Submission" },
+            { value: "REVIEW", label: "Review" },
+            { value: "JOURNAL", label: "Journal" },
+            { value: "NOTIFICATION", label: "Notification" },
+            { value: "VERIFICATION", label: "Verification" },
+          ]}
+        />
+        <FilterToolbar.Select
+          paramName="actor_type"
+          label="Actor"
+          options={[
+            { value: "all", label: "All Actors" },
+            { value: "USER", label: "User" },
+            { value: "SYSTEM", label: "System" },
+            { value: "API", label: "API" },
+            { value: "INTEGRATION", label: "Integration" },
+          ]}
+        />
+      </FilterToolbar>
 
       {/* Activity Logs Table */}
       <ActivityLogsTable
@@ -136,31 +170,16 @@ export default function ActivityLogsPage() {
         error={error}
       />
 
-      {/* Pagination Info */}
-      {logsData && (
-        <div className="flex items-center justify-between text-sm text-muted-foreground">
-          <div>
-            Showing {logs.length} of {logsData.count} total logs
-          </div>
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => Math.max(1, p - 1))}
-              disabled={!logsData.previous || isLoading}
-            >
-              Previous
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => setPage((p) => p + 1)}
-              disabled={!logsData.next || isLoading}
-            >
-              Next
-            </Button>
-          </div>
-        </div>
+      {/* Pagination */}
+      {logsData && logsData.count > 0 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={Math.ceil(logsData.count / 10)}
+          totalCount={logsData.count}
+          pageSize={10}
+          onPageChange={handlePageChange}
+          showPageSizeSelector={false}
+        />
       )}
 
       {/* Log Detail Modal */}

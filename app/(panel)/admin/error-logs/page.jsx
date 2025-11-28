@@ -13,19 +13,24 @@ import {
 import {
   ErrorLogsTable,
   ErrorDetailsModal,
-  ErrorFilters,
 } from "@/features/panel/admin/error-logs";
 import {
   useSentryProjects,
   useSentryIssues,
 } from "@/features/panel/admin/error-logs/hooks/useSentry";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { LoadingScreen } from "@/features";
+import { LoadingScreen, FilterToolbar } from "@/features";
+import { useSearchParams, useRouter } from "next/navigation";
 
 export default function ErrorLogsPage() {
-  const [selectedProject, setSelectedProject] = useState(null);
-  const [statusFilter, setStatusFilter] = useState("unresolved");
-  const [levelFilter, setLevelFilter] = useState("all");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // Get params from URL
+  const statusFilter = searchParams.get("status") || "unresolved";
+  const levelFilter = searchParams.get("level") || "all";
+  const projectSlug = searchParams.get("project") || null;
+
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
 
@@ -37,17 +42,15 @@ export default function ErrorLogsPage() {
     refetch: refetchProjects,
   } = useSentryProjects();
 
-  // Auto-select first project when projects load
+  // Auto-select first project if none in params
   useEffect(() => {
-    if (projectsData?.results?.length > 0 && !selectedProject) {
-      // Use setTimeout to defer state update and avoid cascading renders
-      const timeoutId = setTimeout(() => {
-        setSelectedProject(projectsData.results[0].slug);
-      }, 0);
-
-      return () => clearTimeout(timeoutId);
+    if (projectsData?.results?.length > 0 && !projectSlug) {
+      const firstSlug = projectsData.results[0].slug;
+      const params = new URLSearchParams(searchParams.toString());
+      params.set("project", firstSlug);
+      router.replace(`?${params.toString()}`);
     }
-  }, [projectsData?.results, selectedProject]);
+  }, [projectsData?.results, projectSlug, searchParams, router]);
 
   // Fetch issues for selected project
   const {
@@ -55,8 +58,8 @@ export default function ErrorLogsPage() {
     isLoading: issuesLoading,
     error: issuesError,
     refetch: refetchIssues,
-  } = useSentryIssues(selectedProject, {
-    status: statusFilter === "all" ? "unresolved" : statusFilter,
+  } = useSentryIssues(projectSlug, {
+    status: statusFilter === "all" ? undefined : statusFilter,
     limit: 100,
   });
 
@@ -74,14 +77,16 @@ export default function ErrorLogsPage() {
   };
 
   const handleRefresh = () => {
-    if (selectedProject) {
+    if (projectSlug) {
       refetchIssues();
     }
     refetchProjects();
   };
 
-  const handleProjectChange = (projectSlug) => {
-    setSelectedProject(projectSlug);
+  const handleProjectChange = (slug) => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("project", slug);
+    router.push(`?${params.toString()}`);
   };
 
   const isLoading = projectsLoading || issuesLoading;
@@ -113,7 +118,10 @@ export default function ErrorLogsPage() {
       {projectsData?.results?.length > 0 && (
         <div className="flex items-center gap-4">
           <label className="text-sm font-medium">Project:</label>
-          <Select value={selectedProject} onValueChange={handleProjectChange}>
+          <Select
+            value={projectSlug || undefined}
+            onValueChange={handleProjectChange}
+          >
             <SelectTrigger className="w-[300px]">
               <SelectValue placeholder="Select a project" />
             </SelectTrigger>
@@ -157,17 +165,34 @@ export default function ErrorLogsPage() {
       )}
 
       {/* Filters */}
-      {selectedProject && (
-        <ErrorFilters
-          statusFilter={statusFilter}
-          levelFilter={levelFilter}
-          onStatusChange={setStatusFilter}
-          onLevelChange={setLevelFilter}
-        />
+      {projectSlug && (
+        <FilterToolbar>
+          <FilterToolbar.Select
+            paramName="status"
+            label="Status"
+            options={[
+              { value: "all", label: "All Status" },
+              { value: "unresolved", label: "Unresolved" },
+              { value: "resolved", label: "Resolved" },
+              { value: "ignored", label: "Ignored" },
+            ]}
+          />
+          <FilterToolbar.Select
+            paramName="level"
+            label="Level"
+            options={[
+              { value: "all", label: "All Levels" },
+              { value: "fatal", label: "Fatal" },
+              { value: "error", label: "Error" },
+              { value: "warning", label: "Warning" },
+              { value: "info", label: "Info" },
+            ]}
+          />
+        </FilterToolbar>
       )}
 
       {/* Error Logs Table */}
-      {selectedProject && (
+      {projectSlug && (
         <ErrorLogsTable
           issues={filteredIssues}
           onViewDetails={handleViewDetail}

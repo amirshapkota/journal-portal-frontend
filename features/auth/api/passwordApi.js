@@ -13,8 +13,17 @@ export const changePassword = async (data) => {
  * Verify email with token
  * POST /api/auth/verify-email/
  */
-export const verifyEmail = async () => {
-  const response = await instance.post("/auth/verify-email/");
+export const verifyEmail = async ({ uid, token }) => {
+  const response = await instance.post("/auth/verify-email/", { uid, token });
+  return response.data;
+};
+
+/**
+ * Resend verification email
+ * POST /api/auth/resend-verification/
+ */
+export const resendVerificationEmail = async () => {
+  const response = await instance.post("/auth/resend-verification/");
   return response.data;
 };
 
