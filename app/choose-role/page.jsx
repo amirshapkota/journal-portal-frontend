@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { PenTool, CheckCircle2, ArrowRight, FileText } from "lucide-react";
@@ -61,6 +61,13 @@ export default function ChooseRole() {
   // Filter ROLES based on user's actual roles
   const availableRoles = ROLES.filter((role) => userRoles.includes(role.id));
 
+  // Redirect to unauthorized if user doesn't have multiple roles
+  useEffect(() => {
+    if (userRoles.length <= 2) {
+      router.push("/unauthorized");
+    }
+  }, [userRoles.length, router]);
+
   const handleRoleSelect = async (roleId) => {
     setSelectedRole(roleId);
     setIsLoading(true);
@@ -70,10 +77,6 @@ export default function ChooseRole() {
 
     router.push(`/${roleId.toLowerCase()}/dashboard`);
   };
-
-  if (userRoles.length <= 2) {
-    router.push(`/unauthorized`);
-  }
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center p-4">
@@ -101,7 +104,7 @@ export default function ChooseRole() {
                 key={role.id}
                 onClick={() => !isLoading && handleRoleSelect(role.id)}
                 disabled={isLoading && !isSelected}
-              className="relative flex-1 group text-left transition-all duration-300 transform hover:scale-105 disabled:cursor-not-allowed"
+                className="relative flex-1 group text-left transition-all duration-300 transform hover:scale-105 disabled:cursor-not-allowed"
               >
                 <Card
                   className={`h-full p-6 border-2 transition-all duration-300 relative backdrop-blur-sm

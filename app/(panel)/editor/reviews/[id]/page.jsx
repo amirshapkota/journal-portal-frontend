@@ -28,6 +28,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { LoadingScreen, ErrorCard, DecisionBadge } from "@/features/shared";
 import { reviewRecommendationConfig } from "@/features";
 import { useGetReviewById } from "@/features/panel/editor/submission/hooks/useGetReviewById";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function ReviewDetailPage() {
   const params = useParams();
@@ -49,22 +50,6 @@ export default function ReviewDetailPage() {
       />
     );
   }
-
-  // Helper function to get recommendation badge variant
-  const getRecommendationVariant = (recommendation) => {
-    switch (recommendation) {
-      case "ACCEPT":
-        return "default";
-      case "REJECT":
-        return "destructive";
-      case "MINOR_REVISION":
-        return "secondary";
-      case "MAJOR_REVISION":
-        return "outline";
-      default:
-        return "outline";
-    }
-  };
 
   // Helper function to get recommendation icon
   const getRecommendationIcon = (recommendation) => {
@@ -273,9 +258,14 @@ export default function ReviewDetailPage() {
         </CardHeader>
         <CardContent>
           <div className="prose prose-sm max-w-none dark:prose-invert">
-            <p className="whitespace-pre-wrap text-foreground">
-              {review.review_text || "No detailed comments provided."}
-            </p>
+            <ScrollArea className="min-h-[200px] max-h-[500px] w-full rounded border bg-muted/30 p-4">
+              <div
+                dangerouslySetInnerHTML={{
+                  __html: review.review_text,
+                }}
+                className="text-muted-foreground whitespace-pre-wrap"
+              />
+            </ScrollArea>
           </div>
         </CardContent>
       </Card>
@@ -297,9 +287,14 @@ export default function ReviewDetailPage() {
           </CardHeader>
           <CardContent>
             <div className="prose prose-sm max-w-none dark:prose-invert">
-              <p className="whitespace-pre-wrap text-yellow-900 dark:text-yellow-100">
-                {review.confidential_comments}
-              </p>
+              <ScrollArea className="min-h-[200px] max-h-[500px] w-full rounded border border-yellow-200 dark:border-yellow-800 text-yellow-900 dark:text-yellow-200 p-4">
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html: review.confidential_comments,
+                  }}
+                  className="text-muted-foreground whitespace-pre-wrap"
+                />
+              </ScrollArea>
             </div>
           </CardContent>
         </Card>

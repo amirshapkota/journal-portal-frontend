@@ -12,7 +12,6 @@ const useCrossTabAuth = () => {
   const channelRef = useRef(null);
   const currentAuth = useSelector((state) => state.auth?.access);
   const { redirectUser } = useRoleRedirect();
-  const roles = useSelector((state) => state.auth?.userData?.roles || []);
   const queryClient = useQueryClient();
 
   useEffect(() => {
@@ -51,16 +50,13 @@ const useCrossTabAuth = () => {
               );
 
               if (pathname === "/login") {
-                redirectUser(roles);
+                const userRoles = userData?.roles || [];
+                redirectUser(userRoles);
               }
             }
           }
         } catch (error) {
           console.error("Failed to sync auth state:", error);
-
-          if (pathname === "/login") {
-            redirectUser(roles);
-          }
         }
       }
     };
@@ -89,7 +85,8 @@ const useCrossTabAuth = () => {
             );
 
             if (pathname === "/login") {
-              redirectUser(roles);
+              const userRoles = userData?.roles || [];
+              redirectUser(userRoles);
             }
           }
 
@@ -113,15 +110,7 @@ const useCrossTabAuth = () => {
       window.removeEventListener("storage", handleStorageChange);
       channel.close();
     };
-  }, [
-    dispatch,
-    router,
-    pathname,
-    currentAuth,
-    redirectUser,
-    roles,
-    queryClient,
-  ]);
+  }, [dispatch, router, pathname, currentAuth, redirectUser, queryClient]);
 
   const broadcast = (messageType) => {
     channelRef.current?.postMessage(messageType);

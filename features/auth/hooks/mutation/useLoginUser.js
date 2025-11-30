@@ -5,10 +5,12 @@ import { toast } from "sonner";
 import useCrossTabAuth from "../useCrossTabAuth";
 import { loginUser } from "../../api/LoginApiSlice";
 import { useRoleRedirect } from "@/features/shared";
+import { useRouter } from "next/navigation";
 
 export const useLoginUser = () => {
   const dispatch = useDispatch();
   const broadcast = useCrossTabAuth();
+  const router = useRouter();
 
   const { redirectUser } = useRoleRedirect();
 
@@ -19,6 +21,20 @@ export const useLoginUser = () => {
       toast.success("Login successful.");
       dispatch(authLogin({ userData }));
       broadcast("login");
+
+      // Check if user email is verified
+      if (
+        userData?.user?.is_verified === false &&
+        !userData?.user?.roles.includes("ADMIN")
+      ) {
+        // Redirect to pending verification page
+        setTimeout(() => {
+          router.push("/pending-verification");
+        }, 300);
+        return;
+      }
+
+      // Normal redirect for verified users
       setTimeout(() => {
         redirectUser(userData?.user?.roles || []);
       }, 300);

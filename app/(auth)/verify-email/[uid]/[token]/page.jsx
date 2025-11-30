@@ -15,6 +15,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
+import { useSelector } from "react-redux";
 
 const VerifyEmailPage = () => {
   const { resolvedTheme } = useTheme();
@@ -22,6 +23,7 @@ const VerifyEmailPage = () => {
   const params = useParams();
   const hasVerified = useRef(false);
   const [status, setStatus] = useState("verifying"); // "verifying" | "success" | "error"
+  const isAuthenticated = useSelector((state) => state.auth.status);
 
   const uid = params.uid;
   const token = params.token;
@@ -36,8 +38,20 @@ const VerifyEmailPage = () => {
         try {
           await verifyEmail({ uid, token });
           setStatus("success");
+
+          // Broadcast verification event for cross-tab communication
+          if (typeof window !== "undefined") {
+            localStorage.setItem("email-verified", Date.now().toString());
+            window.dispatchEvent(new Event("storage"));
+          }
+
           setTimeout(() => {
-            router.push("/login");
+            // If user is logged in, reload the page to update auth state
+            if (isAuthenticated) {
+              router.push("/");
+            } else {
+              router.push("/login");
+            }
           }, 3000);
         } catch (error) {
           setStatus("error");
@@ -46,7 +60,7 @@ const VerifyEmailPage = () => {
 
       verify();
     }
-  }, [uid, token, router, verifyEmail]);
+  }, [uid, token, router, verifyEmail, isAuthenticated]);
 
   return (
     <div className="min-h-screen bg-linear-to-br flex items-center justify-center p-4">

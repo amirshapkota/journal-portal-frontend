@@ -23,6 +23,7 @@ import FormRichTextEditor from "./FormRichTextEditor";
 import { SystemHealth } from "./SystemHealth";
 import { InstitutionSearchSelect } from "./InstitutionSearchSelect";
 import Pagination from "./Pagination";
+import { ReviewSummaryCard } from "./ReviewSummaryCard";
 export * from "./charts";
 
 export {
@@ -51,4 +52,5 @@ export {
   SystemHealth,
   InstitutionSearchSelect,
   Pagination,
+  ReviewSummaryCard,
 };

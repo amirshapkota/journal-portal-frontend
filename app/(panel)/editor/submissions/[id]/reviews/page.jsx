@@ -27,11 +27,11 @@ import {
   DecisionBadge,
   StatusBadge,
   statusConfig,
+  ReviewSummaryCard,
 } from "@/features/shared";
 import { reviewRecommendationConfig } from "@/features";
 import { useGetSubmissionReviews } from "@/features/panel/editor/submission/hooks/useGetSubmissionReviews";
 import { useGetEditorSubmissionById } from "@/features/panel/editor/submission";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function SubmissionReviewsPage() {
   const params = useParams();
@@ -181,168 +181,20 @@ export default function SubmissionReviewsPage() {
             Submitted Reviews ({reviews.length})
           </h2>
           {reviews.map((review, index) => (
-            <Card key={review.id} className="hover:shadow-md transition-shadow">
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div className="space-y-1">
-                    <CardTitle className="flex items-center gap-2">
-                      Review {index + 1}
-                      {review.review_round > 1 && (
-                        <Badge variant="outline" className="ml-2">
-                          Round {review.review_round}
-                        </Badge>
-                      )}
-                    </CardTitle>
-                    <CardDescription>
-                      Submitted on{" "}
-                      {format(new Date(review.submitted_at), "PPP 'at' p")}
-                    </CardDescription>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    {getRecommendationIcon(review.recommendation)}
-                    <DecisionBadge
-                      decisionType={review.recommendation}
-                      config={reviewRecommendationConfig}
-                      displayLabel={review.recommendation_display}
-                    />
-                  </div>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                {/* Review Summary */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {/* Reviewer Info */}
-                  {!review.is_anonymous && review.reviewer_info && (
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Reviewer
-                      </p>
-                      <p className="font-medium">
-                        {review.reviewer_info.full_name ||
-                          review.reviewer_info.display_name ||
-                          "Anonymous"}
-                      </p>
-                    </div>
-                  )}
-
-                  {review.is_anonymous && (
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Reviewer
-                      </p>
-                      <p className="font-medium text-muted-foreground">
-                        Anonymous Review
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Confidence Level */}
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">
-                      Confidence Level
-                    </p>
-                    <div className="flex items-center gap-2">
-                      <div className="flex">
-                        {[...Array(5)].map((_, i) => (
-                          <div
-                            key={i}
-                            className={`h-2 w-2 rounded-full mr-1 ${
-                              i < review.confidence_level
-                                ? "bg-primary"
-                                : "bg-muted"
-                            }`}
-                          />
-                        ))}
-                      </div>
-                      <span className="text-sm font-medium">
-                        {review.confidence_level}/5
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Review Time */}
-                  {review.review_time_days !== undefined && (
-                    <div>
-                      <p className="text-sm text-muted-foreground mb-1">
-                        Review Time
-                      </p>
-                      <p className="font-medium">
-                        {review.review_time_days} days
-                      </p>
-                    </div>
-                  )}
-                </div>
-
-                <Separator />
-
-                {/* Review Scores Preview */}
-                {review.scores && Object.keys(review.scores).length > 0 && (
-                  <div>
-                    <p className="text-sm font-semibold mb-2">Quality Scores</p>
-                    <div className="grid grid-cols-3 md:grid-cols-5 gap-2">
-                      {Object.entries(review.scores)
-                        .slice(0, 5)
-                        .map(([key, value]) => (
-                          <div
-                            key={key}
-                            className="text-center p-2 bg-muted/50 rounded"
-                          >
-                            <p className="text-xs text-muted-foreground capitalize truncate">
-                              {key.replace(/_/g, " ")}
-                            </p>
-                            <p className="text-sm font-semibold">
-                              {typeof value === "number"
-                                ? value.toFixed(1)
-                                : value}
-                              /10
-                            </p>
-                          </div>
-                        ))}
-                    </div>
-                    {review.overall_score !== undefined && (
-                      <div className="mt-2 text-center p-2 bg-primary/10 rounded">
-                        <p className="text-xs text-muted-foreground">
-                          Overall Score
-                        </p>
-                        <p className="text-lg font-bold text-primary">
-                          {review.overall_score.toFixed(1)}/10
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                <Separator />
-
-                {/* Review Text Preview */}
-                <div>
-                  <p className="text-sm font-semibold mb-2">Review Summary</p>
-                  <ScrollArea className="min-h-[100px] max-h-[500px] w-full rounded border bg-muted/30 p-4">
-                    <div
-                      className="text-sm text-muted-foreground line-clamp-3"
-                      dangerouslySetInnerHTML={{
-                        __html: review.review_text,
-                      }}
-                    />
-                  </ScrollArea>
-                </div>
-
-                {/* View Details Button */}
-                <div className="flex justify-end">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      router.push(`/editor/reviews/${review.id}`);
-                    }}
-                  >
-                    <Eye className="h-4 w-4 mr-2" />
-                    View Full Review
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
+            <div key={review.id}>
+              <ReviewSummaryCard
+                reviews={[review]}
+                showViewFullReview={true}
+                onViewFullReview={(reviewId) =>
+                  router.push(`/editor/reviews/${reviewId}`)
+                }
+                title={`Review ${index + 1}${
+                  review.review_round > 1
+                    ? ` (Round ${review.review_round})`
+                    : ""
+                }`}
+              />
+            </div>
           ))}
         </div>
       )}

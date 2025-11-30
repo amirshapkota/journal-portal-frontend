@@ -130,7 +130,7 @@ export function ScoreCard({ scoreData, pending }) {
           </div>
         </div>
 
-        <div className="mt-6 p-4 rounded-lg bg-muted/50 border border-border">
+        <div className="mt-6 p-4 rounded-lg bg-muted/50 border border-border relative">
           <p className="text-sm text-muted-foreground leading-relaxed">
             <span className="font-semibold text-foreground">How it works:</span>{" "}
             Your auto-score is calculated based on profile completeness and

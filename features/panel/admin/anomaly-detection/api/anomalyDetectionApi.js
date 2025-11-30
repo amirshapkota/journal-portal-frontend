@@ -4,8 +4,15 @@ import { instance } from "@/lib/instance";
  * Run comprehensive anomaly detection scan
  * @returns {Promise} API response with anomaly scan results
  */
-export const runAnomalyDetectionScan = async () => {
-  const response = await instance.get("/ml/anomaly-detection/scan/");
+/**
+ * Run comprehensive anomaly detection scan with filters, search, and pagination
+ * @param {Object} params - Query params: { type, search, page, page_size }
+ * @returns {Promise} API response with anomaly scan results
+ */
+export const runAnomalyDetectionScan = async (params = {}) => {
+  const response = await instance.get("/ml/anomaly-detection/scan/", {
+    params,
+  });
   return response.data;
 };
 

@@ -31,6 +31,12 @@ const authSlice = createSlice({
       }
     },
 
+    updateVerificationStatus: (state, action) => {
+      if (state.userData) {
+        state.userData.is_verified = action.payload.isVerified;
+      }
+    },
+
     logout: (state) => {
       state.status = false;
       state.userData = null;
@@ -54,5 +60,5 @@ export const persistAuthReducer = persistReducer(
   authSlice.reducer
 );
 
-export const { login, logout } = authSlice.actions;
+export const { login, logout, updateVerificationStatus } = authSlice.actions;
 export default authSlice.reducer;
