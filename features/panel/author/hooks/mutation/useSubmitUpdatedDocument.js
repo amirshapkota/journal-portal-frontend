@@ -15,10 +15,11 @@ export function useSubmitUpdatedDocument({ documentId, onSuccess, onError }) {
   return useMutation({
     mutationFn: (changeSummary) =>
       createDocumentVersion(documentId, changeSummary),
-    onSuccess: (data, ...args) => {
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["submissions"] });
+      queryClient.invalidateQueries({ queryKey: ["document-versions"] });
 
-      if (onSuccess) onSuccess(data, ...args);
+      if (onSuccess) onSuccess();
     },
     onError: (error, ...args) => {
       if (onError) onError(error, ...args);
