@@ -38,6 +38,8 @@ import { useConfigureOJSConnection } from "../../hooks/mutation/useConfigureOJSC
 import { useDisconnectOJS } from "../../hooks/mutation/useDisconnectOJS";
 import { LoadingScreen, ErrorCard } from "@/features/shared";
 import ConfirmationPopup from "@/features/shared/components/ConfirmationPopup";
+import Image from "next/image";
+import { useTheme } from "next-themes";
 
 const ojsConnectionSchema = z.object({
   ojs_api_url: z
@@ -65,6 +67,8 @@ export function OJSConnectionSettings({ journalId }) {
 
   const configureOJSMutation = useConfigureOJSConnection();
   const disconnectOJSMutation = useDisconnectOJS();
+
+  const { resolvedTheme } = useTheme();
 
   const form = useForm({
     resolver: zodResolver(ojsConnectionSchema),
@@ -131,6 +135,23 @@ export function OJSConnectionSettings({ journalId }) {
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
+                {resolvedTheme === "light" ? (
+                  <Image
+                    src="/ojs.png"
+                    alt="OJS Logo"
+                    width={55}
+                    height={55}
+                    className="inline-block  h-fit"
+                  />
+                ) : (
+                  <Image
+                    src="/ojs-white.png"
+                    alt="OJS Logo"
+                    width={55}
+                    height={55}
+                    className="inline-block  h-fit"
+                  />
+                )}
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
                 <CardTitle>OJS Connected</CardTitle>
               </div>
