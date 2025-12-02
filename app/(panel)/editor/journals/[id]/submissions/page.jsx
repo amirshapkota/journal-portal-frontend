@@ -182,6 +182,24 @@ export default function JournalSubmissionsPage() {
             View and manage all submissions for this journal
           </p>
         </div>
+        <Button
+          onClick={handleSyncFromOJS}
+          disabled={importFromOJSMutation.isPending}
+          variant="secondary"
+          size="sm"
+        >
+          {importFromOJSMutation.isPending ? (
+            <>
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              Syncing...
+            </>
+          ) : (
+            <>
+              <RefreshCw className="h-4 w-4 mr-2" />
+              Sync from OJS
+            </>
+          )}
+        </Button>
       </div>
 
       {/* Journal Info Card */}
@@ -197,24 +215,6 @@ export default function JournalSubmissionsPage() {
       <div className="space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold text-foreground">Submissions</h2>
-          <Button
-            onClick={handleSyncFromOJS}
-            disabled={importFromOJSMutation.isPending}
-            variant="outline"
-            size="sm"
-          >
-            {importFromOJSMutation.isPending ? (
-              <>
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                Syncing...
-              </>
-            ) : (
-              <>
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Sync from OJS
-              </>
-            )}
-          </Button>
         </div>
         {/* Filters */}
         <FilterToolbar>
