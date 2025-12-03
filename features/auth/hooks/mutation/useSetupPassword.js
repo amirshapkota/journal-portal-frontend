@@ -11,7 +11,7 @@ export const useSetupPassword = () => {
     onError: (error) => {
       const errorMessage =
         error?.response?.data?.message ||
-        error?.response?.data?.error ||
+        error?.response?.data?.detail ||
         "Failed to setup password";
       toast.error(errorMessage);
     },
