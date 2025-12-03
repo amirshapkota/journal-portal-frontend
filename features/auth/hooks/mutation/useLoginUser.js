@@ -24,11 +24,11 @@ export const useLoginUser = ({ reset }) => {
       broadcast("login");
 
       if (
-        userData?.user?.is_verified === false &&
+        userData?.user?.email_verified === false &&
         userData?.user?.roles.length === 1
       ) {
         router.push(
-          `/pending-verification?is_verified=${userData?.user?.is_verified}`
+          `/pending-verification?email_verified=${userData?.user?.email_verified}`
         );
         return;
       }
