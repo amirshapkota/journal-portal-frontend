@@ -6,7 +6,7 @@ export const useRequestPasswordSetup = () => {
   return useMutation({
     mutationFn: requestPasswordSetup,
     onSuccess: (data) => {
-      toast.success("Password setup link sent to your email");
+      toast.success(data.message || "Password setup link sent to your email");
     },
     onError: (error) => {
       const errorMessage =
