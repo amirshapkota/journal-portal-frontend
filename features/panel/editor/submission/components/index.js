@@ -8,3 +8,6 @@ export { EditorialDecisionForm } from "./EditorialDecisionForm";
 
 // Export copyediting components
 export * from "./copyediting";
+
+// Export production components
+export * from "./production";

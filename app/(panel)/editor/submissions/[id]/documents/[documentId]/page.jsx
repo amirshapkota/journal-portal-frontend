@@ -64,11 +64,7 @@ export default function EditorDocumentViewPage() {
             {documentData?.document_type} • View and Comment
           </p>
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => router.push(`/editor/submissions/${submissionId}`)}
-        >
+        <Button variant="ghost" size="sm" onClick={() => router.back()}>
           <ArrowLeft className="h-4 w-4 mr-2" />
           Back to Submission
         </Button>

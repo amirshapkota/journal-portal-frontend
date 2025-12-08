@@ -28,6 +28,7 @@ import {
   DecisionBadge,
   decisionTypeConfig,
   ErrorCard,
+  ReviewSummaryCard,
   StatusBadge,
   statusConfig,
   useAssignReviewers,
@@ -42,10 +43,11 @@ import { ReviewerRecommendations } from "@/features/panel/editor/submission/comp
 import { InvitedReviewersCard } from "@/features/panel/editor/submission/components/InvitedReviewersCard";
 import { EditorialDecisionForm } from "@/features/panel/editor/submission/components/EditorialDecisionForm";
 
-export default function EditorSubmissionDetailPage() {
+export default function AssignedJournalSubmissionDetailPage() {
   const params = useParams();
   const router = useRouter();
-  const submissionId = params?.id;
+  const submissionId = params?.submissionId;
+  const journalId = params?.id;
   const [assigningReviewerId, setAssigningReviewerId] = useState(null);
   const [isSyncDialogOpen, setIsSyncDialogOpen] = useState(false);
 
@@ -191,54 +193,14 @@ export default function EditorSubmissionDetailPage() {
             size="sm"
             className={"mb-4"}
             onClick={() =>
-              router.push(
-                `/editor/journals/${submission?.journal.id}/submissions`
-              )
+              router.push(`/editor/assigned-journals/${journalId}/submissions`)
             }
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back
+            Back to Submissions
           </Button>
           <h1 className="text-3xl font-bold">Submission Details</h1>
           <p className="text-muted-foreground">Review and manage submission</p>
-        </div>
-        <div className="flex items-center gap-3">
-          <Button
-            onClick={() =>
-              router.push(`/editor/submissions/${submissionId}/copyediting`)
-            }
-          >
-            <FileEdit className="h-4 w-4 mr-2" />
-            Copyediting
-          </Button>
-          <Button
-            onClick={() =>
-              router.push(`/editor/submissions/${submissionId}/production`)
-            }
-          >
-            <Package className="h-4 w-4 mr-2" />
-            Production
-          </Button>
-          {submission?.journal?.ojs_connection_status?.configured && (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => setIsSyncDialogOpen(true)}
-              disabled={isSyncing}
-            >
-              {isSyncing ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Syncing...
-                </>
-              ) : (
-                <>
-                  <RefreshCw className="h-4 w-4 mr-2" />
-                  Sync to OJS
-                </>
-              )}
-            </Button>
-          )}
         </div>
       </div>
 
@@ -352,11 +314,14 @@ export default function EditorSubmissionDetailPage() {
               </div>
             )}
 
-            <EditorialDecisionForm
-              submissionId={submissionId}
-              reviews={reviews}
-              submission={submission}
-            />
+            {reviews.length > 0 && (
+              <ReviewSummaryCard
+                reviews={reviews}
+                showViewFullReview={false}
+                showConfidentialComments={true}
+                cardPadding={false}
+              />
+            )}
           </CardContent>
         </Card>
       )}
