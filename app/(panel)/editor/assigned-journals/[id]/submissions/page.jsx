@@ -138,7 +138,11 @@ export default function MyJournalSubmissionsPage() {
         <Button
           variant="ghost"
           size="sm"
-          onClick={() => router.push(`/editor/submissions/${row.id}`)}
+          onClick={() =>
+            router.push(
+              `/editor/assigned-journals/${journalId}/submissions/${row.id}`
+            )
+          }
         >
           <FileText className="h-4 w-4 mr-2" />
           View
@@ -155,7 +159,7 @@ export default function MyJournalSubmissionsPage() {
           journalError?.message ||
           "Unable to load journal details. Please try again."
         }
-        onBack={() => router.push("/editor/my-journals")}
+        onBack={() => router.push("/editor/assigned-journals")}
       />
     );
   }
@@ -170,10 +174,10 @@ export default function MyJournalSubmissionsPage() {
             <Button
               variant="ghost"
               className={"hover:text-primary-foreground"}
-              onClick={() => router.push("/editor/my-journals")}
+              onClick={() => router.push("/editor/assigned-journals")}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Back to My Journals
+              Back to Assigned Journals
             </Button>
           </div>
           <div className="flex items-center gap-3">

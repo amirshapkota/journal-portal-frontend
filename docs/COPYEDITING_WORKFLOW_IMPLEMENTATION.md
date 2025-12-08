@@ -4,10 +4,6 @@
 
 Complete implementation of the Copyediting workflow UI for the journal portal, following the existing project architecture and reusing established components and patterns.
 
-## Implementation Date
-
-January 2024
-
 ## What Was Built
 
 ### 1. Main Page Structure

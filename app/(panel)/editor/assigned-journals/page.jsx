@@ -13,9 +13,11 @@ import {
 } from "@/features/shared";
 import { useGetMyAssignedJournals } from "@/features/panel/editor/journal";
 import { Badge } from "@/components/ui/badge";
+import { useSelector } from "react-redux";
 
 export default function MyAssignedJournalsPage() {
   const router = useRouter();
+  const userEmail = useSelector((state) => state.auth.userData.email);
 
   // Fetch journals where the current user is a staff member
   const {
@@ -48,6 +50,18 @@ export default function MyAssignedJournalsPage() {
     );
   };
 
+  const getRoleBadge = (role) => {
+    const roleName = {
+      EDITOR_IN_CHIEF: "Editor-in-Chief",
+      MANAGING_EDITOR: "Managing Editor",
+      ASSOCIATE_EDITOR: "Associate Editor",
+      SECTION_EDITOR: "Section Editor",
+      GUEST_EDITOR: "Guest Editor",
+      REVIEWER: "Reviewer",
+    };
+    return roleName[role] || "Staff";
+  };
+
   const columns = [
     {
       key: "title",
@@ -66,19 +80,13 @@ export default function MyAssignedJournalsPage() {
       key: "my_role",
       header: "My Role",
       render: (row) => {
-        // Find the current user's role in this journal's staff_members
-        const myStaffMember = row.staff_members?.find(
-          (staff) => staff.profile?.user_email === row.my_staff_role?.email
+        const myStaffEntry = row.staff_members?.find(
+          (member) => member.email === userEmail
         );
-        const role =
-          myStaffMember?.role_display ||
-          row.my_staff_role?.role_display ||
-          "Staff";
-        const roleKey = myStaffMember?.role || row.my_staff_role?.role || "";
-
+        const roleKey = myStaffEntry?.role;
         return (
           <Badge variant="outline" className={getRoleBadgeColor(roleKey)}>
-            {role}
+            {getRoleBadge(roleKey)}
           </Badge>
         );
       },
@@ -89,7 +97,7 @@ export default function MyAssignedJournalsPage() {
       render: (row) => (
         <div className="flex items-center gap-2 text-sm">
           <FileText className="h-4 w-4 text-muted-foreground" />
-          <span>{row.submissions_count || 0}</span>
+          <span>{row.submission_count || 0}</span>
         </div>
       ),
     },
@@ -128,7 +136,7 @@ export default function MyAssignedJournalsPage() {
           variant="ghost"
           size="sm"
           onClick={() =>
-            router.push(`/editor/my-journals/${row.id}/submissions`)
+            router.push(`/editor/assigned-journals/${row.id}/submissions`)
           }
         >
           <Eye className="h-4 w-4 mr-2" />

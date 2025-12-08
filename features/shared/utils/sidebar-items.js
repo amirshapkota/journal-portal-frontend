@@ -175,7 +175,7 @@ export const sidebarConfig = {
     },
     {
       name: "Assigned Journals",
-      path: "/editor/my-journals",
+      path: "/editor/assigned-journals",
       icon: BookCheck,
     },
     {
