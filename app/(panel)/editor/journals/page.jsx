@@ -97,7 +97,7 @@ export default function JournalsPage() {
             Manage all academic journals and their submission settings.
           </p>
         </div>
-        {journals?.length < 1 && (
+        {journals && journals?.length < 1 && (
           <Button
             variant="secondary"
             onClick={() => setIsFormOpen(true)}

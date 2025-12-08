@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Eye, CheckCircle, Calendar } from "lucide-react";
 import { DataTable } from "@/features/shared";
 import { formatDistanceToNow } from "date-fns";
+import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
 
 const statusBadgeColors = {
   inactive:
@@ -33,7 +34,7 @@ export default function InactiveJournalsTable({
       key: "publisher",
       header: "Publisher",
       cellClassName: "text-muted-foreground",
-      render: (row) => row.publisher || "-",
+      render: (row) => <EllipsisTooltip text={row.publisher || "-"} />,
     },
     {
       key: "editor_in_chief",
@@ -109,6 +110,7 @@ export default function InactiveJournalsTable({
       isPending={isPending}
       error={error}
       emptyMessage="No inactive journals found"
+      tableClassName="bg-card border flex justify-center"
     />
   );
 }

@@ -14,6 +14,7 @@ import {
 import { useGetMyAssignedJournals } from "@/features/panel/editor/journal";
 import { Badge } from "@/components/ui/badge";
 import { useSelector } from "react-redux";
+import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
 
 export default function MyAssignedJournalsPage() {
   const router = useRouter();
@@ -69,7 +70,7 @@ export default function MyAssignedJournalsPage() {
       cellClassName: "font-medium",
       render: (row) => (
         <div className="max-w-md">
-          <p className="font-medium truncate">{row.title}</p>
+          <EllipsisTooltip text={row.title || "-"} />
           {row.abbreviation && (
             <p className="text-xs text-muted-foreground">{row.abbreviation}</p>
           )}

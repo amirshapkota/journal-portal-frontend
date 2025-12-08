@@ -64,7 +64,7 @@ export function JournalInfoCard({ journal, isPending = false }) {
         </div>
         <h3 className="font-semibold text-lg">Journal Information</h3>
       </div>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-8 gap-y-4 text-sm">
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-x-8 gap-y-4 text-sm">
         <div className="flex items-start gap-2">
           <span className="font-medium text-foreground/80 min-w-[140px]">
             Title:
