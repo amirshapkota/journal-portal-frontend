@@ -55,7 +55,7 @@ export function CopyeditingDraftFiles({
     data: files = [],
     isLoading,
     error,
-  } = useCopyeditingFiles({ assignmentId });
+  } = useCopyeditingFiles({ assignmentId, file_type: "DRAFT" });
 
   // Delete mutation
   const deleteMutation = useDeleteCopyeditingFile(assignmentId);
@@ -190,10 +190,10 @@ export function CopyeditingDraftFiles({
                           size="sm"
                           onClick={() =>
                             router.push(
-                              `/author/submissions/active/${submissionId}/copyediting/edit/${file.id}`
+                              `/author/submissions/active/${submissionId}/copyediting/edit/${file.id}?readOnly=true`
                             )
                           }
-                          title="View in SuperDoc"
+                          title="View in SuperDoc (Read-Only)"
                         >
                           <Eye className="h-4 w-4 sm:mr-2" />
                           <span className="hidden sm:inline">View</span>

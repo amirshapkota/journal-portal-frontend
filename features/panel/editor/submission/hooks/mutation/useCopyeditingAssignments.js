@@ -114,6 +114,9 @@ export function useCompleteCopyeditingAssignment() {
       queryClient.invalidateQueries({
         queryKey: ["copyediting-assignment", data.id],
       });
+      queryClient.invalidateQueries({
+        queryKey: ["editor-submission"],
+      });
     },
     onError: (error) => {
       const message =

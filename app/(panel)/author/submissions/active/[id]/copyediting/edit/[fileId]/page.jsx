@@ -1,9 +1,9 @@
 "use client";
 
-import { useRouter, useParams } from "next/navigation";
+import { useRouter, useParams, useSearchParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ErrorCard,
   LoadingScreen,
@@ -11,6 +11,8 @@ import {
   useGetSubmissionById,
   useGetMe,
 } from "@/features";
+import { useConfirmFileFinal } from "@/features/panel/editor/submission/hooks";
+import { toast } from "sonner";
 
 /**
  * Author Copyediting File Editor Page
@@ -18,16 +20,24 @@ import {
  * Route: /author/submissions/active/[id]/copyediting/edit/[fileId]
  *
  * Permissions:
- * - Authors can edit copyedited files (with tracked changes)
- * - Draft files are read-only for authors (handled in CopyeditingDraftFiles component)
+ * - Authors can edit COPYEDITED files (readOnly=false from query param)
+ * - Authors can view DRAFT files as read-only (readOnly=true from query param)
+ * - Authors can view AUTHOR_FINAL files as read-only (readOnly=true from query param)
  */
 export default function AuthorCopyeditingFileEditorPage() {
   const router = useRouter();
   const params = useParams();
+  const searchParams = useSearchParams();
   const submissionId = params?.id;
   const fileId = params?.fileId;
 
+  // Get readOnly from URL query parameter (defaults to true for safety)
+  const isReadOnly = searchParams?.get("readOnly") !== "false";
+
   const { data: user } = useGetMe();
+
+  // Author uses confirm-final endpoint
+  const confirmMutation = useConfirmFileFinal();
 
   const {
     data: submission,
@@ -41,6 +51,28 @@ export default function AuthorCopyeditingFileEditorPage() {
 
   const handleSaveSuccess = (updatedFile) => {
     console.log("File saved successfully by author:", updatedFile);
+  };
+
+  const handleConfirmFinal = async (fileId) => {
+    return new Promise((resolve, reject) => {
+      confirmMutation.mutate(
+        { fileId, data: {} },
+        {
+          onSuccess: () => {
+            toast.success("File confirmed as final");
+            resolve();
+          },
+          onError: (error) => {
+            const message =
+              error?.response?.data?.detail ||
+              error?.message ||
+              "Failed to confirm file";
+            toast.error(message);
+            reject(error);
+          },
+        }
+      );
+    });
   };
 
   if (isSubmissionLoading) {
@@ -66,7 +98,7 @@ export default function AuthorCopyeditingFileEditorPage() {
 
         <div>
           <h1 className="text-3xl font-bold tracking-tight">
-            Review & Edit Copyedited File
+            {isReadOnly ? "View File" : "Review & Edit Copyedited File"}
           </h1>
           <p className="text-muted-foreground mt-2">
             {submission?.title || "Loading..."}
@@ -77,24 +109,35 @@ export default function AuthorCopyeditingFileEditorPage() {
             </p>
           )}
           <p className="text-sm text-muted-foreground mt-2">
-            You can review tracked changes, accept/reject edits, and make
-            additional changes.
+            {isReadOnly
+              ? "You can view the file and tracked changes."
+              : "You can review tracked changes, accept/reject edits, and make additional changes."}
           </p>
         </div>
       </div>
 
-      {/* CopyeditingSuperDocEditor */}
-      <Card className="p-0 overflow-hidden">
-        <CopyeditingSuperDocEditor
-          fileId={fileId}
-          userData={{
-            first_name: user?.first_name,
-            email: user?.email,
-          }}
-          readOnly={true}
-          commentsReadOnly={false}
-          onSaveSuccess={handleSaveSuccess}
-        />
+      <Card>
+        <CardContent>
+          {/* CopyeditingSuperDocEditor */}
+
+          <CopyeditingSuperDocEditor
+            fileId={fileId}
+            userData={{
+              first_name: user?.first_name,
+              email: user?.email,
+            }}
+            readOnly={isReadOnly}
+            commentsReadOnly={false}
+            onSaveSuccess={handleSaveSuccess}
+            className="border rounded-lg"
+            goBack={`/author/submissions/active/${submissionId}/copyediting`}
+            onApprove={isReadOnly ? null : handleConfirmFinal}
+            approveButtonText="Confirm as Final"
+            approveDialogTitle="Confirm File as Final"
+            approveDialogDescription="Are you sure you want to confirm this file as final? This will mark it as author-approved and ready for final completion."
+            showApproveButton={!isReadOnly}
+          />
+        </CardContent>
       </Card>
     </div>
   );

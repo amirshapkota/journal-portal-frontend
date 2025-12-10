@@ -41,7 +41,6 @@ export default function SuperDocEditor({
     onSuccess: () => {
       toast.success("Document version created successfully");
       router.push(`/author/submissions/drafts/${id}`);
-      
     },
     onError: (error) => {
       toast.error(

@@ -2,15 +2,19 @@
 
 import { useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, Save, Download } from "lucide-react";
+import { Loader2, Save, Download, CheckCircle2 } from "lucide-react";
 import "@harbour-enterprises/superdoc/style.css";
 import {
   loadCopyeditingFile,
   saveCopyeditingFile,
 } from "@/features/panel/editor/submission/api";
+import { useApproveCopyeditingFile } from "@/features/panel/editor/submission/hooks/mutation/useCopyeditingFiles";
+import ConfirmationPopup from "@/features/shared/components/ConfirmationPopup";
+import { ErrorCard } from "..";
+import { useRouter } from "next/navigation";
 
 /**
  * Copyediting SuperDoc Editor Component
@@ -28,35 +32,59 @@ export default function CopyeditingSuperDocEditor({
   className = "",
   readOnly = false,
   commentsReadOnly = false,
-  onSaveSuccess,
+  goBack,
+  onApprove, // Pass approve/confirm function from parent
+  approveButtonText = "Approve Copyediting", // Customizable button text
+  approveDialogTitle = "Approve Copyediting File",
+  approveDialogDescription = "Are you sure you want to approve this copyediting file? This action cannot be undone.",
+  showApproveButton = true, // Show/hide approve button
 }) {
   const queryClient = useQueryClient();
   const superDocInstanceRef = useRef(null);
   const isInitializedRef = useRef(false);
   const [hasUnsavedChanges, setHasUnsavedChanges] = useState(false);
-  const [fileData, setFileData] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [isApproveDialogOpen, setIsApproveDialogOpen] = useState(false);
+  const [isApproving, setIsApproving] = useState(false);
+  const router = useRouter();
+
+  const handleApprove = async () => {
+    if (!fileId) return;
+
+    if (onApprove) {
+      // Use custom approve function from parent
+      setIsApproving(true);
+      try {
+        await onApprove(fileId);
+        setIsApproveDialogOpen(false);
+        if (goBack) {
+          router.push(goBack);
+        }
+      } catch (error) {
+        console.error("Approve error:", error);
+      } finally {
+        setIsApproving(false);
+      }
+    }
+  };
 
   // Load file mutation
-  const loadFileMutation = useMutation({
-    mutationFn: () => loadCopyeditingFile(fileId),
-    onSuccess: (data) => {
-      setFileData(data);
-      setIsLoading(false);
-      toast.success("File loaded successfully");
-    },
-    onError: (error) => {
-      setIsLoading(false);
-      toast.error(error?.response?.data?.detail || "Failed to load file");
-    },
+  const {
+    data: fileData,
+    isPending: isFileLoadPending,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["copyediting-file", fileId],
+    queryFn: () => loadCopyeditingFile(fileId),
+    staleTime: 5 * 60 * 1000,
   });
 
   // Save file mutation
   const saveMutation = useMutation({
     mutationFn: (formData) => saveCopyeditingFile(fileId, formData),
+
     onSuccess: (data) => {
       setHasUnsavedChanges(false);
-      setFileData(data.file); // Update file data with new last_edited info
       toast.success("File saved successfully");
 
       // Invalidate queries to refresh file lists
@@ -64,21 +92,14 @@ export default function CopyeditingSuperDocEditor({
         queryKey: ["copyediting-files"],
       });
 
-      if (onSaveSuccess) {
-        onSaveSuccess(data.file);
-      }
+      queryClient.invalidateQueries({
+        queryKey: ["copyediting-file"],
+      });
     },
     onError: (error) => {
       toast.error(error?.response?.data?.detail || "Failed to save file");
     },
   });
-
-  // Load file on mount
-  useEffect(() => {
-    if (fileId) {
-      loadFileMutation.mutate();
-    }
-  }, [fileId]);
 
   // Handle save button click
   const handleSave = async () => {
@@ -189,9 +210,9 @@ export default function CopyeditingSuperDocEditor({
         isInitializedRef.current = false;
       }
     };
-  }, [fileData?.id, readOnly, commentsReadOnly, userData]);
+  }, [fileData, readOnly, commentsReadOnly, userData]);
 
-  if (isLoading || loadFileMutation.isPending) {
+  if (isFileLoadPending) {
     return (
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
@@ -204,26 +225,36 @@ export default function CopyeditingSuperDocEditor({
     );
   }
 
-  if (loadFileMutation.isError) {
+  if (error) {
     return (
-      <div className="flex items-center justify-center h-96">
-        <div className="text-center text-destructive">
-          <p>Error loading document</p>
-          <Button
-            variant="outline"
-            size="sm"
-            className="mt-2"
-            onClick={() => loadFileMutation.mutate()}
-          >
-            Retry
-          </Button>
-        </div>
-      </div>
+      <ErrorCard
+        title="Failed to load files"
+        description={
+          error.message || " Unable to load the document. Please try again."
+        }
+        onRetry={refetch}
+      />
     );
   }
 
   return (
     <>
+      <div className="p-3 border rounded-lg bg-muted/50 mb-4">
+        <div className="grid grid-cols-3 gap-2 text-sm">
+          <div>
+            <span className="font-medium">File:</span>{" "}
+            {fileData.original_filename}
+          </div>
+          <div>
+            <span className="font-medium">Size:</span>{" "}
+            {(fileData.file_size / (1024 * 1024)).toFixed(2)} MB
+          </div>
+          <div>
+            <span className="font-medium">Last Edited:</span>{" "}
+            {new Date(fileData.last_edited_at).toLocaleString()}
+          </div>
+        </div>
+      </div>
       {!readOnly && (
         <div className="flex items-center justify-between p-3 border-b bg-card">
           <div className="flex items-center gap-2">
@@ -245,7 +276,7 @@ export default function CopyeditingSuperDocEditor({
               </Badge>
             )}
           </div>
-          <div>
+          <div className="flex gap-2">
             <Button
               variant="default"
               size="sm"
@@ -259,6 +290,21 @@ export default function CopyeditingSuperDocEditor({
               )}
               Save Document
             </Button>
+            {showApproveButton && (
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => setIsApproveDialogOpen(true)}
+                disabled={isApproving}
+              >
+                {isApproving ? (
+                  <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                ) : (
+                  <CheckCircle2 className="h-4 w-4 mr-2" />
+                )}
+                {approveButtonText}
+              </Button>
+            )}
           </div>
         </div>
       )}
@@ -286,7 +332,7 @@ export default function CopyeditingSuperDocEditor({
         <div className="flex flex-col items-center relative">
           <div
             id="copyediting-superdoc-toolbar"
-            className="bg-white border-b sticky top-0 z-4 border-gray-200 overflow-x-auto max-w-5xl w-fit"
+            className="bg-white border-b sticky top-0 z-4  border-gray-200  overflow-x-auto max-w-5xl w-fit"
           />
           <div
             id="copyediting-superdoc-editor"
@@ -300,6 +346,20 @@ export default function CopyeditingSuperDocEditor({
           />
         </div>
       </div>
+
+      <ConfirmationPopup
+        open={isApproveDialogOpen}
+        onOpenChange={setIsApproveDialogOpen}
+        title={approveDialogTitle}
+        description={approveDialogDescription}
+        confirmText="Confirm"
+        cancelText="Cancel"
+        isPending={isApproving}
+        isSuccess={false}
+        onConfirm={handleApprove}
+        variant="primary"
+        icon={<CheckCircle2 className="h-8 w-8 text-green-600 mx-auto mb-2" />}
+      />
     </>
   );
 }

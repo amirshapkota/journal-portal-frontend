@@ -27,18 +27,19 @@ import {
 import { useCopyeditingAssignmentParticipants } from "../../hooks";
 import { AddParticipantDialog } from "./AddParticipantDialog";
 
-
 /**
  * Component to display and manage copyediting participants
  * Shows assigned copyeditors, authors, and editors
  */
-export function CopyeditingParticipants({ assignmentId, isAuthorView = false }) {
+export function CopyeditingParticipants({
+  assignmentId,
+  isAuthorView = false,
+}) {
   const queryClient = useQueryClient();
   const [removingUserId, setRemovingUserId] = useState(null);
   const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);
   const [userToRemove, setUserToRemove] = useState(null);
   const [isAddParticipantOpen, setIsAddParticipantOpen] = useState(false);
-  
 
   // Fetch participants from API
   const {

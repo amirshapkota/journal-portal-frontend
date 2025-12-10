@@ -27,10 +27,11 @@ import {
   useGetSubmissionById,
 } from "@/features";
 import { CopyeditingDraftFiles } from "@/features/panel/editor/submission/components/copyediting/CopyeditingDraftFiles";
-import { CopyeditedFiles } from "@/features/panel/editor/submission/components/copyediting/CopyeditedFiles";
 import { CopyeditingParticipants } from "@/features/panel/editor/submission/components/copyediting/CopyeditingParticipants";
 import { CopyeditingDiscussions } from "@/features/panel/editor/submission/components";
 import { CopyeditingAssignmentCard } from "@/features/panel/editor/submission/components/copyediting/CopyeditingAssignmentCard";
+import { AuthorConfirmCopyeditedFiles } from "@/features/panel/editor/submission/components/copyediting/AuthorConfirmCopyeditedFiles";
+import { AuthorViewFinalFiles } from "@/features/panel/author/components/copyediting/AuthorViewFinalFiles";
 import { Card } from "@/components/ui/card";
 
 /**
@@ -116,8 +117,8 @@ export default function AuthorCopyeditingPage() {
                   Copyediting Help
                 </Button>
               </SheetTrigger>
-              <SheetContent className="w-full sm:max-w-lg overflow-y-auto">
-                <SheetHeader>
+              <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-6">
+                <SheetHeader className="p-0">
                   <SheetTitle>Copyediting Workflow Guide</SheetTitle>
                   <SheetDescription>
                     Understanding the copyediting process
@@ -197,8 +198,8 @@ export default function AuthorCopyeditingPage() {
       </Card>
 
       {/* Main Content Tabs */}
-      <Tabs defaultValue="copyedited" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 lg:w-fit lg:grid-cols-3">
+      <Tabs defaultValue="draft" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-4 lg:w-fit lg:grid-cols-4">
           <TabsTrigger value="draft" className="gap-2">
             <FileText className="h-4 w-4" />
             <span className="hidden sm:inline">Draft Files</span>
@@ -209,6 +210,11 @@ export default function AuthorCopyeditingPage() {
             <span className="hidden sm:inline">Copyedited Files</span>
             <span className="sm:hidden">Edited</span>
           </TabsTrigger>
+          <TabsTrigger value="final" className="gap-2">
+            <FileText className="h-4 w-4" />
+            <span className="hidden sm:inline">Final Files</span>
+            <span className="sm:hidden">Final</span>
+          </TabsTrigger>
           <TabsTrigger value="discussions" className="gap-2">
             <MessageSquare className="h-4 w-4" />
             <span className="hidden sm:inline">Discussions</span>
@@ -218,7 +224,7 @@ export default function AuthorCopyeditingPage() {
 
         {/* Draft Files Tab - Read Only for Authors */}
         <TabsContent value="draft" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <CopyeditingDraftFiles
                 assignmentId={assignmentId}
@@ -236,16 +242,32 @@ export default function AuthorCopyeditingPage() {
           </div>
         </TabsContent>
 
-        {/* Copyedited Files Tab - Editable for Authors */}
+        {/* Copyedited Files Tab - Author Confirmation */}
         <TabsContent value="copyedited" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <CopyeditedFiles
+              <AuthorConfirmCopyeditedFiles
                 assignmentId={assignmentId}
                 submission={submission}
                 submissionId={submissionId}
-                readOnly={false} // Authors can edit copyedited files
+              />
+            </div>
+            <div>
+              <CopyeditingParticipants
+                assignmentId={assignmentId}
                 isAuthorView={true}
+              />
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* Final Files Tab - Read Only View */}
+        <TabsContent value="final" className="space-y-4">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <AuthorViewFinalFiles
+                assignmentId={assignmentId}
+                submissionId={submissionId}
               />
             </div>
             <div>
@@ -259,7 +281,7 @@ export default function AuthorCopyeditingPage() {
 
         {/* Discussions Tab - Authors can reply */}
         <TabsContent value="discussions" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <CopyeditingDiscussions
                 assignmentId={assignmentId}

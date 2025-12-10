@@ -226,7 +226,7 @@ export default function EditorSubmissionDetailPage() {
               Copyediting
             </Button>
           )}
-          {submission?.status === "COPYEDITED" && (
+          {submission?.status === "PRODUCTION" && (
             <Button
               onClick={() =>
                 router.push(`/editor/submissions/${submissionId}/production`)

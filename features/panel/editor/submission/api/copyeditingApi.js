@@ -167,9 +167,17 @@ export const removeCopyeditingParticipant = async (assignmentId, data) => {
  * @param {string} params.search - Search term
  * @returns {Promise} API response with files list
  */
-export const listCopyeditingFiles = async (assignmentId) => {
+export const listCopyeditingFiles = async (assignmentId, file_type = "") => {
   const response = await instance.get(
-    `submissions/copyediting/assignments/${assignmentId}/files/`
+    `submissions/copyediting/assignments/${assignmentId}/files/?file_type=${file_type}`
+  );
+  return response.data;
+};
+
+export const listCopyeditedFiles = async (assignmentId) => {
+  const response = await instance.get(
+    `submissions/copyediting/assignments/${assignmentId}/copyedited-files/
+`
   );
   return response.data;
 };
@@ -269,6 +277,48 @@ export const saveCopyeditingFile = async (fileId, formData) => {
         "Content-Type": "multipart/form-data",
       },
     }
+  );
+  return response.data;
+};
+
+/**
+ * Get copyedited files for an assignment
+ * @param {string} assignmentId - Assignment ID
+ * @returns {Promise} API response with copyedited files
+ */
+export const getCopyeditedFiles = async (assignmentId) => {
+  const response = await instance.get(
+    `submissions/copyediting/assignments/${assignmentId}/copyedited-files/`
+  );
+  return response.data;
+};
+
+/**
+ * Author confirms file as final
+ * @param {string} fileId - File ID
+ * @param {Object} data - Confirmation data
+ * @param {string} data.confirmation_notes - Optional notes from author
+ * @returns {Promise} API response
+ */
+export const confirmFileFinal = async (fileId, data = {}) => {
+  const response = await instance.post(
+    `submissions/copyediting/files/${fileId}/confirm-final/`,
+    data
+  );
+  return response.data;
+};
+
+/**
+ * Complete copyediting assignment (editor)
+ * @param {string} assignmentId - Assignment ID
+ * @param {Object} data - Completion data
+ * @param {string} data.completion_notes - Optional notes from editor
+ * @returns {Promise} API response
+ */
+export const completeCopyediting = async (assignmentId, data = {}) => {
+  const response = await instance.post(
+    `submissions/copyediting/assignments/${assignmentId}/complete/`,
+    data
   );
   return response.data;
 };
