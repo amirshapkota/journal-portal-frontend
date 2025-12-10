@@ -39,6 +39,11 @@ export const statusConfig = {
     text: "text-indigo-700 dark:text-primary-foreground",
     label: "Revised",
   },
+  PRODUCTION: {
+    bg: "bg-indigo-100 dark:bg-indigo-600",
+    text: "text-indigo-700 dark:text-primary-foreground",
+    label: "Production",
+  },
   ACCEPTED: {
     bg: "bg-green-100 dark:bg-green-600",
     text: "text-green-700 dark:text-primary-foreground",

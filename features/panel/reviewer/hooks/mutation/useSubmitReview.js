@@ -12,11 +12,12 @@ export const useSubmitReview = () => {
     mutationFn: submitReview,
     onSuccess: (data) => {
       toast.success("Review submitted successfully");
-      
+
       // Invalidate relevant queries
       queryClient.invalidateQueries({ queryKey: ["reviewAssignments"] });
       queryClient.invalidateQueries({ queryKey: ["reviewAssignment"] });
       queryClient.invalidateQueries({ queryKey: ["myReviews"] });
+      queryClient.invalidateQueries({ queryKey: ["my-analytics"] });
     },
     onError: (error) => {
       const errorMessage =

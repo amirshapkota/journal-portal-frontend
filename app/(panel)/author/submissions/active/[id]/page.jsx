@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Send } from "lucide-react";
+import { ArrowLeft, FileEdit, Send } from "lucide-react";
 import {
   RoleBasedRoute,
   LoadingScreen,
@@ -64,10 +64,6 @@ export default function ActiveDetailPage() {
     setVersionsDialogOpen(true);
   };
 
-  if (isSubmissionPending) {
-    return <LoadingScreen />;
-  }
-
   if (error) {
     return (
       <div className="space-y-6">
@@ -94,6 +90,7 @@ export default function ActiveDetailPage() {
     <>
       <div className="space-y-6">
         {/* Header */}
+        {isSubmissionPending && <LoadingScreen />}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
             <Button
@@ -124,10 +121,25 @@ export default function ActiveDetailPage() {
               </Button>
             </div>
           )}
+          {submission?.status === "COPYEDITING" && (
+            <Button
+              onClick={() =>
+                router.push(
+                  `/author/submissions/active/${submissionId}/copyediting`
+                )
+              }
+            >
+              <FileEdit className="h-4 w-4 mr-2" />
+              Copyediting
+            </Button>
+          )}
         </div>
 
         {/* Submission Details Card */}
-        <SubmissionDetailsCard submission={submission} />
+        <SubmissionDetailsCard
+          submission={submission}
+          isSubmissionPending={isSubmissionPending}
+        />
 
         {/* Review Summary Card (latest review only, no confidential comments) */}
         {reviewsData &&

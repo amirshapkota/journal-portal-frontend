@@ -43,22 +43,12 @@ export function CopyeditingDraftFiles({
 }) {
   const router = useRouter();
 
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [uploadData, setUploadData] = useState({
-    file_type: "DRAFT",
-    description: "",
-    file: null,
-  });
-
   // Fetch draft files using the hook
   const {
     data: files = [],
     isLoading,
     error,
-  } = useCopyeditingFiles({ assignmentId });
-
-  // Delete mutation
-  const deleteMutation = useDeleteCopyeditingFile(assignmentId);
+  } = useCopyeditingFiles({ assignmentId, file_type: "INITIAL_DRAFT" });
 
   const handleDownload = (fileUrl, fileName) => {
     const link = document.createElement("a");
@@ -67,12 +57,6 @@ export function CopyeditingDraftFiles({
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-  };
-
-  const handleDelete = (fileId) => {
-    if (confirm("Are you sure you want to delete this file?")) {
-      deleteMutation.mutate(fileId);
-    }
   };
 
   return (
@@ -190,10 +174,10 @@ export function CopyeditingDraftFiles({
                           size="sm"
                           onClick={() =>
                             router.push(
-                              `/author/submissions/active/${submissionId}/copyediting/edit/${file.id}`
+                              `/author/submissions/active/${submissionId}/copyediting/edit/${file.id}?readOnly=true`
                             )
                           }
-                          title="View in SuperDoc"
+                          title="View in SuperDoc (Read-Only)"
                         >
                           <Eye className="h-4 w-4 sm:mr-2" />
                           <span className="hidden sm:inline">View</span>

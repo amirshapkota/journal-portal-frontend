@@ -80,7 +80,7 @@ export function useApproveCopyeditingFile() {
         queryKey: ["copyediting-files"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-file", data.id],
+        queryKey: ["copyediting-file"],
       });
     },
     onError: (error) => {
@@ -112,6 +112,36 @@ export function useDeleteCopyeditingFile() {
         error?.response?.data?.detail ||
         error?.message ||
         "Failed to delete file";
+      toast.error(message);
+    },
+  });
+}
+
+/**
+ * Hook to confirm file as final (author action)
+ */
+export function useConfirmFileFinal() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({ fileId, data }) => {
+      const { confirmFileFinal } = require("../../api");
+      return confirmFileFinal(fileId, data);
+    },
+    onSuccess: (data) => {
+      toast.success("File confirmed as final successfully");
+      queryClient.invalidateQueries({
+        queryKey: ["copyediting-files"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["copyediting-file", data.file?.id],
+      });
+    },
+    onError: (error) => {
+      const message =
+        error?.response?.data?.detail ||
+        error?.message ||
+        "Failed to confirm file";
       toast.error(message);
     },
   });

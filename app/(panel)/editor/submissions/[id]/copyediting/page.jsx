@@ -36,6 +36,7 @@ import { AssignCopyeditorDialog } from "@/features/panel/editor/submission/compo
 import { CopyeditingParticipants } from "@/features/panel/editor/submission/components/copyediting/CopyeditingParticipants";
 import { CopyeditingDiscussions } from "@/features/panel/editor/submission/components";
 import { CopyeditingAssignmentCard } from "@/features/panel/editor/submission/components/copyediting/CopyeditingAssignmentCard";
+import { EditorCompleteCopyediting } from "@/features/panel/editor/submission/components/copyediting/EditorCompleteCopyediting";
 import { Card } from "@/components/ui/card";
 
 export default function CopyeditingWorkflowPage() {
@@ -128,13 +129,6 @@ export default function CopyeditingWorkflowPage() {
                 )}
               </Button>
             )}
-            <Button
-              onClick={() => setIsAssignDialogOpen(true)}
-              variant="outline"
-            >
-              <UserPlus className="h-4 w-4 mr-2" />
-              Assign Copyeditor
-            </Button>
 
             {/* Help Drawer */}
             <Sheet>
@@ -264,7 +258,7 @@ export default function CopyeditingWorkflowPage() {
 
       {/* Main Content Tabs */}
       <Tabs defaultValue="draft" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3 lg:w-fit lg:grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4 lg:w-fit lg:grid-cols-4">
           <TabsTrigger value="draft" className="gap-2">
             <FileText className="h-4 w-4" />
             <span className="hidden sm:inline">Draft Files</span>
@@ -280,10 +274,15 @@ export default function CopyeditingWorkflowPage() {
             <span className="hidden sm:inline">Copyedited Files</span>
             <span className="sm:hidden">Edited</span>
           </TabsTrigger>
+          <TabsTrigger value="complete" className="gap-2">
+            <FileText className="h-4 w-4" />
+            <span className="hidden sm:inline">Complete</span>
+            <span className="sm:hidden">Done</span>
+          </TabsTrigger>
         </TabsList>
 
         <TabsContent value="draft" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <CopyeditingDraftFiles
                 assignmentId={assignmentId}
@@ -298,7 +297,7 @@ export default function CopyeditingWorkflowPage() {
         </TabsContent>
 
         <TabsContent value="discussions" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <CopyeditingDiscussions
                 assignmentId={assignmentId}
@@ -312,7 +311,7 @@ export default function CopyeditingWorkflowPage() {
         </TabsContent>
 
         <TabsContent value="copyedited" className="space-y-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
               <CopyeditedFiles
                 assignmentId={assignmentId}
@@ -325,14 +324,22 @@ export default function CopyeditingWorkflowPage() {
             </div>
           </div>
         </TabsContent>
-      </Tabs>
 
-      {/* Assign Copyeditor Dialog */}
-      <AssignCopyeditorDialog
-        isOpen={isAssignDialogOpen}
-        onClose={() => setIsAssignDialogOpen(false)}
-        submissionId={submissionId}
-      />
+        <TabsContent value="complete" className="space-y-4">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
+            <div className="lg:col-span-2">
+              <EditorCompleteCopyediting
+                assignmentId={assignmentId}
+                submission={submission}
+                submissionId={submissionId}
+              />
+            </div>
+            <div>
+              <CopyeditingParticipants assignmentId={assignmentId} />
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

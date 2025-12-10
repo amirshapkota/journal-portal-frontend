@@ -33,6 +33,7 @@ import { stripHtmlTags } from "@/features/shared/utils";
 import {
   useAddCopyeditingMessage,
   useCloseCopyeditingDiscussion,
+  useReopenCopyeditingDiscussion,
   useCopyeditingDiscussion,
 } from "../../hooks";
 
@@ -59,6 +60,7 @@ export function DiscussionThreadDialog({
   // Mutations
   const addMessageMutation = useAddCopyeditingMessage(discussion?.id);
   const closeMutation = useCloseCopyeditingDiscussion(assignmentId);
+  const reopenMutation = useReopenCopyeditingDiscussion();
 
   const form = useForm({
     resolver: zodResolver(replySchema),
@@ -82,7 +84,10 @@ export function DiscussionThreadDialog({
       },
       {
         onSuccess: () => {
-          form.setValue("message", "");
+          // Reset form completely
+          form.reset({ message: "" });
+          // Force re-render of RichTextEditor by updating key
+          form.setValue("message", "", { shouldValidate: false });
         },
       }
     );
@@ -92,6 +97,15 @@ export function DiscussionThreadDialog({
     closeMutation.mutate(discussion.id, {
       onSuccess: () => {
         onClose();
+      },
+    });
+  };
+
+  const handleReopen = async () => {
+    reopenMutation.mutate(discussion.id, {
+      onSuccess: () => {
+        // Keep dialog open to continue discussion
+        toast.success("Discussion reopened successfully");
       },
     });
   };
@@ -240,6 +254,24 @@ export function DiscussionThreadDialog({
                         <CheckCircle className="h-4 w-4 mr-2" />
                       )}
                       Mark as Resolved
+                    </Button>
+                  )}
+                  {discussion.status === "RESOLVED" && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleReopen}
+                      disabled={
+                        reopenMutation.isPending || addMessageMutation.isPending
+                      }
+                      size="sm"
+                    >
+                      {reopenMutation.isPending ? (
+                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                      ) : (
+                        <CheckCircle className="h-4 w-4 mr-2\" />
+                      )}
+                      Reopen Discussion
                     </Button>
                   )}
                 </div>

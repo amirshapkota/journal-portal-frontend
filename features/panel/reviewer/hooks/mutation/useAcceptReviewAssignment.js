@@ -9,7 +9,7 @@ export const useAcceptReviewAssignment = () => {
     onSuccess: () => {
       // Invalidate and refetch review assignments
       queryClient.invalidateQueries({ queryKey: ["reviewAssignments"] });
-      queryClient.invalidateQueries({ queryKey: ["reviewerStats"] });
+      queryClient.invalidateQueries({ queryKey: ["my-analytics"] });
     },
   });
 };

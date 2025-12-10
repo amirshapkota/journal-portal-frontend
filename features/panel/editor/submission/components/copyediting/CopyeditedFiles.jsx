@@ -22,16 +22,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+
 import {
   FileText,
-  Eye,
   Download,
   Upload,
   CheckCircle,
@@ -39,83 +32,34 @@ import {
   Edit,
 } from "lucide-react";
 import { format } from "date-fns";
-import {
-  useCopyeditingFiles,
-  useUploadCopyeditingFile,
-  useApproveCopyeditingFile,
-} from "../../hooks";
+import { useApproveCopyeditingFile, useCopyEditedFiles } from "../../hooks";
 
 /**
  * Component to display copyedited files
  * Shows edited manuscript files with tracking and version history
  */
-export function CopyeditedFiles({ 
-  submission, 
-  submissionId, 
-  assignmentId, 
+export function CopyeditedFiles({
+  assignmentId,
   isAuthorView = false,
-  readOnly = false 
+  readOnly = false,
 }) {
   const router = useRouter();
   const params = useParams();
   const submissionIdFromParams = params?.id;
-
-  const [isUploadModalOpen, setIsUploadModalOpen] = useState(false);
-  const [uploadData, setUploadData] = useState({
-    file_type: "COPYEDITED",
-    description: "",
-    file: null,
-  });
 
   // Fetch copyediting files
   const {
     data: filesData,
     isLoading,
     error,
-  } = useCopyeditingFiles(
-    {
-      submission: submissionId,
-      file_type: "COPYEDITED",
-    },
-    { enabled: !!submissionId }
-  );
+  } = useCopyEditedFiles({
+    assignmentId,
+  });
 
   const files = filesData?.results || [];
 
-  // Upload file mutation
-  const uploadMutation = useUploadCopyeditingFile();
-
   // Approve file mutation
   const approveMutation = useApproveCopyeditingFile();
-
-  const handleFileSelect = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      setUploadData((prev) => ({ ...prev, file }));
-    }
-  };
-
-  const handleUpload = () => {
-    if (!uploadData.file) {
-      return;
-    }
-
-    const formData = new FormData();
-    formData.append("submission", submissionId);
-    if (assignmentId) {
-      formData.append("assignment", assignmentId);
-    }
-    formData.append("file_type", uploadData.file_type);
-    formData.append("description", uploadData.description);
-    formData.append("file", uploadData.file);
-
-    uploadMutation.mutate(formData, {
-      onSuccess: () => {
-        setIsUploadModalOpen(false);
-        setUploadData({ file_type: "COPYEDITED", description: "", file: null });
-      },
-    });
-  };
 
   const handleApprove = (fileId) => {
     approveMutation.mutate(fileId);
@@ -142,10 +86,6 @@ export function CopyeditedFiles({
                 versions here.
               </CardDescription>
             </div>
-            <Button onClick={() => setIsUploadModalOpen(true)} size="sm">
-              <Upload className="h-4 w-4 mr-2" />
-              Upload Copyedited File
-            </Button>
           </div>
         </CardHeader>
         <CardContent>
@@ -163,19 +103,18 @@ export function CopyeditedFiles({
           ) : files.length === 0 ? (
             <div className="text-center py-12 border-2 border-dashed rounded-lg">
               <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-              <h3 className="font-semibold mb-2">No copyedited files yet</h3>
+              <h3 className="font-semibold mb-2">
+                Copyeditor has not yet copyedited the files from draft
+              </h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Upload files with copyediting changes applied
+                Once the copyeditor submits the draft files, they will appear
+                here.
               </p>
-              <Button onClick={() => setIsUploadModalOpen(true)}>
-                <Upload className="h-4 w-4 mr-2" />
-                Upload Copyedited File
-              </Button>
             </div>
           ) : (
             <div className="space-y-3">
               {files &&
-                files?.results?.map((file) => (
+                files?.map((file) => (
                   <div
                     key={file.id}
                     className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-3"
@@ -197,10 +136,21 @@ export function CopyeditedFiles({
                               v{file.version}
                             </Badge>
                           )}
-                          {file.is_approved && (
+                          {file.file_type === "AUTHOR_FINAL" && (
                             <Badge variant="success" className="text-xs">
-                              Approved
+                              Author Confirmed
                             </Badge>
+                          )}
+                          {file.file_type === "COPYEDITED" && (
+                            <Badge
+                              variant="outline"
+                              className="text-xs border-orange-500 text-orange-600"
+                            >
+                              Awaiting Author
+                            </Badge>
+                          )}
+                          {file.file_type === "FINAL" && (
+                            <Badge className="text-xs bg-blue-600">Final</Badge>
                           )}
                         </div>
                         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
@@ -288,68 +238,6 @@ export function CopyeditedFiles({
           )}
         </CardContent>
       </Card>
-
-      {/* Upload Dialog */}
-      <Dialog open={isUploadModalOpen} onOpenChange={setIsUploadModalOpen}>
-        <DialogContent className="sm:max-w-[500px]">
-          <DialogHeader>
-            <DialogTitle>Upload Copyedited File</DialogTitle>
-            <DialogDescription>
-              Upload a file with copyediting changes applied
-            </DialogDescription>
-          </DialogHeader>
-          <div className="space-y-4 py-4">
-            <div className="space-y-2">
-              <Label htmlFor="file">File</Label>
-              <Input
-                id="file"
-                type="file"
-                onChange={handleFileSelect}
-                accept=".pdf,.doc,.docx,.txt"
-              />
-              <p className="text-xs text-muted-foreground">
-                Supported formats: PDF, DOC, DOCX, TXT
-              </p>
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="description">Description (optional)</Label>
-              <Textarea
-                id="description"
-                placeholder="Describe the changes made..."
-                value={uploadData.description}
-                onChange={(e) =>
-                  setUploadData({ ...uploadData, description: e.target.value })
-                }
-                rows={3}
-              />
-            </div>
-          </div>
-          <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsUploadModalOpen(false)}
-            >
-              Cancel
-            </Button>
-            <Button
-              onClick={handleUpload}
-              disabled={!uploadData.file || uploadMutation.isPending}
-            >
-              {uploadMutation.isPending ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Uploading...
-                </>
-              ) : (
-                <>
-                  <Upload className="h-4 w-4 mr-2" />
-                  Upload
-                </>
-              )}
-            </Button>
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
     </>
   );
 }

@@ -3,7 +3,7 @@
 import { useRouter, useParams } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import {
   ErrorCard,
   LoadingScreen,
@@ -11,6 +11,8 @@ import {
   CopyeditingSuperDocEditor,
   useGetMe,
 } from "@/features";
+import { useApproveCopyeditingFile } from "@/features/panel/editor/submission/hooks";
+import { toast } from "sonner";
 
 /**
  * Editor Copyediting File Editor Page
@@ -23,30 +25,38 @@ export default function CopyeditingEditPage() {
   const submissionId = params?.id;
   const fileId = params?.fileId;
 
-  const { data: user } = useGetMe();
+  const { data: user, isPending: isUserPending } = useGetMe();
 
-  const {
-    data: submission,
-    isPending: isSubmissionPending,
-    error: submissionError,
-  } = useGetEditorSubmissionById(submissionId);
+  // Editor uses approve endpoint
+  const approveMutation = useApproveCopyeditingFile();
 
   const handleBack = () => {
     router.push(`/editor/submissions/${submissionId}/copyediting`);
   };
 
-  const handleSaveSuccess = (updatedFile) => {
-    console.log("File saved successfully:", updatedFile);
+  const handleApprove = async (fileId) => {
+    return new Promise((resolve, reject) => {
+      approveMutation.mutate(fileId, {
+        onSuccess: () => {
+          toast.success("Copyediting file approved");
+          resolve();
+        },
+        onError: (error) => {
+          const message =
+            error?.response?.data?.detail ||
+            error?.message ||
+            "Failed to approve file";
+          toast.error(message);
+          reject(error);
+        },
+      });
+    });
   };
-
-  if (submissionError) {
-    return <ErrorCard error={submissionError} />;
-  }
 
   return (
     <div className="space-y-6">
       {/* Header */}
-      {isSubmissionPending && <LoadingScreen />}
+      {isUserPending && <LoadingScreen />}
       <div className="flex flex-col gap-4">
         <Button variant="ghost" onClick={handleBack} className="w-fit">
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -57,29 +67,29 @@ export default function CopyeditingEditPage() {
           <h1 className="text-3xl font-bold tracking-tight">
             Edit Copyediting File
           </h1>
-          <p className="text-muted-foreground mt-2">
-            {submission?.title || "Loading..."}
-          </p>
-          {submission?.submission_id && (
-            <p className="text-sm text-muted-foreground mt-1">
-              Submission ID: {submission.submission_id}
-            </p>
-          )}
         </div>
       </div>
 
-      {/* CopyeditingSuperDocEditor */}
-      <Card className="p-0 overflow-hidden">
-        <CopyeditingSuperDocEditor
-          fileId={fileId}
-          userData={{
-            first_name: user?.first_name,
-            email: user?.email,
-          }}
-          readOnly={false}
-          commentsReadOnly={false}
-          onSaveSuccess={handleSaveSuccess}
-        />
+      <Card className="flex flex-col">
+        <CardContent className="overflow-hidden">
+          {/* CopyeditingSuperDocEditor */}
+          <CopyeditingSuperDocEditor
+            fileId={fileId}
+            userData={{
+              first_name: user?.first_name,
+              email: user?.email,
+            }}
+            readOnly={false}
+            commentsReadOnly={false}
+            className="border rounded-lg"
+            goBack={`/editor/submissions/${submissionId}/copyediting`}
+            onApprove={handleApprove}
+            approveButtonText="Approve Copyediting"
+            approveDialogTitle="Approve Copyediting File"
+            approveDialogDescription="Are you sure you want to approve this copyediting file? This will mark it as copyedited and ready for author review."
+            showApproveButton={true}
+          />
+        </CardContent>
       </Card>
     </div>
   );

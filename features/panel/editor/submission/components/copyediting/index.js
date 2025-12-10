@@ -8,3 +8,5 @@ export { AddParticipantDialog } from "./AddParticipantDialog";
 export { AddDiscussionDialog } from "./AddDiscussionDialog";
 export { DiscussionThreadDialog } from "./DiscussionThreadDialog";
 export { CreateCopyeditingDialog } from "./CreateCopyeditingDialog";
+export { AuthorConfirmCopyeditedFiles } from "./AuthorConfirmCopyeditedFiles";
+export { EditorCompleteCopyediting } from "./EditorCompleteCopyediting";
