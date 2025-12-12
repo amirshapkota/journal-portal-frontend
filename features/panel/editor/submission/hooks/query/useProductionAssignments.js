@@ -10,11 +10,30 @@ import {
 /**
  * Hook to fetch production assignments list
  */
-export function useProductionAssignments(params = {}, options = {}) {
+export function useProductionAssignments(options = {}) {
+  const {
+    production_assistant,
+    submission,
+    status,
+    search,
+    ordering,
+    ...queryOptions
+  } = options;
+
   return useQuery({
-    queryKey: ["production-assignments", params],
-    queryFn: () => listProductionAssignments(params),
-    ...options,
+    queryKey: [
+      "production-assignments",
+      { production_assistant, submission, status, search, ordering },
+    ],
+    queryFn: () =>
+      listProductionAssignments({
+        production_assistant,
+        submission,
+        status,
+        search,
+        ordering,
+      }),
+    ...queryOptions,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }

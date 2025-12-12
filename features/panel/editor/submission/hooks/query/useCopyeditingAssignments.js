@@ -11,10 +11,23 @@ import {
  * Hook to fetch copyediting assignments list
  */
 export function useCopyeditingAssignments(options = {}) {
+  const { copyeditor, submission, status, search, ordering, ...queryOptions } =
+    options;
+
   return useQuery({
-    queryKey: ["copyediting-assignments"],
-    queryFn: () => listCopyeditingAssignments(),
-    ...options,
+    queryKey: [
+      "copyediting-assignments",
+      { copyeditor, submission, status, search, ordering },
+    ],
+    queryFn: () =>
+      listCopyeditingAssignments({
+        copyeditor,
+        submission,
+        status,
+        search,
+        ordering,
+      }),
+    ...queryOptions,
     staleTime: 1000 * 60 * 5, // 5 minutes
   });
 }
