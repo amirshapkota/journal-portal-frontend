@@ -21,6 +21,7 @@ import {
   LogsIcon,
   BookCheck,
   BookA,
+  CopyCheckIcon,
 } from "lucide-react";
 import path from "path";
 
@@ -179,6 +180,16 @@ export const sidebarConfig = {
       name: "Assigned Journals",
       path: "/editor/assigned-journals",
       icon: BookCheck,
+    },
+    {
+      name: "Assigned Copyediting",
+      path: "/editor/copyediting-assignments",
+      icon: CopyCheckIcon,
+    },
+    {
+      name: "Production Assignments",
+      path: "/editor/production-assignments",
+      icon: BarChart,
     },
     {
       name: "Verification Requests",
