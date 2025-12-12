@@ -25,7 +25,7 @@ export function useCreatePublicationSchedule() {
         queryKey: ["publication-schedules", data.submission],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission", data.submission],
+        queryKey: ["editor-submission"],
       });
     },
     onError: (error) => {

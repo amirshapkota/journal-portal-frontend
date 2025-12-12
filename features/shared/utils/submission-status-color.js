@@ -69,4 +69,9 @@ export const statusConfig = {
     text: "text-amber-700 dark:text-primary-foreground",
     label: "Copy Editing",
   },
+  SCHEDULED: {
+    bg: "bg-emerald-100 dark:bg-emerald-600",
+    text: "text-emerald-700 dark:text-primary-foreground",
+    label: "Scheduled",
+  },
 };
