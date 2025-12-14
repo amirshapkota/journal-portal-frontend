@@ -94,8 +94,14 @@ export default function JournalSubmissionsPage() {
 
   const importMutation = useImportFromOJS();
 
-  const { progressData, isPolling, startPolling, isWaitingForStart } =
-    useImportProgress(journalId);
+  const {
+    progressData,
+    isPolling,
+    startPolling,
+    isWaitingForStart,
+    stoppedByError,
+    error,
+  } = useImportProgress(journalId, toggleViewProgress);
 
   const isImportActive =
     progressData?.status !== "idle" &&
@@ -364,6 +370,8 @@ export default function JournalSubmissionsPage() {
           onOpenChange={toggleViewProgress}
           progress={progressData?.percentage || 0}
           progressData={progressData}
+          error={error}
+          stoppedByError={stoppedByError}
         />
       </div>
     </div>
