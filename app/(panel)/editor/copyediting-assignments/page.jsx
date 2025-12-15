@@ -31,6 +31,7 @@ import {
   FilterToolbar,
 } from "@/features/shared";
 import { useCopyeditingAssignments } from "@/features/panel/editor/submission/hooks";
+import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
 
 export default function CopyeditingAssignmentsPage() {
   const router = useRouter();
@@ -103,7 +104,7 @@ export default function CopyeditingAssignmentsPage() {
       cellClassName: "font-medium",
       render: (row) => (
         <div className="max-w-md">
-          <p className="font-medium truncate">{row.submission_title}</p>
+          <EllipsisTooltip text={row.submission_title} maxWidth={50} />
           <p className="text-xs text-muted-foreground">
             ID: {row.submission_id}
           </p>
