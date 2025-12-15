@@ -1,45 +1,8 @@
 "use client";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import {
-  CheckCircle2,
-  Eye,
-  Download,
-  MoreVertical,
-  ClipboardList,
-} from "lucide-react";
+import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+import { DataTable, StatusBadge, statusConfig } from "@/features/shared";
 import { format } from "date-fns";
-import { DataTable } from "@/features/shared";
-
-const statusColors = {
-  PENDING:
-    "bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-300",
-  ACCEPTED: "bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-300",
-  COMPLETED:
-    "bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300",
-  OVERDUE: "bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300",
-};
-
-const StatusBadge = ({ status }) => {
-  const statusConfig = {
-    PENDING: { label: "Pending" },
-    ACCEPTED: { label: "Accepted" },
-    COMPLETED: { label: "Completed" },
-    OVERDUE: { label: "Overdue" },
-  };
-
-  const config = statusConfig[status] || statusConfig.PENDING;
-  const colorClass = statusColors[status] || statusColors.PENDING;
-
-  return <Badge className={`${colorClass} border-0`}>{config.label}</Badge>;
-};
 
 /**
  * ReviewAssignmentsTable - Displays review assignments in a table
@@ -52,6 +15,31 @@ const StatusBadge = ({ status }) => {
  * @param {boolean} [props.isPending] - Show loading state
  * @param {Object} [props.error] - Error object
  */
+
+// Custom status config for review assignments
+const reviewAssignmentStatusConfig = {
+  PENDING: {
+    bg: "bg-yellow-100 dark:bg-yellow-900",
+    text: "text-yellow-700 dark:text-yellow-300",
+    label: "Pending",
+  },
+  ACCEPTED: {
+    bg: "bg-blue-100 dark:bg-blue-900",
+    text: "text-blue-700 dark:text-blue-300",
+    label: "Accepted",
+  },
+  COMPLETED: {
+    bg: "bg-green-100 dark:bg-green-900",
+    text: "text-green-700 dark:text-green-300",
+    label: "Completed",
+  },
+  OVERDUE: {
+    bg: "bg-red-100 dark:bg-red-900",
+    text: "text-red-700 dark:text-red-300",
+    label: "Overdue",
+  },
+};
+
 export default function ReviewAssignmentsTable({
   assignments,
   onAcceptReview,
@@ -63,18 +51,42 @@ export default function ReviewAssignmentsTable({
 }) {
   const columns = [
     {
+      key: "submission_number",
+      header: "Submission #",
+      render: (row) =>
+        row.submission_details?.submission_number ||
+        row.submission_number ||
+        "-",
+    },
+    {
       key: "submission_title",
       header: "Submission Title",
+      render: (row) => (
+        <EllipsisTooltip
+          text={row.submission_title || row.submission_details?.title || "N/A"}
+        />
+      ),
     },
     {
       key: "journal_name",
       header: "Journal",
       cellClassName: "text-sm",
+      render: (row) => (
+        <EllipsisTooltip
+          text={row.submission_details?.journal?.title || "N/A"}
+        />
+      ),
     },
+
     {
       key: "status",
       header: "Status",
-      render: (row) => <StatusBadge status={row.status} />,
+      render: (row) => (
+        <StatusBadge
+          status={row.status}
+          statusConfig={reviewAssignmentStatusConfig}
+        />
+      ),
     },
     {
       key: "due_date",
@@ -102,60 +114,11 @@ export default function ReviewAssignmentsTable({
         </div>
       ),
     },
-    {
-      key: "actions",
-      header: "Actions",
-      align: "right",
-      render: (row) => (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="sm" className="h-8 w-8 p-0">
-              <MoreVertical className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {row.status === "PENDING" && (
-              <>
-                <DropdownMenuItem
-                  className="gap-2"
-                  onClick={() => onAcceptReview?.(row)}
-                >
-                  <CheckCircle2 className="h-4 w-4" />
-                  Accept Review
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className="gap-2 text-destructive"
-                  onClick={() => onDeclineReview?.(row)}
-                >
-                  Decline Review
-                </DropdownMenuItem>
-              </>
-            )}
-            {row.status === "ACCEPTED" && (
-              <DropdownMenuItem
-                className="gap-2"
-                onClick={() => onStartReview?.(row)}
-              >
-                <Eye className="h-4 w-4" />
-                Start Review
-              </DropdownMenuItem>
-            )}
-            <DropdownMenuItem
-              className="gap-2"
-              onClick={() => onDownloadFiles?.(row)}
-            >
-              <Download className="h-4 w-4" />
-              Download Files
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      ),
-    },
   ];
 
   return (
     <DataTable
-      data={assignments}
+      data={assignments?.results || []}
       columns={columns}
       emptyMessage="No review assignments yet."
       isPending={isPending}

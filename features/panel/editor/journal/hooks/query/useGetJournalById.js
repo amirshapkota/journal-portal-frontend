@@ -9,7 +9,7 @@ export const useGetJournalById = (id, options = {}) => {
     staleTime: 5 * 60 * 1000, // 5 minutes - journal details are relatively static
     gcTime: 15 * 60 * 1000, // 15 minutes
     refetchOnWindowFocus: false, // Don't refetch - journal details don't change frequently
-    refetchOnMount: false, // Use cached data
+    refetchOnMount: true, // Use cached data
     retry: 2,
     ...options,
   });

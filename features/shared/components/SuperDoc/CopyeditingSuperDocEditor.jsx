@@ -76,7 +76,6 @@ export default function CopyeditingSuperDocEditor({
   } = useQuery({
     queryKey: ["copyediting-file", fileId],
     queryFn: () => loadCopyeditingFile(fileId),
-    staleTime: 5 * 60 * 1000,
   });
 
   // Save file mutation

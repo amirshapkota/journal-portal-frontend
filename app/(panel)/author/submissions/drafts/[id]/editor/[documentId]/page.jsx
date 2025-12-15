@@ -35,8 +35,8 @@ export default function SuperDocEditorPage() {
     queryKey: ["superdoc-document", documentId],
     queryFn: () => loadDocument(documentId),
     enabled: !!documentId,
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    // 5 minutes
+    // 10 minutes
   });
 
   // Download mutation

@@ -79,8 +79,6 @@ export default function JournalSubmissionsPage() {
     error: journalError,
   } = useGetJournalById(journalId);
 
-  console.log(journalError);
-
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set("page", page.toString());
@@ -103,7 +101,10 @@ export default function JournalSubmissionsPage() {
     isWaitingForStart,
     stoppedByError,
     error,
-  } = useImportProgress(journalId, toggleViewProgress);
+  } = useImportProgress(journalId, toggleViewProgress, () => {
+    // Refetch submissions when import completes
+    refetch();
+  });
 
   const isImportActive =
     progressData?.status !== "idle" &&
@@ -132,8 +133,6 @@ export default function JournalSubmissionsPage() {
       toggleSyncDialog();
     }
   }, [isWaitingForStart, progressData.status, toggleSyncDialog]);
-
-  console.log(isPolling);
 
   const columns = [
     {
@@ -306,17 +305,8 @@ export default function JournalSubmissionsPage() {
             </>
           ) : (
             <Button onClick={handleViewProgress} variant="secondary" size="sm">
-              {isPolling === false ? (
-                <>
-                  <Eye className="h-4 w-4 mr-2" />
-                  <p>View Import Status</p>
-                </>
-              ) : (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  <p> Importing...</p>
-                </>
-              )}
+              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              <p>View Import Status</p>
             </Button>
           )}
         </>

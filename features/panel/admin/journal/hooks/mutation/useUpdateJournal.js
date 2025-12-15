@@ -12,10 +12,13 @@ export const useUpdateJournal = () => {
         queryKey: ["admin-inactive-journals"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["admin-journal", data.id],
+        queryKey: ["admin-journal"],
       });
       queryClient.invalidateQueries({
-        queryKey: ["admin-journals"],
+        queryKey: ["editor-journals"],
+      });
+      queryClient.invalidateQueries({
+        queryKey: ["journals"],
       });
       toast.success("Journal updated successfully");
     },

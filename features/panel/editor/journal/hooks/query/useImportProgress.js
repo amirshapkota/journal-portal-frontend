@@ -1,106 +1,145 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState, useRef, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { getImportProgress } from "../../api/ojsConnectionApi";
 
 /**
  * Custom hook to poll and track OJS import progress using React Query
  * @param {string} journalId - Journal ID to track progress for
  * @param {Function} onErrorStop - Callback to execute when polling stops due to errors
+ * @param {Function} onComplete - Callback to execute when import completes successfully
  * @returns {Object} Progress data and control functions
  */
-export function useImportProgress(journalId, onErrorStop) {
+export function useImportProgress(journalId, onErrorStop, onComplete) {
   const [isWaitingForStart, setIsWaitingForStart] = useState(false);
-  const isWaitingForStartRef = useRef(false);
-  const errorCountRef = useRef(0);
-  const stoppedByErrorRef = useRef(false);
   const [stoppedByError, setStoppedByError] = useState(false);
 
-  const { data, isLoading, refetch, error } = useQuery({
+  const isWaitingForStartRef = useRef(false);
+  const stoppedByErrorRef = useRef(false);
+  const errorCountRef = useRef(0);
+  const prevIsErrorRef = useRef(false);
+  const prevStatusRef = useRef("idle");
+
+  const { data, error, isError, isFetching, isLoading, refetch } = useQuery({
     queryKey: ["import-progress", journalId],
     queryFn: async () => {
       if (!journalId) return null;
-      return await getImportProgress(journalId);
+      return getImportProgress(journalId);
     },
-    enabled: !!journalId,
+    enabled: Boolean(journalId),
+    retry: false,
+    refetchOnMount: true,
+    refetchOnWindowFocus: false,
     refetchInterval: (query) => {
-      // Stop polling immediately if stopped by error
-      if (stoppedByErrorRef.current) {
-        return false;
-      }
+      // Stop polling if stopped by error
+      if (stoppedByErrorRef.current) return false;
 
       const status = query.state.data?.status;
 
-      // If waiting for import to start from idle, poll every 1.5s
+      // Waiting for backend job to start
       if (isWaitingForStartRef.current && status === "idle") {
         return 1500;
       }
 
-      // Once status changes from idle, stop waiting
+      // Backend job started - stop waiting
       if (isWaitingForStartRef.current && status !== "idle") {
         isWaitingForStartRef.current = false;
         setIsWaitingForStart(false);
       }
 
-      // Poll every 1.5s if status is fetching or processing
+      // Active processing states
       if (status === "fetching" || status === "processing") {
         return 1500;
       }
 
       return false;
     },
-    refetchOnMount: true,
-    refetchOnWindowFocus: false,
-    retry: false,
   });
 
-  // Track errors and stop polling after 3 consecutive errors
+  // ---------- ERROR THRESHOLD HANDLING ----------
   useEffect(() => {
-    if (error) {
-      errorCountRef.current = (errorCountRef.current || 0) + 1;
+    // Transition: no-error -> error
+    if (isError && !prevIsErrorRef.current) {
+      errorCountRef.current += 1;
+
       if (errorCountRef.current > 3 && !stoppedByErrorRef.current) {
         stoppedByErrorRef.current = true;
-        setStoppedByError(true);
         isWaitingForStartRef.current = false;
-        setIsWaitingForStart(false);
-        // Close the dialog when stopped by error
-        if (onErrorStop) {
-          onErrorStop();
-        }
-      }
-    } else if (!error && errorCountRef.current > 0) {
-      // Reset error count on successful fetch
-      errorCountRef.current = 0;
-      if (stoppedByErrorRef.current) {
-        stoppedByErrorRef.current = false;
-        setStoppedByError(false);
+
+        // Queue state updates to avoid synchronous setState in effect
+        queueMicrotask(() => {
+          setStoppedByError(true);
+          setIsWaitingForStart(false);
+          onErrorStop?.();
+        });
       }
     }
-  }, [error, onErrorStop]);
 
-  // Format progress data with defaults
+    // Transition: error -> success
+    if (!isError && prevIsErrorRef.current) {
+      errorCountRef.current = 0;
+
+      if (stoppedByErrorRef.current) {
+        stoppedByErrorRef.current = false;
+
+        // Queue state update to avoid synchronous setState in effect
+        queueMicrotask(() => {
+          setStoppedByError(false);
+        });
+      }
+    }
+
+    prevIsErrorRef.current = isError;
+  }, [isError, onErrorStop]);
+
+  // ---------- COMPLETION HANDLING ----------
+  useEffect(() => {
+    const currentStatus = data?.status;
+
+    // Detect transition to completed status
+    if (
+      currentStatus === "completed" &&
+      prevStatusRef.current !== "completed"
+    ) {
+      onComplete?.();
+    }
+
+    prevStatusRef.current = currentStatus || "idle";
+  }, [data?.status, onComplete]);
+
+  // ---------- NORMALIZED PROGRESS ----------
   const progressData = {
-    percentage: data?.percentage || 0,
-    status: data?.status || "idle",
-    stage: data?.stage || "",
-    current: data?.current || 0,
-    total: data?.total || 0,
-    imported: data?.imported || 0,
-    updated: data?.updated || 0,
-    skipped: data?.skipped || 0,
-    errors: data?.errors || 0,
+    percentage: data?.status === "completed" ? 100 : data?.percentage ?? 0,
+    status: data?.status ?? "idle",
+    stage: data?.stage ?? "",
+    current: data?.current ?? 0,
+    total: data?.total ?? 0,
+    imported: data?.imported ?? 0,
+    updated: data?.updated ?? 0,
+    skipped: data?.skipped ?? 0,
+    errors: data?.errors ?? 0,
   };
 
-  // Set to 100% on completion
-  if (progressData.status === "completed" && progressData.percentage < 100) {
-    progressData.percentage = 100;
-  }
-
-  // isPolling is true if status is fetching or processing, or waiting for start, and not stopped by error
+  // ---------- DERIVED FLAGS ----------
   const isPolling =
-    (progressData.status === "fetching" ||
-      progressData.status === "processing" ||
-      isWaitingForStart) &&
-    !stoppedByError;
+    !stoppedByError &&
+    (isWaitingForStart ||
+      progressData.status === "fetching" ||
+      progressData.status === "processing");
+
+  // ---------- PUBLIC API ----------
+  const startPolling = () => {
+    errorCountRef.current = 0;
+    stoppedByErrorRef.current = false;
+    setStoppedByError(false);
+    isWaitingForStartRef.current = true;
+    setIsWaitingForStart(true);
+    refetch();
+  };
+
+  const stopPolling = () => {
+    isWaitingForStartRef.current = false;
+    setIsWaitingForStart(false);
+  };
 
   return {
     progressData,
@@ -108,19 +147,11 @@ export function useImportProgress(journalId, onErrorStop) {
     isWaitingForStart,
     stoppedByError,
     error,
-    startPolling: () => {
-      isWaitingForStartRef.current = true;
-      setIsWaitingForStart(true);
-      stoppedByErrorRef.current = false;
-      setStoppedByError(false);
-      errorCountRef.current = 0;
-      refetch();
-    },
-    stopPolling: () => {
-      isWaitingForStartRef.current = false;
-      setIsWaitingForStart(false);
-    },
-    fetchProgress: refetch,
+    isError,
+    isFetching,
     isLoading,
+    startPolling,
+    stopPolling,
+    fetchProgress: refetch,
   };
 }

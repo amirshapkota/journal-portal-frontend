@@ -38,7 +38,7 @@ export function DOAJSearchSelect({
     queryKey: ["doaj-journals", debouncedSearch],
     queryFn: async () => await searchDOAJJournals(debouncedSearch),
     enabled: Boolean(debouncedSearch && debouncedSearch.trim().length >= 2),
-    staleTime: 5 * 60 * 1000,
+
     refetchOnWindowFocus: false,
   });
 

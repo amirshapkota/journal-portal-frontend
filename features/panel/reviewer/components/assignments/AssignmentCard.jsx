@@ -21,6 +21,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
 
 export function AssignmentCard({
   assignment,
@@ -41,7 +42,11 @@ export function AssignmentCard({
         <div className="flex items-start justify-between">
           <div className="space-y-1 flex-1">
             <CardTitle className="text-lg">
-              {assignment.submission_title || "Untitled Submission"}
+              <EllipsisTooltip
+                text={assignment.submission_title || "Untitled Submission"}
+                maxLength={45}
+                spanProps={{ className: "whitespace-normal!" }}
+              />
             </CardTitle>
             <CardDescription className="flex items-center gap-2 text-sm">
               <FileText className="h-4 w-4" />

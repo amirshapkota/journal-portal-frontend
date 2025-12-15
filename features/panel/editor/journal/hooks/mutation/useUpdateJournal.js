@@ -11,9 +11,10 @@ export const useUpdateJournal = (options = {}) => {
     },
     onSuccess: (data, variables, context) => {
       // Invalidate both the journal list and the specific journal
-      queryClient.invalidateQueries({ queryKey: ["admin-journals"] });
+      queryClient.invalidateQueries({ queryKey: ["editor-journals"] });
+      queryClient.invalidateQueries({ queryKey: ["journals"] });
       queryClient.invalidateQueries({ queryKey: ["journal", variables.id] });
-      
+
       // Don't show toast here if custom onSuccess is provided
       if (!options.onSuccess) {
         toast.success("Journal updated successfully!");
@@ -21,8 +22,6 @@ export const useUpdateJournal = (options = {}) => {
       options.onSuccess?.(data, variables, context);
     },
     onError: (error, variables, context) => {
-      console.error("Journal update error:", error);
-      console.error("Error response:", error.response?.data);
       // Don't show toast here if custom onError is provided
       if (!options.onError) {
         const errorMessage =
