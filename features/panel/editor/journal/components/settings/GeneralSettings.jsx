@@ -14,7 +14,6 @@ import { Input } from "@/components/ui/input";
 import { FormRichTextEditor, FormInputField } from "@/features";
 import { toast } from "sonner";
 import { Save } from "lucide-react";
-import { useUpdateJournal } from "@/features";
 import { stripHtmlTags } from "@/features/shared/utils";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,6 +27,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { useQueryClient } from "@tanstack/react-query";
+import { useUpdateJournal } from "../../hooks";
 
 const generalSettingsSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -102,15 +102,7 @@ export function GeneralSettings({ journal }) {
     }
   }, [journal, form]);
 
-  const updateJournalMutation = useUpdateJournal({
-    onSuccess: () => {
-      toast.success("General settings saved successfully");
-      queryClient.invalidateQueries({ queryKey: ["journals"] });
-    },
-    onError: (error) => {
-      toast.error(`Failed to save settings: ${error.message}`);
-    },
-  });
+  const updateJournalMutation = useUpdateJournal();
 
   const handleSubmit = (data) => {
     if (!journal?.id) {

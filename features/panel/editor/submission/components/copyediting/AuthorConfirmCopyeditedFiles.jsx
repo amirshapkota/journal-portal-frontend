@@ -104,9 +104,9 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
   const renderFileCard = (file, isConfirmed = false) => (
     <div
       key={file.id}
-      className="flex flex-col sm:flex-row sm:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-3"
+      className="flex flex-col md:flex-row md:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors gap-3"
     >
-      <div className="flex items-start gap-3 flex-1 min-w-0">
+      <div className="flex items-start gap-3  flex-1 min-w-0">
         <div className="relative">
           <FileText className="h-8 w-8 text-primary stroke-[1.5] shrink-0" />
           {isConfirmed && (
@@ -114,8 +114,8 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
           )}
         </div>
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
-            <p className="font-medium truncate">{file.original_filename}</p>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 mb-1">
+            <p className="font-medium ">{file.original_filename}</p>
             {file.version && (
               <Badge variant="secondary" className="text-xs">
                 v{file.version}
@@ -163,7 +163,7 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 shrink-0 sm:ml-auto">
+      <div className="flex items-center gap-2 shrink-0 md:ml-auto">
         <Button
           variant="secondary"
           size="sm"
@@ -204,8 +204,7 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
           onClick={() => handleDownload(file.id, file.original_filename)}
           title="Download file"
         >
-          <Download className="h-4 w-4 sm:mr-2" />
-          <span className="hidden sm:inline">Download</span>
+          <Download className="h-4 w-4" />
         </Button>
       </div>
     </div>

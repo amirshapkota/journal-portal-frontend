@@ -102,7 +102,7 @@ export function AuthorViewFinalFiles({ assignmentId, submissionId }) {
                       <div className="flex items-center gap-2 mb-2">
                         <FileText className="h-5 w-5 text-green-600 dark:text-green-400 shrink-0" />
                         <h4 className="font-medium text-green-900 dark:text-green-100 truncate">
-                          {file.label || "Untitled File"}
+                          {file.original_filename || "Untitled File"}
                         </h4>
                         <Badge
                           variant="outline"
@@ -120,19 +120,20 @@ export function AuthorViewFinalFiles({ assignmentId, submissionId }) {
                             {file.version}
                           </p>
                         )}
-                        {file.completed_at && (
+                        {file.last_edited_at && (
                           <p>
                             <span className="font-medium">Completed:</span>{" "}
                             {format(
-                              new Date(file.completed_at),
+                              new Date(file.last_edited_at),
                               "MMM d, yyyy 'at' h:mm a"
                             )}
                           </p>
                         )}
-                        {file.copyeditor && (
+                        {file.last_edited_by && (
                           <p>
                             <span className="font-medium">Copyeditor:</span>{" "}
-                            {file.copyeditor.user_name || file.copyeditor.email}
+                            {file.last_edited_by.user_name ||
+                              file.last_edited_by.email}
                           </p>
                         )}
                         {file.description && (

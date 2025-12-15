@@ -128,7 +128,7 @@ export function useConfirmFileFinal() {
     onSuccess: (data) => {
       toast.success("File confirmed as final successfully");
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files", data.file.id],
+        queryKey: ["copyediting-files"],
       });
       queryClient.invalidateQueries({
         queryKey: ["copyedited-files"],

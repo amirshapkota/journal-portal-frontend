@@ -13,7 +13,7 @@ export const usePublicationSchedule = (scheduleId, options = {}) => {
     queryFn: () => getPublicationSchedule(scheduleId),
     enabled: !!scheduleId,
     staleTime: 1000 * 60 * 5, // 5 minutes
-    gcTime: 10 * 60 * 1000, // 10 minutes
+    // 10 minutes
     retry: 2,
     ...options,
   });

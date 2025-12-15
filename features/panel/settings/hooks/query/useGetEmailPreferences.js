@@ -8,7 +8,7 @@ export const useGetEmailPreferences = (options = {}) => {
     staleTime: 5 * 60 * 1000, // 5 minutes - preferences don't change frequently
     gcTime: 10 * 60 * 1000, // 10 minutes - keep in cache
     refetchOnWindowFocus: false, // Don't refetch on focus - user may be editing
-    refetchOnMount: false, // Use cached data
+    refetchOnMount: true, // Use cached data
     retry: 2, // Retry failed requests twice
     ...options,
   });

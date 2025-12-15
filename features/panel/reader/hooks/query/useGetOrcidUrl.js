@@ -8,7 +8,7 @@ export const useGetOrcidUrl = (options = {}) => {
     staleTime: 0, // Always fresh - URL can change (contains state/nonce)
     gcTime: 0, // Don't cache - generate new URL each time
     refetchOnWindowFocus: false, // Don't refetch on focus - called manually
-    refetchOnMount: false, // Don't refetch on mount - called manually via refetch
+    refetchOnMount: true, // Don't refetch on mount - called manually via refetch
     retry: 1, // Only retry once for URL generation
     ...options,
   });

@@ -24,6 +24,7 @@ import {
 } from "@/features";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
+import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
 
 export default function ReviewerAssignmentsPage() {
   const router = useRouter();
@@ -161,7 +162,11 @@ export default function ReviewerAssignmentsPage() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">
-                        {assignment.submission_title || "Untitled Submission"}
+                        <EllipsisTooltip
+                          text={
+                            assignment.submission_title || "Untitled Submission"
+                          }
+                        />
                       </p>
                       <p className="text-sm text-muted-foreground">
                         {assignment.submission_number || "N/A"}

@@ -12,8 +12,8 @@ export function useGetSubmissionById(submissionId, options = {}) {
     queryFn: () => {
       return getSingleSubmissionById(submissionId);
     },
+    staleTime: 5 * 60 * 1000,
     enabled: Boolean(submissionId),
-    staleTime: 5 * 60 * 1000, // 5 minutes
     ...options,
   });
 

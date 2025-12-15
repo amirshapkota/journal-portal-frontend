@@ -47,7 +47,7 @@ export function InstitutionSearchSelect({
     queryKey: ["institutions", debouncedSearch],
     queryFn: async () => await searchRORInstitutions(debouncedSearch),
     enabled: Boolean(debouncedSearch && debouncedSearch.trim().length >= 2),
-    staleTime: 5 * 60 * 1000,
+
     refetchOnWindowFocus: false,
   });
 
