@@ -41,7 +41,11 @@ import { useRouter } from "next/navigation";
  * Allows editors to complete copyediting assignment after authors confirm files.
  * Shows file status breakdown and validates all files are confirmed before completion.
  */
-export function EditorCompleteCopyediting({ assignmentId, submissionId }) {
+export function EditorCompleteCopyediting({
+  assignmentId,
+  submissionId,
+  assignmentStatus,
+}) {
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
   const [completionNotes, setCompletionNotes] = useState("");
   const router = useRouter();
@@ -106,7 +110,6 @@ export function EditorCompleteCopyediting({ assignmentId, submissionId }) {
       },
       {
         onSuccess: () => {
-          router.push(`/editor/submissions/${submissionId}`);
           setIsCompleteDialogOpen(false);
           setCompletionNotes("");
         },
@@ -360,16 +363,18 @@ export function EditorCompleteCopyediting({ assignmentId, submissionId }) {
           )}
 
           {/* Complete Button */}
-          <div className="flex justify-end">
-            <Button
-              onClick={() => setIsCompleteDialogOpen(true)}
-              disabled={!canComplete || !assignmentId}
-              className="gap-2"
-            >
-              <CheckCircle2 className="h-4 w-4" />
-              Complete Copyediting
-            </Button>
-          </div>
+          {assignmentStatus !== "COMPLETED" && (
+            <div className="flex justify-end">
+              <Button
+                onClick={() => setIsCompleteDialogOpen(true)}
+                disabled={!canComplete || !assignmentId}
+                className="gap-2"
+              >
+                <CheckCircle2 className="h-4 w-4" />
+                Complete Copyediting
+              </Button>
+            </div>
+          )}
         </CardContent>
       </Card>
 
