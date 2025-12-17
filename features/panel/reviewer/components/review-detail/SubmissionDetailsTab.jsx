@@ -23,7 +23,7 @@ export function SubmissionDetailsTab({ submission, isPending }) {
 
       {/* Manuscript Information */}
       <Card className="">
-        <CardContent className=" px-6 ">
+        <CardContent className="  ">
           <div className="flex items-center gap-3 mb-5">
             <div className=" rounded-lg bg-primary/10">
               <BookOpen className="h-5 w-5 text-primary" />

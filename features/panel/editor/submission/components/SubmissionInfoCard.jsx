@@ -17,14 +17,14 @@ export function SubmissionInfoCard({ submission }) {
         <div className="flex items-start justify-between">
           <div className="space-y-2 flex-1">
             <CardTitle className="text-2xl">{submission.title}</CardTitle>
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex flex-col sm:flex-row  sm:items-center gap-4 text-sm text-muted-foreground">
               <div className="flex items-center gap-2">
                 <Calendar className="h-4 w-4" />
                 Submitted {format(new Date(submission.submitted_at), 'PPP')}
               </div>
               <div className="flex items-center gap-2">
                 <User className="h-4 w-4" />
-                {submission.corresponding_author_name}
+                {submission?.corresponding_author?.user_name}
               </div>
             </div>
           </div>

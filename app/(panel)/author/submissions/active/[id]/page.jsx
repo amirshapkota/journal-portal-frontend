@@ -91,7 +91,7 @@ export default function ActiveDetailPage() {
       <div className="space-y-6">
         {/* Header */}
         {isSubmissionPending && <LoadingScreen />}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-0 justify-between">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
@@ -122,6 +122,7 @@ export default function ActiveDetailPage() {
           {submission?.status === 'COPYEDITING' && (
             <Button
               onClick={() => router.push(`/author/submissions/active/${submissionId}/copyediting`)}
+              className="w-fit"
             >
               <FileEdit className="h-4 w-4 mr-2" />
               Copyediting

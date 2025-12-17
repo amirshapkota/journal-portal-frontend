@@ -28,7 +28,7 @@ export default function DocumentVersionsModal({ open, onOpenChange, documentId }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="md:max-w-[85%] lg:max-w-[55%] max-h-[90vh] overflow-y-auto">
+      <DialogContent className="md:max-w-[85%] lg:max-w-[55%] max-h-[90vh] overflow-y-auto p-5 sm:p-6">
         <DialogHeader>
           <DialogTitle>Document Version History</DialogTitle>
           <DialogDescription>
@@ -109,8 +109,8 @@ export default function DocumentVersionsModal({ open, onOpenChange, documentId }
                         }
                         disabled={downloadMutation.isPending}
                       >
-                        <Download className="h-4 w-4 mr-1" />
-                        Download
+                        <Download className="h-4 w-4 sm:mr-1" />
+                        <span className="hidden sm:inline">Download</span>
                       </Button>
                     )}
                   </div>

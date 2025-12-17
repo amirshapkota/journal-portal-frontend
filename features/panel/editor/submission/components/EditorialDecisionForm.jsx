@@ -153,7 +153,7 @@ export function EditorialDecisionForm({ submissionId, reviews = [], submission =
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                 {/* Decision Type */}
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-x-4 items-baseline">
+                <div className="grid grid-cols-1 gap-y-4 sm:gap-y-0 lg:grid-cols-2 gap-x-4 items-baseline">
                   <FormField
                     control={form.control}
                     name="decision_type"
