@@ -89,7 +89,7 @@ The copyediting workflow is built with a modular architecture:
 **Usage:**
 
 ```jsx
-import { AddParticipantDialog } from "@/features/panel/editor/submission/components/copyediting";
+import { AddParticipantDialog } from '@/features/panel/editor/submission/components/copyediting';
 
 <AddParticipantDialog
   isOpen={isDialogOpen}
@@ -175,17 +175,17 @@ import { AddParticipantDialog } from "@/features/panel/editor/submission/compone
 **Usage:**
 
 ```jsx
-import CopyeditingSuperDocEditor from "@/features/shared/components/SuperDoc/CopyeditingSuperDocEditor";
+import CopyeditingSuperDocEditor from '@/features/shared/components/SuperDoc/CopyeditingSuperDocEditor';
 
 <CopyeditingSuperDocEditor
   fileId={fileId}
   userData={{
-    first_name: "John",
-    email: "john@example.com",
+    first_name: 'John',
+    email: 'john@example.com',
   }}
   readOnly={false}
   onSaveSuccess={(updatedFile) => {
-    console.log("File saved:", updatedFile);
+    console.log('File saved:', updatedFile);
   }}
 />;
 ```
@@ -210,13 +210,9 @@ import CopyeditingSuperDocEditor from "@/features/shared/components/SuperDoc/Cop
 **Usage:**
 
 ```jsx
-import ProductionSuperDocEditor from "@/features/shared/components/SuperDoc/ProductionSuperDocEditor";
+import ProductionSuperDocEditor from '@/features/shared/components/SuperDoc/ProductionSuperDocEditor';
 
-<ProductionSuperDocEditor
-  fileId={galleyFileId}
-  userData={userData}
-  readOnly={false}
-/>;
+<ProductionSuperDocEditor fileId={galleyFileId} userData={userData} readOnly={false} />;
 ```
 
 ---
@@ -397,19 +393,19 @@ import {
   useCompleteCopyeditingAssignment,
   useAddCopyeditingParticipant, // NEW
   useRemoveCopyeditingParticipant, // NEW
-} from "@/features/panel/editor/submission/hooks";
+} from '@/features/panel/editor/submission/hooks';
 
 // Example usage
 const addParticipant = useAddCopyeditingParticipant();
 
 addParticipant.mutate(
   {
-    assignmentId: "uuid",
-    data: { profile_id: "uuid" },
+    assignmentId: 'uuid',
+    data: { profile_id: 'uuid' },
   },
   {
     onSuccess: () => {
-      console.log("Participant added");
+      console.log('Participant added');
     },
   }
 );
@@ -613,18 +609,16 @@ Instead of versions, the system tracks:
 ### Example 1: Editor Assigning Copyeditor
 
 ```jsx
-import { useState } from "react";
-import { AssignCopyeditorDialog } from "@/features/panel/editor/submission/components/copyediting";
+import { useState } from 'react';
+import { AssignCopyeditorDialog } from '@/features/panel/editor/submission/components/copyediting';
 
 function EditorCopyeditingPage() {
   const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
-  const submissionId = "uuid";
+  const submissionId = 'uuid';
 
   return (
     <>
-      <Button onClick={() => setIsAssignDialogOpen(true)}>
-        Assign Copyeditor
-      </Button>
+      <Button onClick={() => setIsAssignDialogOpen(true)}>Assign Copyeditor</Button>
 
       <AssignCopyeditorDialog
         isOpen={isAssignDialogOpen}
@@ -639,8 +633,8 @@ function EditorCopyeditingPage() {
 ### Example 2: Adding Participant to Assignment
 
 ```jsx
-import { useState } from "react";
-import { AddParticipantDialog } from "@/features/panel/editor/submission/components/copyediting";
+import { useState } from 'react';
+import { AddParticipantDialog } from '@/features/panel/editor/submission/components/copyediting';
 
 function ParticipantManagement({ assignmentId }) {
   const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
@@ -662,15 +656,15 @@ function ParticipantManagement({ assignmentId }) {
 ### Example 3: Copyeditor Editing File
 
 ```jsx
-import CopyeditingSuperDocEditor from "@/features/shared/components/SuperDoc/CopyeditingSuperDocEditor";
-import { useUser } from "@/features";
+import CopyeditingSuperDocEditor from '@/features/shared/components/SuperDoc/CopyeditingSuperDocEditor';
+import { useUser } from '@/features';
 
 function CopyeditorEditPage({ fileId }) {
   const { data: user } = useUser();
 
   const handleSaveSuccess = (updatedFile) => {
-    console.log("File saved by:", updatedFile.last_edited_by.name);
-    console.log("Saved at:", updatedFile.last_edited_at);
+    console.log('File saved by:', updatedFile.last_edited_by.name);
+    console.log('Saved at:', updatedFile.last_edited_at);
   };
 
   return (
@@ -690,7 +684,7 @@ function CopyeditorEditPage({ fileId }) {
 ### Example 4: Author Reviewing Copyedited File
 
 ```jsx
-import CopyeditingSuperDocEditor from "@/features/shared/components/SuperDoc/CopyeditingSuperDocEditor";
+import CopyeditingSuperDocEditor from '@/features/shared/components/SuperDoc/CopyeditingSuperDocEditor';
 
 function AuthorReviewPage({ fileId, userData }) {
   return (
@@ -712,11 +706,11 @@ function AuthorReviewPage({ fileId, userData }) {
 ### Example 5: Production Galley Creation
 
 ```jsx
-import ProductionSuperDocEditor from "@/features/shared/components/SuperDoc/ProductionSuperDocEditor";
+import ProductionSuperDocEditor from '@/features/shared/components/SuperDoc/ProductionSuperDocEditor';
 
 function GalleyCreationPage({ galleyFileId, userData }) {
   const handleGalleySave = (updatedGalley) => {
-    console.log("Galley updated:", updatedGalley);
+    console.log('Galley updated:', updatedGalley);
     // Trigger PDF generation or other post-processing
   };
 
@@ -753,7 +747,7 @@ addParticipant.mutate(
       // Success handling
     },
     onError: (error) => {
-      console.error("Failed to add participant:", error);
+      console.error('Failed to add participant:', error);
       // Error is already toasted by the hook
     },
   }
@@ -765,16 +759,16 @@ addParticipant.mutate(
 When data changes, invalidate relevant queries:
 
 ```jsx
-import { useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from '@tanstack/react-query';
 
 const queryClient = useQueryClient();
 
 // After adding participant
 queryClient.invalidateQueries({
-  queryKey: ["copyediting-participants"],
+  queryKey: ['copyediting-participants'],
 });
 queryClient.invalidateQueries({
-  queryKey: ["copyediting-assignment", assignmentId],
+  queryKey: ['copyediting-assignment', assignmentId],
 });
 ```
 
@@ -798,7 +792,7 @@ Always check user permissions before rendering actions:
 ```jsx
 // Example: Only show add participant button for editors
 {
-  currentRole === "EDITOR" && !isAuthorView && (
+  currentRole === 'EDITOR' && !isAuthorView && (
     <Button onClick={() => setIsAddDialogOpen(true)}>Add Participant</Button>
   );
 }
@@ -874,25 +868,21 @@ useEffect(() => {
 ### Planned Features
 
 1. **Real-time Collaboration**
-
    - WebSocket integration for live editing
    - Show active users editing the same file
    - Real-time cursor positions
 
 2. **Version Comparison**
-
    - Side-by-side diff view
    - Track changes timeline
    - Rollback to previous saves
 
 3. **Automated Notifications**
-
    - Email alerts for new assignments
    - Push notifications for discussion replies
    - Deadline reminders
 
 4. **Advanced Permissions**
-
    - Granular file-level permissions
    - Role-based access control (RBAC)
    - Custom permission sets

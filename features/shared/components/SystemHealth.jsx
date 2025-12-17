@@ -1,29 +1,23 @@
-"use client";
+'use client';
 
-import { useSystemHealth } from "../hooks/useSystemHealth";
-import {
-  Activity,
-  AlertCircle,
-  CheckCircle2,
-  Loader2,
-  RefreshCw,
-} from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useSystemHealth } from '../hooks/useSystemHealth';
+import { Activity, AlertCircle, CheckCircle2, Loader2, RefreshCw } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 export const SystemHealth = () => {
   const { data, isPending, isError, refetch, isFetching } = useSystemHealth();
 
   const getStatusColor = (status) => {
-    if (!status) return "text-muted-foreground";
+    if (!status) return 'text-muted-foreground';
 
     const statusLower = status.toLowerCase();
-    if (statusLower === "healthy" || statusLower === "ok") {
-      return "text-green-500";
-    } else if (statusLower === "degraded" || statusLower === "warning") {
-      return "text-yellow-500";
+    if (statusLower === 'healthy' || statusLower === 'ok') {
+      return 'text-green-500';
+    } else if (statusLower === 'degraded' || statusLower === 'warning') {
+      return 'text-yellow-500';
     } else {
-      return "text-red-500";
+      return 'text-red-500';
     }
   };
 
@@ -31,9 +25,9 @@ export const SystemHealth = () => {
     if (!status) return Activity;
 
     const statusLower = status.toLowerCase();
-    if (statusLower === "healthy" || statusLower === "ok") {
+    if (statusLower === 'healthy' || statusLower === 'ok') {
       return CheckCircle2;
-    } else if (statusLower === "degraded" || statusLower === "warning") {
+    } else if (statusLower === 'degraded' || statusLower === 'warning') {
       return AlertCircle;
     } else {
       return AlertCircle;
@@ -67,15 +61,13 @@ export const SystemHealth = () => {
           onClick={handleRefresh}
           disabled={isFetching}
         >
-          <RefreshCw
-            className={cn("h-3.5 w-3.5", isFetching ? "animate-spin" : "")}
-          />
+          <RefreshCw className={cn('h-3.5 w-3.5', isFetching ? 'animate-spin' : '')} />
         </Button>
       </div>
     );
   }
 
-  const status = data?.status || "Unknown";
+  const status = data?.status || 'Unknown';
   const StatusIcon = getStatusIcon(status);
   const statusColor = getStatusColor(status);
 
@@ -84,9 +76,7 @@ export const SystemHealth = () => {
       <div className="flex items-center gap-2">
         <Activity className="h-4 w-4 text-muted-foreground" />
         <span className="text-muted-foreground">System Health:</span>
-        <div
-          className={cn("flex items-center gap-1.5 font-medium", statusColor)}
-        >
+        <div className={cn('flex items-center gap-1.5 font-medium', statusColor)}>
           <StatusIcon className="h-4 w-4" />
           <span>{status}</span>
         </div>
@@ -99,9 +89,7 @@ export const SystemHealth = () => {
         disabled={isFetching}
         title="Refresh system health"
       >
-        <RefreshCw
-          className={cn("h-3.5 w-3.5", isFetching ? "animate-spin" : "")}
-        />
+        <RefreshCw className={cn('h-3.5 w-3.5', isFetching ? 'animate-spin' : '')} />
       </Button>
     </div>
   );

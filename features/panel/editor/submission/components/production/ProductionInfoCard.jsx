@@ -1,23 +1,10 @@
-import React from "react";
-import {
-  PlayCircle,
-  CheckCircle2,
-  Calendar,
-  User,
-  UserCheck,
-  Clock,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
-import { format } from "date-fns";
+import React from 'react';
+import { PlayCircle, CheckCircle2, Calendar, User, UserCheck, Clock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { format } from 'date-fns';
 
 export function ProductionInfoCard({
   assignment,
@@ -33,22 +20,22 @@ export function ProductionInfoCard({
   const getStatusBadge = (status) => {
     const configs = {
       PENDING: {
-        label: "Pending",
+        label: 'Pending',
         className:
-          "bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800",
-        dotColor: "bg-amber-500 dark:bg-amber-400",
+          'bg-amber-50 text-amber-700 border-amber-200 dark:bg-amber-950 dark:text-amber-300 dark:border-amber-800',
+        dotColor: 'bg-amber-500 dark:bg-amber-400',
       },
       IN_PROGRESS: {
-        label: "In Progress",
+        label: 'In Progress',
         className:
-          "bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800",
-        dotColor: "bg-blue-500 dark:bg-blue-400",
+          'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950 dark:text-blue-300 dark:border-blue-800',
+        dotColor: 'bg-blue-500 dark:bg-blue-400',
       },
       COMPLETED: {
-        label: "Completed",
+        label: 'Completed',
         className:
-          "bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800",
-        dotColor: "bg-emerald-500 dark:bg-emerald-400",
+          'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950 dark:text-emerald-300 dark:border-emerald-800',
+        dotColor: 'bg-emerald-500 dark:bg-emerald-400',
       },
     };
 
@@ -65,9 +52,9 @@ export function ProductionInfoCard({
   };
 
   const formatDate = (dateString) => {
-    if (!dateString) return "Not set";
+    if (!dateString) return 'Not set';
     const date = new Date(dateString);
-    return format(date, "MMM dd, yyyy");
+    return format(date, 'MMM dd, yyyy');
   };
 
   return (
@@ -92,41 +79,35 @@ export function ProductionInfoCard({
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
               <User className="h-4 w-4" />
-              <p className="text-xs font-medium uppercase tracking-wide">
-                Production Assistant
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide">Production Assistant</p>
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               {assignment.production_assistant?.display_name ||
-                `${assignment.production_assistant?.user?.first_name || ""} ${
-                  assignment.production_assistant?.user?.last_name || ""
+                `${assignment.production_assistant?.user?.first_name || ''} ${
+                  assignment.production_assistant?.user?.last_name || ''
                 }`.trim() ||
-                "Not assigned"}
+                'Not assigned'}
             </p>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
               <UserCheck className="h-4 w-4" />
-              <p className="text-xs font-medium uppercase tracking-wide">
-                Assigned By
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide">Assigned By</p>
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               {assignment.assigned_by?.display_name ||
-                `${assignment.assigned_by?.user?.first_name || ""} ${
-                  assignment.assigned_by?.user?.last_name || ""
+                `${assignment.assigned_by?.user?.first_name || ''} ${
+                  assignment.assigned_by?.user?.last_name || ''
                 }`.trim() ||
-                "Unknown"}
+                'Unknown'}
             </p>
           </div>
 
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
               <Calendar className="h-4 w-4" />
-              <p className="text-xs font-medium uppercase tracking-wide">
-                Due Date
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide">Due Date</p>
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               {formatDate(assignment.due_date)}
@@ -136,9 +117,7 @@ export function ProductionInfoCard({
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-slate-500 dark:text-slate-400">
               <Clock className="h-4 w-4" />
-              <p className="text-xs font-medium uppercase tracking-wide">
-                Assigned On
-              </p>
+              <p className="text-xs font-medium uppercase tracking-wide">Assigned On</p>
             </div>
             <p className="text-sm font-semibold text-slate-900 dark:text-slate-100">
               {formatDate(assignment.assigned_at)}
@@ -162,7 +141,7 @@ export function ProductionInfoCard({
 
         {/* Action Buttons / Completion Alert */}
         <div className="pt-2">
-          {assignment.status === "PENDING" && (
+          {assignment.status === 'PENDING' && (
             <Button onClick={onStartProduction} disabled={isStarting} size="sm">
               {isStarting ? (
                 <>
@@ -177,12 +156,8 @@ export function ProductionInfoCard({
               )}
             </Button>
           )}
-          {assignment.status === "IN_PROGRESS" && (
-            <Button
-              onClick={onCompleteProduction}
-              disabled={isCompleting}
-              size="sm"
-            >
+          {assignment.status === 'IN_PROGRESS' && (
+            <Button onClick={onCompleteProduction} disabled={isCompleting} size="sm">
               {isCompleting ? (
                 <>
                   <Clock className="h-4 w-4 mr-2 animate-spin" />
@@ -197,7 +172,7 @@ export function ProductionInfoCard({
             </Button>
           )}
 
-          {assignment.status === "COMPLETED" && (
+          {assignment.status === 'COMPLETED' && (
             <Alert className="bg-emerald-50 border-emerald-200 dark:bg-emerald-950 dark:border-emerald-800">
               <CheckCircle2 className="h-5 w-5 text-emerald-600 dark:text-emerald-400" />
               <AlertTitle className="text-emerald-900 dark:text-emerald-100">

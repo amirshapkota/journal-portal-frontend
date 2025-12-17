@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 export const getProfileData = async (id) => {
   try {

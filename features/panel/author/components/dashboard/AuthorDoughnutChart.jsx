@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { DoughnutChart } from "@/features/shared";
+import { DoughnutChart } from '@/features/shared';
 
-const COLORS = ["var(--chart-1)", "var(--chart-2)"];
+const COLORS = ['var(--chart-1)', 'var(--chart-2)'];
 
 /**
  * @param {Object} props
@@ -12,8 +12,8 @@ const COLORS = ["var(--chart-1)", "var(--chart-2)"];
  */
 export default function AuthorDoughnutChart({ data, isLoading, isError }) {
   const chartData = [
-    { name: "Accepted", value: data?.accepted || 0 },
-    { name: "Rejected", value: data?.rejected || 0 },
+    { name: 'Accepted', value: data?.accepted || 0 },
+    { name: 'Rejected', value: data?.rejected || 0 },
   ];
 
   return (

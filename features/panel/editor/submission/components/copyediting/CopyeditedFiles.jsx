@@ -1,28 +1,18 @@
-"use client";
+'use client';
 
-import { useRouter, useParams } from "next/navigation";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { FileText, Download, CheckCircle, Loader2, Edit } from "lucide-react";
-import { format } from "date-fns";
-import { useApproveCopyeditingFile, useCopyEditedFiles } from "../../hooks";
+import { useRouter, useParams } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { FileText, Download, CheckCircle, Loader2, Edit } from 'lucide-react';
+import { format } from 'date-fns';
+import { useApproveCopyeditingFile, useCopyEditedFiles } from '../../hooks';
 
 /**
  * Component to display copyedited files
  * Shows edited manuscript files with tracking and version history
  */
-export function CopyeditedFiles({
-  assignmentId,
-  isAuthorView = false,
-  readOnly = false,
-}) {
+export function CopyeditedFiles({ assignmentId, isAuthorView = false, readOnly = false }) {
   const router = useRouter();
   const params = useParams();
   const submissionIdFromParams = params?.id;
@@ -46,7 +36,7 @@ export function CopyeditedFiles({
   };
 
   const handleDownload = (fileUrl, fileName) => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = fileUrl;
     link.download = fileName;
     document.body.appendChild(link);
@@ -62,8 +52,7 @@ export function CopyeditedFiles({
             <div>
               <CardTitle>Copyedited Files</CardTitle>
               <CardDescription>
-                Manuscript files with copyediting changes applied. Upload edited
-                versions here.
+                Manuscript files with copyediting changes applied. Upload edited versions here.
               </CardDescription>
             </div>
           </div>
@@ -72,9 +61,7 @@ export function CopyeditedFiles({
           {isLoading ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mt-2">
-                Loading files...
-              </p>
+              <p className="text-sm text-muted-foreground mt-2">Loading files...</p>
             </div>
           ) : error ? (
             <div className="text-center py-8 text-destructive">
@@ -87,8 +74,7 @@ export function CopyeditedFiles({
                 Copyeditor has not yet copyedited the files from draft
               </h3>
               <p className="text-sm text-muted-foreground mb-4">
-                Once the copyeditor submits the draft files, they will appear
-                here.
+                Once the copyeditor submits the draft files, they will appear here.
               </p>
             </div>
           ) : (
@@ -108,20 +94,18 @@ export function CopyeditedFiles({
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <p className="font-medium whitespace-normal">
-                            {file.original_filename}
-                          </p>
+                          <p className="font-medium whitespace-normal">{file.original_filename}</p>
                           {file.version && (
                             <Badge variant="secondary" className="text-xs">
                               v{file.version}
                             </Badge>
                           )}
-                          {file.file_type === "AUTHOR_FINAL" && (
+                          {file.file_type === 'AUTHOR_FINAL' && (
                             <Badge variant="success" className="text-xs">
                               Author Confirmed
                             </Badge>
                           )}
-                          {file.file_type === "COPYEDITED" && (
+                          {file.file_type === 'COPYEDITED' && (
                             <Badge
                               variant="outline"
                               className="text-xs border-orange-500 text-orange-600"
@@ -129,7 +113,7 @@ export function CopyeditedFiles({
                               Awaiting Author
                             </Badge>
                           )}
-                          {file.file_type === "FINAL" && (
+                          {file.file_type === 'FINAL' && (
                             <Badge className="text-xs bg-blue-600">Final</Badge>
                           )}
                         </div>
@@ -140,39 +124,30 @@ export function CopyeditedFiles({
                           {file.file_size && (
                             <>
                               <span className="hidden sm:inline">•</span>
-                              <span>
-                                {(file.file_size / 1024 / 1024).toFixed(2)} MB
-                              </span>
+                              <span>{(file.file_size / 1024 / 1024).toFixed(2)} MB</span>
                             </>
                           )}
                           {file.created_at && (
                             <>
                               <span className="hidden sm:inline">•</span>
-                              <span>
-                                {format(
-                                  new Date(file.created_at),
-                                  "MMM d, yyyy"
-                                )}
-                              </span>
+                              <span>{format(new Date(file.created_at), 'MMM d, yyyy')}</span>
                             </>
                           )}
                         </div>
                         {file.uploaded_by && (
                           <p className="text-xs text-muted-foreground mt-1">
-                            Uploaded by: {file.uploaded_by.user?.first_name}{" "}
+                            Uploaded by: {file.uploaded_by.user?.first_name}{' '}
                             {file.uploaded_by.user?.last_name}
                           </p>
                         )}
                         {file.description && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {file.description}
-                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">{file.description}</p>
                         )}
                       </div>
                     </div>
 
                     <div className="flex items-center gap-2 shrink-0 sm:ml-auto">
-                      {!readOnly && file.file_type !== "COPYEDITED" && (
+                      {!readOnly && file.file_type !== 'COPYEDITED' && (
                         <Button
                           variant="ghost"
                           size="sm"
@@ -203,9 +178,7 @@ export function CopyeditedFiles({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() =>
-                          handleDownload(file.id, file.original_filename)
-                        }
+                        onClick={() => handleDownload(file.id, file.original_filename)}
                         title="Download file"
                       >
                         <Download className="h-4 w-4 sm:mr-2" />

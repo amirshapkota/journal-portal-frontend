@@ -1,27 +1,25 @@
-"use client";
+'use client';
 
-import { createContext, useContext, useEffect, useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useDebounce } from "use-debounce";
-import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { createContext, useContext, useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useDebounce } from 'use-debounce';
+import { Card, CardContent } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Search } from "lucide-react";
+} from '@/components/ui/select';
+import { Search } from 'lucide-react';
 
 const FilterToolbarContext = createContext();
 
 const useFilterToolbarContext = () => {
   const context = useContext(FilterToolbarContext);
   if (!context) {
-    throw new Error(
-      "FilterToolbar compound components must be used within FilterToolbar"
-    );
+    throw new Error('FilterToolbar compound components must be used within FilterToolbar');
   }
   return context;
 };
@@ -48,14 +46,12 @@ const useFilterToolbarContext = () => {
  *   />
  * </FilterToolbar>
  */
-export function FilterToolbar({ children, className = "" }) {
+export function FilterToolbar({ children, className = '' }) {
   return (
     <FilterToolbarContext.Provider value={{}}>
       <Card className={className}>
         <CardContent className="space-y-4">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-end">
-            {children}
-          </div>
+          <div className="flex flex-col gap-4 lg:flex-row lg:items-end">{children}</div>
         </CardContent>
       </Card>
     </FilterToolbarContext.Provider>
@@ -68,18 +64,16 @@ export function FilterToolbar({ children, className = "" }) {
 FilterToolbar.Search = function FilterToolbarSearch({
   value,
   onChange,
-  placeholder = "Search...",
-  label = "Search",
-  className = "",
-  paramName = "search",
+  placeholder = 'Search...',
+  label = 'Search',
+  className = '',
+  paramName = 'search',
   debounceMs = 500,
 }) {
   useFilterToolbarContext(); // Validate context
   const router = useRouter();
   const searchParams = useSearchParams();
-  const [localValue, setLocalValue] = useState(
-    value || searchParams.get(paramName) || ""
-  );
+  const [localValue, setLocalValue] = useState(value || searchParams.get(paramName) || '');
 
   // Debounce the local value using use-debounce hook
   const [debouncedValue] = useDebounce(localValue, debounceMs);
@@ -90,7 +84,7 @@ FilterToolbar.Search = function FilterToolbarSearch({
 
     if (debouncedValue) {
       params.set(paramName, debouncedValue);
-      params.delete("page"); // Reset to first page when searching
+      params.delete('page'); // Reset to first page when searching
     } else {
       params.delete(paramName);
     }
@@ -111,9 +105,7 @@ FilterToolbar.Search = function FilterToolbarSearch({
 
   return (
     <div className={`flex-2 ${className}`}>
-      <label className="text-sm font-medium text-muted-foreground block mb-2">
-        {label}
-      </label>
+      <label className="text-sm font-medium text-muted-foreground block mb-2">{label}</label>
       <div className="relative">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
@@ -135,24 +127,24 @@ FilterToolbar.Select = function FilterToolbarSelect({
   onChange,
   options = [],
   label,
-  placeholder = "Select...",
-  className = "",
+  placeholder = 'Select...',
+  className = '',
   paramName,
 }) {
   useFilterToolbarContext(); // Validate context
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentValue = value || searchParams.get(paramName) || "";
+  const currentValue = value || searchParams.get(paramName) || '';
 
   const handleChange = (newValue) => {
     if (paramName) {
       const params = new URLSearchParams(searchParams.toString());
-      if (newValue && newValue !== "all") {
+      if (newValue && newValue !== 'all') {
         params.set(paramName, newValue);
       } else {
         params.delete(paramName);
       }
-      params.delete("page"); // Reset to first page when filter changes
+      params.delete('page'); // Reset to first page when filter changes
       router.push(`?${params.toString()}`, { scroll: false });
     }
     if (onChange) onChange(newValue);
@@ -161,9 +153,7 @@ FilterToolbar.Select = function FilterToolbarSelect({
   return (
     <div className={`flex-1  ${className}`}>
       {label && (
-        <label className="text-sm font-medium text-muted-foreground block mb-2">
-          {label}
-        </label>
+        <label className="text-sm font-medium text-muted-foreground block mb-2">{label}</label>
       )}
       <Select value={currentValue} onValueChange={handleChange}>
         <SelectTrigger>
@@ -187,14 +177,14 @@ FilterToolbar.Select = function FilterToolbarSelect({
 FilterToolbar.DateInput = function FilterToolbarDateInput({
   value,
   onChange,
-  label = "Date",
-  className = "",
+  label = 'Date',
+  className = '',
   paramName,
 }) {
   useFilterToolbarContext(); // Validate context
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentValue = value || searchParams.get(paramName) || "";
+  const currentValue = value || searchParams.get(paramName) || '';
 
   const handleChange = (newValue) => {
     if (paramName) {
@@ -211,14 +201,8 @@ FilterToolbar.DateInput = function FilterToolbarDateInput({
 
   return (
     <div className={`flex-1 ${className}`}>
-      <label className="text-sm font-medium text-muted-foreground block mb-2">
-        {label}
-      </label>
-      <Input
-        type="date"
-        value={currentValue}
-        onChange={(e) => handleChange(e.target.value)}
-      />
+      <label className="text-sm font-medium text-muted-foreground block mb-2">{label}</label>
+      <Input type="date" value={currentValue} onChange={(e) => handleChange(e.target.value)} />
     </div>
   );
 };
@@ -230,15 +214,15 @@ FilterToolbar.Input = function FilterToolbarInput({
   value,
   onChange,
   label,
-  placeholder = "",
-  type = "text",
-  className = "",
+  placeholder = '',
+  type = 'text',
+  className = '',
   paramName,
 }) {
   useFilterToolbarContext(); // Validate context
   const router = useRouter();
   const searchParams = useSearchParams();
-  const currentValue = value || searchParams.get(paramName) || "";
+  const currentValue = value || searchParams.get(paramName) || '';
 
   const handleChange = (newValue) => {
     if (paramName) {
@@ -256,9 +240,7 @@ FilterToolbar.Input = function FilterToolbarInput({
   return (
     <div className={`flex-1  ${className}`}>
       {label && (
-        <label className="text-sm font-medium text-muted-foreground block mb-2">
-          {label}
-        </label>
+        <label className="text-sm font-medium text-muted-foreground block mb-2">{label}</label>
       )}
       <Input
         type={type}

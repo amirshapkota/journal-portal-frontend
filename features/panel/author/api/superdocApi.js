@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Load document for SuperDoc editor
@@ -6,9 +6,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response with document data, file URL, and Yjs state
  */
 export const loadDocument = async (documentId) => {
-  const response = await instance.get(
-    `submissions/documents/${documentId}/load/`
-  );
+  const response = await instance.get(`submissions/documents/${documentId}/load/`);
   return response.data;
 };
 
@@ -19,12 +17,9 @@ export const loadDocument = async (documentId) => {
  * @returns {Promise} API response
  */
 export const saveYjsState = async (documentId, yjsStateBase64) => {
-  const response = await instance.post(
-    `submissions/documents/${documentId}/save-state/`,
-    {
-      yjs_state: yjsStateBase64,
-    }
-  );
+  const response = await instance.post(`submissions/documents/${documentId}/save-state/`, {
+    yjs_state: yjsStateBase64,
+  });
   return response.data;
 };
 
@@ -36,17 +31,13 @@ export const saveYjsState = async (documentId, yjsStateBase64) => {
  */
 export const exportDocx = async (documentId, docxBlob) => {
   const formData = new FormData();
-  formData.append("file", docxBlob, "document.docx");
+  formData.append('file', docxBlob, 'document.docx');
 
-  const response = await instance.post(
-    `submissions/documents/${documentId}/export/`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await instance.post(`submissions/documents/${documentId}/export/`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -56,12 +47,9 @@ export const exportDocx = async (documentId, docxBlob) => {
  * @returns {Promise} File download
  */
 export const downloadDocx = async (documentId) => {
-  const response = await instance.get(
-    `submissions/documents/${documentId}/download/`,
-    {
-      responseType: "blob",
-    }
-  );
+  const response = await instance.get(`submissions/documents/${documentId}/download/`, {
+    responseType: 'blob',
+  });
   return response.data;
 };
 
@@ -72,12 +60,9 @@ export const downloadDocx = async (documentId) => {
  * @returns {Promise} API response
  */
 export const createDocumentVersion = async (documentId, changeSummary) => {
-  const response = await instance.post(
-    `submissions/documents/${documentId}/create-version/`,
-    {
-      change_summary: changeSummary,
-    }
-  );
+  const response = await instance.post(`submissions/documents/${documentId}/create-version/`, {
+    change_summary: changeSummary,
+  });
   return response.data;
 };
 
@@ -88,12 +73,9 @@ export const createDocumentVersion = async (documentId, changeSummary) => {
  * @returns {Promise} API response
  */
 export const submitUpdatedDocument = async (documentId, submissionId) => {
-  const response = await instance.post(
-    `submissions/${submissionId}/submit-updated-document/`,
-    {
-      document_id: documentId,
-    }
-  );
+  const response = await instance.post(`submissions/${submissionId}/submit-updated-document/`, {
+    document_id: documentId,
+  });
   return response.data;
 };
 

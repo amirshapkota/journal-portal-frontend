@@ -29,10 +29,10 @@ This document provides a comprehensive guide to the document upload workflow in 
 ```javascript
 // 1. User selects DOCX file and fills metadata
 const data = new FormData();
-data.append("title", "My Manuscript");
-data.append("document_type", "MANUSCRIPT");
-data.append("description", "Initial submission");
-data.append("file", docxFile); // DOCX file blob
+data.append('title', 'My Manuscript');
+data.append('document_type', 'MANUSCRIPT');
+data.append('description', 'Initial submission');
+data.append('file', docxFile); // DOCX file blob
 
 // 2. Upload to backend
 const response = await uploadMutation.mutateAsync({
@@ -72,7 +72,7 @@ const response = await uploadMutation.mutateAsync({
 ```javascript
 // 3. After successful upload, initialize empty Yjs state
 if (response?.id) {
-  const emptyYjsState = ""; // Empty string for new documents
+  const emptyYjsState = ''; // Empty string for new documents
   await initYjsStateMutation.mutateAsync({
     documentId: response.id,
     yjsState: emptyYjsState,
@@ -114,7 +114,7 @@ if (response?.id) {
 ```javascript
 // 1. Fetch document data from backend
 const loadDocumentQuery = useQuery({
-  queryKey: ["document", documentId],
+  queryKey: ['document', documentId],
   queryFn: () => loadDocument(documentId),
 });
 
@@ -159,10 +159,10 @@ useEffect(() => {
     user: {
       id: user.id,
       name: user.name,
-      role: "author",
+      role: 'author',
     },
     onReady: () => {
-      console.log("SuperDoc initialized");
+      console.log('SuperDoc initialized');
 
       // 3. Load existing Yjs state if available
       if (documentData.yjs_state) {
@@ -331,18 +331,16 @@ useEffect(() => {
       const yjsState = superdocRef.current.getUpdate();
 
       // Convert to base64
-      const base64String = btoa(
-        String.fromCharCode(...new Uint8Array(yjsState))
-      );
+      const base64String = btoa(String.fromCharCode(...new Uint8Array(yjsState)));
 
       // Save to backend
       await saveYjsState(documentId, base64String);
 
       setLastSaved(new Date());
-      toast.success("Document auto-saved");
+      toast.success('Document auto-saved');
     } catch (error) {
-      console.error("Auto-save failed:", error);
-      toast.error("Failed to auto-save");
+      console.error('Auto-save failed:', error);
+      toast.error('Failed to auto-save');
     }
   }, 30000); // 30 seconds
 
@@ -360,9 +358,9 @@ const handleSave = async () => {
     const base64String = btoa(String.fromCharCode(...new Uint8Array(yjsState)));
     await saveYjsState(documentId, base64String);
     setLastSaved(new Date());
-    toast.success("Document saved successfully");
+    toast.success('Document saved successfully');
   } catch (error) {
-    toast.error("Failed to save document");
+    toast.error('Failed to save document');
   } finally {
     setIsSaving(false);
   }
@@ -385,7 +383,7 @@ const handleDownload = async () => {
 
     // Create download link
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement("a");
+    const a = document.createElement('a');
     a.href = url;
     a.download = `${documentData.file_name}`;
     document.body.appendChild(a);
@@ -393,9 +391,9 @@ const handleDownload = async () => {
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
 
-    toast.success("Document downloaded");
+    toast.success('Document downloaded');
   } catch (error) {
-    toast.error("Failed to download document");
+    toast.error('Failed to download document');
   }
 };
 ```
@@ -416,13 +414,13 @@ const handleExport = async () => {
 
     // Upload to backend
     const formData = new FormData();
-    formData.append("file", docxBlob, "exported.docx");
+    formData.append('file', docxBlob, 'exported.docx');
 
     await exportDocx(documentId, formData);
 
-    toast.success("Document exported and saved");
+    toast.success('Document exported and saved');
   } catch (error) {
-    toast.error("Failed to export document");
+    toast.error('Failed to export document');
   }
 };
 ```
@@ -496,9 +494,7 @@ def can_access_document(user, document):
   !documentData?.can_edit && (
     <Alert>
       <Info className="h-4 w-4" />
-      <AlertDescription>
-        You have read-only access to this document
-      </AlertDescription>
+      <AlertDescription>You have read-only access to this document</AlertDescription>
     </Alert>
   );
 }
@@ -629,18 +625,18 @@ try {
   if (response?.id) {
     await initYjsStateMutation.mutateAsync({
       documentId: response.id,
-      yjsState: "",
+      yjsState: '',
     });
   }
 
-  toast.success("Document uploaded successfully");
+  toast.success('Document uploaded successfully');
 } catch (error) {
   if (error?.response?.status === 413) {
-    toast.error("File too large. Maximum size is 10MB");
+    toast.error('File too large. Maximum size is 10MB');
   } else if (error?.response?.status === 400) {
-    toast.error(error.response.data.detail || "Invalid file format");
+    toast.error(error.response.data.detail || 'Invalid file format');
   } else {
-    toast.error("Failed to upload document. Please try again.");
+    toast.error('Failed to upload document. Please try again.');
   }
 }
 
@@ -654,7 +650,7 @@ const handleAutoSave = async () => {
       toast.error("You don't have permission to edit this document");
       setHasUnsavedChanges(true); // Prevent data loss
     } else {
-      console.error("Auto-save failed:", error);
+      console.error('Auto-save failed:', error);
       setHasUnsavedChanges(true);
     }
   }
@@ -694,28 +690,28 @@ DATA_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
 
 ```javascript
 // 1. Test document upload
-test("uploads document and initializes Yjs state", async () => {
-  const file = new File(["content"], "test.docx", {
-    type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+test('uploads document and initializes Yjs state', async () => {
+  const file = new File(['content'], 'test.docx', {
+    type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
   });
 
   const uploadResponse = await uploadDocument(submissionId, {
-    title: "Test Document",
-    document_type: "MANUSCRIPT",
-    description: "Test",
+    title: 'Test Document',
+    document_type: 'MANUSCRIPT',
+    description: 'Test',
     file,
   });
 
   expect(uploadResponse.id).toBeDefined();
-  expect(uploadResponse.file_url).toContain(".docx");
+  expect(uploadResponse.file_url).toContain('.docx');
 
   // 2. Verify Yjs state initialization
-  const initResponse = await saveYjsState(uploadResponse.id, "");
-  expect(initResponse.status).toBe("saved");
+  const initResponse = await saveYjsState(uploadResponse.id, '');
+  expect(initResponse.status).toBe('saved');
 });
 
 // 3. Test loading in editor
-test("loads document in SuperDoc editor", async () => {
+test('loads document in SuperDoc editor', async () => {
   const documentData = await loadDocument(documentId);
 
   expect(documentData.file_url).toBeDefined();
@@ -724,13 +720,13 @@ test("loads document in SuperDoc editor", async () => {
 });
 
 // 4. Test auto-save
-test("auto-saves Yjs state", async () => {
+test('auto-saves Yjs state', async () => {
   const mockYjsState = new Uint8Array([1, 2, 3, 4]);
   const base64 = btoa(String.fromCharCode(...mockYjsState));
 
   const response = await saveYjsState(documentId, base64);
 
-  expect(response.status).toBe("saved");
+  expect(response.status).toBe('saved');
   expect(response.last_edited_at).toBeDefined();
 });
 ```
@@ -779,7 +775,7 @@ curl -X GET \
 const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
 
 if (file.size > MAX_FILE_SIZE) {
-  toast.error("File too large. Maximum size is 10MB");
+  toast.error('File too large. Maximum size is 10MB');
   return;
 }
 ```
@@ -798,7 +794,7 @@ FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760  # 10MB
 // Debounce auto-save to prevent excessive API calls
 let saveTimeout;
 
-superdoc.on("update", (update) => {
+superdoc.on('update', (update) => {
   clearTimeout(saveTimeout);
 
   // Wait 30 seconds after last edit before saving
@@ -814,7 +810,7 @@ superdoc.on("update", (update) => {
 
 ```javascript
 // Consider compressing Yjs state before sending to backend
-import pako from "pako";
+import pako from 'pako';
 
 const yjsState = superdoc.getUpdate();
 const compressed = pako.deflate(yjsState);
@@ -838,14 +834,14 @@ const base64 = btoa(String.fromCharCode(...compressed));
 ```javascript
 // Verify file exists before initializing SuperDoc
 if (!documentData?.file_url) {
-  toast.error("Document file not found");
+  toast.error('Document file not found');
   return;
 }
 
 // Test file URL accessibility
-const testResponse = await fetch(documentData.file_url, { method: "HEAD" });
+const testResponse = await fetch(documentData.file_url, { method: 'HEAD' });
 if (!testResponse.ok) {
-  toast.error("Document file is not accessible");
+  toast.error('Document file is not accessible');
   return;
 }
 ```
@@ -867,8 +863,8 @@ try {
     await saveYjsState(documentId, base64String);
   } else if (error?.response?.status === 403) {
     // Permission revoked - show error
-    toast.error("You no longer have edit access");
-    router.push("/author/submissions");
+    toast.error('You no longer have edit access');
+    router.push('/author/submissions');
   }
 }
 ```
@@ -890,8 +886,8 @@ const isValidBase64 = (str) => {
 };
 
 if (documentData.yjs_state && !isValidBase64(documentData.yjs_state)) {
-  console.error("Invalid Yjs state format");
-  toast.error("Document state is corrupted. Starting fresh.");
+  console.error('Invalid Yjs state format');
+  toast.error('Document state is corrupted. Starting fresh.');
   // Continue without loading state
 }
 ```
@@ -909,7 +905,7 @@ const retryInit = async (documentId, maxRetries = 3) => {
     try {
       await initYjsStateMutation.mutateAsync({
         documentId,
-        yjsState: "",
+        yjsState: '',
       });
       return; // Success
     } catch (error) {
@@ -963,7 +959,7 @@ def save_state(self, request, pk=None):
 ```javascript
 // Sanitize user input before uploading
 const sanitizeFileName = (name) => {
-  return name.replace(/[^a-zA-Z0-9.-]/g, "_").substring(0, 255);
+  return name.replace(/[^a-zA-Z0-9.-]/g, '_').substring(0, 255);
 };
 
 const sanitizedFile = new File([file], sanitizeFileName(file.name), {

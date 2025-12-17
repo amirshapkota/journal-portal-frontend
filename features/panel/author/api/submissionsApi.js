@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Create a new submission
@@ -6,7 +6,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response
  */
 export const createSubmission = async (data) => {
-  const response = await instance.post("submissions/", data);
+  const response = await instance.post('submissions/', data);
   return response.data;
 };
 
@@ -15,7 +15,7 @@ export const createSubmission = async (data) => {
  * @returns {Promise} API response
  */
 export const getSubmissions = async () => {
-  const response = await instance.get("submissions/");
+  const response = await instance.get('submissions/');
   return response.data;
 };
 
@@ -25,7 +25,7 @@ export const getSubmissions = async () => {
  * @returns {Promise} API response
  */
 export const getDraftSubmissions = async (params = {}) => {
-  const response = await instance.get("submissions/drafts/", { params });
+  const response = await instance.get('submissions/drafts/', { params });
   return response.data;
 };
 
@@ -34,7 +34,7 @@ export const getDraftSubmissions = async (params = {}) => {
  * @returns {Promise} API response
  */
 export const getUnassignedSubmissions = async (params) => {
-  const response = await instance.get("submissions/unassigned/", { params });
+  const response = await instance.get('submissions/unassigned/', { params });
   return response.data;
 };
 
@@ -43,7 +43,7 @@ export const getUnassignedSubmissions = async (params) => {
  * @returns {Promise} API response
  */
 export const getActiveSubmissions = async (params) => {
-  const response = await instance.get("submissions/active/", { params });
+  const response = await instance.get('submissions/active/', { params });
   return response.data;
 };
 
@@ -52,7 +52,7 @@ export const getActiveSubmissions = async (params) => {
  * @returns {Promise} API response
  */
 export const getArchivedSubmissions = async (params) => {
-  const response = await instance.get("submissions/archived/", { params });
+  const response = await instance.get('submissions/archived/', { params });
   return response.data;
 };
 
@@ -62,7 +62,7 @@ export const getArchivedSubmissions = async (params) => {
  * @returns {Promise} API response
  */
 export const getSingleSubmissionById = async (id) => {
-  const response = await instance.get("submissions/" + id + "/");
+  const response = await instance.get('submissions/' + id + '/');
   return response.data;
 };
 
@@ -73,7 +73,7 @@ export const getSingleSubmissionById = async (id) => {
  * @returns {Promise} API response
  */
 export const updateSubmission = async (id, data) => {
-  const response = await instance.patch("submissions/" + id + "/", data);
+  const response = await instance.patch('submissions/' + id + '/', data);
   return response.data;
 };
 
@@ -83,7 +83,7 @@ export const updateSubmission = async (id, data) => {
  * @returns {Promise} API response
  */
 export const deleteSubmission = async (id) => {
-  const response = await instance.delete("submissions/" + id + "/");
+  const response = await instance.delete('submissions/' + id + '/');
   return response.data;
 };
 
@@ -93,7 +93,7 @@ export const deleteSubmission = async (id) => {
  * @returns {Promise} API response
  */
 export const submitForReview = async (id) => {
-  const response = await instance.post("submissions/" + id + "/submit/");
+  const response = await instance.post('submissions/' + id + '/submit/');
   return response.data;
 };
 
@@ -103,7 +103,7 @@ export const submitForReview = async (id) => {
  * @returns {Promise} API response
  */
 export const withdrawSubmission = async (id) => {
-  const response = await instance.post("submissions/" + id + "/withdraw/");
+  const response = await instance.post('submissions/' + id + '/withdraw/');
   return response.data;
 };
 
@@ -114,15 +114,11 @@ export const withdrawSubmission = async (id) => {
  * @returns {Promise} API response
  */
 export const uploadDocument = async (id, data) => {
-  const response = await instance.post(
-    "submissions/" + id + "/upload_document/",
-    data,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await instance.post('submissions/' + id + '/upload_document/', data, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -132,6 +128,6 @@ export const uploadDocument = async (id, data) => {
  * @returns {Promise} API response
  */
 export const getSubmissionDocuments = async (id) => {
-  const response = await instance.get("submissions/" + id + "/documents/");
+  const response = await instance.get('submissions/' + id + '/documents/');
   return response.data;
 };

@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Logout API
@@ -18,6 +18,6 @@ import { instance } from "@/lib/instance";
  * }
  */
 export const logoutApi = async () => {
-  const response = await instance.post("auth/logout/");
+  const response = await instance.post('auth/logout/');
   return response.data;
 };

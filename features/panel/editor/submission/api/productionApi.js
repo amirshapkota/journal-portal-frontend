@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 // ==================== PRODUCTION ASSIGNMENTS ====================
 
@@ -13,7 +13,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response with production assignments list
  */
 export const listProductionAssignments = async (params = {}) => {
-  const response = await instance.get("submissions/production/assignments/", {
+  const response = await instance.get('submissions/production/assignments/', {
     params,
   });
   return response.data;
@@ -29,10 +29,7 @@ export const listProductionAssignments = async (params = {}) => {
  * @returns {Promise} API response with created assignment
  */
 export const createProductionAssignment = async (data) => {
-  const response = await instance.post(
-    "submissions/production/assignments/",
-    data
-  );
+  const response = await instance.post('submissions/production/assignments/', data);
   return response.data;
 };
 
@@ -42,9 +39,7 @@ export const createProductionAssignment = async (data) => {
  * @returns {Promise} API response with assignment details
  */
 export const getProductionAssignment = async (assignmentId) => {
-  const response = await instance.get(
-    `submissions/production/assignments/${assignmentId}/`
-  );
+  const response = await instance.get(`submissions/production/assignments/${assignmentId}/`);
   return response.data;
 };
 
@@ -68,9 +63,7 @@ export const updateProductionAssignment = async (assignmentId, data) => {
  * @returns {Promise} API response
  */
 export const startProductionAssignment = async (assignmentId) => {
-  const response = await instance.post(
-    `submissions/production/assignments/${assignmentId}/start/`
-  );
+  const response = await instance.post(`submissions/production/assignments/${assignmentId}/start/`);
   return response.data;
 };
 
@@ -95,9 +88,7 @@ export const completeProductionAssignment = async (assignmentId, data) => {
  * @returns {Promise} API response with files list
  */
 export const getProductionAssignmentFiles = async (assignmentId) => {
-  const response = await instance.get(
-    `submissions/production/assignments/${assignmentId}/files/`
-  );
+  const response = await instance.get(`submissions/production/assignments/${assignmentId}/files/`);
   return response.data;
 };
 
@@ -170,7 +161,7 @@ export const removeProductionParticipant = async (assignmentId, data) => {
  * @returns {Promise} API response with files list
  */
 export const listProductionFiles = async (params = {}) => {
-  const response = await instance.get("submissions/production/files/", {
+  const response = await instance.get('submissions/production/files/', {
     params,
   });
   return response.data;
@@ -182,15 +173,11 @@ export const listProductionFiles = async (params = {}) => {
  * @returns {Promise} API response with uploaded file
  */
 export const uploadProductionFile = async (formData) => {
-  const response = await instance.post(
-    "submissions/production/files/",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await instance.post('submissions/production/files/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -200,9 +187,7 @@ export const uploadProductionFile = async (formData) => {
  * @returns {Promise} API response with file details
  */
 export const getProductionFile = async (fileId) => {
-  const response = await instance.get(
-    `submissions/production/files/${fileId}/`
-  );
+  const response = await instance.get(`submissions/production/files/${fileId}/`);
   return response.data;
 };
 
@@ -213,10 +198,7 @@ export const getProductionFile = async (fileId) => {
  * @returns {Promise} API response with updated file
  */
 export const updateProductionFile = async (fileId, data) => {
-  const response = await instance.patch(
-    `submissions/production/files/${fileId}/`,
-    data
-  );
+  const response = await instance.patch(`submissions/production/files/${fileId}/`, data);
   return response.data;
 };
 
@@ -226,9 +208,7 @@ export const updateProductionFile = async (fileId, data) => {
  * @returns {Promise} API response
  */
 export const approveProductionFile = async (fileId) => {
-  const response = await instance.post(
-    `submissions/production/files/${fileId}/approve/`
-  );
+  const response = await instance.post(`submissions/production/files/${fileId}/approve/`);
   return response.data;
 };
 
@@ -238,9 +218,7 @@ export const approveProductionFile = async (fileId) => {
  * @returns {Promise} API response
  */
 export const publishGalleyFile = async (fileId) => {
-  const response = await instance.post(
-    `submissions/production/files/${fileId}/publish/`
-  );
+  const response = await instance.post(`submissions/production/files/${fileId}/publish/`);
   return response.data;
 };
 
@@ -250,9 +228,7 @@ export const publishGalleyFile = async (fileId) => {
  * @returns {Promise} API response
  */
 export const deleteProductionFile = async (fileId) => {
-  const response = await instance.delete(
-    `submissions/production/files/${fileId}/`
-  );
+  const response = await instance.delete(`submissions/production/files/${fileId}/`);
   return response.data;
 };
 
@@ -262,9 +238,7 @@ export const deleteProductionFile = async (fileId) => {
  * @returns {Promise} API response with file metadata and download URL
  */
 export const loadProductionFile = async (fileId) => {
-  const response = await instance.get(
-    `submissions/production/files/${fileId}/load/`
-  );
+  const response = await instance.get(`submissions/production/files/${fileId}/load/`);
   return response.data;
 };
 
@@ -275,15 +249,11 @@ export const loadProductionFile = async (fileId) => {
  * @returns {Promise} API response
  */
 export const saveProductionFile = async (fileId, formData) => {
-  const response = await instance.post(
-    `submissions/production/files/${fileId}/save/`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await instance.post(`submissions/production/files/${fileId}/save/`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -293,12 +263,9 @@ export const saveProductionFile = async (fileId, formData) => {
  * @returns {Promise} API response with file blob
  */
 export const downloadProductionFile = async (fileId) => {
-  const response = await instance.get(
-    `submissions/production/files/${fileId}/download/`,
-    {
-      responseType: "blob",
-    }
-  );
+  const response = await instance.get(`submissions/production/files/${fileId}/download/`, {
+    responseType: 'blob',
+  });
   return response.data;
 };
 
@@ -314,7 +281,7 @@ export const downloadProductionFile = async (fileId) => {
  * @returns {Promise} API response with discussions list
  */
 export const listProductionDiscussions = async (params = {}) => {
-  const response = await instance.get("submissions/production/discussions/", {
+  const response = await instance.get('submissions/production/discussions/', {
     params,
   });
   return response.data;
@@ -330,10 +297,7 @@ export const listProductionDiscussions = async (params = {}) => {
  * @returns {Promise} API response with created discussion
  */
 export const createProductionDiscussion = async (data) => {
-  const response = await instance.post(
-    "submissions/production/discussions/",
-    data
-  );
+  const response = await instance.post('submissions/production/discussions/', data);
   return response.data;
 };
 
@@ -343,9 +307,7 @@ export const createProductionDiscussion = async (data) => {
  * @returns {Promise} API response with discussion details and messages
  */
 export const getProductionDiscussion = async (discussionId) => {
-  const response = await instance.get(
-    `submissions/production/discussions/${discussionId}/`
-  );
+  const response = await instance.get(`submissions/production/discussions/${discussionId}/`);
   return response.data;
 };
 
@@ -384,9 +346,7 @@ export const addProductionMessage = async (discussionId, data) => {
  * @returns {Promise} API response
  */
 export const closeProductionDiscussion = async (discussionId) => {
-  const response = await instance.post(
-    `submissions/production/discussions/${discussionId}/close/`
-  );
+  const response = await instance.post(`submissions/production/discussions/${discussionId}/close/`);
   return response.data;
 };
 
@@ -408,9 +368,7 @@ export const reopenProductionDiscussion = async (discussionId) => {
  * @returns {Promise} API response
  */
 export const deleteProductionDiscussion = async (discussionId) => {
-  const response = await instance.delete(
-    `submissions/production/discussions/${discussionId}/`
-  );
+  const response = await instance.delete(`submissions/production/discussions/${discussionId}/`);
   return response.data;
 };
 
@@ -429,7 +387,7 @@ export const deleteProductionDiscussion = async (discussionId) => {
  * @returns {Promise} API response with schedules list
  */
 export const listPublicationSchedules = async (params = {}) => {
-  const response = await instance.get("submissions/production/schedules/", {
+  const response = await instance.get('submissions/production/schedules/', {
     params,
   });
   return response.data;
@@ -448,10 +406,7 @@ export const listPublicationSchedules = async (params = {}) => {
  * @returns {Promise} API response with created schedule
  */
 export const schedulePublication = async (data) => {
-  const response = await instance.post(
-    "submissions/production/schedules/",
-    data
-  );
+  const response = await instance.post('submissions/production/schedules/', data);
   return response.data;
 };
 
@@ -461,9 +416,7 @@ export const schedulePublication = async (data) => {
  * @returns {Promise} API response with schedule details
  */
 export const getPublicationSchedule = async (scheduleId) => {
-  const response = await instance.get(
-    `submissions/production/schedules/${scheduleId}/`
-  );
+  const response = await instance.get(`submissions/production/schedules/${scheduleId}/`);
   return response.data;
 };
 
@@ -474,10 +427,7 @@ export const getPublicationSchedule = async (scheduleId) => {
  * @returns {Promise} API response with updated schedule
  */
 export const updatePublicationSchedule = async (scheduleId, data) => {
-  const response = await instance.patch(
-    `submissions/production/schedules/${scheduleId}/`,
-    data
-  );
+  const response = await instance.patch(`submissions/production/schedules/${scheduleId}/`, data);
   return response.data;
 };
 
@@ -499,9 +449,7 @@ export const publishNow = async (scheduleId) => {
  * @returns {Promise} API response
  */
 export const cancelPublication = async (scheduleId) => {
-  const response = await instance.post(
-    `submissions/production/schedules/${scheduleId}/cancel/`
-  );
+  const response = await instance.post(`submissions/production/schedules/${scheduleId}/cancel/`);
   return response.data;
 };
 
@@ -511,9 +459,7 @@ export const cancelPublication = async (scheduleId) => {
  * @returns {Promise} API response
  */
 export const deletePublicationSchedule = async (scheduleId) => {
-  const response = await instance.delete(
-    `submissions/production/schedules/${scheduleId}/`
-  );
+  const response = await instance.delete(`submissions/production/schedules/${scheduleId}/`);
   return response.data;
 };
 
@@ -525,9 +471,7 @@ export const deletePublicationSchedule = async (scheduleId) => {
  * @returns {Promise} API response with production participants
  */
 export const getProductionParticipants = async (submissionId) => {
-  const response = await instance.get(
-    `submissions/${submissionId}/production/participants/`
-  );
+  const response = await instance.get(`submissions/${submissionId}/production/participants/`);
   return response.data;
 };
 
@@ -537,8 +481,6 @@ export const getProductionParticipants = async (submissionId) => {
  * @returns {Promise} API response with production status
  */
 export const getProductionStatus = async (submissionId) => {
-  const response = await instance.get(
-    `submissions/${submissionId}/production/status/`
-  );
+  const response = await instance.get(`submissions/${submissionId}/production/status/`);
   return response.data;
 };

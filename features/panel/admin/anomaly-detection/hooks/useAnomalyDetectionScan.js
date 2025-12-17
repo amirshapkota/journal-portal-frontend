@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { runAnomalyDetectionScan } from "../api/anomalyDetectionApi";
+import { useQuery } from '@tanstack/react-query';
+import { runAnomalyDetectionScan } from '../api/anomalyDetectionApi';
 
 /**
  * Hook to run anomaly detection scan
@@ -11,7 +11,7 @@ import { runAnomalyDetectionScan } from "../api/anomalyDetectionApi";
  */
 export const useAnomalyDetectionScan = (params = {}, enabled = true) => {
   return useQuery({
-    queryKey: ["anomalyDetectionScan", params],
+    queryKey: ['anomalyDetectionScan', params],
     queryFn: () => runAnomalyDetectionScan(params),
     enabled,
     staleTime: 5 * 60 * 1000, // 5 minutes

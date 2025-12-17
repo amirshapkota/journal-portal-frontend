@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Get editor verification requests for a specific journal
@@ -8,10 +8,9 @@ import { instance } from "@/lib/instance";
  */
 export const getEditorVerificationRequests = async (journalId, params = {}) => {
   try {
-    const response = await instance.get(
-      `journals/journals/${journalId}/verification-requests/`,
-      { params }
-    );
+    const response = await instance.get(`journals/journals/${journalId}/verification-requests/`, {
+      params,
+    });
     return response.data;
   } catch (error) {
     throw error;
@@ -63,11 +62,7 @@ export const rejectEditorVerification = async (journalId, requestId, data) => {
  * @param {object} data - Request info data (info_request)
  * @returns {Promise<Object>} Updated verification request
  */
-export const requestInfoEditorVerification = async (
-  journalId,
-  requestId,
-  data
-) => {
+export const requestInfoEditorVerification = async (journalId, requestId, data) => {
   try {
     const response = await instance.post(
       `journals/journals/${journalId}/verification-requests/${requestId}/request-info/`,
@@ -86,7 +81,7 @@ export const requestInfoEditorVerification = async (
 export const getEditorJournals = async () => {
   try {
     const response = await instance.get(`journals/journals/`, {
-      params: { role: "editor" },
+      params: { role: 'editor' },
     });
     return response.data;
   } catch (error) {

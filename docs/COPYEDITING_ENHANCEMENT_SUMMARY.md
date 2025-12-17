@@ -128,12 +128,10 @@ This document summarizes the major enhancements made to the copyediting workflow
 
 ```jsx
 {
-  discussionData?.status === "OPEN" && (
-    <Button onClick={handleResolve}>Mark as Resolved</Button>
-  );
+  discussionData?.status === 'OPEN' && <Button onClick={handleResolve}>Mark as Resolved</Button>;
 }
 {
-  discussionData?.status === "RESOLVED" && (
+  discussionData?.status === 'RESOLVED' && (
     <Button onClick={handleReopen}>Reopen Discussion</Button>
   );
 }
@@ -153,14 +151,14 @@ This document summarizes the major enhancements made to the copyediting workflow
 - **Before**:
   ```jsx
   onSuccess: () => {
-    form.setValue("message", "");
+    form.setValue('message', '');
   };
   ```
 - **After**:
   ```jsx
   onSuccess: () => {
-    form.reset({ message: "" });
-    form.setValue("message", "", { shouldValidate: false });
+    form.reset({ message: '' });
+    form.setValue('message', '', { shouldValidate: false });
   };
   ```
 

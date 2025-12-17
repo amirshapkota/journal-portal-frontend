@@ -1,15 +1,15 @@
-"use client";
+'use client';
 
 import {
   ReviewAssignmentsTable,
   ReviewerStatsChart,
-} from "@/features/panel/reviewer/components/dashboard";
-import { LoadingScreen, RoleBasedRoute } from "@/features";
-import { useGetMyAnalytics } from "@/features/shared/hooks";
-import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignments";
-import ErrorCard from "@/features/shared/components/ErrorCard";
-import StatsCard from "@/features/shared/components/StatsCard";
-import { Clock, FileText, CheckCircle2, TrendingUp } from "lucide-react";
+} from '@/features/panel/reviewer/components/dashboard';
+import { LoadingScreen, RoleBasedRoute } from '@/features';
+import { useGetMyAnalytics } from '@/features/shared/hooks';
+import { useGetReviewAssignments } from '@/features/panel/reviewer/hooks/query/useGetReviewAssignments';
+import ErrorCard from '@/features/shared/components/ErrorCard';
+import StatsCard from '@/features/shared/components/StatsCard';
+import { Clock, FileText, CheckCircle2, TrendingUp } from 'lucide-react';
 
 export default function ReviewerDashboard() {
   const {
@@ -30,22 +30,22 @@ export default function ReviewerDashboard() {
 
   // Event handlers for table actions
   const handleAcceptReview = (review) => {
-    console.log("Accept review:", review);
+    console.log('Accept review:', review);
     // TODO: Implement accept review logic
   };
 
   const handleDeclineReview = (review) => {
-    console.log("Decline review:", review);
+    console.log('Decline review:', review);
     // TODO: Implement decline review logic
   };
 
   const handleStartReview = (review) => {
-    console.log("Start review:", review);
+    console.log('Start review:', review);
     // TODO: Implement start review logic
   };
 
   const handleDownloadFiles = (review) => {
-    console.log("Download files:", review);
+    console.log('Download files:', review);
     // TODO: Implement download files logic
   };
 
@@ -54,20 +54,14 @@ export default function ReviewerDashboard() {
       {(isAssignmentsPending || isAnalyticsPending) && <LoadingScreen />}
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold text-foreground">
-          Reviewer Dashboard
-        </h1>
-        <p className="text-muted-foreground">
-          Track and manage your peer review assignments
-        </p>
+        <h1 className="text-3xl font-semibold text-foreground">Reviewer Dashboard</h1>
+        <p className="text-muted-foreground">Track and manage your peer review assignments</p>
       </div>
 
       {hasError && (
         <ErrorCard
           title="Failed to load dashboard"
-          description={
-            analyticsError?.message || "Unable to fetch analytics data"
-          }
+          description={analyticsError?.message || 'Unable to fetch analytics data'}
           onRetry={refetchAnalytics}
         />
       )}
@@ -112,7 +106,7 @@ export default function ReviewerDashboard() {
           value={
             reviewerStats.avg_completion_time_days
               ? reviewerStats.avg_completion_time_days.toFixed(1)
-              : "0"
+              : '0'
           }
           iconClass="text-purple-500"
           valueClass="text-foreground"
@@ -122,10 +116,7 @@ export default function ReviewerDashboard() {
 
       {/* Charts Section */}
       <div className="grid gap-6 md:grid-cols-1">
-        <ReviewerStatsChart
-          reviewerStats={reviewerStats}
-          isLoading={isLoading}
-        />
+        <ReviewerStatsChart reviewerStats={reviewerStats} isLoading={isLoading} />
       </div>
 
       {/* Review Assignments Table */}

@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { Controller } from "react-hook-form";
-import { RichTextEditor } from "./RichTextEditor";
+import { Controller } from 'react-hook-form';
+import { RichTextEditor } from './RichTextEditor';
 import {
   FormControl,
   FormDescription,
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
 /**
  * FormRichTextEditor - Rich text editor component for React Hook Form
@@ -26,12 +26,12 @@ export default function FormRichTextEditor({
   control,
   name,
   label,
-  placeholder = "Enter text...",
+  placeholder = 'Enter text...',
   description,
-  form_classname = "",
+  form_classname = '',
   debounceMs = 300,
   autoFocus = false,
-  editor_classname = "",
+  editor_classname = '',
 }) {
   return (
     <Controller
@@ -51,9 +51,7 @@ export default function FormRichTextEditor({
             />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
-          {fieldState.error && (
-            <FormMessage>{fieldState.error.message}</FormMessage>
-          )}
+          {fieldState.error && <FormMessage>{fieldState.error.message}</FormMessage>}
         </FormItem>
       )}
     />

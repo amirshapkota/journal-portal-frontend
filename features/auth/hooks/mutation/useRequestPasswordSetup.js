@@ -1,18 +1,18 @@
-import { useMutation } from "@tanstack/react-query";
-import { requestPasswordSetup } from "../../api/passwordApi";
-import { toast } from "sonner";
+import { useMutation } from '@tanstack/react-query';
+import { requestPasswordSetup } from '../../api/passwordApi';
+import { toast } from 'sonner';
 
 export const useRequestPasswordSetup = () => {
   return useMutation({
     mutationFn: requestPasswordSetup,
     onSuccess: (data) => {
-      toast.success(data.message || "Password setup link sent to your email");
+      toast.success(data.message || 'Password setup link sent to your email');
     },
     onError: (error) => {
       const errorMessage =
         error?.response?.data?.message ||
         error?.response?.data?.detail ||
-        "Failed to send password setup email";
+        'Failed to send password setup email';
       toast.error(errorMessage);
     },
   });

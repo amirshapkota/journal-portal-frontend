@@ -1,29 +1,20 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Mail, Loader2, RefreshCw, LogOut, CheckCircle } from "lucide-react";
-import {
-  useResendVerificationEmail,
-  useCheckVerificationStatus,
-} from "@/features/auth/hooks";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useSelector, useDispatch } from "react-redux";
-import { useLogout } from "@/features/auth/hooks/useLogout";
-import { updateVerificationStatus } from "@/features/auth/redux/authSlice";
+import { useEffect, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Mail, Loader2, RefreshCw, LogOut, CheckCircle } from 'lucide-react';
+import { useResendVerificationEmail, useCheckVerificationStatus } from '@/features/auth/hooks';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useSelector, useDispatch } from 'react-redux';
+import { useLogout } from '@/features/auth/hooks/useLogout';
+import { updateVerificationStatus } from '@/features/auth/redux/authSlice';
 
 const PendingVerificationPage = () => {
   const searchParams = useSearchParams();
-  const email_verified = searchParams.get("email_verified");
+  const email_verified = searchParams.get('email_verified');
 
   const { resolvedTheme } = useTheme();
   const router = useRouter();
@@ -33,8 +24,9 @@ const PendingVerificationPage = () => {
   const [canResend, setCanResend] = useState(true);
   const [countdown, setCountdown] = useState(0);
 
-  const { mutate: resendEmail, isPending: isResending } =
-    useResendVerificationEmail(countdown === 0);
+  const { mutate: resendEmail, isPending: isResending } = useResendVerificationEmail(
+    countdown === 0
+  );
   const { mutate: logout, isPending: isLoggingOut } = useLogout();
 
   const { data: verificationData } = useCheckVerificationStatus(
@@ -43,21 +35,21 @@ const PendingVerificationPage = () => {
 
   useEffect(() => {
     const roles = userData?.roles || [];
-    if (roles.includes("ADMIN")) {
-      router.replace("/admin/dashboard");
+    if (roles.includes('ADMIN')) {
+      router.replace('/admin/dashboard');
     }
     if (userData?.email_verified === true) {
-      if (roles.length === 1 && roles.includes("READER")) {
-        router.replace("/reader/dashboard");
+      if (roles.length === 1 && roles.includes('READER')) {
+        router.replace('/reader/dashboard');
       } else if (roles.length > 2) {
-        router.replace("/choose-role");
+        router.replace('/choose-role');
       } else {
-        const singleRoles = ["AUTHOR", "REVIEWER", "EDITOR"];
+        const singleRoles = ['AUTHOR', 'REVIEWER', 'EDITOR'];
         const matchedRole = roles.find((r) => singleRoles.includes(r));
         if (matchedRole) {
           router.replace(`/${matchedRole.toLowerCase()}/dashboard`);
         } else {
-          router.replace("/reader/dashboard");
+          router.replace('/reader/dashboard');
         }
       }
     }
@@ -65,25 +57,22 @@ const PendingVerificationPage = () => {
 
   // Update verification status from polling
   useEffect(() => {
-    if (
-      verificationData?.email_verified === true &&
-      userData?.email_verified === false
-    ) {
+    if (verificationData?.email_verified === true && userData?.email_verified === false) {
       dispatch(updateVerificationStatus({ isVerified: true }));
     }
   }, [verificationData, userData, dispatch]);
 
   useEffect(() => {
     const handleStorageChange = (e) => {
-      if (e.key === "email-verified") {
+      if (e.key === 'email-verified') {
         dispatch(updateVerificationStatus({ isVerified: true }));
       }
     };
 
-    window.addEventListener("storage", handleStorageChange);
+    window.addEventListener('storage', handleStorageChange);
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
+      window.removeEventListener('storage', handleStorageChange);
     };
   }, [dispatch]);
 
@@ -116,7 +105,7 @@ const PendingVerificationPage = () => {
     logout();
   };
 
-  if (email_verified === "true") {
+  if (email_verified === 'true') {
     return null;
   }
 
@@ -131,7 +120,7 @@ const PendingVerificationPage = () => {
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center pt-2 mb-2">
-            {resolvedTheme === "dark" ? (
+            {resolvedTheme === 'dark' ? (
               <Image
                 width={200}
                 height={100}
@@ -159,9 +148,7 @@ const PendingVerificationPage = () => {
                 <Mail className="h-8 w-8 text-amber-600 dark:text-amber-500" />
               </div>
             </div>
-            <CardTitle className="text-2xl text-center">
-              Verify Your Email
-            </CardTitle>
+            <CardTitle className="text-2xl text-center">Verify Your Email</CardTitle>
             <CardDescription className="text-center">
               Please verify your email address to continue
             </CardDescription>
@@ -169,18 +156,14 @@ const PendingVerificationPage = () => {
           <CardContent className="space-y-6">
             <div className="space-y-4">
               <div className="p-4 bg-muted/50 rounded-lg">
-                <p className="text-sm text-foreground">
-                  We&apos;ve sent a verification email to:
-                </p>
-                <p className="text-sm font-semibold text-foreground mt-1">
-                  {userData?.email}
-                </p>
+                <p className="text-sm text-foreground">We&apos;ve sent a verification email to:</p>
+                <p className="text-sm font-semibold text-foreground mt-1">{userData?.email}</p>
               </div>
 
               <div className="space-y-2">
                 <p className="text-sm text-muted-foreground text-center">
-                  Click the link in the email to verify your account. The page
-                  will automatically refresh when verified.
+                  Click the link in the email to verify your account. The page will automatically
+                  refresh when verified.
                 </p>
               </div>
 
@@ -239,8 +222,8 @@ const PendingVerificationPage = () => {
 
             <div className="pt-4 border-t">
               <p className="text-xs text-muted-foreground text-center">
-                Didn&apos;t receive the email? Check your spam folder or click
-                the resend button above.
+                Didn&apos;t receive the email? Check your spam folder or click the resend button
+                above.
               </p>
             </div>
           </CardContent>

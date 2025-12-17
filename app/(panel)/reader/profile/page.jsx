@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState, useRef } from "react";
-import { toast } from "sonner";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import CardSkeleton from "@/features/shared/components/CardSkeleton";
+import React, { useState, useRef } from 'react';
+import { toast } from 'sonner';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import CardSkeleton from '@/features/shared/components/CardSkeleton';
 import {
   AvatarUpload,
   ErrorCard,
@@ -12,18 +12,13 @@ import {
   ProfileInfoCard,
   useGetMe,
   VerificationStatusBadge,
-} from "@/features";
-import { usePatchProfile } from "@/features/panel/profile/hooks/mutation/usePatchProfile";
-import { useQueryClient } from "@tanstack/react-query";
+} from '@/features';
+import { usePatchProfile } from '@/features/panel/profile/hooks/mutation/usePatchProfile';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ReaderProfilePage() {
-  const {
-    data: meData,
-    error: isMeError,
-    isPending: isMePending,
-    refetch,
-  } = useGetMe();
-  const [avatarPreview, setAvatarPreview] = useState("");
+  const { data: meData, error: isMeError, isPending: isMePending, refetch } = useGetMe();
+  const [avatarPreview, setAvatarPreview] = useState('');
   const fileInputRef = useRef(null);
   const patchProfileMutation = usePatchProfile();
   const queryClient = useQueryClient();
@@ -32,16 +27,14 @@ export default function ReaderProfilePage() {
   const profileData = meData?.profile;
 
   const defaultValues = {
-    user_name: profileData?.user_name || "",
-    display_name: profileData?.display_name || "",
-    user_email: profileData?.user_email || "",
-    bio: profileData?.bio || "",
-    affiliation_name: profileData?.affiliation_name || "",
-    affiliation_ror_id: profileData?.affiliation_ror_id || "",
-    orcid_id: profileData?.orcid_id || "",
-    expertise_areas: Array.isArray(profileData?.expertise_areas)
-      ? profileData.expertise_areas
-      : [],
+    user_name: profileData?.user_name || '',
+    display_name: profileData?.display_name || '',
+    user_email: profileData?.user_email || '',
+    bio: profileData?.bio || '',
+    affiliation_name: profileData?.affiliation_name || '',
+    affiliation_ror_id: profileData?.affiliation_ror_id || '',
+    orcid_id: profileData?.orcid_id || '',
+    expertise_areas: Array.isArray(profileData?.expertise_areas) ? profileData.expertise_areas : [],
   };
 
   const handleAvatarChange = (e) => {
@@ -59,11 +52,11 @@ export default function ReaderProfilePage() {
     if (!profileData?.id) return;
     try {
       await patchProfileMutation.mutateAsync({ id: profileData.id, data });
-      toast.success("Profile updated successfully!");
-      queryClient.invalidateQueries({ queryKey: ["me"] });
+      toast.success('Profile updated successfully!');
+      queryClient.invalidateQueries({ queryKey: ['me'] });
       setShowEditForm(false);
     } catch (error) {
-      console.error("Profile update error:", error);
+      console.error('Profile update error:', error);
     }
   };
 
@@ -80,9 +73,7 @@ export default function ReaderProfilePage() {
       <div className="space-y-6">
         <LoadingScreen />
         <div className="space-y-2">
-          <h1 className="text-3xl font-semibold text-foreground">
-            Profile Settings
-          </h1>
+          <h1 className="text-3xl font-semibold text-foreground">Profile Settings</h1>
           <p className="text-muted-foreground">
             Manage your account information and academic profile
           </p>
@@ -97,10 +88,7 @@ export default function ReaderProfilePage() {
       <ErrorCard
         title="Error loading profile"
         description="Please try again or contact support if the problem persists."
-        details={
-          isMeError?.message ||
-          (typeof isMeError === "string" ? isMeError : undefined)
-        }
+        details={isMeError?.message || (typeof isMeError === 'string' ? isMeError : undefined)}
         onRetry={() => {
           refetch();
         }}
@@ -113,9 +101,7 @@ export default function ReaderProfilePage() {
     <div className="space-y-6">
       {/* Page Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold text-foreground">
-          Profile Settings
-        </h1>
+        <h1 className="text-3xl font-semibold text-foreground">Profile Settings</h1>
         <p className="text-muted-foreground">
           Manage your account information and academic profile
         </p>

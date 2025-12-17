@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Fetch all journals
@@ -6,6 +6,6 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response
  */
 export const getJournals = async (params = {}) => {
-  const response = await instance.get("journals/journals/", { params });
+  const response = await instance.get('journals/journals/', { params });
   return response.data;
 };

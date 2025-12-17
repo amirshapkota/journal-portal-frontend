@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import {
   AuthorSubmissionsTable,
   LoadingScreen,
   Pagination,
   RoleBasedRoute,
   SubmissionsLayout,
-} from "@/features";
-import { useGetUnassignedSubmissions } from "@/features/panel/author/hooks/query/useGetUnassignedSubmissions";
-import DocumentUploadModal from "@/features/panel/author/components/submission/DocumentUploadModal";
-import DocumentViewModal from "@/features/panel/author/components/submission/DocumentViewModal";
-import { useSubmitForReview } from "@/features/panel/author/hooks/mutation/useSubmitForReview";
+} from '@/features';
+import { useGetUnassignedSubmissions } from '@/features/panel/author/hooks/query/useGetUnassignedSubmissions';
+import DocumentUploadModal from '@/features/panel/author/components/submission/DocumentUploadModal';
+import DocumentViewModal from '@/features/panel/author/components/submission/DocumentViewModal';
+import { useSubmitForReview } from '@/features/panel/author/hooks/mutation/useSubmitForReview';
 
 export default function UnassignedPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
+  const pageParam = searchParams.get('page');
   const currentPage = pageParam ? parseInt(pageParam) : 1;
 
   const params = {
@@ -31,7 +31,7 @@ export default function UnassignedPage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -57,7 +57,7 @@ export default function UnassignedPage() {
 
   return (
     <>
-      {" "}
+      {' '}
       {isSubmissionsPending && <LoadingScreen />}
       <SubmissionsLayout
         title="Unassigned Submissions"
@@ -70,9 +70,7 @@ export default function UnassignedPage() {
           onAddDocuments={handleAddDocuments}
           onViewDocuments={handleViewDocuments}
           onSubmit={handleSubmit}
-          viewUrl={(submission) =>
-            `/author/submissions/unassigned/${submission.id}`
-          }
+          viewUrl={(submission) => `/author/submissions/unassigned/${submission.id}`}
         />
       </SubmissionsLayout>
       {/* Document Upload Modal */}

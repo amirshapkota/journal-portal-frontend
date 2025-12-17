@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 import {
   ContactSettings,
@@ -14,16 +14,16 @@ import {
   SubmissionSettings,
   TaxonomySettings,
   useGetJournalById,
-} from "@/features";
-import ErrorCard from "@/features/shared/components/ErrorCard";
-import { Skeleton } from "@/components/ui/skeleton";
-import { OJSConnectionSettings } from "@/features/panel/editor/journal/components/settings/OJSConnectionSettings";
+} from '@/features';
+import ErrorCard from '@/features/shared/components/ErrorCard';
+import { Skeleton } from '@/components/ui/skeleton';
+import { OJSConnectionSettings } from '@/features/panel/editor/journal/components/settings/OJSConnectionSettings';
 
 export default function JournalSettingsPage() {
   const params = useParams();
   const router = useRouter();
   const journalId = params.id;
-  const [activeTab, setActiveTab] = useState("general");
+  const [activeTab, setActiveTab] = useState('general');
 
   // Fetch journal data from backend
   const { data: journal, isPending, error } = useGetJournalById(journalId);
@@ -40,6 +40,7 @@ export default function JournalSettingsPage() {
         </div>
         <Skeleton className="h-12 w-full" />
         <Skeleton className="h-96 w-full" />
+        <Skeleton className="h-96 w-full" />
       </div>
     );
   }
@@ -49,7 +50,7 @@ export default function JournalSettingsPage() {
       <ErrorCard
         title="Failed to load journal"
         description={error.message}
-        onBack={() => router.push("/editor/journals")}
+        onBack={() => router.push('/editor/journals')}
       />
     );
   }
@@ -63,15 +64,13 @@ export default function JournalSettingsPage() {
             <Button
               variant="ghost"
               size="icon"
-              className={"hover:text-primary-foreground"}
-              onClick={() => router.push("/editor/journals")}
+              className={'hover:text-primary-foreground'}
+              onClick={() => router.push('/editor/journals')}
             >
               <ArrowLeft className="h-5 w-5" />
             </Button>
             <div>
-              <h1 className="text-3xl font-semibold text-foreground">
-                Journal Settings
-              </h1>
+              <h1 className="text-3xl font-semibold text-foreground">Journal Settings</h1>
               <p className="text-muted-foreground mt-1">
                 {journal?.title} ({journal?.short_name})
               </p>
@@ -81,12 +80,8 @@ export default function JournalSettingsPage() {
       </div>
 
       {/* Tabs */}
-      <Tabs
-        value={activeTab}
-        onValueChange={setActiveTab}
-        className="space-y-6"
-      >
-        <TabsList className="grid w-full grid-cols-6">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+        <TabsList className="grid w-full h-full grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
           <TabsTrigger value="general">General</TabsTrigger>
           <TabsTrigger value="taxonomy">Taxonomy</TabsTrigger>
           <TabsTrigger value="staff">Staff</TabsTrigger>

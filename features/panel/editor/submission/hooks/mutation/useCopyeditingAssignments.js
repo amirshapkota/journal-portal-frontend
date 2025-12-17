@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   createCopyeditingAssignment,
   updateCopyeditingAssignment,
@@ -7,7 +7,7 @@ import {
   completeCopyeditingAssignment,
   addCopyeditingParticipant,
   removeCopyeditingParticipant,
-} from "../../api";
+} from '../../api';
 
 /**
  * Hook to create a copyediting assignment
@@ -18,22 +18,20 @@ export function useCreateCopyeditingAssignment() {
   return useMutation({
     mutationFn: (data) => createCopyeditingAssignment(data),
     onSuccess: (data) => {
-      toast.success("Copyeditor assigned successfully");
+      toast.success('Copyeditor assigned successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments", data.submission],
+        queryKey: ['copyediting-assignments', data.submission],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission", data.submission],
+        queryKey: ['editor-submission', data.submission],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to assign copyeditor";
+        error?.response?.data?.detail || error?.message || 'Failed to assign copyeditor';
       toast.error(message);
     },
   });
@@ -46,22 +44,19 @@ export function useUpdateCopyeditingAssignment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ assignmentId, data }) =>
-      updateCopyeditingAssignment(assignmentId, data),
+    mutationFn: ({ assignmentId, data }) => updateCopyeditingAssignment(assignmentId, data),
     onSuccess: (data) => {
-      toast.success("Assignment updated successfully");
+      toast.success('Assignment updated successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignment", data.id],
+        queryKey: ['copyediting-assignment', data.id],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to update assignment";
+        error?.response?.data?.detail || error?.message || 'Failed to update assignment';
       toast.error(message);
     },
   });
@@ -76,22 +71,20 @@ export function useStartCopyeditingAssignment() {
   return useMutation({
     mutationFn: (assignmentId) => startCopyeditingAssignment(assignmentId),
     onSuccess: (data) => {
-      toast.success("Copyediting started");
+      toast.success('Copyediting started');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignment", data.id],
+        queryKey: ['copyediting-assignment', data.id],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to start assignment";
+        error?.response?.data?.detail || error?.message || 'Failed to start assignment';
       toast.error(message);
     },
   });
@@ -104,25 +97,22 @@ export function useCompleteCopyeditingAssignment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ assignmentId, data }) =>
-      completeCopyeditingAssignment(assignmentId, data),
+    mutationFn: ({ assignmentId, data }) => completeCopyeditingAssignment(assignmentId, data),
     onSuccess: (data) => {
-      toast.success("Copyediting completed successfully");
+      toast.success('Copyediting completed successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignment", data.id],
+        queryKey: ['copyediting-assignment', data.id],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission"],
+        queryKey: ['editor-submission'],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to complete assignment";
+        error?.response?.data?.detail || error?.message || 'Failed to complete assignment';
       toast.error(message);
     },
   });
@@ -135,25 +125,22 @@ export function useAddCopyeditingParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ assignmentId, data }) =>
-      addCopyeditingParticipant(assignmentId, data),
+    mutationFn: ({ assignmentId, data }) => addCopyeditingParticipant(assignmentId, data),
     onSuccess: (_, variables) => {
-      toast.success("Participant added successfully");
+      toast.success('Participant added successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignment", variables.assignmentId],
+        queryKey: ['copyediting-assignment', variables.assignmentId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-participants"],
+        queryKey: ['copyediting-participants'],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to add participant";
+        error?.response?.data?.detail || error?.message || 'Failed to add participant';
       toast.error(message);
     },
   });
@@ -166,25 +153,22 @@ export function useRemoveCopyeditingParticipant() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ assignmentId, data }) =>
-      removeCopyeditingParticipant(assignmentId, data),
+    mutationFn: ({ assignmentId, data }) => removeCopyeditingParticipant(assignmentId, data),
     onSuccess: (_, variables) => {
-      toast.success("Participant removed successfully");
+      toast.success('Participant removed successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignment", variables.assignmentId],
+        queryKey: ['copyediting-assignment', variables.assignmentId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-participants"],
+        queryKey: ['copyediting-participants'],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to remove participant";
+        error?.response?.data?.detail || error?.message || 'Failed to remove participant';
       toast.error(message);
     },
   });

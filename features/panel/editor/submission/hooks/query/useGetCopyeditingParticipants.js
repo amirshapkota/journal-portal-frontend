@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getCopyeditingParticipants } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { getCopyeditingParticipants } from '../../api';
 
 /**
  * Hook to fetch copyediting participants for a submission
@@ -9,7 +9,7 @@ import { getCopyeditingParticipants } from "../../api";
  */
 export const useGetCopyeditingParticipants = (submissionId, enabled = true) => {
   return useQuery({
-    queryKey: ["copyediting-participants", submissionId],
+    queryKey: ['copyediting-participants', submissionId],
     queryFn: () => getCopyeditingParticipants(submissionId),
     enabled: !!submissionId && enabled,
     staleTime: 1000 * 60 * 5, // 5 minutes

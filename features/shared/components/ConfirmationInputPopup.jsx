@@ -1,16 +1,11 @@
-"use client";
+'use client';
 
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { useEffect, useState } from "react";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
+import { useEffect, useState } from 'react';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
 
 /**
  * Reusable Confirmation Popup Component with Input Field
@@ -56,25 +51,25 @@ import { Label } from "@/components/ui/label";
  * />
  */
 const ConfirmationInputPopup = ({
-  title = "Confirm Action",
-  description = "Please provide details below.",
+  title = 'Confirm Action',
+  description = 'Please provide details below.',
   icon,
-  inputLabel = "Details",
-  inputPlaceholder = "Enter details...",
-  cancelText = "Cancel",
-  confirmText = "Confirm",
+  inputLabel = 'Details',
+  inputPlaceholder = 'Enter details...',
+  cancelText = 'Cancel',
+  confirmText = 'Confirm',
   onConfirm,
   isPending = false,
   isSuccess = false,
   onOpenChange,
   open,
-  variant = "primary",
+  variant = 'primary',
   autoClose = true,
-  loadingText = "Processing...",
+  loadingText = 'Processing...',
   required = false,
-  inputType = "textarea",
+  inputType = 'textarea',
 }) => {
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState('');
 
   /**
    * Auto-close dialog when operation succeeds and reset input
@@ -95,7 +90,7 @@ const ConfirmationInputPopup = ({
     if (!open) {
       // Use setTimeout to avoid calling setState during render
       const timer = setTimeout(() => {
-        setInputValue("");
+        setInputValue('');
       }, 0);
       return () => clearTimeout(timer);
     }
@@ -106,14 +101,14 @@ const ConfirmationInputPopup = ({
    */
   const getConfirmButtonStyles = () => {
     const baseStyles =
-      "rounded-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed";
+      'rounded-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed';
 
     switch (variant) {
-      case "danger":
+      case 'danger':
         return `${baseStyles} bg-red-500 hover:bg-red-600`;
-      case "primary":
+      case 'primary':
         return `${baseStyles} bg-primary text-primary-foreground shadow-xs hover:bg-primary/90`;
-      case "warning":
+      case 'warning':
         return `${baseStyles} bg-yellow-600 hover:bg-yellow-700`;
       default:
         return `${baseStyles} bg-primary text-primary-foreground shadow-xs hover:bg-primary/90`;
@@ -127,21 +122,15 @@ const ConfirmationInputPopup = ({
     onConfirm(inputValue);
   };
 
-  const isConfirmDisabled =
-    isPending || isSuccess || (required && !inputValue.trim());
+  const isConfirmDisabled = isPending || isSuccess || (required && !inputValue.trim());
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent
-        showCloseButton={false}
-        className="bg-card flex flex-col gap-2 max-w-md"
-      >
+      <DialogContent showCloseButton={false} className="bg-card flex flex-col gap-2 max-w-md">
         {/* Header with icon and title */}
         <div className="flex flex-col items-center gap-2">
           {icon && <div className="shrink-0">{icon}</div>}
-          <DialogTitle className="text-lg font-semibold leading-6">
-            {title}
-          </DialogTitle>
+          <DialogTitle className="text-lg font-semibold leading-6">{title}</DialogTitle>
         </div>
 
         {/* Description */}
@@ -155,7 +144,7 @@ const ConfirmationInputPopup = ({
             {inputLabel}
             {required && <span className="text-red-500 ml-1">*</span>}
           </Label>
-          {inputType === "textarea" ? (
+          {inputType === 'textarea' ? (
             <Textarea
               id="confirmation-input"
               placeholder={inputPlaceholder}

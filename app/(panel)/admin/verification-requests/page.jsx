@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { FilterToolbar, Pagination } from "@/features/shared";
+import { useMemo, useState } from 'react';
+import { FilterToolbar, Pagination } from '@/features/shared';
 import {
   ActionConfirmationPopup,
   VerificationDetailsModal,
@@ -11,17 +11,17 @@ import {
   useApproveVerification,
   useRejectVerification,
   useRequestInfoVerification,
-} from "@/features";
+} from '@/features';
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function VerificationsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
+  const pageParam = searchParams.get('page');
   const currentPage = pageParam ? parseInt(pageParam) : 1;
-  const searchParam = searchParams.get("search");
-  const status = searchParams.get("status");
+  const searchParam = searchParams.get('search');
+  const status = searchParams.get('status');
 
   const params = {
     search: searchParam,
@@ -35,21 +35,16 @@ export default function VerificationsPage() {
     error,
   } = useGetVerificationRequests({ params });
 
-  const verifications = useMemo(
-    () => verificationsData?.results || [],
-    [verificationsData]
-  );
+  const verifications = useMemo(() => verificationsData?.results || [], [verificationsData]);
 
   // Mutations
-  const { mutate: approveVerification, isPending: isApproving } =
-    useApproveVerification();
-  const { mutate: rejectVerification, isPending: isRejecting } =
-    useRejectVerification();
+  const { mutate: approveVerification, isPending: isApproving } = useApproveVerification();
+  const { mutate: rejectVerification, isPending: isRejecting } = useRejectVerification();
   const { mutate: requestInfoVerification, isPending: isRequestingInfo } =
     useRequestInfoVerification();
 
-  const [searchQuery, setSearchQuery] = useState("");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchQuery, setSearchQuery] = useState('');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [selectedVerification, setSelectedVerification] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
@@ -61,17 +56,17 @@ export default function VerificationsPage() {
   };
 
   const handleApprove = () => {
-    setConfirmAction("approve");
+    setConfirmAction('approve');
     setIsConfirmOpen(true);
   };
 
   const handleRequestInfo = () => {
-    setConfirmAction("request-info");
+    setConfirmAction('request-info');
     setIsConfirmOpen(true);
   };
 
   const handleReject = () => {
-    setConfirmAction("reject");
+    setConfirmAction('reject');
     setIsConfirmOpen(true);
   };
 
@@ -132,7 +127,7 @@ export default function VerificationsPage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -141,12 +136,8 @@ export default function VerificationsPage() {
       {isVerificationRequestsPending && <LoadingScreen />}
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold text-foreground">
-          Verification Requests
-        </h1>
-        <p className="text-muted-foreground">
-          Review and manage user verification requests
-        </p>
+        <h1 className="text-3xl font-semibold text-foreground">Verification Requests</h1>
+        <p className="text-muted-foreground">Review and manage user verification requests</p>
       </div>
 
       {/* Filters and Search */}
@@ -164,11 +155,11 @@ export default function VerificationsPage() {
           value={statusFilter}
           onChange={setStatusFilter}
           options={[
-            { value: "all", label: "All Status" },
-            { value: "PENDING", label: "Pending" },
-            { value: "APPROVED", label: "Approved" },
-            { value: "REJECTED", label: "Rejected" },
-            { value: "INFO_REQUESTED", label: "Info Requested" },
+            { value: 'all', label: 'All Status' },
+            { value: 'PENDING', label: 'Pending' },
+            { value: 'APPROVED', label: 'Approved' },
+            { value: 'REJECTED', label: 'Rejected' },
+            { value: 'INFO_REQUESTED', label: 'Info Requested' },
           ]}
         />
       </FilterToolbar>
@@ -195,7 +186,7 @@ export default function VerificationsPage() {
       <ActionConfirmationPopup
         isOpen={isConfirmOpen}
         action={confirmAction}
-        userName={selectedVerification?.profile_name || ""}
+        userName={selectedVerification?.profile_name || ''}
         onApprove={handleApproveConfirm}
         onReject={handleRejectConfirm}
         onRequestInfo={handleRequestInfoConfirm}

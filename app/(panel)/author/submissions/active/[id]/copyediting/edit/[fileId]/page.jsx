@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   ErrorCard,
   LoadingScreen,
   CopyeditingSuperDocEditor,
   useGetSubmissionById,
   useGetMe,
-} from "@/features";
-import { useConfirmFileFinal } from "@/features/panel/editor/submission/hooks";
-import { toast } from "sonner";
+} from '@/features';
+import { useConfirmFileFinal } from '@/features/panel/editor/submission/hooks';
+import { toast } from 'sonner';
 
 /**
  * Author Copyediting File Editor Page
@@ -32,7 +32,7 @@ export default function AuthorCopyeditingFileEditorPage() {
   const fileId = params?.fileId;
 
   // Get readOnly from URL query parameter (defaults to true for safety)
-  const isReadOnly = searchParams?.get("readOnly") !== "false";
+  const isReadOnly = searchParams?.get('readOnly') !== 'false';
 
   const { data: user } = useGetMe();
 
@@ -50,7 +50,7 @@ export default function AuthorCopyeditingFileEditorPage() {
   };
 
   const handleSaveSuccess = (updatedFile) => {
-    console.log("File saved successfully by author:", updatedFile);
+    console.log('File saved successfully by author:', updatedFile);
   };
 
   const handleConfirmFinal = async (fileId) => {
@@ -63,9 +63,7 @@ export default function AuthorCopyeditingFileEditorPage() {
           },
           onError: (error) => {
             const message =
-              error?.response?.data?.detail ||
-              error?.message ||
-              "Failed to confirm file";
+              error?.response?.data?.detail || error?.message || 'Failed to confirm file';
             toast.error(message);
             reject(error);
           },
@@ -97,11 +95,9 @@ export default function AuthorCopyeditingFileEditorPage() {
 
         <div>
           <h1 className="text-3xl font-semibold tracking-tight">
-            {isReadOnly ? "View File" : "Review & Edit Copyedited File"}
+            {isReadOnly ? 'View File' : 'Review & Edit Copyedited File'}
           </h1>
-          <p className="text-muted-foreground mt-2">
-            {submission?.title || "Loading..."}
-          </p>
+          <p className="text-muted-foreground mt-2">{submission?.title || 'Loading...'}</p>
           {submission?.submission_id && (
             <p className="text-sm text-muted-foreground mt-1">
               Submission ID: {submission.submission_id}
@@ -109,8 +105,8 @@ export default function AuthorCopyeditingFileEditorPage() {
           )}
           <p className="text-sm text-muted-foreground mt-2">
             {isReadOnly
-              ? "You can view the file and tracked changes."
-              : "You can review tracked changes, accept/reject edits, and make additional changes."}
+              ? 'You can view the file and tracked changes.'
+              : 'You can review tracked changes, accept/reject edits, and make additional changes.'}
           </p>
         </div>
       </div>

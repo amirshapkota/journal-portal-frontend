@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 // ==================== COPYEDITING ASSIGNMENTS ====================
 
@@ -13,7 +13,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response with copyediting assignments list
  */
 export const listCopyeditingAssignments = async (params = {}) => {
-  const response = await instance.get("submissions/copyediting/assignments/", {
+  const response = await instance.get('submissions/copyediting/assignments/', {
     params,
   });
   return response.data;
@@ -29,10 +29,7 @@ export const listCopyeditingAssignments = async (params = {}) => {
  * @returns {Promise} API response with created assignment
  */
 export const createCopyeditingAssignment = async (data) => {
-  const response = await instance.post(
-    "submissions/copyediting/assignments/",
-    data
-  );
+  const response = await instance.post('submissions/copyediting/assignments/', data);
   return response.data;
 };
 
@@ -42,9 +39,7 @@ export const createCopyeditingAssignment = async (data) => {
  * @returns {Promise} API response with assignment details
  */
 export const getCopyeditingAssignment = async (assignmentId) => {
-  const response = await instance.get(
-    `submissions/copyediting/assignments/${assignmentId}/`
-  );
+  const response = await instance.get(`submissions/copyediting/assignments/${assignmentId}/`);
   return response.data;
 };
 
@@ -95,9 +90,7 @@ export const completeCopyeditingAssignment = async (assignmentId, data) => {
  * @returns {Promise} API response with files list
  */
 export const getCopyeditingAssignmentFiles = async (assignmentId) => {
-  const response = await instance.get(
-    `submissions/copyediting/assignments/${assignmentId}/files/`
-  );
+  const response = await instance.get(`submissions/copyediting/assignments/${assignmentId}/files/`);
   return response.data;
 };
 
@@ -167,7 +160,7 @@ export const removeCopyeditingParticipant = async (assignmentId, data) => {
  * @param {string} params.search - Search term
  * @returns {Promise} API response with files list
  */
-export const listCopyeditingFiles = async (assignmentId, file_type = "") => {
+export const listCopyeditingFiles = async (assignmentId, file_type = '') => {
   const response = await instance.get(
     `submissions/copyediting/assignments/${assignmentId}/files/?file_type=${file_type}`
   );
@@ -188,15 +181,11 @@ export const listCopyeditedFiles = async (assignmentId) => {
  * @returns {Promise} API response with uploaded file
  */
 export const uploadCopyeditingFile = async (formData) => {
-  const response = await instance.post(
-    "submissions/copyediting/files/",
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await instance.post('submissions/copyediting/files/', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -206,9 +195,7 @@ export const uploadCopyeditingFile = async (formData) => {
  * @returns {Promise} API response with file details
  */
 export const getCopyeditingFile = async (fileId) => {
-  const response = await instance.get(
-    `submissions/copyediting/files/${fileId}/`
-  );
+  const response = await instance.get(`submissions/copyediting/files/${fileId}/`);
   return response.data;
 };
 
@@ -219,10 +206,7 @@ export const getCopyeditingFile = async (fileId) => {
  * @returns {Promise} API response with updated file
  */
 export const updateCopyeditingFile = async (fileId, data) => {
-  const response = await instance.patch(
-    `submissions/copyediting/files/${fileId}/`,
-    data
-  );
+  const response = await instance.patch(`submissions/copyediting/files/${fileId}/`, data);
   return response.data;
 };
 
@@ -232,9 +216,7 @@ export const updateCopyeditingFile = async (fileId, data) => {
  * @returns {Promise} API response
  */
 export const approveCopyeditingFile = async (fileId) => {
-  const response = await instance.post(
-    `submissions/copyediting/files/${fileId}/approve/`
-  );
+  const response = await instance.post(`submissions/copyediting/files/${fileId}/approve/`);
   return response.data;
 };
 
@@ -244,9 +226,7 @@ export const approveCopyeditingFile = async (fileId) => {
  * @returns {Promise} API response
  */
 export const deleteCopyeditingFile = async (fileId) => {
-  const response = await instance.delete(
-    `submissions/copyediting/files/${fileId}/`
-  );
+  const response = await instance.delete(`submissions/copyediting/files/${fileId}/`);
   return response.data;
 };
 
@@ -256,9 +236,7 @@ export const deleteCopyeditingFile = async (fileId) => {
  * @returns {Promise} API response with file metadata and download URL
  */
 export const loadCopyeditingFile = async (fileId) => {
-  const response = await instance.get(
-    `submissions/copyediting/files/${fileId}/load/`
-  );
+  const response = await instance.get(`submissions/copyediting/files/${fileId}/load/`);
   return response.data;
 };
 
@@ -269,15 +247,11 @@ export const loadCopyeditingFile = async (fileId) => {
  * @returns {Promise} API response
  */
 export const saveCopyeditingFile = async (fileId, formData) => {
-  const response = await instance.post(
-    `submissions/copyediting/files/${fileId}/save/`,
-    formData,
-    {
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
-    }
-  );
+  const response = await instance.post(`submissions/copyediting/files/${fileId}/save/`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
   return response.data;
 };
 
@@ -329,12 +303,9 @@ export const completeCopyediting = async (assignmentId, data = {}) => {
  * @returns {Promise} API response with file blob
  */
 export const downloadCopyeditingFile = async (fileId) => {
-  const response = await instance.get(
-    `submissions/copyediting/files/${fileId}/download/`,
-    {
-      responseType: "blob",
-    }
-  );
+  const response = await instance.get(`submissions/copyediting/files/${fileId}/download/`, {
+    responseType: 'blob',
+  });
   return response.data;
 };
 
@@ -350,9 +321,7 @@ export const downloadCopyeditingFile = async (fileId) => {
  * @returns {Promise} API response with discussions list
  */
 export const listCopyeditingDiscussions = async (id) => {
-  const response = await instance.get(
-    `submissions/copyediting/assignments/${id}/discussions`
-  );
+  const response = await instance.get(`submissions/copyediting/assignments/${id}/discussions`);
   return response.data;
 };
 
@@ -366,10 +335,7 @@ export const listCopyeditingDiscussions = async (id) => {
  * @returns {Promise} API response with created discussion
  */
 export const createCopyeditingDiscussion = async (data) => {
-  const response = await instance.post(
-    "submissions/copyediting/discussions/",
-    data
-  );
+  const response = await instance.post('submissions/copyediting/discussions/', data);
   return response.data;
 };
 
@@ -379,9 +345,7 @@ export const createCopyeditingDiscussion = async (data) => {
  * @returns {Promise} API response with discussion details and messages
  */
 export const getCopyeditingDiscussion = async (discussionId) => {
-  const response = await instance.get(
-    `submissions/copyediting/discussions/${discussionId}`
-  );
+  const response = await instance.get(`submissions/copyediting/discussions/${discussionId}`);
   return response.data;
 };
 
@@ -444,9 +408,7 @@ export const reopenCopyeditingDiscussion = async (discussionId) => {
  * @returns {Promise} API response
  */
 export const deleteCopyeditingDiscussion = async (discussionId) => {
-  const response = await instance.delete(
-    `submissions/copyediting/discussions/${discussionId}/`
-  );
+  const response = await instance.delete(`submissions/copyediting/discussions/${discussionId}/`);
   return response.data;
 };
 
@@ -458,9 +420,7 @@ export const deleteCopyeditingDiscussion = async (discussionId) => {
  * @returns {Promise} API response with copyeditors, editors, and authors
  */
 export const getCopyeditingParticipants = async (submissionId) => {
-  const response = await instance.get(
-    `submissions/${submissionId}/copyediting/participants/`
-  );
+  const response = await instance.get(`submissions/${submissionId}/copyediting/participants/`);
   return response.data;
 };
 
@@ -471,11 +431,7 @@ export const getCopyeditingParticipants = async (submissionId) => {
  * @param {Object} options - Additional options
  * @returns {Promise} API response
  */
-export const assignCopyeditor = async (
-  submissionId,
-  copyeditorId,
-  options = {}
-) => {
+export const assignCopyeditor = async (submissionId, copyeditorId, options = {}) => {
   return createCopyeditingAssignment({
     submission: submissionId,
     copyeditor_id: copyeditorId,

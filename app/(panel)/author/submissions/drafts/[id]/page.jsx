@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Trash2, Send } from "lucide-react";
+import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Trash2, Send } from 'lucide-react';
 import {
   RoleBasedRoute,
   LoadingScreen,
@@ -15,19 +15,15 @@ import {
   SubmissionDetailsCard,
   SubmissionDocumentsCard,
   CoAuthorsCard,
-} from "@/features";
-import { Card, CardContent } from "@/components/ui/card";
-import { useSubmitForReview } from "@/features/panel/author/hooks/mutation/useSubmitForReview";
+} from '@/features';
+import { Card, CardContent } from '@/components/ui/card';
+import { useSubmitForReview } from '@/features/panel/author/hooks/mutation/useSubmitForReview';
 
 export default function DraftDetailPage() {
   const params = useParams();
   const router = useRouter();
   const submissionId = params.id;
-  const {
-    data: submission,
-    isPending,
-    error,
-  } = useGetSubmissionById(submissionId);
+  const { data: submission, isPending, error } = useGetSubmissionById(submissionId);
 
   const [uploadModalOpen, setUploadModalOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -40,7 +36,7 @@ export default function DraftDetailPage() {
   const handleSubmitForReview = () => {
     submitForReviewMutation.mutate(submissionId, {
       onSuccess: () => {
-        router.push("/author/submissions/unassigned");
+        router.push('/author/submissions/unassigned');
       },
     });
   };
@@ -48,7 +44,7 @@ export default function DraftDetailPage() {
   const handleDelete = () => {
     deleteSubmissionMutation.mutate(submissionId, {
       onSuccess: () => {
-        router.push("/author/submissions/drafts");
+        router.push('/author/submissions/drafts');
       },
     });
   };
@@ -73,7 +69,7 @@ export default function DraftDetailPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => router.push("/author/submissions/drafts")}
+            onClick={() => router.push('/author/submissions/drafts')}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Drafts
@@ -92,13 +88,13 @@ export default function DraftDetailPage() {
     <>
       <div className="space-y-6">
         {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 justify-between">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/author/submissions/drafts")}
-              className={"hover:text-primary-foreground"}
+              onClick={() => router.push('/author/submissions/drafts')}
+              className={'hover:text-primary-foreground'}
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Drafts
@@ -106,7 +102,7 @@ export default function DraftDetailPage() {
           </div>
           <div className="flex gap-2">
             <Button
-              variant="outline"
+              variant="destructive"
               onClick={() => setDeleteDialogOpen(true)}
               className="gap-2"
             >
@@ -123,9 +119,7 @@ export default function DraftDetailPage() {
               className="gap-2"
             >
               <Send className="h-4 w-4" />
-              {submitForReviewMutation.isPending
-                ? "Submitting..."
-                : "Submit for Review"}
+              {submitForReviewMutation.isPending ? 'Submitting...' : 'Submit for Review'}
             </Button>
           </div>
         </div>

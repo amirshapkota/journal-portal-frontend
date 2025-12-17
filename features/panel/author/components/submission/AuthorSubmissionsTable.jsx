@@ -1,86 +1,72 @@
-import React from "react";
-import { format } from "date-fns";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { format } from 'date-fns';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { DataTable } from "@/features/shared";
-import { BookOpen, MoreVertical, Trash2, Eye, Pencil } from "lucide-react";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
-import Link from "next/link";
-import { statusConfig } from "../../../../shared/utils/submission-status-color";
+} from '@/components/ui/dropdown-menu';
+import { DataTable } from '@/features/shared';
+import { BookOpen, MoreVertical, Trash2, Eye, Pencil } from 'lucide-react';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
+import Link from 'next/link';
+import { statusConfig } from '../../../../shared/utils/submission-status-color';
 
 function StatusBadge({ status }) {
   const config = statusConfig[status] || statusConfig.DRAFT;
-  return (
-    <Badge className={`${config.bg} ${config.text} border-0`}>
-      {config.label}
-    </Badge>
-  );
+  return <Badge className={`${config.bg} ${config.text} border-0`}>{config.label}</Badge>;
 }
 
 const columns = [
   {
-    key: "title",
-    header: "Title",
+    key: 'title',
+    header: 'Title',
     render: (row) => {
       return (
         <div className="flex items-center gap-2">
           <BookOpen className="w-4 h-4 text-muted-foreground" />
           <div>
-            <EllipsisTooltip
-              text={row.title}
-              spanProps={{ className: "font-medium" }}
-            />
-            <p className="text-xs text-muted-foreground">
-              {row.submission_number}
-            </p>
+            <EllipsisTooltip text={row.title} spanProps={{ className: 'font-medium' }} />
+            <p className="text-xs text-muted-foreground">{row.submission_number}</p>
           </div>
         </div>
       );
     },
   },
   {
-    key: "journal_name",
-    header: "Journal",
-    cellClassName: "text-muted-foreground",
+    key: 'journal_name',
+    header: 'Journal',
+    cellClassName: 'text-muted-foreground',
   },
   {
-    key: "status",
-    header: "Status",
+    key: 'status',
+    header: 'Status',
     render: (row) => <StatusBadge status={row.status} />,
   },
   {
-    key: "document_counts",
-    header: "Documents",
-    render: (row) => (
-      <p className="text-xs text-muted-foreground">{row?.document_count}</p>
-    ),
+    key: 'document_counts',
+    header: 'Documents',
+    render: (row) => <p className="text-xs text-muted-foreground">{row?.document_count}</p>,
   },
   {
-    key: "submitted_at",
-    header: "Submission Date",
-    cellClassName: "text-muted-foreground text-sm",
+    key: 'submitted_at',
+    header: 'Submission Date',
+    cellClassName: 'text-muted-foreground text-sm',
     render: (row) =>
-      row.submitted_at
-        ? format(new Date(row.submitted_at), "PPP")
-        : "Not Submitted Yet",
+      row.submitted_at ? format(new Date(row.submitted_at), 'PPP') : 'Not Submitted Yet',
   },
   {
-    key: "updated_at",
-    header: "Last Updated",
-    cellClassName: "text-muted-foreground text-sm",
-    render: (row) =>
-      row.updated_at ? format(new Date(row.updated_at), "PPP") : "-",
+    key: 'updated_at',
+    header: 'Last Updated',
+    cellClassName: 'text-muted-foreground text-sm',
+    render: (row) => (row.updated_at ? format(new Date(row.updated_at), 'PPP') : '-'),
   },
   {
-    key: "actions",
-    header: "Actions",
+    key: 'actions',
+    header: 'Actions',
     render: (row) => (
       <div className="flex gap-2 items-center">
         <DropdownMenu>
@@ -90,10 +76,7 @@ const columns = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link
-              href={row.viewUrl || "#"}
-              className={"flex items-center text-sm gap-2 "}
-            >
+            <Link href={row.viewUrl || '#'} className={'flex items-center text-sm gap-2 '}>
               <DropdownMenuItem>
                 <Eye className=" h-4 w-4 text-foreground hover:text-primary-foreground" />
                 View Submission
@@ -105,7 +88,7 @@ const columns = [
                 <DropdownMenuSeparator />
                 <Link
                   href={`/author/submissions/${row.id}/edit`}
-                  className={"flex items-center text-sm gap-2 "}
+                  className={'flex items-center text-sm gap-2 '}
                 >
                   <DropdownMenuItem>
                     <Pencil className=" h-4 w-4 text-foreground hover:text-primary-foreground" />
@@ -153,7 +136,7 @@ export default function AuthorSubmissionsTable({
     onSubmit,
     onDelete,
     onEdit,
-    viewUrl: typeof viewUrl === "function" ? viewUrl(submission) : viewUrl,
+    viewUrl: typeof viewUrl === 'function' ? viewUrl(submission) : viewUrl,
   }));
   return (
     <DataTable

@@ -2,16 +2,10 @@
  * SubmissionDocumentsCard - Displays and manages submission documents with edit/view capabilities
  * @module features/panel/author/components/submission/SubmissionDocumentsCard
  */
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FileText, Upload, Edit, History } from "lucide-react";
-import Link from "next/link";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, Upload, Edit, History } from 'lucide-react';
+import Link from 'next/link';
 
 /**
  * @param {Object} props
@@ -34,13 +28,13 @@ export default function SubmissionDocumentsCard({
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 justify-between">
           <div>
             <CardTitle>Documents</CardTitle>
             <CardDescription>
               {isEditable
-                ? "Manage manuscript files and supporting documents"
-                : "Submitted manuscript files and supporting documents"}
+                ? 'Manage manuscript files and supporting documents'
+                : 'Submitted manuscript files and supporting documents'}
             </CardDescription>
           </div>
           {isEditable && onUpload && (
@@ -56,12 +50,12 @@ export default function SubmissionDocumentsCard({
           <div className="text-center py-12 border-2 border-dashed rounded-lg">
             <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="font-semibold mb-2">
-              {isEditable ? "No documents uploaded" : "No documents found"}
+              {isEditable ? 'No documents uploaded' : 'No documents found'}
             </h3>
             <p className="text-sm text-muted-foreground mb-4">
               {isEditable
-                ? "Upload your manuscript and supporting documents to submit for review"
-                : "This submission has no documents attached"}
+                ? 'Upload your manuscript and supporting documents to submit for review'
+                : 'This submission has no documents attached'}
             </p>
             {isEditable && onUpload && (
               <Button onClick={onUpload} className="gap-2">
@@ -75,7 +69,7 @@ export default function SubmissionDocumentsCard({
             {submission.documents.map((doc) => (
               <div
                 key={doc.id}
-                className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
               >
                 <div className="flex items-center gap-3">
                   <FileText className="h-6 w-6 text-primary stroke-[1.5px]" />
@@ -88,39 +82,24 @@ export default function SubmissionDocumentsCard({
                       {doc.file_size && (
                         <>
                           <span>•</span>
-                          <span>
-                            {(doc.file_size / 1024 / 1024).toFixed(2)} MB
-                          </span>
+                          <span>{(doc.file_size / 1024 / 1024).toFixed(2)} MB</span>
                         </>
                       )}
                     </div>
                   </div>
                 </div>
                 <div className="flex gap-2">
-                  {isEditable &&
-                    !doc.file_name?.toLowerCase().endsWith(".pdf") && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onViewVersions(doc.id)}
-                      >
-                        <History className="h-4 w-4 mr-1 stroke-[1.5px]" />
-                        Versions
-                      </Button>
-                    )}
+                  {isEditable && !doc.file_name?.toLowerCase().endsWith('.pdf') && (
+                    <Button variant="outline" size="sm" onClick={() => onViewVersions(doc.id)}>
+                      <History className="h-4 w-4 mr-1 stroke-[1.5px]" />
+                      Versions
+                    </Button>
+                  )}
                   {isEditable && editBasePath && (
-                    <Link
-                      href={`${editBasePath}/${submissionId}/editor/${doc.id}`}
-                    >
-                      <Button
-                        variant="outline"
-                        className="font-medium"
-                        size="sm"
-                      >
+                    <Link href={`${editBasePath}/${submissionId}/editor/${doc.id}`}>
+                      <Button variant="outline" className="font-medium" size="sm">
                         <Edit className="h-4 w-4 mr-1 stroke-[1.5px]" />
-                        {doc.file_name?.toLowerCase().endsWith(".pdf")
-                          ? "View"
-                          : "Edit"}
+                        {doc.file_name?.toLowerCase().endsWith('.pdf') ? 'View' : 'Edit'}
                       </Button>
                     </Link>
                   )}

@@ -46,25 +46,20 @@ npm install lexical @lexical/react @lexical/rich-text @lexical/selection @lexica
 ### Basic Usage
 
 ```jsx
-import { RichTextEditor } from "@/features/shared";
+import { RichTextEditor } from '@/features/shared';
 
 function MyComponent() {
-  const [content, setContent] = useState("");
+  const [content, setContent] = useState('');
 
-  return (
-    <RichTextEditor
-      placeholder="Start typing..."
-      onChange={(html) => setContent(html)}
-    />
-  );
+  return <RichTextEditor placeholder="Start typing..." onChange={(html) => setContent(html)} />;
 }
 ```
 
 ### With React Hook Form
 
 ```jsx
-import { RichTextEditor } from "@/features/shared";
-import { useForm, Controller } from "react-hook-form";
+import { RichTextEditor } from '@/features/shared';
+import { useForm, Controller } from 'react-hook-form';
 
 function MyForm() {
   const { control, handleSubmit } = useForm();
@@ -95,8 +90,8 @@ function MyForm() {
 ### In a Card
 
 ```jsx
-import { RichTextEditor } from "@/features/shared";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { RichTextEditor } from '@/features/shared';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 function MyComponent() {
   return (

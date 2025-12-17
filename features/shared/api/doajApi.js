@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 export const searchDOAJJournals = async (query) => {
   if (!query) return { results: [] };
@@ -9,7 +9,7 @@ export const searchDOAJJournals = async (query) => {
     );
     return response.data;
   } catch (error) {
-    console.error("Error searching DOAJ journals:", error);
+    console.error('Error searching DOAJ journals:', error);
     return { results: [] };
   }
 };

@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { LoadingScreen, RoleBasedRoute } from "@/features";
-import ErrorCard from "@/features/shared/components/ErrorCard";
+import { LoadingScreen, RoleBasedRoute } from '@/features';
+import ErrorCard from '@/features/shared/components/ErrorCard';
 import {
   ProfileCompletionCard,
   ProfileLinksCard,
   ScoreCard,
   useGetUserScoreStatus,
-} from "@/features/panel";
+} from '@/features/panel';
 
 export default function ReaderDashboard() {
   const {
@@ -20,13 +20,9 @@ export default function ReaderDashboard() {
 
   // Calculate completion percentage from score breakdown
   const scoreBreakdown = scoreData?.latest_request?.score_breakdown || [];
-  const completedItems = scoreBreakdown.filter(
-    (item) => item.status === "completed"
-  ).length;
+  const completedItems = scoreBreakdown.filter((item) => item.status === 'completed').length;
   const completionPercentage =
-    scoreBreakdown.length > 0
-      ? (completedItems / scoreBreakdown.length) * 100
-      : 0;
+    scoreBreakdown.length > 0 ? (completedItems / scoreBreakdown.length) * 100 : 0;
 
   // Error state
   if (isError) {
@@ -63,10 +59,7 @@ export default function ReaderDashboard() {
       <div className="mx-auto space-y-5">
         <div>
           <div className="lg:col-span-2">
-            <ProfileCompletionCard
-              completionPercentage={completionPercentage}
-              pending={false}
-            />
+            <ProfileCompletionCard completionPercentage={completionPercentage} pending={false} />
           </div>
         </div>
         <ScoreCard scoreData={scoreData} pending={false} />

@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createResearchType, updateResearchType, deleteResearchType } from "../../api/journalsApi";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createResearchType, updateResearchType, deleteResearchType } from '../../api/journalsApi';
+import { toast } from 'sonner';
 
 export const useCreateResearchType = (options = {}) => {
   const queryClient = useQueryClient();
@@ -8,15 +8,16 @@ export const useCreateResearchType = (options = {}) => {
   return useMutation({
     mutationFn: createResearchType,
     onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: ["taxonomy-tree"] });
+      queryClient.invalidateQueries({ queryKey: ['taxonomy-tree'] });
       if (!options.onSuccess) {
-        toast.success("Research type created successfully!");
+        toast.success('Research type created successfully!');
       }
       options.onSuccess?.(data, variables, context);
     },
     onError: (error, variables, context) => {
       if (!options.onError) {
-        const errorMessage = error?.response?.data?.message || error?.message || "Failed to create research type";
+        const errorMessage =
+          error?.response?.data?.message || error?.message || 'Failed to create research type';
         toast.error(errorMessage);
       }
       options.onError?.(error, variables, context);
@@ -30,15 +31,16 @@ export const useUpdateResearchType = (options = {}) => {
   return useMutation({
     mutationFn: updateResearchType,
     onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: ["taxonomy-tree"] });
+      queryClient.invalidateQueries({ queryKey: ['taxonomy-tree'] });
       if (!options.onSuccess) {
-        toast.success("Research type updated successfully!");
+        toast.success('Research type updated successfully!');
       }
       options.onSuccess?.(data, variables, context);
     },
     onError: (error, variables, context) => {
       if (!options.onError) {
-        const errorMessage = error?.response?.data?.message || error?.message || "Failed to update research type";
+        const errorMessage =
+          error?.response?.data?.message || error?.message || 'Failed to update research type';
         toast.error(errorMessage);
       }
       options.onError?.(error, variables, context);
@@ -52,15 +54,16 @@ export const useDeleteResearchType = (options = {}) => {
   return useMutation({
     mutationFn: deleteResearchType,
     onSuccess: (data, variables, context) => {
-      queryClient.invalidateQueries({ queryKey: ["taxonomy-tree"] });
+      queryClient.invalidateQueries({ queryKey: ['taxonomy-tree'] });
       if (!options.onSuccess) {
-        toast.success("Research type deleted successfully!");
+        toast.success('Research type deleted successfully!');
       }
       options.onSuccess?.(data, variables, context);
     },
     onError: (error, variables, context) => {
       if (!options.onError) {
-        const errorMessage = error?.response?.data?.message || error?.message || "Failed to delete research type";
+        const errorMessage =
+          error?.response?.data?.message || error?.message || 'Failed to delete research type';
         toast.error(errorMessage);
       }
       options.onError?.(error, variables, context);

@@ -2,13 +2,9 @@
  * DataTable - Global reusable data table component
  * @module features/shared/components/DataTable
  */
-import React from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import TableSkeleton from "@/features/shared/components/TableSkeleton";
+import React from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+import TableSkeleton from '@/features/shared/components/TableSkeleton';
 import {
   Table,
   TableBody,
@@ -16,8 +12,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Info } from "lucide-react";
+} from '@/components/ui/table';
+import { Info } from 'lucide-react';
 
 /**
  * DataTable Component
@@ -74,15 +70,15 @@ import { Info } from "lucide-react";
 export default function DataTable({
   data = [],
   columns = [],
-  emptyMessage = "No data found",
+  emptyMessage = 'No data found',
   error = null,
-  errorMessage = "Error loading data",
+  errorMessage = 'Error loading data',
   isPending = false,
   pendingRows = 5,
   onRowClick,
-  rowClassName = "",
+  rowClassName = '',
   getRowClassName,
-  tableClassName = "",
+  tableClassName = '',
   hoverable = true,
   striped = false,
 }) {
@@ -91,12 +87,12 @@ export default function DataTable({
    */
   const getAlignClass = (align) => {
     switch (align) {
-      case "center":
-        return "text-center";
-      case "right":
-        return "text-right";
+      case 'center':
+        return 'text-center';
+      case 'right':
+        return 'text-right';
       default:
-        return "text-left";
+        return 'text-left';
     }
   };
 
@@ -121,16 +117,16 @@ export default function DataTable({
     }
 
     // If value is a string and longer than 45 chars, show ellipsis and shadcn tooltip
-    if (typeof value === "string" && value.length > 35) {
+    if (typeof value === 'string' && value.length > 35) {
       return (
         <Tooltip>
           <TooltipTrigger asChild>
             <span
               style={{
-                cursor: "pointer",
-                whiteSpace: "nowrap",
-                overflow: "hidden",
-                textOverflow: "ellipsis",
+                cursor: 'pointer',
+                whiteSpace: 'nowrap',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
                 maxWidth: 180,
               }}
             >
@@ -149,13 +145,11 @@ export default function DataTable({
    * Get dynamic row className
    */
   const getRowClass = (row, index) => {
-    const baseClass = "border-b border-border";
-    const hoverClass = hoverable ? "hover:bg-muted/50" : "";
-    const stripedClass = striped && index % 2 === 1 ? "bg-muted/20" : "";
-    const clickableClass = onRowClick ? "cursor-pointer" : "";
-    const customClass = getRowClassName
-      ? getRowClassName(row, index)
-      : rowClassName;
+    const baseClass = 'border-b border-border';
+    const hoverClass = hoverable ? 'hover:bg-muted/50' : '';
+    const stripedClass = striped && index % 2 === 1 ? 'bg-muted/20' : '';
+    const clickableClass = onRowClick ? 'cursor-pointer' : '';
+    const customClass = getRowClassName ? getRowClassName(row, index) : rowClassName;
 
     return `${baseClass} ${hoverClass} ${stripedClass} ${clickableClass} ${customClass}`.trim();
   };
@@ -173,14 +167,14 @@ export default function DataTable({
 
   return (
     <div className={`w-full overflow-x-auto rounded-lg ${tableClassName}`}>
-      <Table className={" "}>
+      <Table className={' '}>
         <TableHeader>
           <TableRow className="border-b border-border">
             {columns.map((column) => (
               <TableHead
                 key={column.key}
                 className={`text-foreground ${getAlignClass(column.align)} ${
-                  column.headerClassName || ""
+                  column.headerClassName || ''
                 }`}
               >
                 {column.header}
@@ -195,12 +189,10 @@ export default function DataTable({
                 <div className="flex flex-col items-center justify-center gap-2">
                   <div className="flex items-center gap-2 text-red-600">
                     <Info />
-                    <span className="font-semibold text-lg">
-                      {errorMessage}
-                    </span>
+                    <span className="font-semibold text-lg">{errorMessage}</span>
                   </div>
                   <div className="text-sm text-red-500 text-center max-w-md">
-                    {typeof error === "string" ? error : error?.message}
+                    {typeof error === 'string' ? error : error?.message}
                   </div>
                 </div>
               </TableCell>
@@ -215,9 +207,7 @@ export default function DataTable({
                 {columns.map((column) => (
                   <TableCell
                     key={column.key}
-                    className={`${getAlignClass(column.align)} ${
-                      column.cellClassName || ""
-                    }`}
+                    className={`${getAlignClass(column.align)} ${column.cellClassName || ''}`}
                   >
                     {renderCell(row, column)}
                   </TableCell>

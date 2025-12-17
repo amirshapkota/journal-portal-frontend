@@ -1,17 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import {
   Form,
   FormControl,
@@ -20,37 +14,29 @@ import {
   FormLabel,
   FormMessage,
   FormDescription,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Badge } from "@/components/ui/badge";
-import { toast } from "sonner";
-import {
-  Save,
-  Loader2,
-  Link2,
-  Unlink,
-  CheckCircle2,
-  XCircle,
-} from "lucide-react";
-import { useGetOJSStatus } from "../../hooks/query/useGetOJSStatus";
-import { useConfigureOJSConnection } from "../../hooks/mutation/useConfigureOJSConnection";
-import { useDisconnectOJS } from "../../hooks/mutation/useDisconnectOJS";
-import { LoadingScreen, ErrorCard } from "@/features/shared";
-import ConfirmationPopup from "@/features/shared/components/ConfirmationPopup";
-import Image from "next/image";
-import { useTheme } from "next-themes";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Switch } from '@/components/ui/switch';
+import { Badge } from '@/components/ui/badge';
+import { Save, Loader2, Link2, Unlink, CheckCircle2, XCircle } from 'lucide-react';
+import { useGetOJSStatus } from '../../hooks/query/useGetOJSStatus';
+import { useConfigureOJSConnection } from '../../hooks/mutation/useConfigureOJSConnection';
+import { useDisconnectOJS } from '../../hooks/mutation/useDisconnectOJS';
+import { LoadingScreen, ErrorCard } from '@/features/shared';
+import ConfirmationPopup from '@/features/shared/components/ConfirmationPopup';
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
 
 const ojsConnectionSchema = z.object({
   ojs_api_url: z
     .string()
-    .url("Must be a valid URL")
-    .min(1, "API URL is required")
-    .refine((val) => val.endsWith("/api/v1"), {
-      message: "API URL must end with /api/v1",
+    .url('Must be a valid URL')
+    .min(1, 'API URL is required')
+    .refine((val) => val.endsWith('/api/v1'), {
+      message: 'API URL must end with /api/v1',
     }),
-  ojs_api_key: z.string().min(1, "API Key is required"),
-  ojs_journal_id: z.coerce.number().min(1, "Journal ID must be at least 1"),
+  ojs_api_key: z.string().min(1, 'API Key is required'),
+  ojs_journal_id: z.coerce.number().min(1, 'Journal ID must be at least 1'),
   ojs_enabled: z.boolean().default(true),
 });
 
@@ -68,8 +54,8 @@ export function OJSConnectionSettings({ journalId }) {
   const form = useForm({
     resolver: zodResolver(ojsConnectionSchema),
     defaultValues: {
-      ojs_api_url: "",
-      ojs_api_key: "",
+      ojs_api_url: '',
+      ojs_api_key: '',
       ojs_journal_id: 0,
       ojs_enabled: true,
     },
@@ -84,8 +70,8 @@ export function OJSConnectionSettings({ journalId }) {
   useEffect(() => {
     if (ojsStatus && ojsStatus.connected) {
       form.reset({
-        ojs_api_url: ojsStatus.ojs_api_url || "",
-        ojs_api_key: ojsStatus.ojs_api_key || "",
+        ojs_api_url: ojsStatus.ojs_api_url || '',
+        ojs_api_key: ojsStatus.ojs_api_key || '',
         ojs_journal_id: ojsStatus.ojs_journal_id || 0,
         ojs_enabled: ojsStatus.ojs_enabled ?? true,
       });
@@ -109,17 +95,11 @@ export function OJSConnectionSettings({ journalId }) {
     });
   };
 
-  if (isLoadingStatus) {
-    return <LoadingScreen />;
-  }
-
   if (statusError) {
     return (
       <ErrorCard
         title="Failed to load OJS status"
-        description={
-          statusError?.message || "Unable to fetch OJS connection status"
-        }
+        description={statusError?.message || 'Unable to fetch OJS connection status'}
         onRetry={refetchStatus}
       />
     );
@@ -130,12 +110,13 @@ export function OJSConnectionSettings({ journalId }) {
   return (
     <div className="space-y-6">
       {/* Connection Status Card */}
+      {isLoadingStatus && <LoadingScreen />}
       {isConnected && (
         <Card>
           <CardHeader>
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
-                {resolvedTheme === "light" ? (
+                {resolvedTheme === 'light' ? (
                   <Image
                     src="/ojs.png"
                     alt="OJS Logo"
@@ -155,10 +136,7 @@ export function OJSConnectionSettings({ journalId }) {
                 <CheckCircle2 className="h-5 w-5 text-green-600" />
                 <CardTitle>OJS Connected</CardTitle>
               </div>
-              <Badge
-                variant="success"
-                className="bg-green-600 text-primary-foreground"
-              >
+              <Badge variant="success" className="bg-green-600 text-primary-foreground">
                 Active
               </Badge>
             </div>
@@ -169,26 +147,16 @@ export function OJSConnectionSettings({ journalId }) {
           <CardContent className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">
-                  API URL
-                </p>
-                <p className="text-sm font-mono break-all">
-                  {ojsStatus.ojs_api_url}
-                </p>
+                <p className="text-sm font-medium text-muted-foreground">API URL</p>
+                <p className="text-sm font-mono break-all">{ojsStatus.ojs_api_url}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">
-                  OJS Journal ID
-                </p>
+                <p className="text-sm font-medium text-muted-foreground">OJS Journal ID</p>
                 <p className="text-sm">{ojsStatus.ojs_journal_id}</p>
               </div>
               <div className="space-y-1">
-                <p className="text-sm font-medium text-muted-foreground">
-                  Status
-                </p>
-                <p className="text-sm">
-                  {ojsStatus.ojs_enabled ? "Enabled" : "Disabled"}
-                </p>
+                <p className="text-sm font-medium text-muted-foreground">Status</p>
+                <p className="text-sm">{ojsStatus.ojs_enabled ? 'Enabled' : 'Disabled'}</p>
               </div>
             </div>
 
@@ -225,10 +193,7 @@ export function OJSConnectionSettings({ journalId }) {
       {/* Configuration Form */}
       {!isConnected && (
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(handleSubmit)}
-            className="space-y-6"
-          >
+          <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-6">
             <Card>
               <CardHeader>
                 <div className="flex items-center gap-2">
@@ -236,8 +201,7 @@ export function OJSConnectionSettings({ journalId }) {
                   <CardTitle>Connect to OJS</CardTitle>
                 </div>
                 <CardDescription>
-                  Configure connection to Open Journal Systems for seamless
-                  integration
+                  Configure connection to Open Journal Systems for seamless integration
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -256,9 +220,7 @@ export function OJSConnectionSettings({ journalId }) {
                           type="url"
                         />
                       </FormControl>
-                      <FormDescription>
-                        The base URL of your OJS API endpoint
-                      </FormDescription>
+                      <FormDescription>The base URL of your OJS API endpoint</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -273,15 +235,9 @@ export function OJSConnectionSettings({ journalId }) {
                         API Key <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="Enter your OJS API key"
-                          type="text"
-                        />
+                        <Input {...field} placeholder="Enter your OJS API key" type="text" />
                       </FormControl>
-                      <FormDescription>
-                        Your OJS API authentication key
-                      </FormDescription>
+                      <FormDescription>Your OJS API authentication key</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -293,20 +249,12 @@ export function OJSConnectionSettings({ journalId }) {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>
-                        OJS Journal ID{" "}
-                        <span className="text-destructive">*</span>
+                        OJS Journal ID <span className="text-destructive">*</span>
                       </FormLabel>
                       <FormControl>
-                        <Input
-                          {...field}
-                          placeholder="1"
-                          type="number"
-                          min="1"
-                        />
+                        <Input {...field} placeholder="1" type="number" min="1" />
                       </FormControl>
-                      <FormDescription>
-                        The journal ID in your OJS system
-                      </FormDescription>
+                      <FormDescription>The journal ID in your OJS system</FormDescription>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -319,15 +267,10 @@ export function OJSConnectionSettings({ journalId }) {
                     <FormItem className="flex items-center justify-between space-y-0">
                       <div className="space-y-0.5">
                         <FormLabel>Enable OJS Integration</FormLabel>
-                        <FormDescription>
-                          Activate synchronization with OJS
-                        </FormDescription>
+                        <FormDescription>Activate synchronization with OJS</FormDescription>
                       </div>
                       <FormControl>
-                        <Switch
-                          checked={field.value}
-                          onCheckedChange={field.onChange}
-                        />
+                        <Switch checked={field.value} onCheckedChange={field.onChange} />
                       </FormControl>
                     </FormItem>
                   )}
@@ -338,9 +281,7 @@ export function OJSConnectionSettings({ journalId }) {
             <div className="flex justify-end">
               <Button
                 type="submit"
-                disabled={
-                  configureOJSMutation.isPending || !form.formState.isDirty
-                }
+                disabled={configureOJSMutation.isPending || !form.formState.isDirty}
               >
                 {configureOJSMutation.isPending ? (
                   <>

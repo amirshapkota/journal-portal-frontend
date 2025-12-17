@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getDiscussionThread } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { getDiscussionThread } from '../../api';
 
 /**
  * Hook to fetch a single discussion thread with all messages
@@ -9,7 +9,7 @@ import { getDiscussionThread } from "../../api";
  */
 export const useGetDiscussionThread = (discussionId, enabled = true) => {
   return useQuery({
-    queryKey: ["discussion-thread", discussionId],
+    queryKey: ['discussion-thread', discussionId],
     queryFn: () => getDiscussionThread(discussionId),
     enabled: !!discussionId && enabled,
     staleTime: 1000 * 60 * 5, // 5 minutes

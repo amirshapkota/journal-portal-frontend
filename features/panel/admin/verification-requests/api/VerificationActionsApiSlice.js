@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Approve a verification request
@@ -7,10 +7,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise}
  */
 export const approveVerification = async (id, data) => {
-  const response = await instance.post(
-    `/admin/verifications/${id}/approve/`,
-    data
-  );
+  const response = await instance.post(`/admin/verifications/${id}/approve/`, data);
   return response.data;
 };
 
@@ -21,10 +18,7 @@ export const approveVerification = async (id, data) => {
  * @returns {Promise}
  */
 export const rejectVerification = async (id, data) => {
-  const response = await instance.post(
-    `/admin/verifications/${id}/reject/`,
-    data
-  );
+  const response = await instance.post(`/admin/verifications/${id}/reject/`, data);
   return response.data;
 };
 
@@ -35,9 +29,6 @@ export const rejectVerification = async (id, data) => {
  * @returns {Promise}
  */
 export const requestInfoVerification = async (id, data) => {
-  const response = await instance.post(
-    `/admin/verifications/${id}/request_info/`,
-    data
-  );
+  const response = await instance.post(`/admin/verifications/${id}/request_info/`, data);
   return response.data;
 };

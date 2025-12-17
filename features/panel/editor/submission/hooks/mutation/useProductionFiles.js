@@ -1,12 +1,12 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   uploadProductionFile,
   updateProductionFile,
   approveProductionFile,
   publishGalleyFile,
   deleteProductionFile,
-} from "../../api";
+} from '../../api';
 
 /**
  * Hook to upload a production file (galley)
@@ -17,24 +17,22 @@ export function useUploadProductionFile() {
   return useMutation({
     mutationFn: (formData) => uploadProductionFile(formData),
     onSuccess: (data) => {
-      toast.success("Galley file uploaded successfully");
+      toast.success('Galley file uploaded successfully');
       queryClient.invalidateQueries({
-        queryKey: ["production-files"],
+        queryKey: ['production-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-files", data.submission],
+        queryKey: ['production-files', data.submission],
       });
       if (data.assignment) {
         queryClient.invalidateQueries({
-          queryKey: ["production-assignment", data.assignment],
+          queryKey: ['production-assignment', data.assignment],
         });
       }
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to upload galley file";
+        error?.response?.data?.detail || error?.message || 'Failed to upload galley file';
       toast.error(message);
     },
   });
@@ -49,19 +47,16 @@ export function useUpdateProductionFile() {
   return useMutation({
     mutationFn: ({ fileId, data }) => updateProductionFile(fileId, data),
     onSuccess: (data) => {
-      toast.success("File updated successfully");
+      toast.success('File updated successfully');
       queryClient.invalidateQueries({
-        queryKey: ["production-files"],
+        queryKey: ['production-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-file", data.id],
+        queryKey: ['production-file', data.id],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to update file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to update file';
       toast.error(message);
     },
   });
@@ -76,19 +71,16 @@ export function useApproveProductionFile() {
   return useMutation({
     mutationFn: (fileId) => approveProductionFile(fileId),
     onSuccess: (data) => {
-      toast.success("Galley file approved");
+      toast.success('Galley file approved');
       queryClient.invalidateQueries({
-        queryKey: ["production-files"],
+        queryKey: ['production-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-file", data.id],
+        queryKey: ['production-file', data.id],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to approve file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to approve file';
       toast.error(message);
     },
   });
@@ -103,19 +95,17 @@ export function usePublishGalleyFile() {
   return useMutation({
     mutationFn: (fileId) => publishGalleyFile(fileId),
     onSuccess: (data) => {
-      toast.success("Galley file published");
+      toast.success('Galley file published');
       queryClient.invalidateQueries({
-        queryKey: ["production-files"],
+        queryKey: ['production-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-file", data.id],
+        queryKey: ['production-file', data.id],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to publish galley file";
+        error?.response?.data?.detail || error?.message || 'Failed to publish galley file';
       toast.error(message);
     },
   });
@@ -130,16 +120,13 @@ export function useDeleteProductionFile() {
   return useMutation({
     mutationFn: (fileId) => deleteProductionFile(fileId),
     onSuccess: () => {
-      toast.success("File deleted successfully");
+      toast.success('File deleted successfully');
       queryClient.invalidateQueries({
-        queryKey: ["production-files"],
+        queryKey: ['production-files'],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to delete file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to delete file';
       toast.error(message);
     },
   });

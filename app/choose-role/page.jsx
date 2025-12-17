@@ -1,52 +1,47 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useSelector } from "react-redux";
-import { PenTool, CheckCircle2, ArrowRight, FileText } from "lucide-react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { PenTool, CheckCircle2, ArrowRight, FileText } from 'lucide-react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 
 // Full list of roles
 const ROLES = [
   {
-    id: "EDITOR",
-    title: "Editor",
+    id: 'EDITOR',
+    title: 'Editor',
     description:
-      "Manage journal submissions, oversee review process, and handle publication workflows",
+      'Manage journal submissions, oversee review process, and handle publication workflows',
     icon: FileText,
-    color:
-      "from-blue-500/20 to-blue-600/10 dark:from-blue-500/20 dark:to-blue-600/10",
+    color: 'from-blue-500/20 to-blue-600/10 dark:from-blue-500/20 dark:to-blue-600/10',
     borderColor:
-      "border-blue-400/40 hover:border-blue-500/60 dark:border-blue-500/30 dark:hover:border-blue-400/50",
+      'border-blue-400/40 hover:border-blue-500/60 dark:border-blue-500/30 dark:hover:border-blue-400/50',
     iconBoxColor:
-      "bg-blue-200/50 text-blue-600 group-hover:bg-blue-300/50 group-hover:text-blue-700 dark:bg-blue-700/50 dark:text-blue-300 dark:group-hover:bg-blue-600/50 dark:group-hover:text-blue-200",
+      'bg-blue-200/50 text-blue-600 group-hover:bg-blue-300/50 group-hover:text-blue-700 dark:bg-blue-700/50 dark:text-blue-300 dark:group-hover:bg-blue-600/50 dark:group-hover:text-blue-200',
   },
   {
-    id: "AUTHOR",
-    title: "Author",
-    description:
-      "Submit manuscripts, track publication status, and manage your submissions",
+    id: 'AUTHOR',
+    title: 'Author',
+    description: 'Submit manuscripts, track publication status, and manage your submissions',
     icon: PenTool,
-    color:
-      "from-amber-500/20 to-amber-600/10 dark:from-amber-500/20 dark:to-amber-600/10",
+    color: 'from-amber-500/20 to-amber-600/10 dark:from-amber-500/20 dark:to-amber-600/10',
     borderColor:
-      "border-amber-400/40 hover:border-amber-500/60 dark:border-amber-500/30 dark:hover:border-amber-400/50",
+      'border-amber-400/40 hover:border-amber-500/60 dark:border-amber-500/30 dark:hover:border-amber-400/50',
     iconBoxColor:
-      "bg-amber-200/50 text-amber-600 group-hover:bg-amber-300/50 group-hover:text-amber-700 dark:bg-amber-700/50 dark:text-amber-300 dark:group-hover:bg-amber-600/50 dark:group-hover:text-amber-200",
+      'bg-amber-200/50 text-amber-600 group-hover:bg-amber-300/50 group-hover:text-amber-700 dark:bg-amber-700/50 dark:text-amber-300 dark:group-hover:bg-amber-600/50 dark:group-hover:text-amber-200',
   },
   {
-    id: "REVIEWER",
-    title: "Reviewer",
-    description:
-      "Review journal submissions, provide peer feedback, and contribute to science",
+    id: 'REVIEWER',
+    title: 'Reviewer',
+    description: 'Review journal submissions, provide peer feedback, and contribute to science',
     icon: CheckCircle2,
-    color:
-      "from-emerald-500/20 to-emerald-600/10 dark:from-emerald-500/20 dark:to-emerald-600/10",
+    color: 'from-emerald-500/20 to-emerald-600/10 dark:from-emerald-500/20 dark:to-emerald-600/10',
     borderColor:
-      "border-emerald-400/40 hover:border-emerald-500/60 dark:border-emerald-500/30 dark:hover:border-emerald-400/50",
+      'border-emerald-400/40 hover:border-emerald-500/60 dark:border-emerald-500/30 dark:hover:border-emerald-400/50',
     iconBoxColor:
-      "bg-emerald-200/50 text-emerald-600 group-hover:bg-emerald-300/50 group-hover:text-emerald-700 dark:bg-emerald-700/50 dark:text-emerald-300 dark:group-hover:bg-emerald-600/50 dark:group-hover:text-emerald-200",
+      'bg-emerald-200/50 text-emerald-600 group-hover:bg-emerald-300/50 group-hover:text-emerald-700 dark:bg-emerald-700/50 dark:text-emerald-300 dark:group-hover:bg-emerald-600/50 dark:group-hover:text-emerald-200',
   },
 ];
 
@@ -64,7 +59,7 @@ export default function ChooseRole() {
   // Redirect to unauthorized if user doesn't have multiple roles
   useEffect(() => {
     if (userRoles.length <= 2) {
-      router.push("/unauthorized");
+      router.push('/unauthorized');
     }
   }, [userRoles.length, router]);
 
@@ -87,10 +82,9 @@ export default function ChooseRole() {
             Choose Your Role
           </h1>
           <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
-            Select how you&apos;d like to access the Journal Management System.
-            Each role provides dedicated tools and workflows for managing
-            journals, handling submissions, coordinating peer reviews, and
-            supporting the publication process.
+            Select how you&apos;d like to access the Journal Management System. Each role provides
+            dedicated tools and workflows for managing journals, handling submissions, coordinating
+            peer reviews, and supporting the publication process.
           </p>
         </div>
 
@@ -112,10 +106,10 @@ export default function ChooseRole() {
                   className={`h-full p-6 border-2 transition-all duration-300 relative backdrop-blur-sm
                     ${
                       isSelected
-                        ? "border-blue-500 bg-linear-to-br from-blue-500/30 to-blue-600/20 shadow-lg shadow-blue-500/20 dark:border-blue-400 dark:from-blue-500/30 dark:to-blue-600/20 dark:shadow-blue-500/20"
+                        ? 'border-blue-500 bg-linear-to-br from-blue-500/30 to-blue-600/20 shadow-lg shadow-blue-500/20 dark:border-blue-400 dark:from-blue-500/30 dark:to-blue-600/20 dark:shadow-blue-500/20'
                         : isOtherSelected
-                        ? "border-slate-300 bg-slate-100/50 opacity-50 dark:border-slate-700 dark:bg-slate-800/50"
-                        : `${role.borderColor} bg-linear-to-br ${role.color} hover:shadow-lg hover:shadow-slate-300/10 dark:hover:shadow-slate-500/10`
+                          ? 'border-slate-300 bg-slate-100/50 opacity-50 dark:border-slate-700 dark:bg-slate-800/50'
+                          : `${role.borderColor} bg-linear-to-br ${role.color} hover:shadow-lg hover:shadow-slate-300/10 dark:hover:shadow-slate-500/10`
                     }
                   `}
                 >
@@ -142,10 +136,10 @@ export default function ChooseRole() {
                       className={`w-12 h-12 rounded-lg flex items-center justify-center transition-colors duration-300
                       ${
                         isSelected
-                          ? "bg-blue-500/30 text-blue-600 dark:bg-blue-400/30 dark:text-blue-300"
+                          ? 'bg-blue-500/30 text-blue-600 dark:bg-blue-400/30 dark:text-blue-300'
                           : isOtherSelected
-                          ? "bg-slate-300/30 text-slate-600 dark:bg-slate-700/30 dark:text-slate-500"
-                          : role.iconBoxColor
+                            ? 'bg-slate-300/30 text-slate-600 dark:bg-slate-700/30 dark:text-slate-500'
+                            : role.iconBoxColor
                       }
                     `}
                     >
@@ -157,10 +151,10 @@ export default function ChooseRole() {
                     className={`text-xl font-semibold mb-2 transition-colors duration-300
                     ${
                       isSelected
-                        ? "text-blue-700 dark:text-blue-200"
+                        ? 'text-blue-700 dark:text-blue-200'
                         : isOtherSelected
-                        ? "text-slate-600 dark:text-slate-500"
-                        : "text-slate-900 group-hover:text-slate-800 dark:text-white dark:group-hover:text-slate-100"
+                          ? 'text-slate-600 dark:text-slate-500'
+                          : 'text-slate-900 group-hover:text-slate-800 dark:text-white dark:group-hover:text-slate-100'
                     }
                   `}
                   >
@@ -170,10 +164,10 @@ export default function ChooseRole() {
                     className={`text-sm transition-colors duration-300
                     ${
                       isSelected
-                        ? "text-blue-600/70 dark:text-blue-100/70"
+                        ? 'text-blue-600/70 dark:text-blue-100/70'
                         : isOtherSelected
-                        ? "text-slate-600 dark:text-slate-500"
-                        : "text-slate-600 group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-300"
+                          ? 'text-slate-600 dark:text-slate-500'
+                          : 'text-slate-600 group-hover:text-slate-700 dark:text-slate-400 dark:group-hover:text-slate-300'
                     }
                   `}
                   >
@@ -200,11 +194,7 @@ export default function ChooseRole() {
           >
             {isLoading ? (
               <>
-                <svg
-                  className="animate-spin h-4 w-4"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                >
+                <svg className="animate-spin h-4 w-4" fill="none" viewBox="0 0 24 24">
                   <circle
                     className="opacity-25"
                     cx="12"
@@ -223,9 +213,7 @@ export default function ChooseRole() {
               </>
             ) : (
               <>
-                Continue as{" "}
-                {selectedRole &&
-                  ROLES.find((r) => r.id === selectedRole)?.title}
+                Continue as {selectedRole && ROLES.find((r) => r.id === selectedRole)?.title}
                 <ArrowRight className="w-4 h-4" />
               </>
             )}
@@ -234,9 +222,7 @@ export default function ChooseRole() {
 
         {/* Footer info */}
         <div className="mt-8 text-center text-sm text-slate-600 dark:text-slate-400">
-          <p>
-            You can change your role anytime from the dashboard navigation menu.
-          </p>
+          <p>You can change your role anytime from the dashboard navigation menu.</p>
         </div>
       </div>
     </div>

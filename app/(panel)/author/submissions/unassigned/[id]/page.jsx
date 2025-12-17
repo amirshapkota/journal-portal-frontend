@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useParams } from "next/navigation";
-import { useGetReviewerRecommendations } from "@/features/panel/author/hooks/query/useGetReviewerRecommendations";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { useState } from 'react';
+import { useParams } from 'next/navigation';
+import { useGetReviewerRecommendations } from '@/features/panel/author/hooks/query/useGetReviewerRecommendations';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import {
   LoadingScreen,
   useGetSubmissionById,
@@ -12,10 +12,10 @@ import {
   SubmissionDocumentsCard,
   CoAuthorsCard,
   DocumentVersionsModal,
-} from "@/features";
-import { Card, CardContent } from "@/components/ui/card";
-import { useRouter as useNextRouter } from "next/navigation";
-import { ReviewerRecommendations } from "@/features/panel/editor/submission/components/ReviewerRecommendationsCard";
+} from '@/features';
+import { Card, CardContent } from '@/components/ui/card';
+import { useRouter as useNextRouter } from 'next/navigation';
+import { ReviewerRecommendations } from '@/features/panel/editor/submission/components/ReviewerRecommendationsCard';
 
 export default function UnassignedDetailPage() {
   const params = useParams();
@@ -25,15 +25,10 @@ export default function UnassignedDetailPage() {
   const [versionsDialogOpen, setVersionsDialogOpen] = useState(false);
   const [selectedDocumentId, setSelectedDocumentId] = useState(null);
 
-  const {
-    data: submission,
-    isPending,
-    error,
-  } = useGetSubmissionById(submissionId);
+  const { data: submission, isPending, error } = useGetSubmissionById(submissionId);
 
   // Get review type from journal settings, fallback to submission review_type
-  const reviewType =
-    submission?.journal?.settings?.review_type || submission?.review_type;
+  const reviewType = submission?.journal?.settings?.review_type || submission?.review_type;
 
   const {
     data: recommendations,
@@ -57,7 +52,7 @@ export default function UnassignedDetailPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => router.push("/author/submissions/unassigned")}
+            onClick={() => router.push('/author/submissions/unassigned')}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Unassigned
@@ -81,7 +76,7 @@ export default function UnassignedDetailPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/author/submissions/unassigned")}
+              onClick={() => router.push('/author/submissions/unassigned')}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Unassigned

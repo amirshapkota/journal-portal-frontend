@@ -1,24 +1,15 @@
-"use client";
+'use client';
 
-import { useParams, useRouter } from "next/navigation";
-import { useQuery, useMutation } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import {
-  Loader2,
-  Download,
-  AlertCircle,
-  FileText,
-  ArrowLeft,
-} from "lucide-react";
-import { toast } from "sonner";
-import { useSelector } from "react-redux";
-import {
-  loadDocument,
-  downloadDocx,
-} from "@/features/panel/author/api/superdocApi";
-import { LoadingScreen, SuperDocEditor, PDFViewer } from "@/features";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { useParams, useRouter } from 'next/navigation';
+import { useQuery, useMutation } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Loader2, Download, AlertCircle, FileText, ArrowLeft } from 'lucide-react';
+import { toast } from 'sonner';
+import { useSelector } from 'react-redux';
+import { loadDocument, downloadDocx } from '@/features/panel/author/api/superdocApi';
+import { LoadingScreen, SuperDocEditor, PDFViewer } from '@/features';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export default function SuperDocEditorPage() {
   const params = useParams();
@@ -33,7 +24,7 @@ export default function SuperDocEditorPage() {
     isPending: isLoading,
     error: loadError,
   } = useQuery({
-    queryKey: ["superdoc-document", documentId],
+    queryKey: ['superdoc-document', documentId],
     queryFn: () => loadDocument(documentId),
     enabled: !!documentId,
     // 5 minutes
@@ -45,17 +36,17 @@ export default function SuperDocEditorPage() {
     mutationFn: () => downloadDocx(documentId),
     onSuccess: (blob) => {
       const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
+      const link = document.createElement('a');
       link.href = url;
-      link.download = documentData?.file_name || "document.docx";
+      link.download = documentData?.file_name || 'document.docx';
       document.body.appendChild(link);
       link.click();
       URL.revokeObjectURL(url);
       document.body.removeChild(link);
-      toast.success("Document downloaded successfully");
+      toast.success('Document downloaded successfully');
     },
     onError: () => {
-      toast.error("Failed to download document");
+      toast.error('Failed to download document');
     },
   });
 
@@ -74,9 +65,7 @@ export default function SuperDocEditorPage() {
         <CardContent className="p-8">
           <Alert variant="destructive">
             <AlertCircle className="h-4 w-4" />
-            <AlertDescription>
-              Failed to load document: {loadError.message}
-            </AlertDescription>
+            <AlertDescription>Failed to load document: {loadError.message}</AlertDescription>
           </Alert>
         </CardContent>
       </Card>
@@ -102,12 +91,8 @@ export default function SuperDocEditorPage() {
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
                 <div>
-                  <h1 className="font-semibold">
-                    {documentData.title || "Document Editor"}
-                  </h1>
-                  <p className="text-xs text-muted-foreground">
-                    {documentData.file_name}
-                  </p>
+                  <h1 className="font-semibold">{documentData.title || 'Document Editor'}</h1>
+                  <p className="text-xs text-muted-foreground">{documentData.file_name}</p>
                 </div>
               </div>
             </div>
@@ -137,22 +122,21 @@ export default function SuperDocEditorPage() {
             <div className="p-3 border rounded-lg bg-muted/50 mb-4">
               <div className="grid sm:grid-cols-3 gap-2 text-sm">
                 <div>
-                  <span className="font-medium">File:</span>{" "}
-                  {documentData.file_name}
+                  <span className="font-medium">File:</span> {documentData.file_name}
                 </div>
                 <div>
-                  <span className="font-medium">Size:</span>{" "}
+                  <span className="font-medium">Size:</span>{' '}
                   {(documentData.file_size / 1024).toFixed(2)} KB
                 </div>
                 <div>
-                  <span className="font-medium">Last Edited:</span>{" "}
+                  <span className="font-medium">Last Edited:</span>{' '}
                   {new Date(documentData.last_edited_at).toLocaleString()}
                 </div>
               </div>
             </div>
 
             {/* Document Viewer - PDF or SuperDoc */}
-            {documentData.file_name?.toLowerCase().endsWith(".pdf") ? (
+            {documentData.file_name?.toLowerCase().endsWith('.pdf') ? (
               <PDFViewer
                 fileUrl={documentData.file_url}
                 fileName={documentData.file_name}

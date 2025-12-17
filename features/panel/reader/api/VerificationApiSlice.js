@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Submit a new verification request
@@ -6,7 +6,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response
  */
 export const submitVerificationRequest = async (data) => {
-  const response = await instance.post("verification-requests/", data);
+  const response = await instance.post('verification-requests/', data);
   return response.data;
 };
 
@@ -15,7 +15,7 @@ export const submitVerificationRequest = async (data) => {
  * @returns {Promise} API response with pagination
  */
 export const getUserVerificationRequests = async () => {
-  const response = await instance.get("verification-requests/my_requests");
+  const response = await instance.get('verification-requests/my_requests');
   return response.data;
 };
 

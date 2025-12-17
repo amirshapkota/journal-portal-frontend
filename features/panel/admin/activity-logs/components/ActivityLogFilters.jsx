@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Select,
@@ -6,10 +6,10 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Search } from "lucide-react";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Search } from 'lucide-react';
 
 export function ActivityLogFilters({
   actionFilter,
@@ -22,39 +22,39 @@ export function ActivityLogFilters({
   onSearchChange,
 }) {
   const actionTypes = [
-    { value: "all", label: "All Actions" },
-    { value: "LOGIN", label: "Login" },
-    { value: "LOGOUT", label: "Logout" },
-    { value: "CREATE", label: "Create" },
-    { value: "READ", label: "Read" },
-    { value: "UPDATE", label: "Update" },
-    { value: "DELETE", label: "Delete" },
-    { value: "SUBMIT", label: "Submit" },
-    { value: "REVIEW", label: "Review" },
-    { value: "APPROVE", label: "Approve" },
-    { value: "REJECT", label: "Reject" },
-    { value: "PUBLISH", label: "Publish" },
-    { value: "WITHDRAW", label: "Withdraw" },
+    { value: 'all', label: 'All Actions' },
+    { value: 'LOGIN', label: 'Login' },
+    { value: 'LOGOUT', label: 'Logout' },
+    { value: 'CREATE', label: 'Create' },
+    { value: 'READ', label: 'Read' },
+    { value: 'UPDATE', label: 'Update' },
+    { value: 'DELETE', label: 'Delete' },
+    { value: 'SUBMIT', label: 'Submit' },
+    { value: 'REVIEW', label: 'Review' },
+    { value: 'APPROVE', label: 'Approve' },
+    { value: 'REJECT', label: 'Reject' },
+    { value: 'PUBLISH', label: 'Publish' },
+    { value: 'WITHDRAW', label: 'Withdraw' },
   ];
 
   const resourceTypes = [
-    { value: "all", label: "All Resources" },
-    { value: "USER", label: "User" },
-    { value: "PROFILE", label: "Profile" },
-    { value: "SUBMISSION", label: "Submission" },
-    { value: "DOCUMENT", label: "Document" },
-    { value: "REVIEW", label: "Review" },
-    { value: "JOURNAL", label: "Journal" },
-    { value: "PLAGIARISM_REPORT", label: "Plagiarism Report" },
-    { value: "FORMAT_CHECK", label: "Format Check" },
+    { value: 'all', label: 'All Resources' },
+    { value: 'USER', label: 'User' },
+    { value: 'PROFILE', label: 'Profile' },
+    { value: 'SUBMISSION', label: 'Submission' },
+    { value: 'DOCUMENT', label: 'Document' },
+    { value: 'REVIEW', label: 'Review' },
+    { value: 'JOURNAL', label: 'Journal' },
+    { value: 'PLAGIARISM_REPORT', label: 'Plagiarism Report' },
+    { value: 'FORMAT_CHECK', label: 'Format Check' },
   ];
 
   const actorTypes = [
-    { value: "all", label: "All Actors" },
-    { value: "USER", label: "User" },
-    { value: "SYSTEM", label: "System" },
-    { value: "API", label: "API" },
-    { value: "INTEGRATION", label: "Integration" },
+    { value: 'all', label: 'All Actors' },
+    { value: 'USER', label: 'User' },
+    { value: 'SYSTEM', label: 'System' },
+    { value: 'API', label: 'API' },
+    { value: 'INTEGRATION', label: 'Integration' },
   ];
 
   return (

@@ -1,3 +1,3 @@
-export * from "./api/anomalyDetectionApi";
-export * from "./hooks";
-export * from "./components";
+export * from './api/anomalyDetectionApi';
+export * from './hooks';
+export * from './components';

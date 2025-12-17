@@ -1,38 +1,33 @@
-"use client";
+'use client';
 
-import { useMemo, useEffect, useState } from "react";
-import { useForm, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Form } from "@/components/ui/form";
-import { Send } from "lucide-react";
-import { useRouter } from "next/navigation";
-import SubmissionGuidelines from "./submission-form-steps/SubmissionGuidelines";
-import ManuscriptInfoStep from "./submission-form-steps/ManuscriptInfoStep";
-import AuthorsStep from "./submission-form-steps/AuthorsStep";
-import { useCreateSubmission, useGetJournalById } from "../../hooks";
-import { useGetMe, SubmissionCreatedDialog } from "@/features/shared";
-import { stripHtmlTags } from "@/features/shared/utils";
+import { useMemo, useEffect, useState } from 'react';
+import { useForm, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Form } from '@/components/ui/form';
+import { Send } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import SubmissionGuidelines from './submission-form-steps/SubmissionGuidelines';
+import ManuscriptInfoStep from './submission-form-steps/ManuscriptInfoStep';
+import AuthorsStep from './submission-form-steps/AuthorsStep';
+import { useCreateSubmission, useGetJournalById } from '../../hooks';
+import { useGetMe, SubmissionCreatedDialog } from '@/features/shared';
+import { stripHtmlTags } from '@/features/shared/utils';
 
 const fullFormSchema = z.object({
-  journal_id: z.string().min(1, "Journal is required"),
-  title: z.string().min(1, "Title is required"),
+  journal_id: z.string().min(1, 'Journal is required'),
+  title: z.string().min(1, 'Title is required'),
   abstract: z
     .string()
-    .min(1, "Abstract is required")
+    .min(1, 'Abstract is required')
     .refine((val) => {
       const plainText = stripHtmlTags(val);
       return plainText.length > 0;
-    }, "Abstract must contain text"),
-  keywords: z.array(z.string()).min(1, "At least one keyword is required"),
+    }, 'Abstract must contain text'),
+  keywords: z.array(z.string()).min(1, 'At least one keyword is required'),
   section_id: z.string().optional(),
   category_id: z.string().optional(),
   research_type_id: z.string().optional(),
@@ -51,9 +46,7 @@ const fullFormSchema = z.object({
     institution: z.string(),
   }),
   co_authors: z.array(z.any()),
-  requirements: z
-    .array(z.literal(true))
-    .min(1, "All requirements must be accepted"),
+  requirements: z.array(z.literal(true)).min(1, 'All requirements must be accepted'),
 });
 
 export default function NewSubmissionForm() {
@@ -63,31 +56,30 @@ export default function NewSubmissionForm() {
   const [showSuccessDialog, setShowSuccessDialog] = useState(false);
   const [createdSubmissionId, setCreatedSubmissionId] = useState(null);
 
-  const { mutate: createSubmission, isPending: isCreating } =
-    useCreateSubmission();
+  const { mutate: createSubmission, isPending: isCreating } = useCreateSubmission();
 
   const form = useForm({
     resolver: zodResolver(fullFormSchema),
     defaultValues: {
-      journal_id: "",
+      journal_id: '',
       requirements: [],
-      title: "",
-      abstract: "",
+      title: '',
+      abstract: '',
       keywords: [],
-      section_id: "",
-      category_id: "",
-      research_type_id: "",
-      area_id: "",
+      section_id: '',
+      category_id: '',
+      research_type_id: '',
+      area_id: '',
       metadata_json: {
-        review_type: "Single Blind",
-        subject_area: "Computer Science",
-        funding_info: "",
+        review_type: 'Single Blind',
+        subject_area: 'Computer Science',
+        funding_info: '',
         ethics_declarations: [],
       },
       corresponding_author: {
-        name: profile?.user_name || "",
-        email: profile?.user_email || "",
-        institution: profile?.affiliation_name || "",
+        name: profile?.user_name || '',
+        email: profile?.user_email || '',
+        institution: profile?.affiliation_name || '',
       },
       co_authors: [],
       terms_accepted: false,
@@ -97,8 +89,8 @@ export default function NewSubmissionForm() {
   // Watch journal_id to get coauthor roles
   const journalId = useWatch({
     control: form.control,
-    name: "journal_id",
-    defaultValue: "",
+    name: 'journal_id',
+    defaultValue: '',
   });
 
   const { data: selectedJournalDetails } = useGetJournalById(journalId, {
@@ -113,33 +105,30 @@ export default function NewSubmissionForm() {
   // Update form when profile data loads
   useEffect(() => {
     if (profile) {
-      form.setValue("corresponding_author.name", profile.user_name || "");
-      form.setValue("corresponding_author.email", profile.user_email || "");
-      form.setValue(
-        "corresponding_author.institution",
-        profile.affiliation_name || ""
-      );
+      form.setValue('corresponding_author.name', profile.user_name || '');
+      form.setValue('corresponding_author.email', profile.user_email || '');
+      form.setValue('corresponding_author.institution', profile.affiliation_name || '');
     }
   }, [profile, form]);
 
   const handleAddCoauthor = () => {
-    const currentCoAuthors = form.getValues("co_authors") || [];
-    form.setValue("co_authors", [
+    const currentCoAuthors = form.getValues('co_authors') || [];
+    form.setValue('co_authors', [
       ...currentCoAuthors,
       {
-        name: "",
-        email: "",
-        institution: "",
-        orcid: "",
-        contribution_role: "Author",
+        name: '',
+        email: '',
+        institution: '',
+        orcid: '',
+        contribution_role: 'Author',
       },
     ]);
   };
 
   const handleRemoveCoauthor = (index) => {
-    const currentCoAuthors = form.getValues("co_authors") || [];
+    const currentCoAuthors = form.getValues('co_authors') || [];
     form.setValue(
-      "co_authors",
+      'co_authors',
       currentCoAuthors.filter((_, i) => i !== index)
     );
   };
@@ -173,13 +162,29 @@ export default function NewSubmissionForm() {
     });
   };
 
+  const onError = (errors) => {
+    // Show toast for each validation error
+    const errorMessages = Object.entries(errors).map(([field, error]) => {
+      const fieldName = field
+        .replace(/_/g, ' ')
+        .replace(/([A-Z])/g, ' $1')
+        .trim()
+        .replace(/^\w/, (c) => c.toUpperCase());
+      return `${fieldName}: ${error.message}`;
+    });
+
+    if (errorMessages.length > 0) {
+      toast.error('Please fix the following errors:', {
+        description: errorMessages.slice(0, 3).join('\n'),
+      });
+    }
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h1 className="text-3xl font-semibold text-foreground">
-          New Submission
-        </h1>
+        <h1 className="text-3xl font-semibold text-foreground">New Submission</h1>
         <p className="text-sm text-muted-foreground mt-1">
           Complete all sections below to submit your manuscript
         </p>
@@ -187,7 +192,7 @@ export default function NewSubmissionForm() {
 
       {/* Form Content */}
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+        <form onSubmit={form.handleSubmit(onSubmit, onError)} className="space-y-6">
           {/* Journal Selection Card */}
           <Card>
             <CardHeader>
@@ -205,9 +210,7 @@ export default function NewSubmissionForm() {
           <Card>
             <CardHeader>
               <CardTitle>Manuscript Information</CardTitle>
-              <CardDescription>
-                Provide details about your manuscript
-              </CardDescription>
+              <CardDescription>Provide details about your manuscript</CardDescription>
             </CardHeader>
             <CardContent>
               <ManuscriptInfoStep form={form} />
@@ -218,9 +221,7 @@ export default function NewSubmissionForm() {
           <Card>
             <CardHeader>
               <CardTitle>Authors</CardTitle>
-              <CardDescription>
-                Manage author information and contributions
-              </CardDescription>
+              <CardDescription>Manage author information and contributions</CardDescription>
             </CardHeader>
             <CardContent>
               <AuthorsStep
@@ -234,14 +235,9 @@ export default function NewSubmissionForm() {
 
           {/* Submit Button */}
           <div className="flex justify-end">
-            <Button
-              type="submit"
-              size="lg"
-              disabled={isCreating}
-              className="gap-2"
-            >
+            <Button type="submit" size="lg" disabled={isCreating} className="gap-2">
               <Send className="h-4 w-4" />
-              {isCreating ? "Submitting..." : "Submit Manuscript"}
+              {isCreating ? 'Submitting...' : 'Submit Manuscript'}
             </Button>
           </div>
         </form>

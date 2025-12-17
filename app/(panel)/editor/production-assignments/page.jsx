@@ -1,47 +1,34 @@
-"use client";
+'use client';
 
-import React from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useSelector } from "react-redux";
-import {
-  Package,
-  Clock,
-  CheckCircle2,
-  AlertCircle,
-  Eye,
-  Filter,
-  Calendar,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import React from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { Package, Clock, CheckCircle2, AlertCircle, Eye, Filter, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { format } from "date-fns";
-import {
-  DataTable,
-  ErrorCard,
-  LoadingScreen,
-  FilterToolbar,
-} from "@/features/shared";
-import { useProductionAssignments } from "@/features/panel/editor/submission/hooks";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { format } from 'date-fns';
+import { DataTable, ErrorCard, LoadingScreen, FilterToolbar } from '@/features/shared';
+import { useProductionAssignments } from '@/features/panel/editor/submission/hooks';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
 
 export default function ProductionAssignmentsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const statusFilter = searchParams.get("status") || "all";
-  const searchQuery = searchParams.get("search") || "";
+  const statusFilter = searchParams.get('status') || 'all';
+  const searchQuery = searchParams.get('search') || '';
 
   // Store params for backend filtering
   const params = {
-    status: statusFilter !== "all" ? statusFilter : undefined,
+    status: statusFilter !== 'all' ? statusFilter : undefined,
     search: searchQuery || undefined,
   };
 
@@ -58,7 +45,7 @@ export default function ProductionAssignmentsPage() {
   } = useProductionAssignments({
     production_assistant: currentUserProfileId,
     search: searchQuery,
-    status: statusFilter !== "all" ? statusFilter : undefined,
+    status: statusFilter !== 'all' ? statusFilter : undefined,
   });
 
   const assignments = assignmentsData?.results || [];
@@ -66,35 +53,30 @@ export default function ProductionAssignmentsPage() {
   // Calculate statistics
   const stats = {
     total: assignments.length,
-    pending: assignments.filter((a) => a.status === "PENDING").length,
-    in_progress: assignments.filter((a) => a.status === "IN_PROGRESS").length,
-    completed: assignments.filter((a) => a.status === "COMPLETED").length,
+    pending: assignments.filter((a) => a.status === 'PENDING').length,
+    in_progress: assignments.filter((a) => a.status === 'IN_PROGRESS').length,
+    completed: assignments.filter((a) => a.status === 'COMPLETED').length,
     overdue: assignments.filter((a) => a.is_overdue).length,
   };
 
   const getStatusBadgeColor = (status) => {
     const colors = {
-      PENDING:
-        "bg-yellow-100 dark:bg-yellow-600 text-yellow-700 dark:text-primary-foreground",
-      IN_PROGRESS:
-        "text-blue-700 dark:text-primary-foreground bg-blue-100 dark:bg-blue-600",
-      COMPLETED:
-        "bg-green-100 dark:bg-green-600 text-green-700 dark:text-primary-foreground",
-      CANCELLED:
-        "text-red-700 dark:text-primary-foreground bg-red-100 dark:bg-red-600",
+      PENDING: 'bg-yellow-100 dark:bg-yellow-600 text-yellow-700 dark:text-primary-foreground',
+      IN_PROGRESS: 'text-blue-700 dark:text-primary-foreground bg-blue-100 dark:bg-blue-600',
+      COMPLETED: 'bg-green-100 dark:bg-green-600 text-green-700 dark:text-primary-foreground',
+      CANCELLED: 'text-red-700 dark:text-primary-foreground bg-red-100 dark:bg-red-600',
     };
     return (
-      colors[status] ||
-      "text-gray-700 dark:text-primary-foreground bg-gray-100 dark:bg-gray-800"
+      colors[status] || 'text-gray-700 dark:text-primary-foreground bg-gray-100 dark:bg-gray-800'
     );
   };
 
   const getStatusDisplay = (status) => {
     const displays = {
-      PENDING: "Pending",
-      IN_PROGRESS: "In Progress",
-      COMPLETED: "Completed",
-      CANCELLED: "Cancelled",
+      PENDING: 'Pending',
+      IN_PROGRESS: 'In Progress',
+      COMPLETED: 'Completed',
+      CANCELLED: 'Cancelled',
     };
     return displays[status] || status;
   };
@@ -105,9 +87,9 @@ export default function ProductionAssignmentsPage() {
 
   const columns = [
     {
-      key: "submission_title",
-      header: "Submission",
-      cellClassName: "font-medium",
+      key: 'submission_title',
+      header: 'Submission',
+      cellClassName: 'font-medium',
       render: (row) => (
         <div className="max-w-md">
           <p className="font-medium truncate">{row.submission_title}</p>
@@ -118,9 +100,9 @@ export default function ProductionAssignmentsPage() {
       ),
     },
     {
-      key: "status",
-      header: "Status",
-      align: "center",
+      key: 'status',
+      header: 'Status',
+      align: 'center',
       render: (row) => (
         <Badge variant="outline" className={getStatusBadgeColor(row.status)}>
           {getStatusDisplay(row.status)}
@@ -128,28 +110,20 @@ export default function ProductionAssignmentsPage() {
       ),
     },
     {
-      key: "assigned_at",
-      header: "Assigned",
+      key: 'assigned_at',
+      header: 'Assigned',
       render: (row) => (
-        <span className="text-sm">
-          {format(new Date(row.assigned_at), "MMM d, yyyy")}
-        </span>
+        <span className="text-sm">{format(new Date(row.assigned_at), 'MMM d, yyyy')}</span>
       ),
     },
     {
-      key: "due_date",
-      header: "Due Date",
+      key: 'due_date',
+      header: 'Due Date',
       render: (row) => (
         <div className="flex items-center gap-2">
           <Calendar className="h-4 w-4 text-muted-foreground" />
-          <span
-            className={`text-sm ${
-              row.is_overdue ? "text-red-600 font-medium" : ""
-            }`}
-          >
-            {row.due_date
-              ? format(new Date(row.due_date), "MMM d, yyyy")
-              : "N/A"}
+          <span className={`text-sm ${row.is_overdue ? 'text-red-600 font-medium' : ''}`}>
+            {row.due_date ? format(new Date(row.due_date), 'MMM d, yyyy') : 'N/A'}
           </span>
           {row.is_overdue && (
             <Badge variant="destructive" className="text-xs">
@@ -160,26 +134,20 @@ export default function ProductionAssignmentsPage() {
       ),
     },
     {
-      key: "completed_at",
-      header: "Completed",
+      key: 'completed_at',
+      header: 'Completed',
       render: (row) => (
         <span className="text-sm">
-          {row.completed_at
-            ? format(new Date(row.completed_at), "MMM d, yyyy")
-            : "-"}
+          {row.completed_at ? format(new Date(row.completed_at), 'MMM d, yyyy') : '-'}
         </span>
       ),
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (row) => (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => handleViewAssignment(row)}
-        >
+        <Button variant="ghost" size="sm" onClick={() => handleViewAssignment(row)}>
           <Eye className="h-4 w-4 mr-2" />
           View
         </Button>
@@ -192,7 +160,7 @@ export default function ProductionAssignmentsPage() {
       <div className="container mx-auto p-6">
         <ErrorCard
           title="Error Loading Production Assignments"
-          message={error?.message || "Failed to load assignments"}
+          message={error?.message || 'Failed to load assignments'}
           onRetry={refetch}
         />
       </div>
@@ -204,12 +172,8 @@ export default function ProductionAssignmentsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            My Production Assignments
-          </h1>
-          <p className="text-muted-foreground mt-1">
-            Manage your assigned production tasks
-          </p>
+          <h1 className="text-3xl font-semibold tracking-tight">My Production Assignments</h1>
+          <p className="text-muted-foreground mt-1">Manage your assigned production tasks</p>
         </div>
       </div>
 
@@ -265,9 +229,7 @@ export default function ProductionAssignmentsPage() {
             <AlertCircle className="h-4 w-4 text-red-600" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-semibold text-red-600">
-              {stats.overdue}
-            </div>
+            <div className="text-2xl font-semibold text-red-600">{stats.overdue}</div>
             <p className="text-xs text-muted-foreground">Need attention</p>
           </CardContent>
         </Card>
@@ -284,19 +246,17 @@ export default function ProductionAssignmentsPage() {
           paramName="status"
           label="Status"
           options={[
-            { value: "all", label: "All Statuses" },
-            { value: "PENDING", label: "Pending" },
-            { value: "IN_PROGRESS", label: "In Progress" },
-            { value: "COMPLETED", label: "Completed" },
-            { value: "CANCELLED", label: "Cancelled" },
+            { value: 'all', label: 'All Statuses' },
+            { value: 'PENDING', label: 'Pending' },
+            { value: 'IN_PROGRESS', label: 'In Progress' },
+            { value: 'COMPLETED', label: 'Completed' },
+            { value: 'CANCELLED', label: 'Cancelled' },
           ]}
         />
       </FilterToolbar>
 
       {/* Assignments Table */}
-      <h2 className="text-xl font-semibold">
-        Assignments ({assignments.length})
-      </h2>
+      <h2 className="text-xl font-semibold">Assignments ({assignments.length})</h2>
       <DataTable
         data={assignments}
         columns={columns}

@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getPendingVerificationRequests } from "../../api/VerificationRequestsApiSlice";
+import { useQuery } from '@tanstack/react-query';
+import { getPendingVerificationRequests } from '../../api/VerificationRequestsApiSlice';
 
 export const useGetPendingVerificationRequests = (options = {}) => {
   return useQuery({
-    queryKey: ["admin-pending-verification-requests"],
+    queryKey: ['admin-pending-verification-requests'],
     queryFn: getPendingVerificationRequests,
     staleTime: 1000 * 60 * 5, // 5 minutes
     gcTime: 5 * 60 * 1000, // 5 minutes

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   Calendar,
@@ -12,24 +12,21 @@ import {
   Save,
   FileText,
   User,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
-import { ErrorCard, LoadingScreen, ConfirmationPopup } from "@/features/shared";
-import {
-  usePublicationSchedule,
-  useUpdatePublicationSchedule,
-} from "@/features";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { format } from 'date-fns';
+import { ErrorCard, LoadingScreen, ConfirmationPopup } from '@/features/shared';
+import { usePublicationSchedule, useUpdatePublicationSchedule } from '@/features';
 import {
   useCancelPublicationSchedule,
   useDeletePublicationSchedule,
   usePublishNow,
-} from "@/features/panel/editor/submission/hooks/mutation/usePublicationScheduleMutations";
+} from '@/features/panel/editor/submission/hooks/mutation/usePublicationScheduleMutations';
 
 export default function PublicationScheduleDetailPage() {
   const params = useParams();
@@ -42,12 +39,12 @@ export default function PublicationScheduleDetailPage() {
   const [publishDialogOpen, setPublishDialogOpen] = useState(false);
 
   const [formData, setFormData] = useState({
-    scheduled_date: "",
-    volume: "",
-    issue: "",
-    year: "",
-    doi: "",
-    pages: "",
+    scheduled_date: '',
+    volume: '',
+    issue: '',
+    year: '',
+    doi: '',
+    pages: '',
   });
 
   // Fetch schedule details
@@ -61,12 +58,12 @@ export default function PublicationScheduleDetailPage() {
       setFormData({
         scheduled_date: data.scheduled_date
           ? new Date(data.scheduled_date).toISOString().slice(0, 16)
-          : "",
-        volume: data.volume || "",
-        issue: data.issue || "",
-        year: data.year || "",
-        doi: data.doi || "",
-        pages: data.pages || "",
+          : '',
+        volume: data.volume || '',
+        issue: data.issue || '',
+        year: data.year || '',
+        doi: data.doi || '',
+        pages: data.pages || '',
       });
     },
   });
@@ -115,7 +112,7 @@ export default function PublicationScheduleDetailPage() {
   const confirmDelete = () => {
     deleteMutation.mutate(scheduleId, {
       onSuccess: () => {
-        router.push("/editor/publication-schedules");
+        router.push('/editor/publication-schedules');
       },
     });
   };
@@ -140,16 +137,12 @@ export default function PublicationScheduleDetailPage() {
 
   const getStatusBadgeColor = (status) => {
     const colors = {
-      SCHEDULED:
-        "bg-blue-100 dark:bg-blue-600 text-blue-700 dark:text-primary-foreground",
-      PUBLISHED:
-        "bg-green-100 dark:bg-green-600 text-green-700 dark:text-primary-foreground",
-      CANCELLED:
-        "bg-red-100 dark:bg-red-600 text-red-700 dark:text-primary-foreground",
+      SCHEDULED: 'bg-blue-100 dark:bg-blue-600 text-blue-700 dark:text-primary-foreground',
+      PUBLISHED: 'bg-green-100 dark:bg-green-600 text-green-700 dark:text-primary-foreground',
+      CANCELLED: 'bg-red-100 dark:bg-red-600 text-red-700 dark:text-primary-foreground',
     };
     return (
-      colors[status] ||
-      "text-gray-700 dark:text-primary-foreground bg-gray-100 dark:bg-gray-800"
+      colors[status] || 'text-gray-700 dark:text-primary-foreground bg-gray-100 dark:bg-gray-800'
     );
   };
 
@@ -162,7 +155,7 @@ export default function PublicationScheduleDetailPage() {
       <div className="container mx-auto p-6">
         <ErrorCard
           title="Error Loading Publication Schedule"
-          message={error?.message || "Failed to load schedule"}
+          message={error?.message || 'Failed to load schedule'}
           onRetry={refetch}
         />
       </div>
@@ -176,25 +169,18 @@ export default function PublicationScheduleDetailPage() {
         <div className="flex-1">
           <Button
             variant="ghost"
-            onClick={() => router.push("/editor/publication-schedules")}
+            onClick={() => router.push('/editor/publication-schedules')}
             className="mb-4"
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Schedules
           </Button>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Publication Schedule Details
-          </h1>
-          <p className="text-muted-foreground mt-2">
-            {schedule?.submission_title}
-          </p>
+          <h1 className="text-3xl font-semibold tracking-tight">Publication Schedule Details</h1>
+          <p className="text-muted-foreground mt-2">{schedule?.submission_title}</p>
         </div>
 
         <div className="flex items-center gap-2">
-          <Badge
-            variant="outline"
-            className={getStatusBadgeColor(schedule?.status)}
-          >
+          <Badge variant="outline" className={getStatusBadgeColor(schedule?.status)}>
             {schedule?.status_display}
           </Badge>
         </div>
@@ -207,13 +193,9 @@ export default function PublicationScheduleDetailPage() {
         <CardHeader className="flex flex-row items-center justify-between">
           <CardTitle>Schedule Information</CardTitle>
           <div className="flex gap-2">
-            {!isEditing && schedule?.status === "SCHEDULED" && (
+            {!isEditing && schedule?.status === 'SCHEDULED' && (
               <>
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setIsEditing(true)}
-                >
+                <Button variant="outline" size="sm" onClick={() => setIsEditing(true)}>
                   Edit
                 </Button>
                 <Button variant="default" size="sm" onClick={handlePublish}>
@@ -236,15 +218,13 @@ export default function PublicationScheduleDetailPage() {
                     // Reset form data
                     setFormData({
                       scheduled_date: schedule.scheduled_date
-                        ? new Date(schedule.scheduled_date)
-                            .toISOString()
-                            .slice(0, 16)
-                        : "",
-                      volume: schedule.volume || "",
-                      issue: schedule.issue || "",
-                      year: schedule.year || "",
-                      doi: schedule.doi || "",
-                      pages: schedule.pages || "",
+                        ? new Date(schedule.scheduled_date).toISOString().slice(0, 16)
+                        : '',
+                      volume: schedule.volume || '',
+                      issue: schedule.issue || '',
+                      year: schedule.year || '',
+                      doi: schedule.doi || '',
+                      pages: schedule.pages || '',
                     });
                   }}
                 >
@@ -257,11 +237,11 @@ export default function PublicationScheduleDetailPage() {
                   disabled={updateMutation.isPending}
                 >
                   <Save className="h-4 w-4 mr-2" />
-                  {updateMutation.isPending ? "Saving..." : "Save Changes"}
+                  {updateMutation.isPending ? 'Saving...' : 'Save Changes'}
                 </Button>
               </>
             )}
-            {schedule?.status !== "PUBLISHED" && (
+            {schedule?.status !== 'PUBLISHED' && (
               <Button variant="destructive" size="sm" onClick={handleDelete}>
                 <Trash2 className="h-4 w-4 mr-2" />
                 Delete
@@ -338,39 +318,31 @@ export default function PublicationScheduleDetailPage() {
             <div className="grid gap-6 md:grid-cols-2">
               <div className="space-y-4">
                 <div>
-                  <p className="text-sm text-muted-foreground">
-                    Scheduled Date
-                  </p>
+                  <p className="text-sm text-muted-foreground">Scheduled Date</p>
                   <div className="flex items-center gap-2 mt-1">
                     <Calendar className="h-4 w-4 text-muted-foreground" />
                     <p className="font-medium">
                       {schedule?.scheduled_date
-                        ? format(new Date(schedule.scheduled_date), "PPpp")
-                        : "Not set"}
+                        ? format(new Date(schedule.scheduled_date), 'PPpp')
+                        : 'Not set'}
                     </p>
                   </div>
                 </div>
                 <div>
-                  <p className="text-sm text-muted-foreground">
-                    Published Date
-                  </p>
+                  <p className="text-sm text-muted-foreground">Published Date</p>
                   <p className="font-medium mt-1">
                     {schedule?.published_date
-                      ? format(new Date(schedule.published_date), "PPpp")
-                      : "Not published yet"}
+                      ? format(new Date(schedule.published_date), 'PPpp')
+                      : 'Not published yet'}
                   </p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Volume</p>
-                  <p className="font-medium mt-1">
-                    {schedule?.volume || "Not set"}
-                  </p>
+                  <p className="font-medium mt-1">{schedule?.volume || 'Not set'}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Issue</p>
-                  <p className="font-medium mt-1">
-                    {schedule?.issue || "Not set"}
-                  </p>
+                  <p className="font-medium mt-1">{schedule?.issue || 'Not set'}</p>
                 </div>
               </div>
               <div className="space-y-4">
@@ -380,23 +352,17 @@ export default function PublicationScheduleDetailPage() {
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">DOI</p>
-                  <p className="font-medium mt-1">
-                    {schedule?.doi || "Not assigned"}
-                  </p>
+                  <p className="font-medium mt-1">{schedule?.doi || 'Not assigned'}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Pages</p>
-                  <p className="font-medium mt-1">
-                    {schedule?.pages || "Not set"}
-                  </p>
+                  <p className="font-medium mt-1">{schedule?.pages || 'Not set'}</p>
                 </div>
                 <div>
                   <p className="text-sm text-muted-foreground">Scheduled By</p>
                   <div className="flex items-center gap-2 mt-1">
                     <User className="h-4 w-4 text-muted-foreground" />
-                    <p className="font-medium">
-                      {schedule?.scheduled_by?.user_name || "Unknown"}
-                    </p>
+                    <p className="font-medium">{schedule?.scheduled_by?.user_name || 'Unknown'}</p>
                   </div>
                 </div>
               </div>
@@ -421,9 +387,7 @@ export default function PublicationScheduleDetailPage() {
           </div>
           <Button
             variant="outline"
-            onClick={() =>
-              router.push(`/editor/submissions/${schedule?.submission}`)
-            }
+            onClick={() => router.push(`/editor/submissions/${schedule?.submission}`)}
           >
             <FileText className="h-4 w-4 mr-2" />
             View Submission
@@ -441,17 +405,13 @@ export default function PublicationScheduleDetailPage() {
             <div>
               <p className="text-sm text-muted-foreground">Created At</p>
               <p className="font-medium mt-1">
-                {schedule?.created_at
-                  ? format(new Date(schedule.created_at), "PPpp")
-                  : "N/A"}
+                {schedule?.created_at ? format(new Date(schedule.created_at), 'PPpp') : 'N/A'}
               </p>
             </div>
             <div>
               <p className="text-sm text-muted-foreground">Last Updated</p>
               <p className="font-medium mt-1">
-                {schedule?.updated_at
-                  ? format(new Date(schedule.updated_at), "PPpp")
-                  : "N/A"}
+                {schedule?.updated_at ? format(new Date(schedule.updated_at), 'PPpp') : 'N/A'}
               </p>
             </div>
           </div>

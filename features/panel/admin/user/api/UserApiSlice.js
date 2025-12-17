@@ -7,9 +7,9 @@ export const deleteUser = async (userId) => {
     throw error;
   }
 };
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
-export const getAllUsers = async (userRole = "", params = {}) => {
+export const getAllUsers = async (userRole = '', params = {}) => {
   try {
     const response = await instance.get(`users/?role=${userRole}`, { params });
     return response.data;

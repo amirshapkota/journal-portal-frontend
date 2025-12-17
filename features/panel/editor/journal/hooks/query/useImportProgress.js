@@ -1,6 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useRef, useState } from "react";
-import { getImportProgress } from "../../api/ojsConnectionApi";
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useRef, useState } from 'react';
+import { getImportProgress } from '../../api/ojsConnectionApi';
 
 /**
  * Custom hook to poll and track OJS import progress using React Query
@@ -17,10 +17,10 @@ export function useImportProgress(journalId, onErrorStop, onComplete) {
   const stoppedByErrorRef = useRef(false);
   const errorCountRef = useRef(0);
   const prevIsErrorRef = useRef(false);
-  const prevStatusRef = useRef("idle");
+  const prevStatusRef = useRef('idle');
 
   const { data, error, isError, isFetching, isLoading, refetch } = useQuery({
-    queryKey: ["import-progress", journalId],
+    queryKey: ['import-progress', journalId],
     queryFn: async () => {
       if (!journalId) return null;
       return getImportProgress(journalId);
@@ -36,18 +36,18 @@ export function useImportProgress(journalId, onErrorStop, onComplete) {
       const status = query.state.data?.status;
 
       // Waiting for backend job to start
-      if (isWaitingForStartRef.current && status === "idle") {
+      if (isWaitingForStartRef.current && status === 'idle') {
         return 1500;
       }
 
       // Backend job started - stop waiting
-      if (isWaitingForStartRef.current && status !== "idle") {
+      if (isWaitingForStartRef.current && status !== 'idle') {
         isWaitingForStartRef.current = false;
         setIsWaitingForStart(false);
       }
 
       // Active processing states
-      if (status === "fetching" || status === "processing") {
+      if (status === 'fetching' || status === 'processing') {
         return 1500;
       }
 
@@ -96,21 +96,18 @@ export function useImportProgress(journalId, onErrorStop, onComplete) {
     const currentStatus = data?.status;
 
     // Detect transition to completed status
-    if (
-      currentStatus === "completed" &&
-      prevStatusRef.current !== "completed"
-    ) {
+    if (currentStatus === 'completed' && prevStatusRef.current !== 'completed') {
       onComplete?.();
     }
 
-    prevStatusRef.current = currentStatus || "idle";
+    prevStatusRef.current = currentStatus || 'idle';
   }, [data?.status, onComplete]);
 
   // ---------- NORMALIZED PROGRESS ----------
   const progressData = {
-    percentage: data?.status === "completed" ? 100 : data?.percentage ?? 0,
-    status: data?.status ?? "idle",
-    stage: data?.stage ?? "",
+    percentage: data?.status === 'completed' ? 100 : (data?.percentage ?? 0),
+    status: data?.status ?? 'idle',
+    stage: data?.stage ?? '',
     current: data?.current ?? 0,
     total: data?.total ?? 0,
     imported: data?.imported ?? 0,
@@ -123,8 +120,8 @@ export function useImportProgress(journalId, onErrorStop, onComplete) {
   const isPolling =
     !stoppedByError &&
     (isWaitingForStart ||
-      progressData.status === "fetching" ||
-      progressData.status === "processing");
+      progressData.status === 'fetching' ||
+      progressData.status === 'processing');
 
   // ---------- PUBLIC API ----------
   const startPolling = () => {

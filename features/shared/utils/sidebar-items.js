@@ -20,49 +20,49 @@ import {
   BookCheck,
   CopyCheckIcon,
   CalendarCheck,
-} from "lucide-react";
+} from 'lucide-react';
 
 // Sidebar configuration for each role
 export const sidebarConfig = {
   READER: [
     {
-      name: "Overview",
-      path: "/reader/dashboard",
+      name: 'Overview',
+      path: '/reader/dashboard',
       icon: LayoutDashboard,
     },
     {
-      name: "Profile",
-      path: "/profile",
+      name: 'Profile',
+      path: '/profile',
       icon: User,
     },
     {
-      name: "Verification",
-      path: "/reader/verification",
+      name: 'Verification',
+      path: '/reader/verification',
       icon: CheckCircle,
     },
     {
-      name: "Settings",
-      path: "/settings",
+      name: 'Settings',
+      path: '/settings',
       icon: Settings,
       children: [
         {
-          name: "Email Preferences",
-          path: "/settings/email-preferences",
+          name: 'Email Preferences',
+          path: '/settings/email-preferences',
           icon: Mail,
         },
         {
-          name: "Email Logs",
-          path: "/settings/email-log",
+          name: 'Email Logs',
+          path: '/settings/email-log',
           icon: FileText,
         },
         {
-          name: "Account",
-          path: "/settings/account",
+          name: 'Account',
+          path: '/settings/account',
           icon: User,
         },
         {
-          name: "Appearance",
-          path: "/settings/appearance",
+          name: 'Appearance',
+          path: '/settings/appearance',
           icon: Palette,
         },
       ],
@@ -70,51 +70,51 @@ export const sidebarConfig = {
   ],
   AUTHOR: [
     {
-      name: "Overview",
-      path: "/author/dashboard",
+      name: 'Overview',
+      path: '/author/dashboard',
       icon: LayoutDashboard,
     },
 
     {
-      name: "Submissions",
-      path: "/author/submissions",
+      name: 'Submissions',
+      path: '/author/submissions',
       icon: Inbox,
       children: [
         {
-          name: "Submissions",
-          path: "/author/submissions/drafts",
+          name: 'Submissions',
+          path: '/author/submissions/drafts',
           icon: Files,
         },
         {
-          name: "New Submission",
-          path: "/author/new-submission",
+          name: 'New Submission',
+          path: '/author/new-submission',
           icon: FilePlus2Icon,
         },
       ],
     },
     {
-      name: "Settings",
-      path: "/settings",
+      name: 'Settings',
+      path: '/settings',
       icon: Settings,
       children: [
         {
-          name: "Email Preferences",
-          path: "/settings/email-preferences",
+          name: 'Email Preferences',
+          path: '/settings/email-preferences',
           icon: Mail,
         },
         {
-          name: "Email Logs",
-          path: "/settings/email-log",
+          name: 'Email Logs',
+          path: '/settings/email-log',
           icon: FileText,
         },
         {
-          name: "Account",
-          path: "/settings/account",
+          name: 'Account',
+          path: '/settings/account',
           icon: User,
         },
         {
-          name: "Appearance",
-          path: "/settings/appearance",
+          name: 'Appearance',
+          path: '/settings/appearance',
           icon: Palette,
         },
       ],
@@ -122,40 +122,40 @@ export const sidebarConfig = {
   ],
   REVIEWER: [
     {
-      name: "Overview",
-      path: "/reviewer/dashboard",
+      name: 'Overview',
+      path: '/reviewer/dashboard',
       icon: LayoutDashboard,
     },
 
     {
-      name: "Assignments",
-      path: "/reviewer/assignments",
+      name: 'Assignments',
+      path: '/reviewer/assignments',
       icon: UserCheck,
     },
 
     {
-      name: "Settings",
-      path: "/settings",
+      name: 'Settings',
+      path: '/settings',
       icon: Settings,
       children: [
         {
-          name: "Email Preferences",
-          path: "/settings/email-preferences",
+          name: 'Email Preferences',
+          path: '/settings/email-preferences',
           icon: Mail,
         },
         {
-          name: "Email Logs",
-          path: "/settings/email-log",
+          name: 'Email Logs',
+          path: '/settings/email-log',
           icon: FileText,
         },
         {
-          name: "Account",
-          path: "/settings/account",
+          name: 'Account',
+          path: '/settings/account',
           icon: User,
         },
         {
-          name: "Appearance",
-          path: "/settings/appearance",
+          name: 'Appearance',
+          path: '/settings/appearance',
           icon: Palette,
         },
       ],
@@ -163,64 +163,64 @@ export const sidebarConfig = {
   ],
   EDITOR: [
     {
-      name: "Overview",
-      path: "/editor/dashboard",
+      name: 'Overview',
+      path: '/editor/dashboard',
       icon: LayoutDashboard,
     },
 
     {
-      name: "Journal",
-      path: "/editor/journals",
+      name: 'Journal',
+      path: '/editor/journals',
       icon: Book,
     },
     {
-      name: "Assigned Journals",
-      path: "/editor/assigned-journals",
+      name: 'Assigned Journals',
+      path: '/editor/assigned-journals',
       icon: BookCheck,
     },
     {
-      name: "Assigned Copyediting",
-      path: "/editor/copyediting-assignments",
+      name: 'Assigned Copyediting',
+      path: '/editor/copyediting-assignments',
       icon: CopyCheckIcon,
     },
     {
-      name: "Production Assignments",
-      path: "/editor/production-assignments",
+      name: 'Production Assignments',
+      path: '/editor/production-assignments',
       icon: BarChart,
     },
     {
-      name: "Publication Schedules",
-      path: "/editor/publication-schedules",
+      name: 'Publication Schedules',
+      path: '/editor/publication-schedules',
       icon: CalendarCheck,
     },
     {
-      name: "Verification Requests",
-      path: "/editor/verification-requests",
+      name: 'Verification Requests',
+      path: '/editor/verification-requests',
       icon: CheckCircle,
     },
     {
-      name: "Settings",
-      path: "/settings",
+      name: 'Settings',
+      path: '/settings',
       icon: Settings,
       children: [
         {
-          name: "Email Preferences",
-          path: "/settings/email-preferences",
+          name: 'Email Preferences',
+          path: '/settings/email-preferences',
           icon: Mail,
         },
         {
-          name: "Email Logs",
-          path: "/settings/email-log",
+          name: 'Email Logs',
+          path: '/settings/email-log',
           icon: FileText,
         },
         {
-          name: "Account",
-          path: "/settings/account",
+          name: 'Account',
+          path: '/settings/account',
           icon: User,
         },
         {
-          name: "Appearance",
-          path: "/settings/appearance",
+          name: 'Appearance',
+          path: '/settings/appearance',
           icon: Palette,
         },
       ],
@@ -228,79 +228,79 @@ export const sidebarConfig = {
   ],
   ADMIN: [
     {
-      name: "Overview",
-      path: "/admin/dashboard",
+      name: 'Overview',
+      path: '/admin/dashboard',
       icon: LayoutDashboard,
     },
 
     {
-      name: "Users",
-      path: "/admin/users",
+      name: 'Users',
+      path: '/admin/users',
       icon: Users,
       children: [
         {
-          name: "User Management",
-          path: "/admin/users",
+          name: 'User Management',
+          path: '/admin/users',
           icon: Users,
         },
         {
-          name: "Verification Requests",
-          path: "/admin/verification-requests",
+          name: 'Verification Requests',
+          path: '/admin/verification-requests',
           icon: CheckCircle,
         },
       ],
     },
     {
-      name: "Journals",
-      path: "/admin/journals",
+      name: 'Journals',
+      path: '/admin/journals',
       icon: Book,
       children: [
         {
-          name: "Journal Management",
-          path: "/admin/journals",
+          name: 'Journal Management',
+          path: '/admin/journals',
           icon: BookOpen,
         },
         {
-          name: "Verify Journals",
-          path: "/admin/inactive-journals",
+          name: 'Verify Journals',
+          path: '/admin/inactive-journals',
           icon: BookCheck,
         },
       ],
     },
 
     {
-      name: "Anomaly Detection",
-      path: "/admin/anomaly-detection",
+      name: 'Anomaly Detection',
+      path: '/admin/anomaly-detection',
       icon: AlertTriangle,
     },
     {
-      name: "Error Logs",
-      path: "/admin/error-logs",
+      name: 'Error Logs',
+      path: '/admin/error-logs',
       icon: Bug,
     },
     {
-      name: "Activity Logs",
-      path: "/admin/activity-logs",
+      name: 'Activity Logs',
+      path: '/admin/activity-logs',
       icon: LogsIcon,
     },
     {
-      name: "Settings",
-      path: "/settings",
+      name: 'Settings',
+      path: '/settings',
       icon: Settings,
       children: [
         {
-          name: "Email Logs",
-          path: "/settings/email-log",
+          name: 'Email Logs',
+          path: '/settings/email-log',
           icon: FileText,
         },
         {
-          name: "Account",
-          path: "/settings/account",
+          name: 'Account',
+          path: '/settings/account',
           icon: User,
         },
         {
-          name: "Appearance",
-          path: "/settings/appearance",
+          name: 'Appearance',
+          path: '/settings/appearance',
           icon: Palette,
         },
       ],

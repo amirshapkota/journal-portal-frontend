@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Run comprehensive anomaly detection scan
@@ -10,7 +10,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response with anomaly scan results
  */
 export const runAnomalyDetectionScan = async (params = {}) => {
-  const response = await instance.get("/ml/anomaly-detection/scan/", {
+  const response = await instance.get('/ml/anomaly-detection/scan/', {
     params,
   });
   return response.data;
@@ -32,9 +32,7 @@ export const getUserRiskScore = async (userId) => {
  * @returns {Promise} API response with submission anomalies
  */
 export const getSubmissionAnomalies = async (submissionId) => {
-  const response = await instance.get(
-    `/ml/anomaly-detection/submission/${submissionId}/`
-  );
+  const response = await instance.get(`/ml/anomaly-detection/submission/${submissionId}/`);
   return response.data;
 };
 
@@ -44,8 +42,6 @@ export const getSubmissionAnomalies = async (submissionId) => {
  * @returns {Promise} API response with reviewer anomalies
  */
 export const getReviewerAnomalies = async (reviewerId) => {
-  const response = await instance.get(
-    `/ml/anomaly-detection/reviewer/${reviewerId}/`
-  );
+  const response = await instance.get(`/ml/anomaly-detection/reviewer/${reviewerId}/`);
   return response.data;
 };

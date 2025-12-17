@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   EmailDetailModal,
@@ -8,18 +8,18 @@ import {
   useGetUserEmailLogStats,
   FilterToolbar,
   Pagination,
-} from "@/features";
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
+} from '@/features';
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 export default function EmailLogTab() {
   const searchParams = useSearchParams();
   const [selectedEmail, setSelectedEmail] = useState(null);
   const router = useRouter();
   // Get filter values from URL
-  const searchValue = searchParams.get("search") || "";
+  const searchValue = searchParams.get('search') || '';
 
-  const currentPage = parseInt(searchParams.get("page") || "1", 10);
+  const currentPage = parseInt(searchParams.get('page') || '1', 10);
 
   const params = {
     search: searchValue,
@@ -37,16 +37,14 @@ export default function EmailLogTab() {
   // Pagination data - TODO: Replace with actual API pagination data
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-xl font-semibold text-foreground mb-4">
-          Email History
-        </h2>
+        <h2 className="text-xl font-semibold text-foreground mb-4">Email History</h2>
       </div>
 
       {/* Statistics Section */}
@@ -59,10 +57,7 @@ export default function EmailLogTab() {
 
       {/* Filter Toolbar */}
       <FilterToolbar>
-        <FilterToolbar.Search
-          placeholder="Search by subject, recipient..."
-          paramName="search"
-        />
+        <FilterToolbar.Search placeholder="Search by subject, recipient..." paramName="search" />
       </FilterToolbar>
 
       {/* Email Table Section */}

@@ -1,5 +1,5 @@
-import { Info } from "lucide-react";
-import React from "react";
+import { Info } from 'lucide-react';
+import React from 'react';
 
 /**
  * StatsErrorCard - Full width error card for stats sections
@@ -10,10 +10,10 @@ import React from "react";
  * @param {string} [props.className] - Additional className
  */
 export default function StatsErrorCard({
-  title = "Error loading statistics",
-  message = "An unexpected error occurred while loading stats.",
+  title = 'Error loading statistics',
+  message = 'An unexpected error occurred while loading stats.',
   icon,
-  className = "",
+  className = '',
 }) {
   return (
     <div

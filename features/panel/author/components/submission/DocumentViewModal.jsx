@@ -1,37 +1,33 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
+import { useRouter } from 'next/navigation';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FileText, Download, Loader2, Edit } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
-import { getSubmissionDocuments } from "../../api/submissionsApi";
+} from '@/components/ui/dialog';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, Download, Loader2, Edit } from 'lucide-react';
+import { useQuery } from '@tanstack/react-query';
+import { getSubmissionDocuments } from '../../api/submissionsApi';
 
-export default function DocumentViewModal({
-  open,
-  onOpenChange,
-  submissionId,
-}) {
+export default function DocumentViewModal({ open, onOpenChange, submissionId }) {
   const router = useRouter();
   const {
     data: documents,
     isPending,
     error,
   } = useQuery({
-    queryKey: ["submission-documents", submissionId],
+    queryKey: ['submission-documents', submissionId],
     queryFn: () => getSubmissionDocuments(submissionId),
     enabled: open && !!submissionId,
   });
 
   const handleDownload = (documentUrl) => {
-    window.open(documentUrl, "_blank");
+    window.open(documentUrl, '_blank');
   };
 
   const handleEdit = (docId) => {
@@ -43,9 +39,7 @@ export default function DocumentViewModal({
       <DialogContent className="md:max-w-[85%] lg:max-w-[60%] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Submission Documents</DialogTitle>
-          <DialogDescription>
-            View and download documents for this submission
-          </DialogDescription>
+          <DialogDescription>View and download documents for this submission</DialogDescription>
         </DialogHeader>
 
         <div className="py-4 space-y-4">
@@ -78,17 +72,11 @@ export default function DocumentViewModal({
                     <div className="flex items-center gap-3">
                       <FileText className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="font-medium">
-                          {doc.document_type_display}
-                        </p>
+                        <p className="font-medium">{doc.document_type_display}</p>
                       </div>
                     </div>
                     <div className="flex gap-2">
-                      <Button
-                        variant="default"
-                        size="sm"
-                        onClick={() => handleEdit(doc.id)}
-                      >
+                      <Button variant="default" size="sm" onClick={() => handleEdit(doc.id)}>
                         <Edit className="h-4 w-4 mr-2" />
                         Edit
                       </Button>

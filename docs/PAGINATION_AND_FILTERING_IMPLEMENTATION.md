@@ -46,12 +46,12 @@ All pages now include:
 
 ```javascript
 const searchParams = useSearchParams();
-const pageParam = searchParams.get("page");
+const pageParam = searchParams.get('page');
 const currentPage = pageParam ? parseInt(pageParam) : 1;
 
 const handlePageChange = (page) => {
   const params = new URLSearchParams(searchParams.toString());
-  params.set("page", page.toString());
+  params.set('page', page.toString());
   router.push(`?${params.toString()}`, { scroll: false });
 };
 
@@ -71,11 +71,9 @@ const handlePageChange = (page) => {
 All API functions now accept a `params` object:
 
 1. **`features/panel/admin/journal/api/journalsApi.js`**
-
    - `getJournals(params)`
 
 2. **`features/panel/reviewer/api/reviewsApi.js`**
-
    - `getPendingReviewAssignments(params)`
    - `getAcceptedReviewAssignments(params)`
    - `getCompletedReviewAssignments(params)`
@@ -88,7 +86,7 @@ All API functions now accept a `params` object:
 
 ```javascript
 export const getResource = async (params = {}) => {
-  const response = await instance.get("/api/endpoint/", { params });
+  const response = await instance.get('/api/endpoint/', { params });
   return response.data;
 };
 ```
@@ -109,7 +107,7 @@ All hooks now accept params and include them in queryKey:
 ```javascript
 export const useGetResource = ({ params = {} } = {}, options = {}) => {
   return useQuery({
-    queryKey: ["resource-key", params],
+    queryKey: ['resource-key', params],
     queryFn: () => getResource(params),
     staleTime: 1000 * 60 * 5,
     ...options,
@@ -125,13 +123,12 @@ Pages with filtering now pass URL params to hooks:
 
 ```javascript
 const params = {
-  is_active:
-    statusParam === "active" ? true : statusParam === "inactive" ? false : "",
-  search: searchParam || "",
-  profile__verification_status: verificationParam || "",
+  is_active: statusParam === 'active' ? true : statusParam === 'inactive' ? false : '',
+  search: searchParam || '',
+  profile__verification_status: verificationParam || '',
   page: currentPage,
 };
-const { data } = useGetUsers({ userRole: "", params });
+const { data } = useGetUsers({ userRole: '', params });
 ```
 
 **Admin Verification Requests Page**:
@@ -139,7 +136,7 @@ const { data } = useGetUsers({ userRole: "", params });
 ```javascript
 const params = {
   status: status,
-  search: searchParam || "",
+  search: searchParam || '',
   page: currentPage,
 };
 const { data } = useGetVerificationRequests({ params });
@@ -149,15 +146,10 @@ const { data } = useGetVerificationRequests({ params });
 
 ```javascript
 const params = {
-  search: searchParam || "",
-  is_active:
-    statusParam === "active" ? true : statusParam === "inactive" ? false : "",
+  search: searchParam || '',
+  is_active: statusParam === 'active' ? true : statusParam === 'inactive' ? false : '',
   is_accepting_submissions:
-    submissionsParam === "accepting"
-      ? true
-      : submissionsParam === "not-accepting"
-      ? false
-      : "",
+    submissionsParam === 'accepting' ? true : submissionsParam === 'not-accepting' ? false : '',
   page: currentPage,
 };
 const { data } = useGetJournals({ params });
@@ -280,16 +272,16 @@ To add filtering to any page:
 2. **Extract params from URL**:
 
 ```javascript
-const searchParam = searchParams.get("search");
-const statusParam = searchParams.get("status");
+const searchParam = searchParams.get('search');
+const statusParam = searchParams.get('status');
 ```
 
 3. **Build params object**:
 
 ```javascript
 const params = {
-  search: searchParam || "",
-  status: statusParam || "",
+  search: searchParam || '',
+  status: statusParam || '',
   page: currentPage,
 };
 ```

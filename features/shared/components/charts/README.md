@@ -27,13 +27,13 @@ A reusable pie chart component with customizable colors and formatting.
 **Usage:**
 
 ```jsx
-import { PieChart } from "@/components/ui/charts";
+import { PieChart } from '@/components/ui/charts';
 
 <PieChart
   title="Status Distribution"
   data={[
-    { name: "Accepted", value: 10, color: "var(--chart-1)" },
-    { name: "Rejected", value: 5, color: "var(--chart-2)" },
+    { name: 'Accepted', value: 10, color: 'var(--chart-1)' },
+    { name: 'Rejected', value: 5, color: 'var(--chart-2)' },
   ]}
   isLoading={false}
   isError={false}
@@ -65,13 +65,13 @@ A reusable bar chart component with customizable colors and grid options.
 **Usage:**
 
 ```jsx
-import { BarChart } from "@/components/ui/charts";
+import { BarChart } from '@/components/ui/charts';
 
 <BarChart
   title="Submissions by Status"
   data={[
-    { name: "Pending", value: 15, color: "var(--chart-1)" },
-    { name: "Completed", value: 20, color: "var(--chart-2)" },
+    { name: 'Pending', value: 15, color: 'var(--chart-1)' },
+    { name: 'Completed', value: 20, color: 'var(--chart-2)' },
   ]}
   isLoading={false}
   isError={false}
@@ -104,13 +104,13 @@ A reusable doughnut chart (pie with inner radius) with optional center content.
 **Usage:**
 
 ```jsx
-import { DoughnutChart } from "@/components/ui/charts";
+import { DoughnutChart } from '@/components/ui/charts';
 
 <DoughnutChart
   title="Journal Distribution"
   data={[
-    { name: "Active", value: 30 },
-    { name: "Inactive", value: 10 },
+    { name: 'Active', value: 30 },
+    { name: 'Inactive', value: 10 },
   ]}
   innerRadius={60}
   outerRadius={80}
@@ -146,15 +146,15 @@ A reusable line chart component supporting multiple lines.
 **Usage:**
 
 ```jsx
-import { LineChart } from "@/components/ui/charts";
+import { LineChart } from '@/components/ui/charts';
 
 <LineChart
   title="User Growth"
   data={[
-    { date: "Mon", users: 100 },
-    { date: "Tue", users: 150 },
+    { date: 'Mon', users: 100 },
+    { date: 'Tue', users: 150 },
   ]}
-  lines={[{ dataKey: "users", color: "var(--primary)" }]}
+  lines={[{ dataKey: 'users', color: 'var(--primary)' }]}
   xAxisKey="date"
   isLoading={false}
   isError={false}

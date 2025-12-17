@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateJournal } from "../../api/journalsApi";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateJournal } from '../../api/journalsApi';
+import { toast } from 'sonner';
 
 export const useUpdateJournal = (options = {}) => {
   const queryClient = useQueryClient();
@@ -11,13 +11,13 @@ export const useUpdateJournal = (options = {}) => {
     },
     onSuccess: (data, variables, context) => {
       // Invalidate both the journal list and the specific journal
-      queryClient.invalidateQueries({ queryKey: ["editor-journals"] });
-      queryClient.invalidateQueries({ queryKey: ["journals"] });
-      queryClient.invalidateQueries({ queryKey: ["journal", variables.id] });
+      queryClient.invalidateQueries({ queryKey: ['editor-journals'] });
+      queryClient.invalidateQueries({ queryKey: ['journals'] });
+      queryClient.invalidateQueries({ queryKey: ['journal', variables.id] });
 
       // Don't show toast here if custom onSuccess is provided
       if (!options.onSuccess) {
-        toast.success("Journal updated successfully!");
+        toast.success('Journal updated successfully!');
       }
       options.onSuccess?.(data, variables, context);
     },
@@ -28,7 +28,7 @@ export const useUpdateJournal = (options = {}) => {
           error?.response?.data?.message ||
           error?.response?.data?.detail ||
           error?.message ||
-          "Failed to update journal";
+          'Failed to update journal';
         toast.error(errorMessage);
       }
       options.onError?.(error, variables, context);

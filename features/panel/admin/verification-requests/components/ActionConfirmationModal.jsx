@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   AlertDialog,
@@ -8,23 +8,23 @@ import {
   AlertDialogDescription,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Form } from "@/components/ui/form";
-import { FormTextareaField } from "@/features/shared/components";
+} from '@/components/ui/alert-dialog';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Form } from '@/components/ui/form';
+import { FormTextareaField } from '@/features/shared/components';
 
 // Zod schemas
 const rejectionSchema = z.object({
-  rejection_reason: z.string().min(1, "Rejection reason is required"),
+  rejection_reason: z.string().min(1, 'Rejection reason is required'),
   admin_notes: z.string().optional(),
 });
 const approveSchema = z.object({
   admin_notes: z.string().optional(),
 });
 const requestInfoSchema = z.object({
-  additional_info_requested: z.string().min(1, "Message to user is required"),
+  additional_info_requested: z.string().min(1, 'Message to user is required'),
   admin_notes: z.string().optional(),
 });
 
@@ -38,9 +38,9 @@ export function ActionConfirmationPopup({
   onCancel,
   isLoading = false,
 }) {
-  const isReject = action === "reject";
-  const isApprove = action === "approve";
-  const isRequestInfo = action === "request-info";
+  const isReject = action === 'reject';
+  const isApprove = action === 'approve';
+  const isRequestInfo = action === 'request-info';
 
   // Use correct schema and default values
   const form = useForm({
@@ -48,16 +48,16 @@ export function ActionConfirmationPopup({
       isReject
         ? rejectionSchema
         : isApprove
-        ? approveSchema
-        : isRequestInfo
-        ? requestInfoSchema
-        : approveSchema
+          ? approveSchema
+          : isRequestInfo
+            ? requestInfoSchema
+            : approveSchema
     ),
     defaultValues: isReject
-      ? { rejection_reason: "", admin_notes: "" }
+      ? { rejection_reason: '', admin_notes: '' }
       : isRequestInfo
-      ? { additional_info_requested: "", admin_notes: "" }
-      : { admin_notes: "" },
+        ? { additional_info_requested: '', admin_notes: '' }
+        : { admin_notes: '' },
   });
 
   const onFormSubmit = (values) => {
@@ -86,17 +86,17 @@ export function ActionConfirmationPopup({
           <AlertDialogHeader>
             <AlertDialogTitle>
               {isReject
-                ? "Reject Verification?"
+                ? 'Reject Verification?'
                 : isApprove
-                ? "Approve Verification?"
-                : "Request Additional Information"}
+                  ? 'Approve Verification?'
+                  : 'Request Additional Information'}
             </AlertDialogTitle>
             <AlertDialogDescription>
               {isReject
                 ? `You are about to reject ${userName}'s verification request.`
                 : isApprove
-                ? `You are about to approve ${userName}'s verification request.`
-                : `You are about to request additional information from ${userName}.`}
+                  ? `You are about to approve ${userName}'s verification request.`
+                  : `You are about to request additional information from ${userName}.`}
             </AlertDialogDescription>
           </AlertDialogHeader>
 
@@ -142,11 +142,7 @@ export function ActionConfirmationPopup({
                 rows={2}
               />
               <div className="flex gap-3 justify-end">
-                <AlertDialogCancel
-                  type="button"
-                  disabled={isLoading}
-                  onClick={handleCancel}
-                >
+                <AlertDialogCancel type="button" disabled={isLoading} onClick={handleCancel}>
                   Cancel
                 </AlertDialogCancel>
                 <AlertDialogAction
@@ -155,19 +151,19 @@ export function ActionConfirmationPopup({
                   onClick={form.handleSubmit(onFormSubmit)}
                   className={
                     isReject
-                      ? "bg-destructive hover:bg-destructive/90"
+                      ? 'bg-destructive hover:bg-destructive/90'
                       : isRequestInfo
-                      ? "bg-blue-600 hover:bg-blue-700 text-white"
-                      : ""
+                        ? 'bg-blue-600 hover:bg-blue-700 text-white'
+                        : ''
                   }
                 >
                   {isLoading
-                    ? "Processing..."
+                    ? 'Processing...'
                     : isReject
-                    ? "Reject"
-                    : isRequestInfo
-                    ? "Send Request"
-                    : "Approve"}
+                      ? 'Reject'
+                      : isRequestInfo
+                        ? 'Send Request'
+                        : 'Approve'}
                 </AlertDialogAction>
               </div>
             </div>

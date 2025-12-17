@@ -1,8 +1,8 @@
 // DocumentsStep.jsx
-import { useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { X, Upload } from "lucide-react";
+import { useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { X, Upload } from 'lucide-react';
 
 export default function DocumentsStep({ onFilesChange }) {
   const [uploadedFiles, setUploadedFiles] = useState({
@@ -31,11 +31,11 @@ export default function DocumentsStep({ onFilesChange }) {
   };
   return (
     <div className="space-y-6">
-      {["manuscript", "cover_letter", "supplementary"].map((category) => (
+      {['manuscript', 'cover_letter', 'supplementary'].map((category) => (
         <Card key={category} className="p-4 bg-muted/50 border border-border">
           <h3 className="font-semibold text-foreground mb-4 capitalize">
-            {category === "cover_letter" ? "Cover Letter" : category}
-            {category === "manuscript" && " (Required)"}
+            {category === 'cover_letter' ? 'Cover Letter' : category}
+            {category === 'manuscript' && ' (Required)'}
           </h3>
           <div className="border-2 border-dashed border-border rounded-lg p-6 text-center hover:border-blue-400 transition-colors cursor-pointer">
             <Upload className="h-8 w-8 mx-auto text-muted-foreground mb-2" />
@@ -43,13 +43,11 @@ export default function DocumentsStep({ onFilesChange }) {
               Drag files here or click to upload
             </p>
             <p className="text-xs text-muted-foreground mt-1">
-              {category === "manuscript"
-                ? "PDF, DOCX (Max 10MB)"
-                : "Any file type (Max 25MB)"}
+              {category === 'manuscript' ? 'PDF, DOCX (Max 10MB)' : 'Any file type (Max 25MB)'}
             </p>
             <input
               type="file"
-              multiple={category !== "cover_letter"}
+              multiple={category !== 'cover_letter'}
               onChange={(e) => handleFileUpload(category, e.target.files)}
               className="hidden"
               id={`upload-${category}`}

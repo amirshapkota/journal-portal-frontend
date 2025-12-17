@@ -2,14 +2,14 @@
  * React hooks for Sentry API integration
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from 'react';
 import {
   fetchProjects,
   fetchIssues,
   fetchIssueDetail,
   fetchIssueEvents,
   fetchProjectStats,
-} from "../api/sentryApi";
+} from '../api/sentryApi';
 
 /**
  * Hook to fetch Sentry projects

@@ -1,18 +1,16 @@
-import { useMutation } from "@tanstack/react-query";
-import { verifyEmail } from "../../api/passwordApi";
-import { toast } from "sonner";
+import { useMutation } from '@tanstack/react-query';
+import { verifyEmail } from '../../api/passwordApi';
+import { toast } from 'sonner';
 
 export const useVerifyEmail = () => {
   return useMutation({
     mutationFn: ({ uid, token }) => verifyEmail({ uid, token }),
     onSuccess: (data) => {
-      toast.success("Email verified successfully");
+      toast.success('Email verified successfully');
     },
     onError: (error) => {
       const errorMessage =
-        error?.response?.data?.message ||
-        error?.response?.data?.error ||
-        "Failed to verify email";
+        error?.response?.data?.message || error?.response?.data?.error || 'Failed to verify email';
       toast.error(errorMessage);
     },
   });

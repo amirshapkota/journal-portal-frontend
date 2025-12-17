@@ -1,6 +1,6 @@
-"use client";
+'use client';
 // Polyfill DOMMatrix for SSR
-if (typeof global !== "undefined" && typeof global.DOMMatrix === "undefined") {
+if (typeof global !== 'undefined' && typeof global.DOMMatrix === 'undefined') {
   global.DOMMatrix = class DOMMatrix {
     constructor() {
       this.a = 1;
@@ -12,8 +12,8 @@ if (typeof global !== "undefined" && typeof global.DOMMatrix === "undefined") {
     }
   };
 }
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   BarChart as RechartsBarChart,
   Bar,
@@ -24,7 +24,7 @@ import {
   ResponsiveContainer,
   Legend,
   Cell,
-} from "recharts";
+} from 'recharts';
 
 /**
  * Reusable Bar Chart Component
@@ -50,23 +50,23 @@ export function BarChart({
   title,
   data = [],
   colors = [
-    "var(--chart-1)",
-    "var(--chart-2)",
-    "var(--chart-3)",
-    "var(--chart-4)",
-    "var(--chart-5)",
+    'var(--chart-1)',
+    'var(--chart-2)',
+    'var(--chart-3)',
+    'var(--chart-4)',
+    'var(--chart-5)',
   ],
   isLoading = false,
   isError = false,
-  emptyMessage = "No data to display",
-  errorMessage = "Failed to load chart data",
+  emptyMessage = 'No data to display',
+  errorMessage = 'Failed to load chart data',
   showLegend = false,
   showTooltip = true,
   showGrid = true,
-  dataKey = "value",
-  xAxisKey = "name",
+  dataKey = 'value',
+  xAxisKey = 'name',
   height = 300,
-  className = "",
+  className = '',
   radius = [8, 8, 0, 0],
 }) {
   // Loading state
@@ -76,10 +76,7 @@ export function BarChart({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
-        <CardContent
-          className="flex items-center justify-center"
-          style={{ height: `${height}px` }}
-        >
+        <CardContent className="flex items-center justify-center" style={{ height: `${height}px` }}>
           <Skeleton className="h-[250px] w-full" />
         </CardContent>
       </Card>
@@ -93,10 +90,7 @@ export function BarChart({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
-        <CardContent
-          className="flex items-center justify-center"
-          style={{ height: `${height}px` }}
-        >
+        <CardContent className="flex items-center justify-center" style={{ height: `${height}px` }}>
           <p className="text-destructive text-center">{errorMessage}</p>
         </CardContent>
       </Card>
@@ -104,8 +98,7 @@ export function BarChart({
   }
 
   // Check if all values are zero
-  const allZero =
-    data.length === 0 || data.every((item) => item[dataKey] === 0);
+  const allZero = data.length === 0 || data.every((item) => item[dataKey] === 0);
 
   // Empty state
   if (allZero) {
@@ -114,10 +107,7 @@ export function BarChart({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
-        <CardContent
-          className="flex items-center justify-center"
-          style={{ height: `${height}px` }}
-        >
+        <CardContent className="flex items-center justify-center" style={{ height: `${height}px` }}>
           <p className="text-muted-foreground text-center">{emptyMessage}</p>
         </CardContent>
       </Card>
@@ -132,28 +122,23 @@ export function BarChart({
       <CardContent>
         <ResponsiveContainer width="100%" height={height}>
           <RechartsBarChart data={data}>
-            {showGrid && (
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-            )}
+            {showGrid && <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />}
             <XAxis dataKey={xAxisKey} stroke="var(--muted-foreground)" />
             <YAxis stroke="var(--muted-foreground)" />
             {showTooltip && (
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "var(--card)",
-                  border: "1px solid var(--border)",
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
                 }}
-                itemStyle={{ color: "var(--popover-foreground)" }}
-                labelStyle={{ color: "var(--muted-foreground)" }}
+                itemStyle={{ color: 'var(--popover-foreground)' }}
+                labelStyle={{ color: 'var(--muted-foreground)' }}
               />
             )}
             {showLegend && <Legend />}
             <Bar dataKey={dataKey} radius={radius}>
               {data.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={entry.color || colors[index % colors.length]}
-                />
+                <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
               ))}
             </Bar>
           </RechartsBarChart>

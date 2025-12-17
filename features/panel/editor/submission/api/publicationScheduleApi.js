@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 const BASE_URL = `/submissions/production/schedules`;
 
@@ -70,8 +70,6 @@ export const cancelPublicationSchedule = async (scheduleId) => {
  * @returns {Promise} - API response
  */
 export const publishNow = async (scheduleId) => {
-  const response = await instance.post(
-    `${BASE_URL}/${scheduleId}/publish_now/`
-  );
+  const response = await instance.post(`${BASE_URL}/${scheduleId}/publish_now/`);
   return response.data;
 };

@@ -1,120 +1,117 @@
-"use client";
+'use client';
 
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Card } from "@/components/ui/card";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
-import { useCurrentRole } from "@/features/shared";
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Card } from '@/components/ui/card';
+import { FormControl, FormField, FormItem } from '@/components/ui/form';
+import { useCurrentRole } from '@/features/shared';
 
 export const notificationGroups = [
   {
-    title: "Account Activity",
+    title: 'Account Activity',
     items: [
       {
-        id: "email_on_login",
-        label: "Login Notifications",
-        description: "Receive an email whenever your account is logged in.",
+        id: 'email_on_login',
+        label: 'Login Notifications',
+        description: 'Receive an email whenever your account is logged in.',
       },
       {
-        id: "email_on_password_change",
-        label: "Password Changes",
+        id: 'email_on_password_change',
+        label: 'Password Changes',
+        description: 'Get notified when your password or security settings are updated.',
+      },
+    ],
+  },
+  {
+    title: 'ORCID',
+    items: [
+      {
+        id: 'email_on_orcid_connected',
+        label: 'ORCID Connected',
         description:
-          "Get notified when your password or security settings are updated.",
+          'Receive an email confirmation when your ORCID account is successfully linked.',
+      },
+      {
+        id: 'email_on_orcid_disconnected',
+        label: 'ORCID Disconnected',
+        description: 'Alert when your ORCID connection is removed or expires.',
       },
     ],
   },
   {
-    title: "ORCID",
+    title: 'Verification',
     items: [
       {
-        id: "email_on_orcid_connected",
-        label: "ORCID Connected",
-        description:
-          "Receive an email confirmation when your ORCID account is successfully linked.",
+        id: 'email_on_verification_submitted',
+        label: 'Verification Submitted',
+        description: 'Notify when verification request is submitted',
       },
       {
-        id: "email_on_orcid_disconnected",
-        label: "ORCID Disconnected",
-        description: "Alert when your ORCID connection is removed or expires.",
+        id: 'email_on_verification_approved',
+        label: 'Verification Approved',
+        description: 'Notify when verification is approved',
+      },
+      {
+        id: 'email_on_verification_rejected',
+        label: 'Verification Rejected',
+        description: 'Notify when verification is rejected',
+      },
+      {
+        id: 'email_on_verification_info_requested',
+        label: 'Verification Info Requested',
+        description: 'Notify when admin requests additional information',
       },
     ],
   },
   {
-    title: "Verification",
+    title: 'Submission',
     items: [
       {
-        id: "email_on_verification_submitted",
-        label: "Verification Submitted",
-        description: "Notify when verification request is submitted",
+        id: 'email_on_submission_received',
+        label: 'Submission Confirmation',
+        description: 'Receive confirmation when your manuscript or article submission is received.',
+        roles: ['AUTHOR'],
       },
       {
-        id: "email_on_verification_approved",
-        label: "Verification Approved",
-        description: "Notify when verification is approved",
-      },
-      {
-        id: "email_on_verification_rejected",
-        label: "Verification Rejected",
-        description: "Notify when verification is rejected",
-      },
-      {
-        id: "email_on_verification_info_requested",
-        label: "Verification Info Requested",
-        description: "Notify when admin requests additional information",
+        id: 'email_on_submission_status_change',
+        label: 'Submission Status Change',
+        description: 'Notify on submission status changes',
+        roles: ['AUTHOR'],
       },
     ],
   },
   {
-    title: "Submission",
+    title: 'Review',
     items: [
       {
-        id: "email_on_submission_received",
-        label: "Submission Confirmation",
-        description:
-          "Receive confirmation when your manuscript or article submission is received.",
-        roles: ["AUTHOR"],
+        id: 'email_on_review_assigned',
+        label: 'Review Assignment',
+        description: 'Get notified when you are assigned to review a new submission.',
+        roles: ['REVIEWER'],
       },
       {
-        id: "email_on_submission_status_change",
-        label: "Submission Status Change",
-        description: "Notify on submission status changes",
-        roles: ["AUTHOR"],
+        id: 'email_on_review_reminder',
+        label: 'Review Reminder',
+        description: 'Send review deadline reminders',
+        roles: ['REVIEWER'],
       },
     ],
   },
   {
-    title: "Review",
+    title: 'Decision',
     items: [
       {
-        id: "email_on_review_assigned",
-        label: "Review Assignment",
-        description:
-          "Get notified when you are assigned to review a new submission.",
-        roles: ["REVIEWER"],
-      },
-      {
-        id: "email_on_review_reminder",
-        label: "Review Reminder",
-        description: "Send review deadline reminders",
-        roles: ["REVIEWER"],
-      },
-    ],
-  },
-  {
-    title: "Decision",
-    items: [
-      {
-        id: "email_on_decision_made",
-        label: "Decision Made",
-        description: "Notify when editorial decision is made",
-        roles: ["EDITOR"],
+        id: 'email_on_decision_made',
+        label: 'Decision Made',
+        description: 'Notify when editorial decision is made',
+        roles: ['EDITOR'],
       },
     ],
   },
 ];
 
 export default function NotificationGroupsList({ form }) {
-  const masterEnabled = form.watch("email_notifications_enabled");
+  const masterEnabled = form.watch('email_notifications_enabled');
 
   const { currentRole } = useCurrentRole();
 
@@ -152,9 +149,7 @@ export default function NotificationGroupsList({ form }) {
                             {item.label}
                           </Label>
                         </div>
-                        <p className="text-xs text-muted-foreground">
-                          {item.description}
-                        </p>
+                        <p className="text-xs text-muted-foreground">{item.description}</p>
                       </div>
                     </FormItem>
                   )}

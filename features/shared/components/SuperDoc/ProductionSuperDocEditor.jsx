@@ -1,16 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, Save } from "lucide-react";
-import "@harbour-enterprises/superdoc/style.css";
-import {
-  loadProductionFile,
-  saveProductionFile,
-} from "@/features/panel/editor/submission/api";
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Save } from 'lucide-react';
+import '@harbour-enterprises/superdoc/style.css';
+import { loadProductionFile, saveProductionFile } from '@/features/panel/editor/submission/api';
 
 /**
  * Production SuperDoc Editor Component
@@ -25,7 +22,7 @@ import {
 export default function ProductionSuperDocEditor({
   fileId,
   userData,
-  className = "",
+  className = '',
   readOnly = false,
   commentsReadOnly = false,
   onSaveSuccess,
@@ -43,11 +40,11 @@ export default function ProductionSuperDocEditor({
     onSuccess: (data) => {
       setFileData(data);
       setIsLoading(false);
-      toast.success("File loaded successfully");
+      toast.success('File loaded successfully');
     },
     onError: (error) => {
       setIsLoading(false);
-      toast.error(error?.response?.data?.detail || "Failed to load file");
+      toast.error(error?.response?.data?.detail || 'Failed to load file');
     },
   });
 
@@ -57,11 +54,11 @@ export default function ProductionSuperDocEditor({
     onSuccess: (data) => {
       setHasUnsavedChanges(false);
       setFileData(data.file); // Update file data with new last_edited info
-      toast.success("File saved successfully");
+      toast.success('File saved successfully');
 
       // Invalidate queries to refresh file lists
       queryClient.invalidateQueries({
-        queryKey: ["production-files"],
+        queryKey: ['production-files'],
       });
 
       if (onSaveSuccess) {
@@ -69,7 +66,7 @@ export default function ProductionSuperDocEditor({
       }
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.detail || "Failed to save file");
+      toast.error(error?.response?.data?.detail || 'Failed to save file');
     },
   });
 
@@ -83,31 +80,31 @@ export default function ProductionSuperDocEditor({
   // Handle save button click
   const handleSave = async () => {
     if (!superDocInstanceRef.current) {
-      toast.error("Editor not ready");
+      toast.error('Editor not ready');
       return;
     }
 
     if (!superDocInstanceRef.current.activeEditor) {
-      toast.error("Editor not initialized");
+      toast.error('Editor not initialized');
       return;
     }
 
     try {
       // Export as DOCX blob
       const blob = await superDocInstanceRef.current.export({
-        commentsType: "external",
+        commentsType: 'external',
         triggerDownload: false,
       });
 
       // Create FormData and append the file
       const formData = new FormData();
-      formData.append("file", blob, fileData.original_filename);
+      formData.append('file', blob, fileData.original_filename);
 
       // Save using mutation
       saveMutation.mutate(formData);
     } catch (error) {
-      console.error("Error preparing document:", error);
-      toast.error("Failed to prepare document for saving");
+      console.error('Error preparing document:', error);
+      toast.error('Failed to prepare document for saving');
     }
   };
 
@@ -121,61 +118,59 @@ export default function ProductionSuperDocEditor({
 
     const initializeEditor = async () => {
       try {
-        const { SuperDoc } = await import("@harbour-enterprises/superdoc");
+        const { SuperDoc } = await import('@harbour-enterprises/superdoc');
 
         if (!mounted) return;
 
         // Initialize SuperDoc
         const editor = new SuperDoc({
-          selector: "#production-superdoc-editor",
+          selector: '#production-superdoc-editor',
           document: fileData.file_url,
           pagination: true,
-          theme: "light",
-          role: readOnly ? "viewer" : "editor",
+          theme: 'light',
+          role: readOnly ? 'viewer' : 'editor',
           user: {
-            name: userData?.first_name || "User",
-            email: userData?.email || "user@example.com",
+            name: userData?.first_name || 'User',
+            email: userData?.email || 'user@example.com',
           },
           modules: {
             comments: { readOnly: commentsReadOnly },
             toolbar: readOnly
               ? false
               : {
-                  selector: "#production-superdoc-toolbar",
+                  selector: '#production-superdoc-toolbar',
                   excludeItems: [
-                    "documentMode",
-                    "acceptTrackedChangeBySelection",
-                    "rejectTrackedChangeOnSelection",
+                    'documentMode',
+                    'acceptTrackedChangeBySelection',
+                    'rejectTrackedChangeOnSelection',
                   ],
                 },
           },
           onReady: () => {
-            const superdocRoot = document.getElementById(
-              "production-superdoc-editor"
-            );
+            const superdocRoot = document.getElementById('production-superdoc-editor');
             if (superdocRoot) {
-              superdocRoot.style.setProperty("color", "#222", "important");
-              const allElements = superdocRoot.querySelectorAll("*");
+              superdocRoot.style.setProperty('color', '#222', 'important');
+              const allElements = superdocRoot.querySelectorAll('*');
               allElements.forEach((el) => {
-                el.style.setProperty("color", "#222", "important");
+                el.style.setProperty('color', '#222', 'important');
               });
             }
-            toast.success("Document loaded successfully");
+            toast.success('Document loaded successfully');
           },
           onEditorUpdate: () => {
             setHasUnsavedChanges(true);
           },
           onError: (error) => {
-            console.error("SuperDoc error:", error);
-            toast.error("Failed to load document");
+            console.error('SuperDoc error:', error);
+            toast.error('Failed to load document');
           },
         });
 
         superDocInstanceRef.current = editor;
         isInitializedRef.current = true;
       } catch (error) {
-        console.error("Failed to initialize editor:", error);
-        toast.error("Failed to initialize document editor");
+        console.error('Failed to initialize editor:', error);
+        toast.error('Failed to initialize document editor');
       }
     };
 
@@ -187,7 +182,7 @@ export default function ProductionSuperDocEditor({
         try {
           superDocInstanceRef.current.destroy?.();
         } catch (error) {
-          console.error("Error destroying editor:", error);
+          console.error('Error destroying editor:', error);
         }
         superDocInstanceRef.current = null;
         isInitializedRef.current = false;
@@ -200,9 +195,7 @@ export default function ProductionSuperDocEditor({
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-          <p className="text-sm text-muted-foreground mt-2">
-            Loading document...
-          </p>
+          <p className="text-sm text-muted-foreground mt-2">Loading document...</p>
         </div>
       </div>
     );
@@ -244,7 +237,7 @@ export default function ProductionSuperDocEditor({
             )}
             {fileData?.last_edited_by && (
               <Badge variant="secondary" className="text-xs">
-                Last edited by {fileData.last_edited_by.name} at{" "}
+                Last edited by {fileData.last_edited_by.name} at{' '}
                 {new Date(fileData.last_edited_at).toLocaleString()}
               </Badge>
             )}
@@ -296,10 +289,10 @@ export default function ProductionSuperDocEditor({
             id="production-superdoc-editor"
             className="text-black w-fit"
             style={{
-              minHeight: "600px",
-              padding: "20px",
-              background: "#fff",
-              color: "#222",
+              minHeight: '600px',
+              padding: '20px',
+              background: '#fff',
+              color: '#222',
             }}
           />
         </div>

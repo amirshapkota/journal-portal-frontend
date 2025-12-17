@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -6,19 +6,11 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { format } from "date-fns";
-import {
-  User,
-  Clock,
-  MapPin,
-  Globe,
-  Activity,
-  FileJson,
-  Hash,
-} from "lucide-react";
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { format } from 'date-fns';
+import { User, Clock, MapPin, Globe, Activity, FileJson, Hash } from 'lucide-react';
 
 export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
   if (!log) return null;
@@ -26,10 +18,10 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
   const formatDate = (dateString) => {
     try {
       const date = new Date(dateString);
-      if (isNaN(date.getTime())) return "Invalid date";
-      return format(date, "PPpp");
+      if (isNaN(date.getTime())) return 'Invalid date';
+      return format(date, 'PPpp');
     } catch {
-      return "Invalid date";
+      return 'Invalid date';
     }
   };
 
@@ -41,9 +33,7 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
             <Activity className="h-5 w-5" />
             Activity Log Details
           </DialogTitle>
-          <DialogDescription>
-            Detailed information about this system event
-          </DialogDescription>
+          <DialogDescription>Detailed information about this system event</DialogDescription>
         </DialogHeader>
 
         <div className="space-y-6">
@@ -53,9 +43,7 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Log ID</p>
-                <code className="text-xs bg-muted px-2 py-1 rounded block">
-                  {log.id}
-                </code>
+                <code className="text-xs bg-muted px-2 py-1 rounded block">{log.id}</code>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Timestamp</p>
@@ -75,15 +63,11 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Action Type</p>
-                <Badge variant="default">
-                  {log.action_type_display || log.action_type}
-                </Badge>
+                <Badge variant="default">{log.action_type_display || log.action_type}</Badge>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Actor Type</p>
-                <Badge variant="secondary">
-                  {log.actor_type_display || log.actor_type}
-                </Badge>
+                <Badge variant="secondary">{log.actor_type_display || log.actor_type}</Badge>
               </div>
             </div>
           </div>
@@ -96,9 +80,7 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
             <div className="grid grid-cols-1 gap-4">
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Resource Type</p>
-                <Badge variant="outline">
-                  {log.resource_type_display || log.resource_type}
-                </Badge>
+                <Badge variant="outline">{log.resource_type_display || log.resource_type}</Badge>
               </div>
               <div className="space-y-1">
                 <p className="text-xs text-muted-foreground">Resource ID</p>
@@ -126,15 +108,11 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
                   </div>
                   <div className="space-y-1">
                     <p className="text-xs text-muted-foreground">User ID</p>
-                    <code className="text-xs bg-muted px-2 py-1 rounded block">
-                      {log.user_id}
-                    </code>
+                    <code className="text-xs bg-muted px-2 py-1 rounded block">{log.user_id}</code>
                   </div>
                 </>
               ) : (
-                <p className="text-sm text-muted-foreground">
-                  No user associated (System action)
-                </p>
+                <p className="text-sm text-muted-foreground">No user associated (System action)</p>
               )}
             </div>
           </div>
@@ -150,9 +128,7 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
                   <p className="text-xs text-muted-foreground">IP Address</p>
                   <div className="flex items-center gap-1.5">
                     <MapPin className="h-3 w-3" />
-                    <code className="text-xs bg-muted px-2 py-1 rounded">
-                      {log.ip_address}
-                    </code>
+                    <code className="text-xs bg-muted px-2 py-1 rounded">{log.ip_address}</code>
                   </div>
                 </div>
               )}
@@ -172,9 +148,7 @@ export function ActivityLogDetailsModal({ log, open, onOpenChange }) {
                   <p className="text-xs text-muted-foreground">Session ID</p>
                   <div className="flex items-center gap-1.5">
                     <Hash className="h-3 w-3" />
-                    <code className="text-xs bg-muted px-2 py-1 rounded">
-                      {log.session_id}
-                    </code>
+                    <code className="text-xs bg-muted px-2 py-1 rounded">{log.session_id}</code>
                   </div>
                 </div>
               )}

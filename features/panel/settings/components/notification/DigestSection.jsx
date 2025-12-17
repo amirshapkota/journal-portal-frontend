@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { FormControl, FormField, FormItem } from "@/components/ui/form";
+import { Card } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { FormControl, FormField, FormItem } from '@/components/ui/form';
 
 export default function DigestSection({ form }) {
-  const masterEnabled = form.watch("email_notifications_enabled");
+  const masterEnabled = form.watch('email_notifications_enabled');
 
   return (
     <Card className="p-4">
@@ -25,9 +25,7 @@ export default function DigestSection({ form }) {
                     disabled={!masterEnabled}
                   />
                 </FormControl>
-                <Label className="cursor-pointer text-sm text-muted-foreground">
-                  Daily Digest
-                </Label>
+                <Label className="cursor-pointer text-sm text-muted-foreground">Daily Digest</Label>
               </div>
             </FormItem>
           )}

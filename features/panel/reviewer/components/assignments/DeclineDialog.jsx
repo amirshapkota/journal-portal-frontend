@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -9,10 +9,10 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Textarea } from "@/components/ui/textarea";
-import { Label } from "@/components/ui/label";
-import { toast } from "sonner";
+} from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
+import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 
 export function DeclineDialog({
   open,
@@ -21,11 +21,11 @@ export function DeclineDialog({
   declineMutation,
   onSuccess,
 }) {
-  const [declineReason, setDeclineReason] = useState("");
+  const [declineReason, setDeclineReason] = useState('');
 
   const handleDeclineConfirm = () => {
     if (!declineReason.trim()) {
-      toast.warning("Please provide a reason for declining");
+      toast.warning('Please provide a reason for declining');
       return;
     }
 
@@ -39,14 +39,12 @@ export function DeclineDialog({
       {
         onSuccess: () => {
           onOpenChange(false);
-          setDeclineReason("");
+          setDeclineReason('');
           onSuccess();
-          toast.success("Review assignment declined");
+          toast.success('Review assignment declined');
         },
         onError: (error) => {
-          toast.error(
-            `Failed to decline: ${error.response?.data?.error || error.message}`
-          );
+          toast.error(`Failed to decline: ${error.response?.data?.error || error.message}`);
         },
       }
     );
@@ -78,7 +76,7 @@ export function DeclineDialog({
             variant="outline"
             onClick={() => {
               onOpenChange(false);
-              setDeclineReason("");
+              setDeclineReason('');
             }}
           >
             Cancel
@@ -88,7 +86,7 @@ export function DeclineDialog({
             onClick={handleDeclineConfirm}
             disabled={declineMutation.isPending || !declineReason.trim()}
           >
-            {declineMutation.isPending ? "Declining..." : "Confirm Decline"}
+            {declineMutation.isPending ? 'Declining...' : 'Confirm Decline'}
           </Button>
         </DialogFooter>
       </DialogContent>

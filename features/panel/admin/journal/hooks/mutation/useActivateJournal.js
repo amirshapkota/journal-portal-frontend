@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { activateJournal } from "../../api/inactiveJournalsApi";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { activateJournal } from '../../api/inactiveJournalsApi';
+import { toast } from 'sonner';
 
 export const useActivateJournal = () => {
   const queryClient = useQueryClient();
@@ -9,20 +9,18 @@ export const useActivateJournal = () => {
     mutationFn: (id) => activateJournal(id),
     onSuccess: (data) => {
       queryClient.invalidateQueries({
-        queryKey: ["admin-inactive-journals"],
+        queryKey: ['admin-inactive-journals'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["admin-journal", data.id],
+        queryKey: ['admin-journal', data.id],
       });
       queryClient.invalidateQueries({
-        queryKey: ["admin-journals"],
+        queryKey: ['admin-journals'],
       });
-      toast.success("Journal activated successfully");
+      toast.success('Journal activated successfully');
     },
     onError: (error) => {
-      toast.error(
-        error?.response?.data?.detail || "Failed to activate journal"
-      );
+      toast.error(error?.response?.data?.detail || 'Failed to activate journal');
     },
   });
 };

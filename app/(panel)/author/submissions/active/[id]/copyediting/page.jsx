@@ -1,17 +1,11 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  HelpCircle,
-  MessageSquare,
-  FileText,
-  Loader2,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
+import React, { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { ArrowLeft, HelpCircle, MessageSquare, FileText, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
 import {
   Sheet,
   SheetContent,
@@ -19,20 +13,20 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
+} from '@/components/ui/sheet';
 import {
   ErrorCard,
   LoadingScreen,
   useCopyeditingAssignments,
   useGetSubmissionById,
-} from "@/features";
-import { CopyeditingDraftFiles } from "@/features/panel/editor/submission/components/copyediting/CopyeditingDraftFiles";
-import { CopyeditingParticipants } from "@/features/panel/editor/submission/components/copyediting/CopyeditingParticipants";
-import { CopyeditingDiscussions } from "@/features/panel/editor/submission/components";
-import { CopyeditingAssignmentCard } from "@/features/panel/editor/submission/components/copyediting/CopyeditingAssignmentCard";
-import { AuthorConfirmCopyeditedFiles } from "@/features/panel/editor/submission/components/copyediting/AuthorConfirmCopyeditedFiles";
-import { AuthorViewFinalFiles } from "@/features/panel/author/components/copyediting/AuthorViewFinalFiles";
-import { Card } from "@/components/ui/card";
+} from '@/features';
+import { CopyeditingDraftFiles } from '@/features/panel/editor/submission/components/copyediting/CopyeditingDraftFiles';
+import { CopyeditingParticipants } from '@/features/panel/editor/submission/components/copyediting/CopyeditingParticipants';
+import { CopyeditingDiscussions } from '@/features/panel/editor/submission/components';
+import { CopyeditingAssignmentCard } from '@/features/panel/editor/submission/components/copyediting/CopyeditingAssignmentCard';
+import { AuthorConfirmCopyeditedFiles } from '@/features/panel/editor/submission/components/copyediting/AuthorConfirmCopyeditedFiles';
+import { AuthorViewFinalFiles } from '@/features/panel/author/components/copyediting/AuthorViewFinalFiles';
+import { Card } from '@/components/ui/card';
 
 /**
  * Author Copyediting Page
@@ -69,10 +63,7 @@ export default function AuthorCopyeditingPage() {
   if (submissionError) {
     return (
       <div className="container mx-auto p-6">
-        <ErrorCard
-          title="Error Loading Submission"
-          onRetry={refetchSubmission}
-        />
+        <ErrorCard title="Error Loading Submission" onRetry={refetchSubmission} />
       </div>
     );
   }
@@ -84,9 +75,7 @@ export default function AuthorCopyeditingPage() {
       <div className="flex flex-col gap-4">
         <Button
           variant="ghost"
-          onClick={() =>
-            router.push(`/author/submissions/active/${submissionId}`)
-          }
+          onClick={() => router.push(`/author/submissions/active/${submissionId}`)}
           className="w-fit"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
@@ -95,12 +84,8 @@ export default function AuthorCopyeditingPage() {
 
         <div className="flex items-start justify-between gap-4">
           <div>
-            <h1 className="text-3xl font-semibold tracking-tight">
-              Copyediting Workflow
-            </h1>
-            <p className="text-muted-foreground mt-2">
-              {submission?.title || "Loading..."}
-            </p>
+            <h1 className="text-3xl font-semibold tracking-tight">Copyediting Workflow</h1>
+            <p className="text-muted-foreground mt-2">{submission?.title || 'Loading...'}</p>
             {submission?.submission_id && (
               <p className="text-sm text-muted-foreground mt-1">
                 Submission ID: {submission.submission_id}
@@ -120,17 +105,14 @@ export default function AuthorCopyeditingPage() {
               <SheetContent className="w-full sm:max-w-lg overflow-y-auto p-6">
                 <SheetHeader className="p-0">
                   <SheetTitle>Copyediting Workflow Guide</SheetTitle>
-                  <SheetDescription>
-                    Understanding the copyediting process
-                  </SheetDescription>
+                  <SheetDescription>Understanding the copyediting process</SheetDescription>
                 </SheetHeader>
                 <div className="space-y-4 py-4">
                   <div>
                     <h3 className="font-semibold mb-2">What is Copyediting?</h3>
                     <p className="text-sm text-muted-foreground">
-                      After your manuscript is accepted, it undergoes
-                      copyediting to improve clarity, grammar, and formatting
-                      consistency.
+                      After your manuscript is accepted, it undergoes copyediting to improve
+                      clarity, grammar, and formatting consistency.
                     </p>
                   </div>
 
@@ -191,10 +173,7 @@ export default function AuthorCopyeditingPage() {
 
       {/* Assignment Info Card */}
       <Card className="p-6">
-        <CopyeditingAssignmentCard
-          assignment={assignment}
-          isPending={isAssignmentsPending}
-        />
+        <CopyeditingAssignmentCard assignment={assignment} isPending={isAssignmentsPending} />
       </Card>
 
       {/* Main Content Tabs */}
@@ -253,10 +232,7 @@ export default function AuthorCopyeditingPage() {
               />
             </div>
             <div>
-              <CopyeditingParticipants
-                assignmentId={assignmentId}
-                isAuthorView={true}
-              />
+              <CopyeditingParticipants assignmentId={assignmentId} isAuthorView={true} />
             </div>
           </div>
         </TabsContent>
@@ -265,16 +241,10 @@ export default function AuthorCopyeditingPage() {
         <TabsContent value="final" className="space-y-4">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="lg:col-span-2">
-              <AuthorViewFinalFiles
-                assignmentId={assignmentId}
-                submissionId={submissionId}
-              />
+              <AuthorViewFinalFiles assignmentId={assignmentId} submissionId={submissionId} />
             </div>
             <div>
-              <CopyeditingParticipants
-                assignmentId={assignmentId}
-                isAuthorView={true}
-              />
+              <CopyeditingParticipants assignmentId={assignmentId} isAuthorView={true} />
             </div>
           </div>
         </TabsContent>
@@ -290,10 +260,7 @@ export default function AuthorCopyeditingPage() {
               />
             </div>
             <div>
-              <CopyeditingParticipants
-                assignmentId={assignmentId}
-                isAuthorView={true}
-              />
+              <CopyeditingParticipants assignmentId={assignmentId} isAuthorView={true} />
             </div>
           </div>
         </TabsContent>

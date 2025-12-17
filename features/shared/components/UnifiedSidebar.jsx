@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Sidebar,
@@ -11,29 +11,24 @@ import {
   SidebarMenuSub,
   SidebarMenuSubItem,
   SidebarMenuSubButton,
-} from "@/components/ui/sidebar";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
+} from '@/components/ui/sidebar';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import { ChevronRight } from 'lucide-react';
 
 /**
  * Check if a menu item or any of its children is active
  */
 function isMenuItemActive(item, pathname) {
   // Check if current path matches item path
-  const directMatch =
-    pathname === item.path || pathname.startsWith(item.path + "/");
+  const directMatch = pathname === item.path || pathname.startsWith(item.path + '/');
 
   // Check if any child is active
   const childMatch = item.children?.some(
-    (child) => pathname === child.path || pathname.startsWith(child.path + "/")
+    (child) => pathname === child.path || pathname.startsWith(child.path + '/')
   );
 
   return directMatch || childMatch;
@@ -48,7 +43,7 @@ export function UnifiedSidebar({ menuItems }) {
       <SidebarContent className="bg-card rounded-xl border py-6 pt-0 shadow-new">
         {/* Logo Section */}
         <div className="flex justify-between items-center p-3 pb-0">
-          {resolvedTheme === "dark" ? (
+          {resolvedTheme === 'dark' ? (
             <Image
               width={200}
               height={100}
@@ -88,33 +83,24 @@ export function UnifiedSidebar({ menuItems }) {
                   >
                     <SidebarMenuItem>
                       <CollapsibleTrigger asChild>
-                        <SidebarMenuButton
-                          isActive={isActive}
-                          hasChildren={true}
-                        >
+                        <SidebarMenuButton isActive={isActive} hasChildren={true}>
                           <Icon className="h-4 w-4" />
                           <span>{item.name}</span>
                           <ChevronRight className="ml-auto h-4 w-4 transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
                         </SidebarMenuButton>
                       </CollapsibleTrigger>
                       <CollapsibleContent>
-                        <SidebarMenuSub className={"mx-0"}>
+                        <SidebarMenuSub className={'mx-0'}>
                           {item.children.map((child) => {
                             const ChildIcon = child.icon;
                             const isChildActive =
-                              pathname === child.path ||
-                              pathname.startsWith(child.path + "/");
+                              pathname === child.path || pathname.startsWith(child.path + '/');
 
                             return (
                               <SidebarMenuSubItem key={child.path}>
-                                <SidebarMenuSubButton
-                                  asChild
-                                  isActive={isChildActive}
-                                >
+                                <SidebarMenuSubButton asChild isActive={isChildActive}>
                                   <Link href={child.path}>
-                                    {ChildIcon && (
-                                      <ChildIcon className="h-4 w-4" />
-                                    )}
+                                    {ChildIcon && <ChildIcon className="h-4 w-4" />}
                                     <span>{child.name}</span>
                                   </Link>
                                 </SidebarMenuSubButton>

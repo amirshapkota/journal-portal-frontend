@@ -1,13 +1,8 @@
 // ReviewStep.jsx
-import { Card } from "@/components/ui/card";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { useWatch } from "react-hook-form";
+import { Card } from '@/components/ui/card';
+import { FormField, FormItem, FormLabel, FormControl } from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { useWatch } from 'react-hook-form';
 
 export default function ReviewStep({ form }) {
   const formData = useWatch({
@@ -20,29 +15,26 @@ export default function ReviewStep({ form }) {
         <div>
           <h4 className="font-semibold text-foreground mb-2">Journal</h4>
           <p className="text-sm text-muted-foreground">
-            {formData?.journal_name || "Not selected"}
+            {formData?.journal_name || 'Not selected'}
           </p>
         </div>
         <div className="h-px bg-border" />
         <div>
           <h4 className="font-semibold text-foreground mb-2">Title</h4>
-          <p className="text-sm text-muted-foreground">
-            {formData?.title || "Not provided"}
-          </p>
+          <p className="text-sm text-muted-foreground">{formData?.title || 'Not provided'}</p>
         </div>
         <div className="h-px bg-border" />
         <div>
           <h4 className="font-semibold text-foreground mb-2">Abstract</h4>
           <p className="text-sm text-muted-foreground line-clamp-3">
-            {formData?.abstract || "Not provided"}
+            {formData?.abstract || 'Not provided'}
           </p>
         </div>
         <div className="h-px bg-border" />
         <div>
           <h4 className="font-semibold text-foreground mb-2">Authors</h4>
           <p className="text-sm text-muted-foreground">
-            {formData?.corresponding_author?.name || "Not provided"}{" "}
-            (Corresponding Author)
+            {formData?.corresponding_author?.name || 'Not provided'} (Corresponding Author)
           </p>
           {formData?.co_authors?.length > 0 && (
             <p className="text-sm text-muted-foreground mt-1">
@@ -58,14 +50,10 @@ export default function ReviewStep({ form }) {
         render={({ field }) => (
           <FormItem className="flex items-start space-x-3">
             <FormControl>
-              <Checkbox
-                checked={field.value}
-                onCheckedChange={field.onChange}
-              />
+              <Checkbox checked={field.value} onCheckedChange={field.onChange} />
             </FormControl>
             <FormLabel className="font-normal text-sm leading-relaxed cursor-pointer">
-              I accept the terms and conditions and agree to submit this
-              manuscript
+              I accept the terms and conditions and agree to submit this manuscript
             </FormLabel>
           </FormItem>
         )}

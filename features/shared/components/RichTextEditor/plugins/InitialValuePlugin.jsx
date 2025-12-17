@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { $generateNodesFromDOM } from "@lexical/html";
-import { $getRoot, $insertNodes } from "lexical";
+import { useEffect } from 'react';
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { $generateNodesFromDOM } from '@lexical/html';
+import { $getRoot, $insertNodes } from 'lexical';
 
 export default function InitialValuePlugin({ initialValue }) {
   const [editor] = useLexicalComposerContext();
@@ -14,7 +14,7 @@ export default function InitialValuePlugin({ initialValue }) {
     editor.update(() => {
       // Parse HTML string to DOM
       const parser = new DOMParser();
-      const dom = parser.parseFromString(initialValue, "text/html");
+      const dom = parser.parseFromString(initialValue, 'text/html');
 
       // Generate Lexical nodes from the DOM
       const nodes = $generateNodesFromDOM(editor, dom);

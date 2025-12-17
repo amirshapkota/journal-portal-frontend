@@ -1,24 +1,20 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Trash2 } from "lucide-react";
-import {
-  AuthorSubmissionsTable,
-  LoadingScreen,
-  SubmissionsLayout,
-} from "@/features";
-import { useGetDraftSubmissions } from "@/features/panel/author/hooks/query/useGetDraftSubmissions";
-import DocumentUploadModal from "@/features/panel/author/components/submission/DocumentUploadModal";
-import DocumentViewModal from "@/features/panel/author/components/submission/DocumentViewModal";
-import { useSubmitForReview } from "@/features/panel/author/hooks/mutation/useSubmitForReview";
-import { useDeleteSubmission } from "@/features/panel/author/hooks/mutation/useDeleteSubmission";
-import { ConfirmationPopup, Pagination } from "@/features/shared";
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Trash2 } from 'lucide-react';
+import { AuthorSubmissionsTable, LoadingScreen, SubmissionsLayout } from '@/features';
+import { useGetDraftSubmissions } from '@/features/panel/author/hooks/query/useGetDraftSubmissions';
+import DocumentUploadModal from '@/features/panel/author/components/submission/DocumentUploadModal';
+import DocumentViewModal from '@/features/panel/author/components/submission/DocumentViewModal';
+import { useSubmitForReview } from '@/features/panel/author/hooks/mutation/useSubmitForReview';
+import { useDeleteSubmission } from '@/features/panel/author/hooks/mutation/useDeleteSubmission';
+import { ConfirmationPopup, Pagination } from '@/features/shared';
 
 export default function DraftsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
+  const pageParam = searchParams.get('page');
   const currentPage = pageParam ? parseInt(pageParam) : 1;
 
   const params = {
@@ -42,7 +38,7 @@ export default function DraftsPage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -95,9 +91,7 @@ export default function DraftsPage() {
           onAddDocuments={handleAddDocuments}
           onViewDocuments={handleViewDocuments}
           onSubmit={handleSubmit}
-          viewUrl={(submission) =>
-            `/author/submissions/drafts/${submission.id}`
-          }
+          viewUrl={(submission) => `/author/submissions/drafts/${submission.id}`}
           onEdit={handleEdit}
           onDelete={handleDelete}
         />

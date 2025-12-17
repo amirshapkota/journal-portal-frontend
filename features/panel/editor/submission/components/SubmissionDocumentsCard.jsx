@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FileText, Eye, Download } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, Eye, Download } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 /**
  * Component to display submission documents
@@ -23,9 +17,7 @@ export function SubmissionDocuments({ submission, submissionId }) {
         <div className="flex items-center justify-between">
           <div>
             <CardTitle>Documents</CardTitle>
-            <CardDescription>
-              Submitted manuscript files and supporting documents
-            </CardDescription>
+            <CardDescription>Submitted manuscript files and supporting documents</CardDescription>
           </div>
         </div>
       </CardHeader>
@@ -55,9 +47,7 @@ export function SubmissionDocuments({ submission, submissionId }) {
                       {doc.file_size && (
                         <>
                           <span>•</span>
-                          <span>
-                            {(doc.file_size / 1024 / 1024).toFixed(2)} MB
-                          </span>
+                          <span>{(doc.file_size / 1024 / 1024).toFixed(2)} MB</span>
                         </>
                       )}
                     </div>
@@ -69,9 +59,7 @@ export function SubmissionDocuments({ submission, submissionId }) {
                       variant="ghost"
                       size="sm"
                       onClick={() =>
-                        router.push(
-                          `/editor/submissions/${submissionId}/documents/${doc.id}`
-                        )
+                        router.push(`/editor/submissions/${submissionId}/documents/${doc.id}`)
                       }
                     >
                       <Eye className="h-4 w-4 mr-2" />
@@ -82,7 +70,7 @@ export function SubmissionDocuments({ submission, submissionId }) {
                     <Button
                       variant="ghost"
                       size="sm"
-                      onClick={() => window.open(doc.original_file, "_blank")}
+                      onClick={() => window.open(doc.original_file, '_blank')}
                     >
                       <Download className="h-4 w-4 mr-2" />
                       Download

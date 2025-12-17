@@ -1,7 +1,7 @@
-import React from "react";
-import StatsCard from "@/features/shared/components/StatsCard";
-import { FileText, Clock, CheckCircle, XCircle } from "lucide-react";
-import { StatsErrorCard } from "@/features/shared";
+import React from 'react';
+import StatsCard from '@/features/shared/components/StatsCard';
+import { FileText, Clock, CheckCircle, XCircle } from 'lucide-react';
+import { StatsErrorCard } from '@/features/shared';
 
 /**
  * @param {Object} props
@@ -17,34 +17,34 @@ export default function AuthorDashboardStats({
   const cards = [
     {
       icon: FileText,
-      title: "Draft Submissions",
+      title: 'Draft Submissions',
       value: counts?.draft,
-      iconClass: "text-gray-500",
+      iconClass: 'text-gray-500',
     },
     {
       icon: Clock,
-      title: "Under Review",
+      title: 'Under Review',
       value: counts?.underReview ?? counts?.under_review,
-      iconClass: "text-blue-500",
+      iconClass: 'text-blue-500',
     },
     {
       icon: CheckCircle,
-      title: "Accepted",
+      title: 'Accepted',
       value: counts?.accepted,
-      iconClass: "text-green-500",
+      iconClass: 'text-green-500',
     },
     {
       icon: XCircle,
-      title: "Rejected",
+      title: 'Rejected',
       value: counts?.rejected,
-      iconClass: "text-red-500",
+      iconClass: 'text-red-500',
     },
 
     {
       icon: Clock,
-      title: "Pending",
+      title: 'Pending',
       value: counts?.pending,
-      iconClass: "text-yellow-500",
+      iconClass: 'text-yellow-500',
     },
   ];
 
@@ -52,10 +52,10 @@ export default function AuthorDashboardStats({
     return (
       <StatsErrorCard
         title="Failed to load author stats"
-        message={error?.message || "Unknown error"}
+        message={error?.message || 'Unknown error'}
       />
     );
-  } 
+  }
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6 ">

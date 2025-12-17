@@ -1,16 +1,11 @@
-"use client";
+'use client';
 
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Info } from "lucide-react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Info } from 'lucide-react';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 
 export function ProfileCompletionCard({ completionPercentage, pending }) {
   // For animation, only animate when not pending
@@ -81,9 +76,8 @@ export function ProfileCompletionCard({ completionPercentage, pending }) {
                   </TooltipTrigger>
                   <TooltipContent side="right" className="max-w-sm">
                     <p>
-                      A complete profile increases your chances of being
-                      selected for journal submission reviews and editorial
-                      roles.
+                      A complete profile increases your chances of being selected for journal
+                      submission reviews and editorial roles.
                     </p>
                   </TooltipContent>
                 </Tooltip>
@@ -109,10 +103,9 @@ export function ProfileCompletionCard({ completionPercentage, pending }) {
                 Complete your profile to unlock your role!
               </h3>
               <p className="text-xs text-amber-700 dark:text-amber-100/60 leading-relaxed">
-                Request roles like Author, Reviewer, or Editor through the
-                Verification Page. Admins will review your profile and requested
-                role, and once your profile meets the required criteria,
-                you&apos;ll gain full access to journal submissions, peer
+                Request roles like Author, Reviewer, or Editor through the Verification Page. Admins
+                will review your profile and requested role, and once your profile meets the
+                required criteria, you&apos;ll gain full access to journal submissions, peer
                 reviews, and editorial opportunities.
               </p>
             </div>

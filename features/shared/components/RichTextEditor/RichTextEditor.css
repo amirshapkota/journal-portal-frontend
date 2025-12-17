@@ -103,8 +103,7 @@
   background-color: var(--muted);
   padding: 0.125rem 0.25rem;
   border-radius: 0.25rem;
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
-    monospace;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, monospace;
   font-size: 0.875rem;
 }
 
@@ -194,10 +193,7 @@
   list-style-type: circle;
 }
 
-.editor-nested-listitem
-  > .editor-list-ul
-  .editor-nested-listitem
-  > .editor-list-ul {
+.editor-nested-listitem > .editor-list-ul .editor-nested-listitem > .editor-list-ul {
   list-style-type: square;
 }
 
@@ -205,10 +201,7 @@
   list-style-type: lower-alpha;
 }
 
-.editor-nested-listitem
-  > .editor-list-ol
-  .editor-nested-listitem
-  > .editor-list-ol {
+.editor-nested-listitem > .editor-list-ol .editor-nested-listitem > .editor-list-ol {
   list-style-type: lower-roman;
 }
 
@@ -224,8 +217,7 @@
 /* Code Block */
 .editor-code {
   background-color: var(--muted);
-  font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas,
-    monospace;
+  font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Monaco, Consolas, monospace;
   display: block;
   padding: 1rem;
   line-height: 1.5;
@@ -318,7 +310,9 @@
   width: 100%;
   opacity: 0;
   background-color: var(--background);
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  box-shadow:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
   border-radius: 0.5rem;
   border: 1px solid var(--border);
   transition: opacity 0.5s;

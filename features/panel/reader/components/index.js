@@ -1,3 +1,3 @@
-export * from "./dashboard";
-export * from "./verification";
-export * from "../../profile/components";
+export * from './dashboard';
+export * from './verification';
+export * from '../../profile/components';

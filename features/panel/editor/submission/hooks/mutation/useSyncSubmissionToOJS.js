@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { syncSubmissionToOJS } from "../../api";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { syncSubmissionToOJS } from '../../api';
+import { toast } from 'sonner';
 
 /**
  * Hook to sync a single submission to OJS
@@ -12,14 +12,14 @@ export const useSyncSubmissionToOJS = () => {
   return useMutation({
     mutationFn: (submissionId) => syncSubmissionToOJS(submissionId),
     onSuccess: (data, submissionId) => {
-      toast.success(data.message || "Submission synced to OJS successfully");
+      toast.success(data.message || 'Submission synced to OJS successfully');
 
       // Invalidate relevant queries to refresh data
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission", submissionId],
+        queryKey: ['editor-submission', submissionId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["journal-submissions"],
+        queryKey: ['journal-submissions'],
       });
     },
     onError: (error) => {
@@ -27,7 +27,7 @@ export const useSyncSubmissionToOJS = () => {
         error?.response?.data?.detail ||
         error?.response?.data?.message ||
         error?.message ||
-        "Failed to sync submission to OJS.";
+        'Failed to sync submission to OJS.';
       toast.error(message);
     },
   });

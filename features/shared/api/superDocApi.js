@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Save SuperDoc document with multiple format exports
@@ -13,17 +13,13 @@ import { instance } from "@/lib/instance";
 export const saveSuperdocDocument = async (documentId, payload) => {
   try {
     const formData = new FormData();
-    formData.append("file", payload.blob, payload.fileName);
+    formData.append('file', payload.blob, payload.fileName);
 
-    const response = await instance.post(
-      `submissions/documents/${documentId}/save/`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
+    const response = await instance.post(`submissions/documents/${documentId}/save/`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
 
     return response.data;
   } catch (error) {

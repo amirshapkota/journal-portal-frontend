@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { uploadDocument } from "../../api/submissionsApi";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { uploadDocument } from '../../api/submissionsApi';
+import { toast } from 'sonner';
 
 export const useUploadDocument = () => {
   const queryClient = useQueryClient();
@@ -8,14 +8,14 @@ export const useUploadDocument = () => {
   return useMutation({
     mutationFn: (params) => uploadDocument(params.id, params.data),
     onSuccess: (data) => {
-      toast.success("Documents uploaded successfully!");
-      queryClient.invalidateQueries({ queryKey: ["submission"] });
+      toast.success('Documents uploaded successfully!');
+      queryClient.invalidateQueries({ queryKey: ['submission'] });
     },
     onError: (error) => {
       const errorMessage =
         error?.response?.data?.message ||
         error?.response?.data?.detail ||
-        "Failed to upload documents";
+        'Failed to upload documents';
       toast.error(errorMessage);
     },
   });

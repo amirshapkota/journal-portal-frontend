@@ -1,33 +1,33 @@
-"use client";
+'use client';
 
-import { PieChart } from "@/features/shared";
+import { PieChart } from '@/features/shared';
 
 const COLORS = {
-  journals: "var(--chart-1)",
-  submissions_managed: "var(--chart-5)",
-  decisions_made: "var(--chart-3)",
-  pending: "var(--chart-4)",
+  journals: 'var(--chart-1)',
+  submissions_managed: 'var(--chart-5)',
+  decisions_made: 'var(--chart-3)',
+  pending: 'var(--chart-4)',
 };
 
 export default function EditorSubmissionsChart({ data, isLoading, isError }) {
   const chartData = [
     {
-      name: "Journals",
+      name: 'Journals',
       value: data?.journals || 0,
       color: COLORS.journals,
     },
     {
-      name: "Submissions Managed",
+      name: 'Submissions Managed',
       value: data?.submissions_managed || 0,
       color: COLORS.submissions_managed,
     },
     {
-      name: "Decisions Made",
+      name: 'Decisions Made',
       value: data?.decisions_made || 0,
       color: COLORS.decisions_made,
     },
     {
-      name: "Pending",
+      name: 'Pending',
       value: data?.pending_submissions || 0,
       color: COLORS.pending,
     },

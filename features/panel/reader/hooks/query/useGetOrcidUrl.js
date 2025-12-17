@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getOrcidUrl } from "../../api/OrcidApiSlice";
+import { useQuery } from '@tanstack/react-query';
+import { getOrcidUrl } from '../../api/OrcidApiSlice';
 
 export const useGetOrcidUrl = (options = {}) => {
   return useQuery({
-    queryKey: ["orcid-url"],
+    queryKey: ['orcid-url'],
     queryFn: () => getOrcidUrl(),
     staleTime: 0, // Always fresh - URL can change (contains state/nonce)
     gcTime: 0, // Don't cache - generate new URL each time

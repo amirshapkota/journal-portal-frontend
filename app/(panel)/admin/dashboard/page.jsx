@@ -1,17 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useDashboardAnalytics } from "@/features/panel/admin/dashboard/hooks/useDashboardAnalytics";
-import { Button } from "@/components/ui/button";
-import {
-  Users,
-  BookOpen,
-  FileText,
-  Clock,
-  CheckCircle,
-  XCircle,
-  TrendingUp,
-} from "lucide-react";
+import { useState } from 'react';
+import { useDashboardAnalytics } from '@/features/panel/admin/dashboard/hooks/useDashboardAnalytics';
+import { Button } from '@/components/ui/button';
+import { Users, BookOpen, FileText, Clock, CheckCircle, XCircle, TrendingUp } from 'lucide-react';
 import {
   ErrorCard,
   LoadingScreen,
@@ -21,16 +13,16 @@ import {
   StatsCard,
   StatsErrorCard,
   SystemHealth,
-} from "@/features";
+} from '@/features';
 import {
   SubmissionStatusChart,
   ReviewStatusChart,
   UserDistributionChart,
   JournalDistributionChart,
-} from "@/features/panel/admin/dashboard/components";
+} from '@/features/panel/admin/dashboard/components';
 
 export default function AdminDashboard() {
-  const [dateRange, setDateRange] = useState("30d");
+  const [dateRange, setDateRange] = useState('30d');
 
   // Fetch analytics data from API
   const {
@@ -81,64 +73,63 @@ export default function AdminDashboard() {
   const statistics = analyticsData
     ? [
         {
-          title: "Total Submissions",
-          value: analyticsData.overview.total_submissions?.toString() ?? "-",
+          title: 'Total Submissions',
+          value: analyticsData.overview.total_submissions?.toString() ?? '-',
           icon: FileText,
-          valueClass: "text-chart-1",
-          iconClass: "text-chart-1",
+          valueClass: 'text-chart-1',
+          iconClass: 'text-chart-1',
         },
         {
-          title: "Pending Submissions",
-          value: analyticsData.overview.pending_submissions?.toString() ?? "-",
+          title: 'Pending Submissions',
+          value: analyticsData.overview.pending_submissions?.toString() ?? '-',
           icon: Clock,
-          valueClass: "text-chart-2",
-          iconClass: "text-chart-2",
+          valueClass: 'text-chart-2',
+          iconClass: 'text-chart-2',
         },
         {
-          title: "Total Reviews",
-          value: analyticsData.overview.total_reviews?.toString() ?? "-",
+          title: 'Total Reviews',
+          value: analyticsData.overview.total_reviews?.toString() ?? '-',
           icon: CheckCircle,
-          valueClass: "text-chart-3",
-          iconClass: "text-chart-3",
+          valueClass: 'text-chart-3',
+          iconClass: 'text-chart-3',
         },
         {
-          title: "Pending Reviews",
-          value: analyticsData.overview.pending_reviews?.toString() ?? "-",
+          title: 'Pending Reviews',
+          value: analyticsData.overview.pending_reviews?.toString() ?? '-',
           icon: XCircle,
-          valueClass: "text-chart-4",
-          iconClass: "text-chart-4",
+          valueClass: 'text-chart-4',
+          iconClass: 'text-chart-4',
         },
         {
-          title: "Acceptance Rate",
+          title: 'Acceptance Rate',
           value:
             analyticsData.overview.acceptance_rate != null
               ? `${analyticsData.overview.acceptance_rate}%`
-              : "-",
+              : '-',
           icon: TrendingUp,
-          valueClass: "text-chart-5",
-          iconClass: "text-chart-5",
+          valueClass: 'text-chart-5',
+          iconClass: 'text-chart-5',
         },
         {
-          title: "Total Users",
-          value: analyticsData.users.total?.toString() ?? "-",
+          title: 'Total Users',
+          value: analyticsData.users.total?.toString() ?? '-',
           icon: Users,
-          valueClass: "text-foreground",
-          iconClass: "text-foreground",
+          valueClass: 'text-foreground',
+          iconClass: 'text-foreground',
         },
         {
-          title: "Total Journals",
-          value: analyticsData.journals.total?.toString() ?? "-",
+          title: 'Total Journals',
+          value: analyticsData.journals.total?.toString() ?? '-',
           icon: BookOpen,
-          valueClass: "text-chart-3",
-          iconClass: "text-chart-3",
+          valueClass: 'text-chart-3',
+          iconClass: 'text-chart-3',
         },
         {
-          title: "Submissions (30d)",
-          value:
-            analyticsData.overview.submissions_last_30_days?.toString() ?? "-",
+          title: 'Submissions (30d)',
+          value: analyticsData.overview.submissions_last_30_days?.toString() ?? '-',
           icon: FileText,
-          valueClass: "text-secondary",
-          iconClass: "text-secondary",
+          valueClass: 'text-secondary',
+          iconClass: 'text-secondary',
         },
       ]
     : [];
@@ -160,9 +151,7 @@ export default function AdminDashboard() {
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-4">
         <div className="space-y-2">
-          <h1 className="text-3xl font-semibold text-foreground">
-            Admin Dashboard
-          </h1>
+          <h1 className="text-3xl font-semibold text-foreground">Admin Dashboard</h1>
         </div>
         <SystemHealth />
       </div>
@@ -171,12 +160,7 @@ export default function AdminDashboard() {
       {isPending ? (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {Array.from({ length: 8 }).map((_, i) => (
-            <StatsCard
-              key={`skeleton-${i}`}
-              title="Loading..."
-              value="-"
-              isLoading={isPending}
-            />
+            <StatsCard key={`skeleton-${i}`} title="Loading..." value="-" isLoading={isPending} />
           ))}
         </div>
       ) : (
@@ -196,32 +180,18 @@ export default function AdminDashboard() {
 
       {/* Analytics Charts Section */}
       <div className="space-y-5">
-        <h2 className="text-xl font-semibold text-foreground">
-          Analytics Overview
-        </h2>
+        <h2 className="text-xl font-semibold text-foreground">Analytics Overview</h2>
 
         {/* Submission and Review Status Charts */}
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <SubmissionStatusChart
-            data={analyticsData?.submissions || {}}
-            isPending={isPending}
-          />
-          <ReviewStatusChart
-            data={analyticsData?.reviews || {}}
-            isPending={isPending}
-          />
+          <SubmissionStatusChart data={analyticsData?.submissions || {}} isPending={isPending} />
+          <ReviewStatusChart data={analyticsData?.reviews || {}} isPending={isPending} />
         </div>
 
         {/* User and Journal Distribution Charts */}
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-          <UserDistributionChart
-            data={analyticsData?.users || {}}
-            isPending={isPending}
-          />
-          <JournalDistributionChart
-            data={analyticsData?.journals || {}}
-            isPending={isPending}
-          />
+          <UserDistributionChart data={analyticsData?.users || {}} isPending={isPending} />
+          <JournalDistributionChart data={analyticsData?.journals || {}} isPending={isPending} />
         </div>
       </div>
 

@@ -203,7 +203,7 @@ All hooks should follow this pattern:
 ```javascript
 export const useGetResource = ({ params = {} } = {}, options = {}) => {
   return useQuery({
-    queryKey: ["resource-key", params],
+    queryKey: ['resource-key', params],
     queryFn: () => getResource(params),
     staleTime: 1000 * 60 * 5,
     ...options,
@@ -217,7 +217,7 @@ All API functions should follow this pattern:
 
 ```javascript
 export const getResource = async (params = {}) => {
-  const response = await instance.get("/endpoint/", { params });
+  const response = await instance.get('/endpoint/', { params });
   return response.data;
 };
 ```
@@ -226,14 +226,14 @@ export const getResource = async (params = {}) => {
 
 ```javascript
 const searchParams = useSearchParams();
-const pageParam = searchParams.get("page");
-const searchParam = searchParams.get("search");
-const statusParam = searchParams.get("status");
+const pageParam = searchParams.get('page');
+const searchParam = searchParams.get('search');
+const statusParam = searchParams.get('status');
 
 const params = {
   page: pageParam ? parseInt(pageParam) : 1,
-  search: searchParam || "",
-  status: statusParam || "",
+  search: searchParam || '',
+  status: statusParam || '',
   // ... other filters
 };
 

@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Get pending verification requests
@@ -6,7 +6,7 @@ import { instance } from "@/lib/instance";
  */
 export const getPendingVerificationRequests = async () => {
   try {
-    const response = await instance.get("admin/verifications/pending_review/");
+    const response = await instance.get('admin/verifications/pending_review/');
     return response.data;
   } catch (error) {
     throw error;

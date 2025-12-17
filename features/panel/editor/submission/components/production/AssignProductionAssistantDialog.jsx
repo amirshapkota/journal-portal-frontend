@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { UserPlus, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { UserPlus, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -10,12 +10,12 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { useCreateProductionAssignment } from "../../hooks";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+} from '@/components/ui/dialog';
+import { toast } from 'sonner';
+import { useCreateProductionAssignment } from '../../hooks';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import {
   Form,
   FormControl,
@@ -24,38 +24,34 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { SearchableSelect } from "@/features/shared";
-import { useGetUsers } from "@/features/panel/admin";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
+import { SearchableSelect } from '@/features/shared';
+import { useGetUsers } from '@/features/panel/admin';
 
 const schema = z.object({
-  assigned_to: z.string().min(1, "Please select a user"),
-  role: z.string().min(1, "Please select a role"),
-  due_date: z.string().min(1, "Please select a due date"),
+  assigned_to: z.string().min(1, 'Please select a user'),
+  role: z.string().min(1, 'Please select a role'),
+  due_date: z.string().min(1, 'Please select a due date'),
   instructions: z.string().optional(),
 });
-export function AssignProductionAssistantDialog({
-  isOpen,
-  onClose,
-  submissionId,
-}) {
+export function AssignProductionAssistantDialog({ isOpen, onClose, submissionId }) {
   // Form schema
   const form = useForm({
     resolver: zodResolver(schema),
     defaultValues: {
-      assigned_to: "",
-      role: "PRODUCTION_ASSISTANT",
-      due_date: "",
-      instructions: "",
+      assigned_to: '',
+      role: 'PRODUCTION_ASSISTANT',
+      due_date: '',
+      instructions: '',
     },
   });
 
@@ -65,7 +61,7 @@ export function AssignProductionAssistantDialog({
     isPending: loadingUsers,
     error: usersError,
   } = useGetUsers(
-    { userRole: "EDITOR" }, // Adjust as needed for your backend
+    { userRole: 'EDITOR' }, // Adjust as needed for your backend
     { enabled: isOpen }
   );
 
@@ -73,9 +69,7 @@ export function AssignProductionAssistantDialog({
   const userOptions =
     usersData?.results?.map((user) => ({
       value: user.profile.id.toString(),
-      label: `${user.profile.display_name || user.profile.user_name || ""} (${
-        user.email
-      })`,
+      label: `${user.profile.display_name || user.profile.user_name || ''} (${user.email})`,
     })) || [];
 
   const createMutation = useCreateProductionAssignment();
@@ -107,8 +101,7 @@ export function AssignProductionAssistantDialog({
         <DialogHeader>
           <DialogTitle>Assign Production Assistant</DialogTitle>
           <DialogDescription>
-            Select a user to assign as a production assistant or layout editor
-            for this submission.
+            Select a user to assign as a production assistant or layout editor for this submission.
           </DialogDescription>
         </DialogHeader>
 
@@ -123,29 +116,18 @@ export function AssignProductionAssistantDialog({
                   <FormItem>
                     <FormLabel>Role</FormLabel>
                     <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
+                      <Select value={field.value} onValueChange={field.onChange}>
                         <SelectTrigger id="role">
                           <SelectValue placeholder="Select a role" />
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="PRODUCTION_ASSISTANT">
-                            Production Assistant
-                          </SelectItem>
-                          <SelectItem value="LAYOUT_EDITOR">
-                            Layout Editor
-                          </SelectItem>
-                          <SelectItem value="PROOFREADER">
-                            Proofreader
-                          </SelectItem>
+                          <SelectItem value="PRODUCTION_ASSISTANT">Production Assistant</SelectItem>
+                          <SelectItem value="LAYOUT_EDITOR">Layout Editor</SelectItem>
+                          <SelectItem value="PROOFREADER">Proofreader</SelectItem>
                         </SelectContent>
                       </Select>
                     </FormControl>
-                    <FormDescription>
-                      Select the role for this assignment
-                    </FormDescription>
+                    <FormDescription>Select the role for this assignment</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -163,15 +145,13 @@ export function AssignProductionAssistantDialog({
                         options={userOptions}
                         value={field.value}
                         onChange={field.onChange}
-                        placeholder={
-                          loadingUsers ? "Loading users..." : "Select a user"
-                        }
+                        placeholder={loadingUsers ? 'Loading users...' : 'Select a user'}
                         emptyText={
                           usersError
-                            ? "Error loading users"
+                            ? 'Error loading users'
                             : userOptions.length === 0
-                            ? "No users found"
-                            : "No user found."
+                              ? 'No users found'
+                              : 'No user found.'
                         }
                         searchPlaceholder="Search by name or email..."
                         disabled={loadingUsers || createMutation.isPending}
@@ -199,9 +179,7 @@ export function AssignProductionAssistantDialog({
                         disabled={createMutation.isPending}
                       />
                     </FormControl>
-                    <FormDescription>
-                      Set a deadline for this assignment
-                    </FormDescription>
+                    <FormDescription>Set a deadline for this assignment</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}
@@ -223,9 +201,7 @@ export function AssignProductionAssistantDialog({
                         disabled={createMutation.isPending}
                       />
                     </FormControl>
-                    <FormDescription>
-                      Any specific guidelines or notes
-                    </FormDescription>
+                    <FormDescription>Any specific guidelines or notes</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

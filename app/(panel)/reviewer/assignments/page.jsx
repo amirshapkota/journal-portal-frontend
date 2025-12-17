@@ -1,30 +1,13 @@
-"use client";
+'use client';
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import {
-  FileText,
-  CheckCircle2,
-  XCircle,
-  Clock,
-  ArrowRight,
-  AlertCircle,
-} from "lucide-react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  ErrorCard,
-  useGetMyAnalytics,
-  useGetReviewAssignments,
-} from "@/features";
-import { Skeleton } from "@/components/ui/skeleton";
-import { Button } from "@/components/ui/button";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+import { useRouter } from 'next/navigation';
+import Link from 'next/link';
+import { FileText, CheckCircle2, XCircle, Clock, ArrowRight, AlertCircle } from 'lucide-react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorCard, useGetMyAnalytics, useGetReviewAssignments } from '@/features';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Button } from '@/components/ui/button';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
 
 export default function ReviewerAssignmentsPage() {
   const router = useRouter();
@@ -42,12 +25,7 @@ export default function ReviewerAssignmentsPage() {
 
   const recentAssignments = assignments.slice(0, 10); // Show up to 10
 
-  const {
-    data: analytics,
-    isPending,
-    error: analyticsError,
-    refetch,
-  } = useGetMyAnalytics();
+  const { data: analytics, isPending, error: analyticsError, refetch } = useGetMyAnalytics();
   const reviewerStats = analytics?.reviewer_stats || {};
 
   if (isAssignmentDataPending) {
@@ -66,8 +44,7 @@ export default function ReviewerAssignmentsPage() {
         <ErrorCard
           title="Failed to Load Review Assignments"
           description={
-            error?.message ||
-            "Unable to load your review assignments. Please try again."
+            error?.message || 'Unable to load your review assignments. Please try again.'
           }
           onRetry={refetch}
         />
@@ -80,9 +57,9 @@ export default function ReviewerAssignmentsPage() {
       {/* Recent Assignments */}
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        {" "}
+        {' '}
         <Card className="hover:shadow-md transition-shadow flex justify-between gap-4 flex-col md:flex-row">
-          <CardHeader className={"flex-1 gap-0"}>
+          <CardHeader className={'flex-1 gap-0'}>
             <div className="flex items-center gap-3">
               <div className="p-2 bg-amber-100 dark:bg-amber-900 rounded-lg">
                 <Clock className="h-6 w-6 text-amber-600 dark:text-amber-400" />
@@ -91,8 +68,7 @@ export default function ReviewerAssignmentsPage() {
                 <CardTitle>Pending Invitations</CardTitle>
                 <CardDescription>
                   {reviewerStats?.pending} invitation
-                  {reviewerStats?.pending !== 1 ? "s" : ""} awaiting your
-                  response
+                  {reviewerStats?.pending !== 1 ? 's' : ''} awaiting your response
                 </CardDescription>
               </div>
             </div>
@@ -107,7 +83,7 @@ export default function ReviewerAssignmentsPage() {
           </CardContent>
         </Card>
         <Card className="hover:shadow-md transition-shadow flex justify-between gap-4 flex-col md:flex-row">
-          <CardHeader className={"flex-1 gap-0"}>
+          <CardHeader className={'flex-1 gap-0'}>
             <div className="flex items-center gap-3">
               <div className="p-2 bg-green-100 dark:bg-green-900 rounded-lg">
                 <CheckCircle2 className="h-6 w-6 text-green-600 dark:text-green-400" />
@@ -116,7 +92,7 @@ export default function ReviewerAssignmentsPage() {
                 <CardTitle>Accepted Reviews</CardTitle>
                 <CardDescription>
                   {reviewerStats?.accepted} review
-                  {reviewerStats?.accepted !== 1 ? "s" : ""} in progress
+                  {reviewerStats?.accepted !== 1 ? 's' : ''} in progress
                 </CardDescription>
               </div>
             </div>
@@ -145,14 +121,14 @@ export default function ReviewerAssignmentsPage() {
                   key={assignment.id}
                   className="flex md:items-center flex-col md:flex-row lg:flex-col lg:items-start lg:gap-3 xl:flex-row xl:gap-0 justify-between p-3 sm:p-4 border rounded-lg hover:bg-muted/50 transition-colors cursor-pointer gap-3 md:gap-0"
                   onClick={() => {
-                    if (assignment.status === "PENDING") {
-                      router.push("/reviewer/assignments/pending");
-                    } else if (assignment.status === "ACCEPTED") {
+                    if (assignment.status === 'PENDING') {
+                      router.push('/reviewer/assignments/pending');
+                    } else if (assignment.status === 'ACCEPTED') {
                       router.push(`/reviewer/assignments/accepted`);
-                    } else if (assignment.status === "COMPLETED") {
-                      router.push("/reviewer/assignments/completed");
+                    } else if (assignment.status === 'COMPLETED') {
+                      router.push('/reviewer/assignments/completed');
                     } else {
-                      router.push("/reviewer/assignments/declined");
+                      router.push('/reviewer/assignments/declined');
                     }
                   }}
                 >
@@ -163,36 +139,34 @@ export default function ReviewerAssignmentsPage() {
                     <div className="flex-1 min-w-0">
                       <p className="font-medium truncate">
                         <EllipsisTooltip
-                          text={
-                            assignment.submission_title || "Untitled Submission"
-                          }
+                          text={assignment.submission_title || 'Untitled Submission'}
                         />
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        {assignment.submission_number || "N/A"}
+                        {assignment.submission_number || 'N/A'}
                       </p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    {assignment.status === "PENDING" && (
+                    {assignment.status === 'PENDING' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-800 dark:bg-amber-900 dark:text-amber-200">
                         <Clock className="h-3 w-3 mr-1" />
                         Pending
                       </span>
                     )}
-                    {assignment.status === "ACCEPTED" && (
+                    {assignment.status === 'ACCEPTED' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200">
                         <CheckCircle2 className="h-3 w-3 mr-1" />
                         Accepted
                       </span>
                     )}
-                    {assignment.status === "COMPLETED" && (
+                    {assignment.status === 'COMPLETED' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
                         <FileText className="h-3 w-3 mr-1" />
                         Completed
                       </span>
                     )}
-                    {assignment.status === "DECLINED" && (
+                    {assignment.status === 'DECLINED' && (
                       <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-200">
                         <XCircle className="h-3 w-3 mr-1" />
                         Declined
@@ -218,8 +192,7 @@ export default function ReviewerAssignmentsPage() {
             <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="font-semibold mb-2">No assignments yet</h3>
             <p className="text-sm text-muted-foreground">
-              You haven&apos;t been assigned any reviews yet. Check back later
-              for new invitations.
+              You haven&apos;t been assigned any reviews yet. Check back later for new invitations.
             </p>
           </CardContent>
         </Card>

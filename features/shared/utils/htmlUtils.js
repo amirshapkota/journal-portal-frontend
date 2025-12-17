@@ -4,8 +4,8 @@
  * @returns {string} Plain text without HTML tags
  */
 export const stripHtmlTags = (html) => {
-  if (!html) return "";
-  return html.replace(/<[^>]*>/g, "").trim();
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').trim();
 };
 
 /**

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { RegisterForm } from "@/features";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { RegisterForm } from '@/features';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 const RegisterPage = () => {
   const { resolvedTheme } = useTheme();
@@ -14,7 +14,7 @@ const RegisterPage = () => {
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center pt-2 mb-2">
-            {resolvedTheme == "dark" ? (
+            {resolvedTheme == 'dark' ? (
               <Image
                 width={200}
                 height={100}
@@ -37,9 +37,7 @@ const RegisterPage = () => {
         {/* Signup Card */}
         <Card className="border-0 gap-3 shadow-xl  backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-1">
-            <CardTitle className="text-2xl  text-center ">
-              Create Account
-            </CardTitle>
+            <CardTitle className="text-2xl  text-center ">Create Account</CardTitle>
           </CardHeader>
           <CardContent className="">
             <RegisterForm />

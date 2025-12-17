@@ -1,38 +1,24 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Separator } from "@/components/ui/separator";
-import { toast } from "sonner";
-import { Loader2, Phone, Mail, User } from "lucide-react";
-import { useUpdateJournal } from "@/features";
+import { useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Separator } from '@/components/ui/separator';
+import { toast } from 'sonner';
+import { Loader2, Phone, Mail, User } from 'lucide-react';
+import { useUpdateJournal } from '@/features';
 
 const contactSchema = z.object({
   main_contact_name: z.string().optional(),
-  main_contact_email: z
-    .string()
-    .email("Invalid email")
-    .or(z.literal(""))
-    .optional(),
+  main_contact_email: z.string().email('Invalid email').or(z.literal('')).optional(),
   main_contact_phone: z.string().optional(),
   technical_contact_name: z.string().optional(),
-  technical_contact_email: z
-    .string()
-    .email("Invalid email")
-    .or(z.literal(""))
-    .optional(),
+  technical_contact_email: z.string().email('Invalid email').or(z.literal('')).optional(),
   technical_contact_phone: z.string().optional(),
 });
 
@@ -47,12 +33,12 @@ export function ContactSettings({ journal }) {
   } = useForm({
     resolver: zodResolver(contactSchema),
     defaultValues: {
-      main_contact_name: "",
-      main_contact_email: "",
-      main_contact_phone: "",
-      technical_contact_name: "",
-      technical_contact_email: "",
-      technical_contact_phone: "",
+      main_contact_name: '',
+      main_contact_email: '',
+      main_contact_phone: '',
+      technical_contact_name: '',
+      technical_contact_email: '',
+      technical_contact_phone: '',
     },
   });
 
@@ -60,12 +46,12 @@ export function ContactSettings({ journal }) {
   useEffect(() => {
     if (journal) {
       reset({
-        main_contact_name: journal.main_contact_name || "",
-        main_contact_email: journal.main_contact_email || "",
-        main_contact_phone: journal.main_contact_phone || "",
-        technical_contact_name: journal.technical_contact_name || "",
-        technical_contact_email: journal.technical_contact_email || "",
-        technical_contact_phone: journal.technical_contact_phone || "",
+        main_contact_name: journal.main_contact_name || '',
+        main_contact_email: journal.main_contact_email || '',
+        main_contact_phone: journal.main_contact_phone || '',
+        technical_contact_name: journal.technical_contact_name || '',
+        technical_contact_email: journal.technical_contact_email || '',
+        technical_contact_phone: journal.technical_contact_phone || '',
       });
     }
   }, [journal, reset]);
@@ -78,11 +64,11 @@ export function ContactSettings({ journal }) {
       },
       {
         onSuccess: () => {
-          toast.success("Contact settings updated successfully");
+          toast.success('Contact settings updated successfully');
         },
         onError: (error) => {
-          console.error("Contact update error:", error);
-          toast.error(error.message || "Failed to update contact settings");
+          console.error('Contact update error:', error);
+          toast.error(error.message || 'Failed to update contact settings');
         },
       }
     );
@@ -92,9 +78,7 @@ export function ContactSettings({ journal }) {
     <Card>
       <CardHeader>
         <CardTitle>Contact Information</CardTitle>
-        <CardDescription>
-          Manage main and technical contact details for the journal
-        </CardDescription>
+        <CardDescription>Manage main and technical contact details for the journal</CardDescription>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
@@ -116,12 +100,10 @@ export function ContactSettings({ journal }) {
                 <Input
                   id="main_contact_name"
                   placeholder="Dr. John Doe"
-                  {...register("main_contact_name")}
+                  {...register('main_contact_name')}
                 />
                 {errors.main_contact_name && (
-                  <p className="text-sm text-destructive">
-                    {errors.main_contact_name.message}
-                  </p>
+                  <p className="text-sm text-destructive">{errors.main_contact_name.message}</p>
                 )}
               </div>
 
@@ -131,12 +113,10 @@ export function ContactSettings({ journal }) {
                   id="main_contact_email"
                   type="email"
                   placeholder="contact@journal.com"
-                  {...register("main_contact_email")}
+                  {...register('main_contact_email')}
                 />
                 {errors.main_contact_email && (
-                  <p className="text-sm text-destructive">
-                    {errors.main_contact_email.message}
-                  </p>
+                  <p className="text-sm text-destructive">{errors.main_contact_email.message}</p>
                 )}
               </div>
 
@@ -146,12 +126,10 @@ export function ContactSettings({ journal }) {
                   id="main_contact_phone"
                   type="tel"
                   placeholder="+1 (555) 123-4567"
-                  {...register("main_contact_phone")}
+                  {...register('main_contact_phone')}
                 />
                 {errors.main_contact_phone && (
-                  <p className="text-sm text-destructive">
-                    {errors.main_contact_phone.message}
-                  </p>
+                  <p className="text-sm text-destructive">{errors.main_contact_phone.message}</p>
                 )}
               </div>
             </div>
@@ -173,7 +151,7 @@ export function ContactSettings({ journal }) {
                 <Input
                   id="technical_contact_name"
                   placeholder="Jane Smith"
-                  {...register("technical_contact_name")}
+                  {...register('technical_contact_name')}
                 />
                 {errors.technical_contact_name && (
                   <p className="text-sm text-destructive">
@@ -188,7 +166,7 @@ export function ContactSettings({ journal }) {
                   id="technical_contact_email"
                   type="email"
                   placeholder="tech@journal.com"
-                  {...register("technical_contact_email")}
+                  {...register('technical_contact_email')}
                 />
                 {errors.technical_contact_email && (
                   <p className="text-sm text-destructive">
@@ -203,7 +181,7 @@ export function ContactSettings({ journal }) {
                   id="technical_contact_phone"
                   type="tel"
                   placeholder="+1 (555) 987-6543"
-                  {...register("technical_contact_phone")}
+                  {...register('technical_contact_phone')}
                 />
                 {errors.technical_contact_phone && (
                   <p className="text-sm text-destructive">
@@ -226,13 +204,8 @@ export function ContactSettings({ journal }) {
             >
               Reset
             </Button>
-            <Button
-              type="submit"
-              disabled={!isDirty || updateJournalMutation.isPending}
-            >
-              {updateJournalMutation.isPending && (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              )}
+            <Button type="submit" disabled={!isDirty || updateJournalMutation.isPending}>
+              {updateJournalMutation.isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
               Save Contact Settings
             </Button>
           </div>

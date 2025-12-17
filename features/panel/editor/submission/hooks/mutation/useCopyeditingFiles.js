@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   uploadCopyeditingFile,
   updateCopyeditingFile,
   approveCopyeditingFile,
   deleteCopyeditingFile,
-} from "../../api";
+} from '../../api';
 
 /**
  * Hook to upload a copyediting file
@@ -16,24 +16,21 @@ export function useUploadCopyeditingFile() {
   return useMutation({
     mutationFn: (formData) => uploadCopyeditingFile(formData),
     onSuccess: (data) => {
-      toast.success("File uploaded successfully");
+      toast.success('File uploaded successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files", data.submission],
+        queryKey: ['copyediting-files', data.submission],
       });
       if (data.assignment) {
         queryClient.invalidateQueries({
-          queryKey: ["copyediting-assignment", data.assignment],
+          queryKey: ['copyediting-assignment', data.assignment],
         });
       }
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to upload file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to upload file';
       toast.error(message);
     },
   });
@@ -48,19 +45,16 @@ export function useUpdateCopyeditingFile() {
   return useMutation({
     mutationFn: ({ fileId, data }) => updateCopyeditingFile(fileId, data),
     onSuccess: (data) => {
-      toast.success("File updated successfully");
+      toast.success('File updated successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-file", data.id],
+        queryKey: ['copyediting-file', data.id],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to update file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to update file';
       toast.error(message);
     },
   });
@@ -75,16 +69,13 @@ export function useApproveCopyeditingFile() {
   return useMutation({
     mutationFn: (fileId) => approveCopyeditingFile(fileId),
     onSuccess: (data) => {
-      toast.success("File approved successfully");
+      toast.success('File approved successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to approve file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to approve file';
       toast.error(message);
     },
   });
@@ -99,16 +90,13 @@ export function useDeleteCopyeditingFile() {
   return useMutation({
     mutationFn: (fileId) => deleteCopyeditingFile(fileId),
     onSuccess: () => {
-      toast.success("File deleted successfully");
+      toast.success('File deleted successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to delete file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to delete file';
       toast.error(message);
     },
   });
@@ -122,26 +110,23 @@ export function useConfirmFileFinal() {
 
   return useMutation({
     mutationFn: ({ fileId, data }) => {
-      const { confirmFileFinal } = require("../../api");
+      const { confirmFileFinal } = require('../../api');
       return confirmFileFinal(fileId, data);
     },
     onSuccess: (data) => {
-      toast.success("File confirmed as final successfully");
+      toast.success('File confirmed as final successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyedited-files"],
+        queryKey: ['copyedited-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to confirm file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to confirm file';
       toast.error(message);
     },
   });

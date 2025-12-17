@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import { CalendarIcon, Loader2, UserPlus } from "lucide-react";
-import { format } from "date-fns";
-import { Button } from "@/components/ui/button";
+import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { CalendarIcon, Loader2, UserPlus } from 'lucide-react';
+import { format } from 'date-fns';
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
@@ -15,7 +15,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Form,
   FormControl,
@@ -24,33 +24,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Calendar } from "@/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { cn } from "@/lib/utils";
-import { toast } from "sonner";
-import { useCreateCopyeditingAssignment } from "../../hooks";
-import { SearchableSelect } from "@/features/shared";
-import { useGetUsers } from "@/features/panel/admin";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Calendar } from '@/components/ui/calendar';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { cn } from '@/lib/utils';
+import { toast } from 'sonner';
+import { useCreateCopyeditingAssignment } from '../../hooks';
+import { SearchableSelect } from '@/features/shared';
+import { useGetUsers } from '@/features/panel/admin';
 
 // Form validation schema
 const copyeditingSchema = z.object({
-  copyeditor_id: z.string().min(1, "Please select a copyeditor"),
+  copyeditor_id: z.string().min(1, 'Please select a copyeditor'),
   due_date: z.date({
-    required_error: "Due date is required",
+    required_error: 'Due date is required',
   }),
   instructions: z.string().optional(),
 });
@@ -58,21 +54,16 @@ const copyeditingSchema = z.object({
 /**
  * Dialog component for creating a copyediting assignment
  */
-export function CreateCopyeditingDialog({
-  isOpen,
-  onClose,
-  submissionId,
-  submission,
-}) {
+export function CreateCopyeditingDialog({ isOpen, onClose, submissionId, submission }) {
   const router = useRouter();
   const createMutation = useCreateCopyeditingAssignment();
 
   const form = useForm({
     resolver: zodResolver(copyeditingSchema),
     defaultValues: {
-      copyeditor_id: "",
+      copyeditor_id: '',
       due_date: null,
-      instructions: "",
+      instructions: '',
     },
   });
 
@@ -82,7 +73,7 @@ export function CreateCopyeditingDialog({
     isPending: loadingUsers,
     error: usersError,
   } = useGetUsers(
-    { userRole: "EDITOR" }, // or "COPY_EDITOR" if you have this role
+    { userRole: 'EDITOR' }, // or "COPY_EDITOR" if you have this role
     {
       enabled: isOpen,
     }
@@ -92,9 +83,7 @@ export function CreateCopyeditingDialog({
   const userOptions =
     usersData?.results?.map((user) => ({
       value: user.profile.id.toString(),
-      label: `${user.profile.display_name || user.profile.user_name || ""} (${
-        user.email
-      })`,
+      label: `${user.profile.display_name || user.profile.user_name || ''} (${user.email})`,
     })) || [];
 
   const onSubmit = (data) => {
@@ -102,8 +91,8 @@ export function CreateCopyeditingDialog({
       submission: submissionId,
       copyeditor_id: data.copyeditor_id,
       due_date: data.due_date.toISOString(),
-      instructions: data.instructions || "",
-      status: "PENDING",
+      instructions: data.instructions || '',
+      status: 'PENDING',
     };
 
     createMutation.mutate(payload, {
@@ -128,7 +117,7 @@ export function CreateCopyeditingDialog({
         <DialogHeader>
           <DialogTitle>Create Copyediting Assignment</DialogTitle>
           <DialogDescription>
-            Assign a copyeditor to review and edit the manuscript for{" "}
+            Assign a copyeditor to review and edit the manuscript for{' '}
             <span className="font-medium">{submission?.title}</span>
           </DialogDescription>
         </DialogHeader>
@@ -151,25 +140,20 @@ export function CreateCopyeditingDialog({
                         options={userOptions}
                         value={field.value}
                         onChange={field.onChange}
-                        placeholder={
-                          loadingUsers
-                            ? "Loading users..."
-                            : "Select a copyeditor"
-                        }
+                        placeholder={loadingUsers ? 'Loading users...' : 'Select a copyeditor'}
                         emptyText={
                           usersError
-                            ? "Error loading users"
+                            ? 'Error loading users'
                             : userOptions.length === 0
-                            ? "No copyeditors found"
-                            : "No user found."
+                              ? 'No copyeditors found'
+                              : 'No user found.'
                         }
                         searchPlaceholder="Search by name or email..."
                         disabled={loadingUsers || createMutation.isPending}
                       />
                     </FormControl>
                     <FormDescription>
-                      Select the copyeditor who will be responsible for editing
-                      this manuscript
+                      Select the copyeditor who will be responsible for editing this manuscript
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -191,12 +175,12 @@ export function CreateCopyeditingDialog({
                           <Button
                             variant="outline"
                             className={cn(
-                              "w-full pl-3 text-left font-normal",
-                              !field.value && "text-muted-foreground"
+                              'w-full pl-3 text-left font-normal',
+                              !field.value && 'text-muted-foreground'
                             )}
                           >
                             {field.value ? (
-                              format(field.value, "PPP")
+                              format(field.value, 'PPP')
                             ) : (
                               <span>Pick a due date</span>
                             )}
@@ -214,9 +198,7 @@ export function CreateCopyeditingDialog({
                         />
                       </PopoverContent>
                     </Popover>
-                    <FormDescription>
-                      Set a deadline for the copyediting work
-                    </FormDescription>
+                    <FormDescription>Set a deadline for the copyediting work</FormDescription>
                     <FormMessage />
                   </FormItem>
                 )}

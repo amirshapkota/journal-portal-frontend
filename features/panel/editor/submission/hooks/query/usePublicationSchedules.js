@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { getPublicationSchedules, getPublicationSchedule } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { getPublicationSchedules, getPublicationSchedule } from '../../api';
 
 /**
  * Hook to fetch publication schedules list
  */
 export function usePublicationSchedules(params = {}, options = {}) {
   return useQuery({
-    queryKey: ["publication-schedules", params],
+    queryKey: ['publication-schedules', params],
     queryFn: () => getPublicationSchedules(params),
     ...options,
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -18,7 +18,7 @@ export function usePublicationSchedules(params = {}, options = {}) {
  */
 export function usePublicationSchedule(scheduleId, options = {}) {
   return useQuery({
-    queryKey: ["publication-schedule", scheduleId],
+    queryKey: ['publication-schedule', scheduleId],
     queryFn: () => getPublicationSchedule(scheduleId),
     enabled: !!scheduleId && options.enabled !== false,
     ...options,

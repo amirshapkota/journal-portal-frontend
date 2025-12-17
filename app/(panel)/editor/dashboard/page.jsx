@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   EditorDashboardStats,
@@ -6,24 +6,18 @@ import {
   LoadingScreen,
   RoleBasedRoute,
   useGetMyAnalytics,
-} from "@/features";
-import dynamic from "next/dynamic";
+} from '@/features';
+import dynamic from 'next/dynamic';
 
 const EditorJournalsDoughnutChart = dynamic(
-  () =>
-    import(
-      "@/features/panel/editor/dashboard/components/EditorJournalsDoughnutChart"
-    ),
+  () => import('@/features/panel/editor/dashboard/components/EditorJournalsDoughnutChart'),
   { ssr: false }
 );
 const EditorSubmissionsChart = dynamic(
-  () =>
-    import(
-      "@/features/panel/editor/dashboard/components/EditorSubmissionsChart"
-    ),
+  () => import('@/features/panel/editor/dashboard/components/EditorSubmissionsChart'),
   { ssr: false }
 );
-import React from "react";
+import React from 'react';
 
 export default function EditorDashboard() {
   const {
@@ -43,9 +37,7 @@ export default function EditorDashboard() {
     return (
       <ErrorCard
         title="Failed to load dashboard"
-        description={
-          analyticsError?.message || "Unable to fetch analytics data"
-        }
+        description={analyticsError?.message || 'Unable to fetch analytics data'}
         onRetry={refetchAnalytics}
       />
     );

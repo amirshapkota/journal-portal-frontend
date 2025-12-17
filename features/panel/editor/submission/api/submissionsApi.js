@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 // ==================== SUBMISSION DETAIL APIs ====================
 
@@ -30,7 +30,7 @@ export const updateSubmissionStatus = async (id, data) => {
  * @returns {Promise} API response
  */
 export const assignReviewers = async (data) => {
-  console.log("Assign Reviewers API - Data:", data);
+  console.log('Assign Reviewers API - Data:', data);
   const response = await instance.post(`reviews/assignments/`, data);
   return response.data;
 };

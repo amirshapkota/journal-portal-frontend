@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { SidebarProvider } from "@/components/ui/sidebar";
+import { SidebarProvider } from '@/components/ui/sidebar';
 import {
   RoleBasedRoute,
   sidebarConfig,
   UnifiedAppbar,
   UnifiedSidebar,
   useCurrentRole,
-} from "@/features";
-import { useSelector } from "react-redux";
+} from '@/features';
+import { useSelector } from 'react-redux';
 
 export default function PanelLayout({ children }) {
   const userData = useSelector((state) => state.auth?.userData);
@@ -16,15 +16,14 @@ export default function PanelLayout({ children }) {
 
   // Get the primary role (first role in the array)
   const userName = userData
-    ? `${userData.first_name || ""} ${userData.last_name || ""}`.trim() ||
-      "User"
-    : "User";
+    ? `${userData.first_name || ''} ${userData.last_name || ''}`.trim() || 'User'
+    : 'User';
 
   // Get menu items for the current role
   const menuItems = sidebarConfig[currentRole] || sidebarConfig.READER;
 
   // Allowed roles - user can access if they have any role
-  const allowedRoles = ["READER", "AUTHOR", "REVIEWER", "EDITOR", "ADMIN"];
+  const allowedRoles = ['READER', 'AUTHOR', 'REVIEWER', 'EDITOR', 'ADMIN'];
 
   return (
     <RoleBasedRoute allowedRoles={allowedRoles}>

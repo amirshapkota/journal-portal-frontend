@@ -9,7 +9,6 @@ The error-logs page has been updated to use real Sentry API data instead of mock
 ### New Files
 
 1. **`api/sentryApi.js`** - API service layer
-
    - `fetchProjects()` - Get all Sentry projects
    - `fetchIssues(projectSlug, options)` - Get issues for a project
    - `fetchIssueDetail(issueId)` - Get issue details
@@ -26,7 +25,6 @@ The error-logs page has been updated to use real Sentry API data instead of mock
 ### Modified Files
 
 1. **`app/(panel)/admin/error-logs/page.jsx`** - Main page component
-
    - Replaced mock data with real API calls
    - Added project selection dropdown
    - Implemented loading and error states
@@ -137,15 +135,12 @@ SENTRY_ORG_SLUG=your-organization-slug
 The page handles several error scenarios:
 
 1. **No Sentry Configuration**
-
    - Shows alert: "Please check your Sentry configuration..."
 
 2. **No Projects Found**
-
    - Shows alert: "No Sentry projects found..."
 
 3. **API Errors**
-
    - Shows error message from API
    - Suggests checking configuration
 
@@ -193,25 +188,21 @@ app/(panel)/admin/error-logs/
 ## Testing
 
 1. **Verify Configuration**
-
    - Check `.env` has Sentry credentials
    - Ensure Django server is running
    - Verify Sentry organization has projects
 
 2. **Test Page Load**
-
    - Navigate to `/admin/error-logs`
    - Should see project dropdown
    - Should see issues table with real data
 
 3. **Test Filtering**
-
    - Change status filter (unresolved/resolved/ignored)
    - Change level filter (error/warning/fatal)
    - Verify table updates
 
 4. **Test Refresh**
-
    - Click refresh button
    - Should see spinner animation
    - Data should reload

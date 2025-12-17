@@ -180,8 +180,8 @@ yarn add @superdoc/editor
 Replace the placeholder in `SuperDocEditorModal.jsx`:
 
 ```jsx
-import { SuperDocEditor } from "@superdoc/editor";
-import "@superdoc/editor/dist/styles.css";
+import { SuperDocEditor } from '@superdoc/editor';
+import '@superdoc/editor/dist/styles.css';
 
 // Inside component
 const [editor, setEditor] = useState(null);
@@ -202,7 +202,7 @@ useEffect(() => {
       yjsState: documentData.yjs_state
         ? Uint8Array.from(atob(documentData.yjs_state), (c) => c.charCodeAt(0))
         : null,
-      userName: userData?.name || "Anonymous",
+      userName: userData?.name || 'Anonymous',
       userColor: generateUserColor(userData?.id),
     },
 
@@ -250,9 +250,7 @@ const handleSave = useCallback(
     try {
       // Extract Yjs state
       const yjsState = editorRef.current.getYjsState();
-      const base64State = btoa(
-        String.fromCharCode.apply(null, new Uint8Array(yjsState))
-      );
+      const base64State = btoa(String.fromCharCode.apply(null, new Uint8Array(yjsState)));
 
       // Save to backend
       saveMutation.mutate({
@@ -261,13 +259,13 @@ const handleSave = useCallback(
       });
 
       if (!silent) {
-        toast.success("Document saved successfully");
+        toast.success('Document saved successfully');
       }
       setHasUnsavedChanges(false);
     } catch (error) {
-      console.error("Save failed:", error);
+      console.error('Save failed:', error);
       if (!silent) {
-        toast.error("Failed to save document");
+        toast.error('Failed to save document');
       }
     }
   },
@@ -280,7 +278,7 @@ const handleSave = useCallback(
 ```jsx
 const handleSubmit = async () => {
   if (hasUnsavedChanges) {
-    toast.error("Please save your changes before submitting");
+    toast.error('Please save your changes before submitting');
     return;
   }
 
@@ -294,7 +292,7 @@ const handleSubmit = async () => {
     // Submit for review
     await submitMutation.mutateAsync();
   } catch (error) {
-    toast.error("Submission failed: " + error.message);
+    toast.error('Submission failed: ' + error.message);
   }
 };
 ```

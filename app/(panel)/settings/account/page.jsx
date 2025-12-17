@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { ChangePassword } from "@/features";
+import { ChangePassword } from '@/features';
 
 export default function AccountTab() {
   return (

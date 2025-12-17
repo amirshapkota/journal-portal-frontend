@@ -1,23 +1,19 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Checkbox } from "@/components/ui/checkbox";
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Checkbox } from '@/components/ui/checkbox';
 
 export const MultiSelect = ({
   options = [],
   selected = [],
   onChange,
-  placeholder = "Select options",
+  placeholder = 'Select options',
   error,
 }) => {
   const [open, setOpen] = React.useState(false);
@@ -51,15 +47,14 @@ export const MultiSelect = ({
       <PopoverTrigger>
         <div
           className={`${
-            error &&
-            "ring-destructive/20 dark:ring-destructive/40 border-destructive"
+            error && 'ring-destructive/20 dark:ring-destructive/40 border-destructive'
           } flex gap-2 items-center flex-wrap border rounded-lg py-1 h-9 px-3 capitalize aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive`}
         >
           {displayNodes}
         </div>
       </PopoverTrigger>
       <PopoverContent align="start" className=" p-0">
-        <Command className={"w-full"}>
+        <Command className={'w-full'}>
           <CommandInput placeholder="Search..." />
           <CommandEmpty>No option found.</CommandEmpty>
           <CommandGroup className="max-h-60 overflow-y-auto">

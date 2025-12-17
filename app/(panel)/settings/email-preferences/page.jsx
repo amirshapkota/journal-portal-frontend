@@ -1,24 +1,21 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useCallback } from "react";
-import { useForm } from "react-hook-form";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Switch } from "@/components/ui/switch";
-import { Label } from "@/components/ui/label";
-import { Form, FormControl, FormField, FormItem } from "@/components/ui/form";
-import {
-  useGetEmailPreferences,
-  useUpdateEmailPreferences,
-} from "@/features/panel/settings/hooks";
-import { Loader2 } from "lucide-react";
+import { useEffect, useRef, useCallback } from 'react';
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
+import { Form, FormControl, FormField, FormItem } from '@/components/ui/form';
+import { useGetEmailPreferences, useUpdateEmailPreferences } from '@/features/panel/settings/hooks';
+import { Loader2 } from 'lucide-react';
 import {
   ErrorCard,
   LoadingScreen,
   notificationGroups,
   NotificationGroupsList,
   RoleBasedRoute,
-} from "@/features";
+} from '@/features';
 
 export default function EmailPreferencesTab() {
   const {
@@ -48,7 +45,7 @@ export default function EmailPreferencesTab() {
   }, [fetchedPreferences, reset]);
 
   const handleMasterToggle = (enabled) => {
-    setValue("email_notifications_enabled", enabled, { shouldDirty: true });
+    setValue('email_notifications_enabled', enabled, { shouldDirty: true });
 
     // Toggle all notification preferences
     notificationGroups.forEach((group) => {
@@ -64,7 +61,7 @@ export default function EmailPreferencesTab() {
         await updateMutation.mutateAsync(data);
         reset(data); // Reset form with new data to mark as pristine
       } catch (err) {
-        console.error("Failed to save preferences:", err);
+        console.error('Failed to save preferences:', err);
       }
     },
     [updateMutation, reset]
@@ -75,16 +72,11 @@ export default function EmailPreferencesTab() {
   };
 
   if (isError) {
-    return (
-      <ErrorCard
-        title="Error Loading Email Preferences"
-        onRetry={EmailPreferencesRefetch}
-      />
-    );
+    return <ErrorCard title="Error Loading Email Preferences" onRetry={EmailPreferencesRefetch} />;
   }
 
   return (
-    <RoleBasedRoute allowedRoles={["REVIEWER", "EDITOR", "AUTHOR", "READER"]}>
+    <RoleBasedRoute allowedRoles={['REVIEWER', 'EDITOR', 'AUTHOR', 'READER']}>
       <Form {...form}>
         {isEmailPreferencesPending && <LoadingScreen />}
 
@@ -116,7 +108,7 @@ export default function EmailPreferencesTab() {
                     Saving...
                   </>
                 ) : (
-                  "Save Changes"
+                  'Save Changes'
                 )}
               </Button>
             </div>
@@ -174,7 +166,7 @@ export default function EmailPreferencesTab() {
                   Saving...
                 </>
               ) : (
-                "Save Changes"
+                'Save Changes'
               )}
             </Button>
           </div>

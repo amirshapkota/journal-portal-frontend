@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import React, { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import {
   Form,
   FormControl,
@@ -12,30 +12,22 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { FormRichTextEditor } from "@/features";
-import { Loader2, Check, X, Plus } from "lucide-react";
-import { profileSchema } from "../../reader/utils/FormSchema";
-import { Badge } from "@/components/ui/badge";
-import { InstitutionSearchSelect } from "@/features";
-import { useGetRORInstitution } from "@/features/shared/hooks/useGetRORInstitution";
-import ReactCountryFlag from "react-country-flag";
-import { getPlainTextLength } from "@/features/shared/utils";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { FormRichTextEditor } from '@/features';
+import { Loader2, Check, X, Plus } from 'lucide-react';
+import { profileSchema } from '../../reader/utils/FormSchema';
+import { Badge } from '@/components/ui/badge';
+import { InstitutionSearchSelect } from '@/features';
+import { useGetRORInstitution } from '@/features/shared/hooks/useGetRORInstitution';
+import ReactCountryFlag from 'react-country-flag';
+import { getPlainTextLength } from '@/features/shared/utils';
 
-export default function ProfileForm({
-  defaultValues,
-  saveSuccess,
-  onSubmit,
-  onCancel,
-  isPending,
-}) {
+export default function ProfileForm({ defaultValues, saveSuccess, onSubmit, onCancel, isPending }) {
   const [expertiseAreas, setExpertiseAreas] = useState([]);
-  const [newExpertise, setNewExpertise] = useState("");
-  const [currentRorId, setCurrentRorId] = useState(
-    defaultValues?.affiliation_ror_id || ""
-  );
+  const [newExpertise, setNewExpertise] = useState('');
+  const [currentRorId, setCurrentRorId] = useState(defaultValues?.affiliation_ror_id || '');
 
   const form = useForm({
     resolver: zodResolver(profileSchema),
@@ -43,15 +35,14 @@ export default function ProfileForm({
   });
 
   // Fetch ROR institution data based on current ROR ID
-  const { data: rorInstitution, isPending: isRorLoading } =
-    useGetRORInstitution(currentRorId, {
-      enabled: Boolean(currentRorId),
-    });
+  const { data: rorInstitution, isPending: isRorLoading } = useGetRORInstitution(currentRorId, {
+    enabled: Boolean(currentRorId),
+  });
 
   // Pre-populate institution name from ROR data if available
   useEffect(() => {
-    if (rorInstitution && !form.getValues("affiliation_name")) {
-      form.setValue("affiliation_name", rorInstitution.name, {
+    if (rorInstitution && !form.getValues('affiliation_name')) {
+      form.setValue('affiliation_name', rorInstitution.name, {
         shouldDirty: false,
       });
     }
@@ -61,14 +52,14 @@ export default function ProfileForm({
   useEffect(() => {
     if (defaultValues?.expertise_areas) {
       const areas =
-        typeof defaultValues.expertise_areas === "string"
+        typeof defaultValues.expertise_areas === 'string'
           ? defaultValues.expertise_areas
-              .split(",")
+              .split(',')
               .map((area) => area.trim())
               .filter(Boolean)
           : Array.isArray(defaultValues.expertise_areas)
-          ? defaultValues.expertise_areas
-          : [];
+            ? defaultValues.expertise_areas
+            : [];
       setExpertiseAreas(areas);
     }
   }, [defaultValues?.expertise_areas]);
@@ -78,21 +69,19 @@ export default function ProfileForm({
     if (trimmedExpertise && !expertiseAreas.includes(trimmedExpertise)) {
       const updatedAreas = [...expertiseAreas, trimmedExpertise];
       setExpertiseAreas(updatedAreas);
-      form.setValue("expertise_areas", updatedAreas, { shouldDirty: true });
-      setNewExpertise("");
+      form.setValue('expertise_areas', updatedAreas, { shouldDirty: true });
+      setNewExpertise('');
     }
   };
 
   const handleRemoveExpertise = (indexToRemove) => {
-    const updatedAreas = expertiseAreas.filter(
-      (_, index) => index !== indexToRemove
-    );
+    const updatedAreas = expertiseAreas.filter((_, index) => index !== indexToRemove);
     setExpertiseAreas(updatedAreas);
-    form.setValue("expertise_areas", updatedAreas, { shouldDirty: true });
+    form.setValue('expertise_areas', updatedAreas, { shouldDirty: true });
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleAddExpertise();
     }
@@ -103,23 +92,18 @@ export default function ProfileForm({
     const formattedData = {
       ...data,
       expertise_areas: expertiseAreas,
-      affiliation_ror_id: form.getValues("affiliation_ror_id") || "",
-      affiliation_name: form.getValues("affiliation_name") || "",
+      affiliation_ror_id: form.getValues('affiliation_ror_id') || '',
+      affiliation_name: form.getValues('affiliation_name') || '',
     };
     onSubmit(formattedData);
   };
 
   return (
     <Form {...form}>
-      <form
-        onSubmit={form.handleSubmit(handleFormSubmit)}
-        className="space-y-6"
-      >
+      <form onSubmit={form.handleSubmit(handleFormSubmit)} className="space-y-6">
         {/* Personal Information */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-foreground">
-            Personal Information
-          </h3>
+          <h3 className="font-semibold text-foreground">Personal Information</h3>
           <div className=" grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormField
               control={form.control}
@@ -142,11 +126,7 @@ export default function ProfileForm({
                 <FormItem>
                   <FormLabel>Email Address</FormLabel>
                   <FormControl>
-                    <Input
-                      type="email"
-                      placeholder="your.email@example.com"
-                      {...field}
-                    />
+                    <Input type="email" placeholder="your.email@example.com" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -162,9 +142,7 @@ export default function ProfileForm({
                   <FormControl>
                     <Input placeholder="e.g., Dr. Sarah Chen" {...field} />
                   </FormControl>
-                  <FormDescription>
-                    How your name appears on your profile
-                  </FormDescription>
+                  <FormDescription>How your name appears on your profile</FormDescription>
                   <FormMessage />
                 </FormItem>
               )}
@@ -173,9 +151,7 @@ export default function ProfileForm({
         </div>
         {/* Academic Information */}
         <div className="space-y-4">
-          <h3 className="font-semibold text-foreground">
-            Academic Information
-          </h3>
+          <h3 className="font-semibold text-foreground">Academic Information</h3>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
             <div>
               <FormField
@@ -189,7 +165,7 @@ export default function ProfileForm({
                         value={field.value}
                         onChange={field.onChange}
                         onRorIdChange={(rorId) => {
-                          form.setValue("affiliation_ror_id", rorId, {
+                          form.setValue('affiliation_ror_id', rorId, {
                             shouldDirty: true,
                           });
                           setCurrentRorId(rorId);
@@ -198,8 +174,7 @@ export default function ProfileForm({
                       />
                     </FormControl>
                     <FormDescription>
-                      Search and select your current academic or research
-                      institution
+                      Search and select your current academic or research institution
                     </FormDescription>
                     <FormMessage />
                   </FormItem>
@@ -208,31 +183,29 @@ export default function ProfileForm({
 
               {isRorLoading && currentRorId && (
                 <p className="flex items-center gap-2 text-sm mt-2">
-                  <Loader2 className="animate-spin h-4 w-4 text-muted-foreground" />{" "}
-                  Loading institution...
+                  <Loader2 className="animate-spin h-4 w-4 text-muted-foreground" /> Loading
+                  institution...
                 </p>
               )}
               {!isRorLoading && rorInstitution && (
                 <div className="cursor-pointer py-3">
                   <div className="flex items-center gap-3 flex-1 min-w-0">
                     <ReactCountryFlag
-                      countryCode={rorInstitution.country_code || ""}
+                      countryCode={rorInstitution.country_code || ''}
                       svg
                       style={{
-                        width: "2em",
-                        height: "2em",
-                        borderRadius: "0.25em",
+                        width: '2em',
+                        height: '2em',
+                        borderRadius: '0.25em',
                       }}
                       title={rorInstitution.country}
                     />
                     <div className="flex flex-col gap-1 flex-1 min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="font-semibold text-sm">
-                          {rorInstitution.name}
-                        </span>
+                        <span className="font-semibold text-sm">{rorInstitution.name}</span>
                         {rorInstitution.acronyms?.length > 0 && (
                           <span className="text-xs text-muted-foreground">
-                            ({rorInstitution.acronyms.join(", ")})
+                            ({rorInstitution.acronyms.join(', ')})
                           </span>
                         )}
                       </div>
@@ -247,21 +220,13 @@ export default function ProfileForm({
                       </div>
                       <div className="flex gap-1 flex-wrap mt-1">
                         {rorInstitution.id && (
-                          <Badge
-                            variant="outline"
-                            className="text-xs px-2 py-0 font-mono"
-                          >
-                            ROR:{" "}
-                            {rorInstitution.id.replace("https://ror.org/", "")}
+                          <Badge variant="outline" className="text-xs px-2 py-0 font-mono">
+                            ROR: {rorInstitution.id.replace('https://ror.org/', '')}
                           </Badge>
                         )}
                         {rorInstitution.types?.length > 0 &&
                           rorInstitution.types.map((type) => (
-                            <Badge
-                              key={type}
-                              variant="secondary"
-                              className="text-xs px-2 py-0"
-                            >
+                            <Badge key={type} variant="secondary" className="text-xs px-2 py-0">
                               {type}
                             </Badge>
                           ))}
@@ -295,9 +260,7 @@ export default function ProfileForm({
                   </Button>
                 </div>
               </div>
-              <FormDescription>
-                Add your areas of expertise one at a time
-              </FormDescription>
+              <FormDescription>Add your areas of expertise one at a time</FormDescription>
               {/* Display expertise areas as badges */}
               {expertiseAreas.length > 0 && (
                 <div className="flex flex-wrap gap-2">
@@ -330,9 +293,7 @@ export default function ProfileForm({
             name="bio"
             label="Bio"
             placeholder="Tell us about yourself, your research interests, and professional background..."
-            description={`${getPlainTextLength(
-              form.watch("bio")
-            )}/500 characters`}
+            description={`${getPlainTextLength(form.watch('bio'))}/500 characters`}
           />
         </div>
         {/* Action Buttons */}
@@ -344,18 +305,9 @@ export default function ProfileForm({
           >
             {saveSuccess && <Check className="w-4 h-4 mr-2" />}
             {isPending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-            {saveSuccess
-              ? "Saved Successfully"
-              : isPending
-              ? "Saving..."
-              : "Save Changes"}
+            {saveSuccess ? 'Saved Successfully' : isPending ? 'Saving...' : 'Save Changes'}
           </Button>
-          <Button
-            type="button"
-            variant="outline"
-            onClick={onCancel}
-            disabled={isPending}
-          >
+          <Button type="button" variant="outline" onClick={onCancel} disabled={isPending}>
             Cancel
           </Button>
         </div>

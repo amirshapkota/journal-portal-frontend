@@ -98,5 +98,5 @@ npm run lint
 - Store: `store/store.js` and `lib/authPersist.js` contain Redux persist wiring and auth reducer.
 
 ---
-For more detailed feature/component-level documentation see the `docs/` folder.
 
+For more detailed feature/component-level documentation see the `docs/` folder.

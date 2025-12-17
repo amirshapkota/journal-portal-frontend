@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { FilterToolbar } from "@/features/shared";
+import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { FilterToolbar } from '@/features/shared';
 import {
   ConfirmationPopup,
   LoadingScreen,
@@ -10,28 +10,27 @@ import {
   useGetUsers,
   UserDetailsModal,
   UserTable,
-} from "@/features";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useRouter } from "next/navigation";
-import Pagination from "@/features/shared/components/Pagination";
+} from '@/features';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import Pagination from '@/features/shared/components/Pagination';
 
 export default function UserManagementPage() {
   const queryClient = useQueryClient();
   const router = useRouter();
 
   const searchParams = useSearchParams();
-  const statusParam = searchParams.get("account_status");
-  const verificationParam = searchParams.get("verification_status");
-  const searchParam = searchParams.get("search");
-  const pageParam = searchParams.get("page");
-  const is_active =
-    statusParam === "active" ? true : statusParam === "inactive" ? false : "";
+  const statusParam = searchParams.get('account_status');
+  const verificationParam = searchParams.get('verification_status');
+  const searchParam = searchParams.get('search');
+  const pageParam = searchParams.get('page');
+  const is_active = statusParam === 'active' ? true : statusParam === 'inactive' ? false : '';
   const currentPage = pageParam ? parseInt(pageParam) : 1;
   const params = {
     is_active: is_active,
-    search: searchParam || "",
-    profile__verification_status: verificationParam || "",
+    search: searchParam || '',
+    profile__verification_status: verificationParam || '',
     page: currentPage,
   };
 
@@ -39,42 +38,37 @@ export default function UserManagementPage() {
     data: users,
     isPending: isUsersDataPending,
     error: UserDataError,
-  } = useGetUsers({ userRole: "", params });
+  } = useGetUsers({ userRole: '', params });
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [verificationFilter, setVerificationFilter] = useState("all");
-  const [statusFilter, setStatusFilter] = useState("all");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [verificationFilter, setVerificationFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [userNameToDelete, setUserNameToDelete] = useState(null);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
-  const toggleDeleteDialog = () =>
-    setDeleteDialogOpen((prevState) => !prevState);
+  const toggleDeleteDialog = () => setDeleteDialogOpen((prevState) => !prevState);
 
   const deleteUserMutation = useDeleteUser({
     onSuccess: () => {
-      toast.success("User deleted successfully");
-      queryClient.invalidateQueries({ queryKey: ["admin-users"] });
+      toast.success('User deleted successfully');
+      queryClient.invalidateQueries({ queryKey: ['admin-users'] });
       setDeleteDialogOpen(false);
       setUserIdToDelete(null);
       setUserNameToDelete(null);
       deleteUserMutation.reset();
     },
     onError: (error) => {
-      toast.error(
-        `Error deleting user: ${error.message}` || "Failed to delete user"
-      );
+      toast.error(`Error deleting user: ${error.message}` || 'Failed to delete user');
     },
   });
 
   // Delete user handler with confirmation popup
   const handleDeleteUser = (user) => {
     setUserIdToDelete(user.id);
-    setUserNameToDelete(
-      user.profile.display_name || `${user.first_name} ${user.last_name}`
-    );
+    setUserNameToDelete(user.profile.display_name || `${user.first_name} ${user.last_name}`);
     setDeleteDialogOpen(true);
   };
 
@@ -85,7 +79,7 @@ export default function UserManagementPage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -94,9 +88,7 @@ export default function UserManagementPage() {
       {/* Header */}
       {isUsersDataPending && <LoadingScreen />}
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold text-foreground">
-          User Management
-        </h1>
+        <h1 className="text-3xl font-semibold text-foreground">User Management</h1>
         <p className="text-muted-foreground">
           Manage all registered users, roles, and verification statuses.
         </p>
@@ -112,14 +104,14 @@ export default function UserManagementPage() {
           label="Search"
         />
         <FilterToolbar.Select
-          paramName={"verification_status"}
+          paramName={'verification_status'}
           label="Verification Status"
           value={verificationFilter}
           onChange={setVerificationFilter}
           options={[
-            { value: "all", label: "All" },
-            { value: "GENUINE", label: "Genuine" },
-            { value: "PENDING", label: "Pending" },
+            { value: 'all', label: 'All' },
+            { value: 'GENUINE', label: 'Genuine' },
+            { value: 'PENDING', label: 'Pending' },
           ]}
         />
         <FilterToolbar.Select
@@ -128,9 +120,9 @@ export default function UserManagementPage() {
           value={statusFilter}
           onChange={setStatusFilter}
           options={[
-            { value: "all", label: "All" },
-            { value: "active", label: "Active" },
-            { value: "inactive", label: "Inactive" },
+            { value: 'all', label: 'All' },
+            { value: 'active', label: 'Active' },
+            { value: 'inactive', label: 'Inactive' },
           ]}
         />
       </FilterToolbar>

@@ -1,11 +1,11 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   schedulePublication,
   updatePublicationSchedule,
   publishNow,
   cancelPublication,
-} from "../../api";
+} from '../../api';
 
 /**
  * Hook to create/schedule a publication
@@ -17,15 +17,15 @@ export function useCreatePublicationSchedule() {
   return useMutation({
     mutationFn: (data) => schedulePublication(data),
     onSuccess: (data) => {
-      toast.success("Publication scheduled successfully");
+      toast.success('Publication scheduled successfully');
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedules"],
+        queryKey: ['publication-schedules'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedules", data.submission],
+        queryKey: ['publication-schedules', data.submission],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission"],
+        queryKey: ['editor-submission'],
       });
     },
     onError: (error) => {
@@ -33,7 +33,7 @@ export function useCreatePublicationSchedule() {
         error?.response?.data?.detail ||
         error?.response?.data?.submission ||
         error?.message ||
-        "Failed to schedule publication";
+        'Failed to schedule publication';
       toast.error(message);
     },
   });
@@ -48,22 +48,20 @@ export function useSchedulePublication() {
   return useMutation({
     mutationFn: (data) => schedulePublication(data),
     onSuccess: (data) => {
-      toast.success("Publication scheduled successfully");
+      toast.success('Publication scheduled successfully');
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedules"],
+        queryKey: ['publication-schedules'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedules", data.submission],
+        queryKey: ['publication-schedules', data.submission],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission", data.submission],
+        queryKey: ['editor-submission', data.submission],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to schedule publication";
+        error?.response?.data?.detail || error?.message || 'Failed to schedule publication';
       toast.error(message);
     },
   });
@@ -76,22 +74,19 @@ export function useUpdatePublicationSchedule() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ scheduleId, data }) =>
-      updatePublicationSchedule(scheduleId, data),
+    mutationFn: ({ scheduleId, data }) => updatePublicationSchedule(scheduleId, data),
     onSuccess: (data) => {
-      toast.success("Publication schedule updated");
+      toast.success('Publication schedule updated');
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedules"],
+        queryKey: ['publication-schedules'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedule", data.id],
+        queryKey: ['publication-schedule', data.id],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to update schedule";
+        error?.response?.data?.detail || error?.message || 'Failed to update schedule';
       toast.error(message);
     },
   });
@@ -106,22 +101,20 @@ export function usePublishNow() {
   return useMutation({
     mutationFn: (scheduleId) => publishNow(scheduleId),
     onSuccess: (data) => {
-      toast.success("Article published successfully");
+      toast.success('Article published successfully');
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedules"],
+        queryKey: ['publication-schedules'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedule", data.id],
+        queryKey: ['publication-schedule', data.id],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission", data.submission],
+        queryKey: ['editor-submission', data.submission],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to publish article";
+        error?.response?.data?.detail || error?.message || 'Failed to publish article';
       toast.error(message);
     },
   });
@@ -136,22 +129,20 @@ export function useCancelPublication() {
   return useMutation({
     mutationFn: (scheduleId) => cancelPublication(scheduleId),
     onSuccess: (data) => {
-      toast.success("Publication cancelled");
+      toast.success('Publication cancelled');
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedules"],
+        queryKey: ['publication-schedules'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["publication-schedule", data.id],
+        queryKey: ['publication-schedule', data.id],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission", data.submission],
+        queryKey: ['editor-submission', data.submission],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to cancel publication";
+        error?.response?.data?.detail || error?.message || 'Failed to cancel publication';
       toast.error(message);
     },
   });

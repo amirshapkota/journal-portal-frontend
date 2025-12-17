@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useParams } from "next/navigation";
-import { useGetSubmissionById } from "@/features/panel/author/hooks";
-import EditSubmissionForm from "@/features/panel/author/components/edit-submission/EditSubmissionForm";
-import { LoadingScreen, ErrorCard } from "@/features/shared/components";
+import { useParams } from 'next/navigation';
+import { useGetSubmissionById } from '@/features/panel/author/hooks';
+import EditSubmissionForm from '@/features/panel/author/components/edit-submission/EditSubmissionForm';
+import { LoadingScreen, ErrorCard } from '@/features/shared/components';
 
 export default function EditSubmissionPage() {
   const params = useParams();
@@ -26,9 +26,7 @@ export default function EditSubmissionPage() {
       <ErrorCard
         title="Error loading submission"
         description="Unable to fetch submission details. Please try again."
-        details={
-          error?.message || (typeof error === "string" ? error : undefined)
-        }
+        details={error?.message || (typeof error === 'string' ? error : undefined)}
         onRetry={refetch}
       />
     );

@@ -1,28 +1,21 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import {
   listProductionAssignments,
   getProductionAssignment,
   getProductionAssignmentFiles,
   getProductionAssignmentDiscussions,
   getProductionAssignmentParticipants,
-} from "../../api";
+} from '../../api';
 
 /**
  * Hook to fetch production assignments list
  */
 export function useProductionAssignments(options = {}) {
-  const {
-    production_assistant,
-    submission,
-    status,
-    search,
-    ordering,
-    ...queryOptions
-  } = options;
+  const { production_assistant, submission, status, search, ordering, ...queryOptions } = options;
 
   return useQuery({
     queryKey: [
-      "production-assignments",
+      'production-assignments',
       { production_assistant, submission, status, search, ordering },
     ],
     queryFn: () =>
@@ -43,7 +36,7 @@ export function useProductionAssignments(options = {}) {
  */
 export function useProductionAssignment(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["production-assignment", assignmentId],
+    queryKey: ['production-assignment', assignmentId],
     queryFn: () => getProductionAssignment(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,
@@ -56,7 +49,7 @@ export function useProductionAssignment(assignmentId, options = {}) {
  */
 export function useProductionAssignmentFiles(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["production-assignment-files", assignmentId],
+    queryKey: ['production-assignment-files', assignmentId],
     queryFn: () => getProductionAssignmentFiles(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,
@@ -69,7 +62,7 @@ export function useProductionAssignmentFiles(assignmentId, options = {}) {
  */
 export function useProductionAssignmentDiscussions(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["production-assignment-discussions", assignmentId],
+    queryKey: ['production-assignment-discussions', assignmentId],
     queryFn: () => getProductionAssignmentDiscussions(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,
@@ -80,12 +73,9 @@ export function useProductionAssignmentDiscussions(assignmentId, options = {}) {
 /**
  * Hook to fetch participants for a production assignment
  */
-export function useProductionAssignmentParticipants(
-  assignmentId,
-  options = {}
-) {
+export function useProductionAssignmentParticipants(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["production-assignment-participants", assignmentId],
+    queryKey: ['production-assignment-participants', assignmentId],
     queryFn: () => getProductionAssignmentParticipants(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,

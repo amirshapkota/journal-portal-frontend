@@ -1,9 +1,5 @@
-import React from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import React from 'react';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 
 /**
  * EllipsisTooltip - Shows truncated text with ellipsis and a tooltip for long strings
@@ -11,12 +7,8 @@ import {
  * @param {number} [maxLength=45] - Max length before truncation
  * @param {object} [spanProps] - Additional props for the span
  */
-export default function EllipsisTooltip({
-  text,
-  maxLength = 35,
-  spanProps = {},
-}) {
-  if (typeof text !== "string" || text.length <= maxLength) {
+export default function EllipsisTooltip({ text, maxLength = 35, spanProps = {} }) {
+  if (typeof text !== 'string' || text.length <= maxLength) {
     return <span {...spanProps}>{text}</span>;
   }
   return (
@@ -25,7 +17,7 @@ export default function EllipsisTooltip({
         <span
           {...spanProps}
           className={`cursor-pointer whitespace-nowrap overflow-hidden text-ellipsis max-w-[180px] ${
-            spanProps.className || ""
+            spanProps.className || ''
           }`.trim()}
         >
           {text.slice(0, maxLength)}...

@@ -1,49 +1,37 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter } from "next/navigation";
-import { useForm, Controller, useWatch } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Form } from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Slider } from "@/components/ui/slider";
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useForm, Controller, useWatch } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Form } from '@/components/ui/form';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Slider } from '@/components/ui/slider';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Separator } from "@/components/ui/separator";
-import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
-import { useSubmitReview } from "../hooks/mutation/useSubmitReview";
-import { FormRichTextEditor } from "@/features/shared";
-import { getPlainTextLength, stripHtmlTags } from "@/features/shared/utils";
+} from '@/components/ui/select';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Separator } from '@/components/ui/separator';
+import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { useSubmitReview } from '../hooks/mutation/useSubmitReview';
+import { FormRichTextEditor } from '@/features/shared';
+import { getPlainTextLength, stripHtmlTags } from '@/features/shared/utils';
 
 // Validation schema
 const reviewSchema = z.object({
-  recommendation: z.enum(
-    ["ACCEPT", "MINOR_REVISION", "MAJOR_REVISION", "REJECT"],
-    {
-      required_error: "Please select a recommendation",
-    }
-  ),
-  confidence_level: z
-    .number()
-    .min(1)
-    .max(5, "Confidence level must be between 1 and 5"),
+  recommendation: z.enum(['ACCEPT', 'MINOR_REVISION', 'MAJOR_REVISION', 'REJECT'], {
+    required_error: 'Please select a recommendation',
+  }),
+  confidence_level: z.number().min(1).max(5, 'Confidence level must be between 1 and 5'),
   novelty: z.number().min(0).max(10),
   methodology: z.number().min(0).max(10),
   clarity: z.number().min(0).max(10),
@@ -51,15 +39,15 @@ const reviewSchema = z.object({
   originality: z.number().min(0).max(10),
   review_text: z
     .string()
-    .min(100, "Review must be at least 100 characters")
+    .min(100, 'Review must be at least 100 characters')
     .refine((val) => {
       const plainText = stripHtmlTags(val);
       return plainText.length >= 100;
-    }, "Review must contain at least 100 characters of text")
+    }, 'Review must contain at least 100 characters of text')
     .refine((val) => {
       const plainText = stripHtmlTags(val);
       return plainText.length <= 10000;
-    }, "Review must not exceed 10,000 characters of text"),
+    }, 'Review must not exceed 10,000 characters of text'),
   confidential_comments: z
     .string()
     .optional()
@@ -67,73 +55,73 @@ const reviewSchema = z.object({
       if (!val) return true;
       const plainText = stripHtmlTags(val);
       return plainText.length <= 5000;
-    }, "Confidential comments must not exceed 5,000 characters of text"),
+    }, 'Confidential comments must not exceed 5,000 characters of text'),
 });
 
 const RECOMMENDATION_OPTIONS = [
   {
-    value: "ACCEPT",
-    label: "Accept",
-    description: "The manuscript is suitable for publication as is",
-    color: "text-green-600 dark:text-green-400",
-    bg: "bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800",
+    value: 'ACCEPT',
+    label: 'Accept',
+    description: 'The manuscript is suitable for publication as is',
+    color: 'text-green-600 dark:text-green-400',
+    bg: 'bg-green-50 dark:bg-green-900/20 border-green-200 dark:border-green-800',
   },
   {
-    value: "MINOR_REVISION",
-    label: "Minor Revision",
-    description: "Accept pending minor changes that do not require re-review",
-    color: "text-blue-600 dark:text-blue-400",
-    bg: "bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800",
+    value: 'MINOR_REVISION',
+    label: 'Minor Revision',
+    description: 'Accept pending minor changes that do not require re-review',
+    color: 'text-blue-600 dark:text-blue-400',
+    bg: 'bg-blue-50 dark:bg-blue-900/20 border-blue-200 dark:border-blue-800',
   },
   {
-    value: "MAJOR_REVISION",
-    label: "Major Revision",
-    description: "Requires substantial revisions and re-review",
-    color: "text-amber-600 dark:text-amber-400",
-    bg: "bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800",
+    value: 'MAJOR_REVISION',
+    label: 'Major Revision',
+    description: 'Requires substantial revisions and re-review',
+    color: 'text-amber-600 dark:text-amber-400',
+    bg: 'bg-amber-50 dark:bg-amber-900/20 border-amber-200 dark:border-amber-800',
   },
   {
-    value: "REJECT",
-    label: "Reject",
-    description: "The manuscript is not suitable for publication",
-    color: "text-red-600 dark:text-red-400",
-    bg: "bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800",
+    value: 'REJECT',
+    label: 'Reject',
+    description: 'The manuscript is not suitable for publication',
+    color: 'text-red-600 dark:text-red-400',
+    bg: 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800',
   },
 ];
 
 const CONFIDENCE_LEVELS = [
-  { value: 1, label: "Very Low" },
-  { value: 2, label: "Low" },
-  { value: 3, label: "Medium" },
-  { value: 4, label: "High" },
-  { value: 5, label: "Very High" },
+  { value: 1, label: 'Very Low' },
+  { value: 2, label: 'Low' },
+  { value: 3, label: 'Medium' },
+  { value: 4, label: 'High' },
+  { value: 5, label: 'Very High' },
 ];
 
 const SCORE_CRITERIA = [
   {
-    name: "novelty",
-    label: "Novelty",
-    description: "Originality and uniqueness of the research",
+    name: 'novelty',
+    label: 'Novelty',
+    description: 'Originality and uniqueness of the research',
   },
   {
-    name: "methodology",
-    label: "Methodology",
-    description: "Soundness of research methods and experimental design",
+    name: 'methodology',
+    label: 'Methodology',
+    description: 'Soundness of research methods and experimental design',
   },
   {
-    name: "clarity",
-    label: "Clarity",
-    description: "Quality of writing and presentation",
+    name: 'clarity',
+    label: 'Clarity',
+    description: 'Quality of writing and presentation',
   },
   {
-    name: "significance",
-    label: "Significance",
-    description: "Impact and importance of the findings",
+    name: 'significance',
+    label: 'Significance',
+    description: 'Impact and importance of the findings',
   },
   {
-    name: "originality",
-    label: "Originality",
-    description: "Contribution to the field",
+    name: 'originality',
+    label: 'Originality',
+    description: 'Contribution to the field',
   },
 ];
 
@@ -145,15 +133,15 @@ export function ReviewSubmissionForm({ assignment }) {
   const methods = useForm({
     resolver: zodResolver(reviewSchema),
     defaultValues: {
-      recommendation: "",
+      recommendation: '',
       confidence_level: 3,
       novelty: 5,
       methodology: 5,
       clarity: 5,
       significance: 5,
       originality: 5,
-      review_text: "",
-      confidential_comments: "",
+      review_text: '',
+      confidential_comments: '',
     },
   });
 
@@ -165,14 +153,14 @@ export function ReviewSubmissionForm({ assignment }) {
     formState: { errors, isSubmitting },
   } = methods;
 
-  const recommendation = watch("recommendation");
-  const reviewText = watch("review_text");
+  const recommendation = watch('recommendation');
+  const reviewText = watch('review_text');
 
   const onSubmit = async (data) => {
     try {
       const reviewData = {
         assignment: assignment.id,
-        review_type: "SINGLE_BLIND",
+        review_type: 'SINGLE_BLIND',
         recommendation: data.recommendation,
         confidence_level: data.confidence_level,
         scores: {
@@ -183,7 +171,7 @@ export function ReviewSubmissionForm({ assignment }) {
           originality: data.originality,
         },
         review_text: data.review_text,
-        confidential_comments: data.confidential_comments || "",
+        confidential_comments: data.confidential_comments || '',
       };
 
       await submitReviewMutation.mutateAsync(reviewData);
@@ -191,10 +179,10 @@ export function ReviewSubmissionForm({ assignment }) {
 
       // Redirect after 2 seconds
       setTimeout(() => {
-        router.push("/reviewer/assignments");
+        router.push('/reviewer/assignments');
       }, 2000);
     } catch (error) {
-      console.error("Error submitting review:", error);
+      console.error('Error submitting review:', error);
     }
   };
 
@@ -226,9 +214,7 @@ export function ReviewSubmissionForm({ assignment }) {
         <Card>
           <CardHeader>
             <CardTitle>1. Overall Recommendation</CardTitle>
-            <CardDescription>
-              Select your recommendation for this manuscript
-            </CardDescription>
+            <CardDescription>Select your recommendation for this manuscript</CardDescription>
           </CardHeader>
           <CardContent>
             <Controller
@@ -236,7 +222,7 @@ export function ReviewSubmissionForm({ assignment }) {
               control={control}
               render={({ field }) => (
                 <RadioGroup
-                  value={field.value || ""}
+                  value={field.value || ''}
                   onValueChange={field.onChange}
                   className="grid grid-cols-1 md:grid-cols-2 gap-4"
                 >
@@ -247,18 +233,14 @@ export function ReviewSubmissionForm({ assignment }) {
                         className={`relative flex items-start p-4 border-2 rounded-lg cursor-pointer transition-all ${
                           field.value === option.value
                             ? option.bg
-                            : "border-border hover:border-muted-foreground/30"
+                            : 'border-border hover:border-muted-foreground/30'
                         }`}
                       >
-                        <RadioGroupItem
-                          value={option.value}
-                          id={option.value}
-                          className="mt-1"
-                        />
+                        <RadioGroupItem value={option.value} id={option.value} className="mt-1" />
                         <div className="ml-3 flex-1">
                           <div
                             className={`font-semibold ${
-                              field.value === option.value ? option.color : ""
+                              field.value === option.value ? option.color : ''
                             }`}
                           >
                             {option.label}
@@ -274,9 +256,7 @@ export function ReviewSubmissionForm({ assignment }) {
               )}
             />
             {errors.recommendation && (
-              <p className="text-sm text-destructive mt-2">
-                {errors.recommendation.message}
-              </p>
+              <p className="text-sm text-destructive mt-2">{errors.recommendation.message}</p>
             )}
           </CardContent>
         </Card>
@@ -285,9 +265,7 @@ export function ReviewSubmissionForm({ assignment }) {
         <Card>
           <CardHeader>
             <CardTitle>2. Confidence Level</CardTitle>
-            <CardDescription>
-              How confident are you in your recommendation?
-            </CardDescription>
+            <CardDescription>How confident are you in your recommendation?</CardDescription>
           </CardHeader>
           <CardContent>
             <Controller
@@ -303,10 +281,7 @@ export function ReviewSubmissionForm({ assignment }) {
                   </SelectTrigger>
                   <SelectContent>
                     {CONFIDENCE_LEVELS.map((level) => (
-                      <SelectItem
-                        key={level.value}
-                        value={level.value.toString()}
-                      >
+                      <SelectItem key={level.value} value={level.value.toString()}>
                         {level.label}
                       </SelectItem>
                     ))}
@@ -315,9 +290,7 @@ export function ReviewSubmissionForm({ assignment }) {
               )}
             />
             {errors.confidence_level && (
-              <p className="text-sm text-destructive mt-2">
-                {errors.confidence_level.message}
-              </p>
+              <p className="text-sm text-destructive mt-2">{errors.confidence_level.message}</p>
             )}
           </CardContent>
         </Card>
@@ -326,9 +299,7 @@ export function ReviewSubmissionForm({ assignment }) {
         <Card>
           <CardHeader>
             <CardTitle>3. Quality Assessment</CardTitle>
-            <CardDescription>
-              Rate the manuscript on the following criteria (0-10)
-            </CardDescription>
+            <CardDescription>Rate the manuscript on the following criteria (0-10)</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {SCORE_CRITERIA.map((criterion) => (
@@ -338,9 +309,7 @@ export function ReviewSubmissionForm({ assignment }) {
                     <Label htmlFor={criterion.name} className="font-semibold">
                       {criterion.label}
                     </Label>
-                    <p className="text-sm text-muted-foreground">
-                      {criterion.description}
-                    </p>
+                    <p className="text-sm text-muted-foreground">{criterion.description}</p>
                   </div>
                   <Controller
                     name={criterion.name}
@@ -389,9 +358,7 @@ export function ReviewSubmissionForm({ assignment }) {
               control={control}
               name="review_text"
               placeholder="Provide your detailed review here. Include strengths, weaknesses, and suggestions for improvement..."
-              description={`${getPlainTextLength(
-                reviewText
-              )} characters (minimum 100 required)`}
+              description={`${getPlainTextLength(reviewText)} characters (minimum 100 required)`}
               editor_classname="min-h-[300px]"
             />
           </CardContent>
@@ -421,13 +388,10 @@ export function ReviewSubmissionForm({ assignment }) {
           <Alert>
             <AlertCircle className="h-4 w-4" />
             <AlertDescription>
-              Please ensure you have carefully reviewed the manuscript before
-              submitting. Your recommendation is:{" "}
+              Please ensure you have carefully reviewed the manuscript before submitting. Your
+              recommendation is:{' '}
               <strong>
-                {
-                  RECOMMENDATION_OPTIONS.find((o) => o.value === recommendation)
-                    ?.label
-                }
+                {RECOMMENDATION_OPTIONS.find((o) => o.value === recommendation)?.label}
               </strong>
             </AlertDescription>
           </Alert>
@@ -443,10 +407,7 @@ export function ReviewSubmissionForm({ assignment }) {
           >
             Cancel
           </Button>
-          <Button
-            type="submit"
-            disabled={isSubmitting || submitReviewMutation.isPending}
-          >
+          <Button type="submit" disabled={isSubmitting || submitReviewMutation.isPending}>
             {(isSubmitting || submitReviewMutation.isPending) && (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             )}

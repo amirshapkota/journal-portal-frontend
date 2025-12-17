@@ -1,23 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -25,50 +19,51 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
-import { toast } from "sonner";
-import { Plus, Edit, Trash2, Mail, User } from "lucide-react";
+import { toast } from 'sonner';
+import { Plus, Edit, Trash2, Mail, User } from 'lucide-react';
 
 import {
   useGetJournalStaff,
   useAddJournalStaff,
+  useUpdateJournalStaff,
   useRemoveJournalStaff,
   useGetUsers,
-} from "@/features";
-import { DataTable, SearchableSelect } from "@/features/shared";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+} from '@/features';
+import { ConfirmationPopup } from '@/features/shared';
+import { DataTable, SearchableSelect } from '@/features/shared';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
 
 const STAFF_ROLES = [
-  { value: "EDITOR_IN_CHIEF", label: "Editor-in-Chief" },
-  { value: "MANAGING_EDITOR", label: "Managing Editor" },
-  { value: "ASSOCIATE_EDITOR", label: "Associate Editor" },
-  { value: "SECTION_EDITOR", label: "Section Editor" },
-  { value: "REVIEWER", label: "Reviewer" },
-  { value: "GUEST_EDITOR", label: "Guest Editor" },
+  { value: 'EDITOR_IN_CHIEF', label: 'Editor-in-Chief' },
+  { value: 'MANAGING_EDITOR', label: 'Managing Editor' },
+  { value: 'ASSOCIATE_EDITOR', label: 'Associate Editor' },
+  { value: 'SECTION_EDITOR', label: 'Section Editor' },
+  { value: 'REVIEWER', label: 'Reviewer' },
+  { value: 'GUEST_EDITOR', label: 'Guest Editor' },
 ];
 
 const ROLE_COLORS = {
-  EDITOR_IN_CHIEF: "bg-purple-100 text-purple-800 border-purple-200",
-  MANAGING_EDITOR: "bg-blue-100 text-blue-800 border-blue-200",
-  ASSOCIATE_EDITOR: "bg-green-100 text-green-800 border-green-200",
-  SECTION_EDITOR: "bg-yellow-100 text-yellow-800 border-yellow-200",
-  REVIEWER: "bg-gray-100 text-gray-800 border-gray-200",
-  GUEST_EDITOR: "bg-orange-100 text-orange-800 border-orange-200",
+  EDITOR_IN_CHIEF: 'bg-purple-100 text-purple-800 border-purple-200',
+  MANAGING_EDITOR: 'bg-blue-100 text-blue-800 border-blue-200',
+  ASSOCIATE_EDITOR: 'bg-green-100 text-green-800 border-green-200',
+  SECTION_EDITOR: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+  REVIEWER: 'bg-gray-100 text-gray-800 border-gray-200',
+  GUEST_EDITOR: 'bg-orange-100 text-orange-800 border-orange-200',
 };
 
 export function StaffSettings({ journalId }) {
   const [isAddStaffOpen, setIsAddStaffOpen] = useState(false);
   const [isEditStaffOpen, setIsEditStaffOpen] = useState(false);
   const [selectedStaff, setSelectedStaff] = useState(null);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [staffToDelete, setStaffToDelete] = useState(null);
 
   // Fetch staff data from backend
-  const {
-    data: staffData = [],
-    isPending,
-    error,
-  } = useGetJournalStaff(journalId);
+  const { data: staffData = [], isPending, error } = useGetJournalStaff(journalId);
   const addStaffMutation = useAddJournalStaff();
+  const updateStaffMutation = useUpdateJournalStaff();
   const removeStaffMutation = useRemoveJournalStaff();
 
   const handleAddStaff = (data) => {
@@ -86,23 +81,25 @@ export function StaffSettings({ journalId }) {
   };
 
   const handleEditStaff = (data) => {
-    // TODO: Implement staff update
-    toast.success("Staff member updated successfully");
-    setIsEditStaffOpen(false);
-    setSelectedStaff(null);
+    updateStaffMutation.mutate(
+      {
+        journalId,
+        userId: selectedStaff.profile?.id,
+        ...data,
+      },
+      {
+        onSuccess: () => {
+          setIsEditStaffOpen(false);
+          setSelectedStaff(null);
+        },
+      }
+    );
   };
 
   const handleRemoveStaff = (staff) => {
-    if (
-      confirm(
-        `Are you sure you want to remove ${staff.profile?.first_name} ${staff.profile?.last_name}?`
-      )
-    ) {
-      removeStaffMutation.mutate({
-        journalId,
-        userId: staff.profile?.id,
-      });
-    }
+    // open confirmation popup instead of native confirm()
+    setStaffToDelete(staff);
+    setDeleteDialogOpen(true);
   };
 
   const getRoleLabel = (role) => {
@@ -111,50 +108,44 @@ export function StaffSettings({ journalId }) {
 
   const columns = [
     {
-      key: "name",
-      header: "Name",
+      key: 'name',
+      header: 'Name',
       render: (staff) => (
         <div className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
             <User className="h-4 w-4 text-gray-600" />
           </div>
           <span className="font-medium">
-            {staff.profile?.display_name ||
-              staff.profile?.user_name ||
-              "No name"}
+            {staff.profile?.display_name || staff.profile?.user_name || 'No name'}
           </span>
         </div>
       ),
     },
     {
-      key: "email",
-      header: "Email",
+      key: 'email',
+      header: 'Email',
       render: (staff) => (
         <div className="flex items-center gap-1 text-sm text-muted-foreground">
           <Mail className="h-3 w-3" />
-          {staff.profile?.user_email || "N/A"}
+          {staff.profile?.user_email || 'N/A'}
         </div>
       ),
     },
     {
-      key: "affiliation",
-      header: "Affiliation",
+      key: 'affiliation',
+      header: 'Affiliation',
+      render: (staff) => <EllipsisTooltip text={staff.profile?.affiliation_name || '-'} />,
+    },
+    {
+      key: 'role',
+      header: 'Role',
       render: (staff) => (
-        <EllipsisTooltip text={staff.profile?.affiliation_name || "-"} />
+        <Badge className={ROLE_COLORS[staff.role]}>{getRoleLabel(staff.role)}</Badge>
       ),
     },
     {
-      key: "role",
-      header: "Role",
-      render: (staff) => (
-        <Badge className={ROLE_COLORS[staff.role]}>
-          {getRoleLabel(staff.role)}
-        </Badge>
-      ),
-    },
-    {
-      key: "added_date",
-      header: "Added Date",
+      key: 'added_date',
+      header: 'Added Date',
       render: (staff) => (
         <span className="text-sm text-muted-foreground">
           {new Date(staff.start_date || staff.created_at).toLocaleDateString()}
@@ -162,9 +153,9 @@ export function StaffSettings({ journalId }) {
       ),
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (staff) => (
         <div className="flex justify-end gap-2">
           <Button
@@ -174,6 +165,7 @@ export function StaffSettings({ journalId }) {
               setSelectedStaff(staff);
               setIsEditStaffOpen(true);
             }}
+            disabled={updateStaffMutation.isPending}
           >
             <Edit className="h-4 w-4" />
           </Button>
@@ -194,7 +186,7 @@ export function StaffSettings({ journalId }) {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col gap-3 sm:gap-0 sm:flex-row sm:items-center justify-between">
           <div>
             <CardTitle>Editorial Team</CardTitle>
             <CardDescription>
@@ -206,16 +198,15 @@ export function StaffSettings({ journalId }) {
             Add Staff
           </Button>
         </CardHeader>
-        <CardContent>
-          <DataTable
-            data={staffData}
-            columns={columns}
-            isPending={isPending}
-            error={error}
-            emptyMessage="No staff members yet. Click 'Add Staff' to get started."
-          />
-        </CardContent>
       </Card>
+      <DataTable
+        data={staffData}
+        columns={columns}
+        isPending={isPending}
+        error={error}
+        emptyMessage="No staff members yet. Click 'Add Staff' to get started."
+        tableClassName="bg-card border flex justify-center"
+      />
 
       {/* Add Staff Dialog */}
       <AddStaffDialog
@@ -234,29 +225,69 @@ export function StaffSettings({ journalId }) {
             setSelectedStaff(null);
           }}
           onSubmit={handleEditStaff}
+          isPending={updateStaffMutation.isPending}
           staff={selectedStaff}
         />
       )}
+
+      {/* Delete confirmation popup */}
+      <ConfirmationPopup
+        open={deleteDialogOpen}
+        onOpenChange={(open) => {
+          setDeleteDialogOpen(open);
+          if (!open) setStaffToDelete(null);
+        }}
+        title="Remove Staff Member"
+        description={
+          staffToDelete
+            ? `Are you sure you want to remove ${
+                staffToDelete.profile?.display_name ||
+                `${staffToDelete.profile?.first_name || ''} ${
+                  staffToDelete.profile?.last_name || ''
+                }`.trim()
+              } from this journal? This action cannot be undone.`
+            : 'Are you sure you want to remove this staff member?'
+        }
+        confirmText="Remove"
+        variant="danger"
+        onConfirm={() => {
+          if (!staffToDelete) return;
+          removeStaffMutation.mutate(
+            {
+              journalId,
+              userId: staffToDelete.profile?.id,
+            },
+            {
+              onSuccess: () => {
+                setDeleteDialogOpen(false);
+                setStaffToDelete(null);
+              },
+            }
+          );
+        }}
+        isPending={removeStaffMutation.isPending}
+        isSuccess={removeStaffMutation.isSuccess}
+      />
     </div>
   );
 }
 
 function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
   const [formData, setFormData] = useState({
-    profile_id: "",
-    role: "",
+    profile_id: '',
+    role: '',
   });
   // Remove open state for Popover, not needed for SearchableSelect
 
   // Map staff roles to user roles
   const getRoleForQuery = (staffRole) => {
     const roleMapping = {
-      EDITOR_IN_CHIEF: "EDITOR",
-      MANAGING_EDITOR: "EDITOR",
-      ASSOCIATE_EDITOR: "EDITOR",
-      SECTION_EDITOR: "EDITOR",
-      REVIEWER: "REVIEWER",
-      GUEST_EDITOR: "EDITOR",
+      EDITOR_IN_CHIEF: 'EDITOR',
+      MANAGING_EDITOR: 'EDITOR',
+      ASSOCIATE_EDITOR: 'EDITOR',
+      SECTION_EDITOR: 'EDITOR',
+      REVIEWER: 'REVIEWER',
+      GUEST_EDITOR: 'EDITOR',
     };
     return roleMapping[staffRole];
   };
@@ -277,12 +308,12 @@ function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     onSubmit(formData);
-    setFormData({ profile_id: "", role: "" });
+    setFormData({ profile_id: '', role: '' });
   };
 
   const handleRoleChange = (value) => {
     // Reset profile selection when role changes
-    setFormData({ profile_id: "", role: value });
+    setFormData({ profile_id: '', role: value });
   };
 
   // Filter out users already present in staffData
@@ -295,13 +326,13 @@ function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
   const userOptions = filteredProfiles.map((profile) => ({
     value: profile.profile.id,
     label: `${
-      profile.profile.display_name || profile.profile.user_name || "No name"
+      profile.profile.display_name || profile.profile.user_name || 'No name'
     } (${profile.profile.user_email})`,
   }));
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="overflow-x-auto">
         <DialogHeader>
           <DialogTitle>Add Staff Member</DialogTitle>
           <DialogDescription>
@@ -311,11 +342,7 @@ function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="space-y-2">
             <Label htmlFor="role">Role</Label>
-            <Select
-              value={formData.role}
-              onValueChange={handleRoleChange}
-              required
-            >
+            <Select value={formData.role} onValueChange={handleRoleChange} required>
               <SelectTrigger id="role">
                 <SelectValue placeholder="Select a role" />
               </SelectTrigger>
@@ -334,24 +361,22 @@ function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
             <SearchableSelect
               options={userOptions}
               value={formData.profile_id}
-              onChange={(value) =>
-                setFormData({ ...formData, profile_id: value })
-              }
+              onChange={(value) => setFormData({ ...formData, profile_id: value })}
               placeholder={
                 !formData.role
-                  ? "Select a role first"
+                  ? 'Select a role first'
                   : loadingUsers
-                  ? "Loading users..."
-                  : "Select a user"
+                    ? 'Loading users...'
+                    : 'Select a user'
               }
               emptyText={
                 !formData.role
-                  ? "Please select a role first"
+                  ? 'Please select a role first'
                   : usersError
-                  ? "Error loading users"
-                  : userOptions.length === 0
-                  ? `No users found with ${getRoleForQuery(formData.role)} role`
-                  : "No user found."
+                    ? 'Error loading users'
+                    : userOptions.length === 0
+                      ? `No users found with ${getRoleForQuery(formData.role)} role`
+                      : 'No user found.'
               }
               searchPlaceholder="Search users by name or email..."
               disabled={!formData.role || loadingUsers}
@@ -362,10 +387,7 @@ function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
             <Button type="button" variant="outline" onClick={onClose}>
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={!formData.profile_id || !formData.role}
-            >
+            <Button type="submit" disabled={!formData.profile_id || !formData.role}>
               Add Staff
             </Button>
           </DialogFooter>
@@ -375,14 +397,15 @@ function AddStaffDialog({ isOpen, onClose, onSubmit, staffData }) {
   );
 }
 
-function EditStaffDialog({ isOpen, onClose, onSubmit, staff }) {
+function EditStaffDialog({ isOpen, onClose, onSubmit, staff, isPending }) {
   const [formData, setFormData] = useState({
-    role: staff?.role || "",
+    role: staff?.role || '',
+    is_active: staff?.is_active ?? true,
   });
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSubmit({ ...formData, id: staff.id });
+    onSubmit(formData);
   };
 
   return (
@@ -391,8 +414,7 @@ function EditStaffDialog({ isOpen, onClose, onSubmit, staff }) {
         <DialogHeader>
           <DialogTitle>Edit Staff Member</DialogTitle>
           <DialogDescription>
-            Update the role for{" "}
-            {staff?.profile?.display_name || staff?.profile?.user_name}
+            Update the role for {staff?.profile?.display_name || staff?.profile?.user_name}
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -406,9 +428,7 @@ function EditStaffDialog({ isOpen, onClose, onSubmit, staff }) {
                 <p className="font-medium">
                   {staff?.profile?.display_name || staff?.profile?.user_name}
                 </p>
-                <p className="text-sm text-muted-foreground">
-                  {staff?.profile?.user_email}
-                </p>
+                <p className="text-sm text-muted-foreground">{staff?.profile?.user_email}</p>
               </div>
             </div>
           </div>
@@ -417,10 +437,9 @@ function EditStaffDialog({ isOpen, onClose, onSubmit, staff }) {
             <Label htmlFor="role">Role</Label>
             <Select
               value={formData.role}
-              onValueChange={(value) =>
-                setFormData({ ...formData, role: value })
-              }
+              onValueChange={(value) => setFormData({ ...formData, role: value })}
               required
+              disabled={isPending}
             >
               <SelectTrigger id="role">
                 <SelectValue placeholder="Select a role" />
@@ -436,10 +455,12 @@ function EditStaffDialog({ isOpen, onClose, onSubmit, staff }) {
           </div>
 
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={onClose}>
+            <Button type="button" variant="outline" onClick={onClose} disabled={isPending}>
               Cancel
             </Button>
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit" disabled={isPending}>
+              {isPending ? 'Saving...' : 'Save Changes'}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

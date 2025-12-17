@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { DoughnutChart } from "@/features/shared/components/charts";
+import { DoughnutChart } from '@/features/shared/components/charts';
 
-const COLORS = ["var(--chart-3)", "var(--chart-2)"];
+const COLORS = ['var(--chart-3)', 'var(--chart-2)'];
 
 export function JournalDistributionChart({ data, isPending, isError }) {
   const chartData = [
-    { name: "Active", value: data?.active || 0 },
-    { name: "Inactive", value: data?.inactive || 0 },
+    { name: 'Active', value: data?.active || 0 },
+    { name: 'Inactive', value: data?.inactive || 0 },
   ];
 
   return (
@@ -21,9 +21,7 @@ export function JournalDistributionChart({ data, isPending, isError }) {
       innerRadius={60}
       outerRadius={80}
       paddingAngle={5}
-      labelFormatter={(entry) =>
-        `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`
-      }
+      labelFormatter={(entry) => `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`}
       className="shadow-new"
       height={260}
     />

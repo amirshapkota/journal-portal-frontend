@@ -1,12 +1,8 @@
-"use client";
+'use client';
 
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { useEffect } from "react";
-import {
-  INDENT_CONTENT_COMMAND,
-  OUTDENT_CONTENT_COMMAND,
-  KEY_TAB_COMMAND,
-} from "lexical";
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { useEffect } from 'react';
+import { INDENT_CONTENT_COMMAND, OUTDENT_CONTENT_COMMAND, KEY_TAB_COMMAND } from 'lexical';
 
 export default function TabIndentationPlugin() {
   const [editor] = useLexicalComposerContext();

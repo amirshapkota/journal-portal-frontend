@@ -5,17 +5,17 @@ import {
   FormMessage,
   FormLabel,
   FormDescription,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
 
 export const FormInputField = ({
   control,
   name,
   placeholder,
   label,
-  className = "",
+  className = '',
   description,
-  form_classname = "",
+  form_classname = '',
   ...props
 }) => {
   return (
@@ -26,12 +26,7 @@ export const FormInputField = ({
         <FormItem className={form_classname}>
           {label && <FormLabel>{label}</FormLabel>}
           <FormControl>
-            <Input
-              placeholder={placeholder}
-              className={className}
-              {...field}
-              {...props}
-            />
+            <Input placeholder={placeholder} className={className} {...field} {...props} />
           </FormControl>
           {description && <FormDescription>{description}</FormDescription>}
           <FormMessage className="text-destructive" />

@@ -53,8 +53,8 @@ Body: { "message": "<p>HTML content</p>" }
 ### SuperDoc Editor (Editor Role)
 
 ```jsx
-import { CopyeditingSuperDocEditor } from "@/features";
-import { useApproveCopyeditingFile } from "@/features/panel/editor/submission/hooks";
+import { CopyeditingSuperDocEditor } from '@/features';
+import { useApproveCopyeditingFile } from '@/features/panel/editor/submission/hooks';
 
 const approveMutation = useApproveCopyeditingFile();
 
@@ -62,7 +62,7 @@ const handleApprove = async (fileId) => {
   return new Promise((resolve, reject) => {
     approveMutation.mutate(fileId, {
       onSuccess: () => {
-        toast.success("Approved");
+        toast.success('Approved');
         resolve();
       },
       onError: (error) => {
@@ -87,7 +87,7 @@ const handleApprove = async (fileId) => {
 ### SuperDoc Editor (Author Role)
 
 ```jsx
-import { useConfirmFileFinal } from "@/features/panel/editor/submission/hooks";
+import { useConfirmFileFinal } from '@/features/panel/editor/submission/hooks';
 
 const confirmMutation = useConfirmFileFinal();
 
@@ -97,7 +97,7 @@ const handleConfirm = async (fileId) => {
       { fileId, data: {} },
       {
         onSuccess: () => {
-          toast.success("Confirmed");
+          toast.success('Confirmed');
           resolve();
         },
         onError: (error) => {
@@ -125,12 +125,9 @@ const handleConfirm = async (fileId) => {
 ### Author View Final Files
 
 ```jsx
-import { AuthorViewFinalFiles } from "@/features/panel/author/components/copyediting/AuthorViewFinalFiles";
+import { AuthorViewFinalFiles } from '@/features/panel/author/components/copyediting/AuthorViewFinalFiles';
 
-<AuthorViewFinalFiles
-  assignmentId={assignmentId}
-  submissionId={submissionId}
-/>;
+<AuthorViewFinalFiles assignmentId={assignmentId} submissionId={submissionId} />;
 ```
 
 ---
@@ -190,11 +187,11 @@ OPEN <--------> RESOLVED
 ### Check File Status Before Action
 
 ```javascript
-if (file.file_type === "DRAFT") {
+if (file.file_type === 'DRAFT') {
   // Can approve
-} else if (file.file_type === "COPYEDITED") {
+} else if (file.file_type === 'COPYEDITED') {
   // Can confirm (author only)
-} else if (file.file_type === "AUTHOR_FINAL") {
+} else if (file.file_type === 'AUTHOR_FINAL') {
   // Can complete assignment (editor only)
 } else {
   // Already final
@@ -205,7 +202,7 @@ if (file.file_type === "DRAFT") {
 
 ```javascript
 const canComplete =
-  assignment.status === "IN_PROGRESS" &&
+  assignment.status === 'IN_PROGRESS' &&
   draftCount === 0 &&
   copyeditedCount === 0 &&
   authorFinalCount > 0;
@@ -215,11 +212,11 @@ const canComplete =
 
 ```javascript
 // ❌ Wrong - only updates form value
-form.setValue("message", "");
+form.setValue('message', '');
 
 // ✅ Right - resets entire form state
-form.reset({ message: "" });
-form.setValue("message", "", { shouldValidate: false });
+form.reset({ message: '' });
+form.setValue('message', '', { shouldValidate: false });
 ```
 
 ---
@@ -249,9 +246,7 @@ GET /api/submissions/copyediting/assignments/{id}/files/
 
 ```jsx
 {
-  discussion.status === "RESOLVED" && isEditor && (
-    <Button onClick={handleReopen}>Reopen</Button>
-  );
+  discussion.status === 'RESOLVED' && isEditor && <Button onClick={handleReopen}>Reopen</Button>;
 }
 ```
 
@@ -260,7 +255,7 @@ GET /api/submissions/copyediting/assignments/{id}/files/
 **Solution**: Use `form.reset()` instead of just `setValue()`
 
 ```javascript
-form.reset({ message: "" });
+form.reset({ message: '' });
 ```
 
 ---

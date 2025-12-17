@@ -1,42 +1,34 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
-import { DataTable } from "@/features/shared";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Eye } from 'lucide-react';
+import { formatDistanceToNow } from 'date-fns';
+import { DataTable } from '@/features/shared';
 
 const statusColors = {
-  PENDING:
-    "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100",
-  APPROVED: "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100",
-  REJECTED: "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100",
-  INFO_REQUESTED:
-    "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100",
-  WITHDRAWN:
-    "bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100",
+  PENDING: 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100',
+  APPROVED: 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100',
+  REJECTED: 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100',
+  INFO_REQUESTED: 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100',
+  WITHDRAWN: 'bg-gray-100 dark:bg-gray-700 text-gray-800 dark:text-gray-100',
 };
 
-export function VerificationRequestsTable({
-  requests,
-  onViewDetails,
-  isPending,
-  error,
-}) {
+export function VerificationRequestsTable({ requests, onViewDetails, isPending, error }) {
   const columns = [
     {
-      key: "profile_name",
-      header: "Name",
-      cellClassName: "font-medium text-sm",
+      key: 'profile_name',
+      header: 'Name',
+      cellClassName: 'font-medium text-sm',
     },
     {
-      key: "profile_email",
-      header: "Email",
-      cellClassName: "text-sm text-muted-foreground",
+      key: 'profile_email',
+      header: 'Email',
+      cellClassName: 'text-sm text-muted-foreground',
     },
     {
-      key: "requested_roles",
-      header: "Requested Roles",
+      key: 'requested_roles',
+      header: 'Requested Roles',
       render: (row) => (
         <div className="flex gap-1 flex-wrap">
           {row.requested_roles.map((role) => (
@@ -52,30 +44,28 @@ export function VerificationRequestsTable({
       ),
     },
     {
-      key: "affiliation",
-      header: "Affiliation",
-      cellClassName: "text-sm text-muted-foreground",
+      key: 'affiliation',
+      header: 'Affiliation',
+      cellClassName: 'text-sm text-muted-foreground',
     },
     {
-      key: "academic_position",
-      header: "Position",
-      render: (row) => (
-        <span className="text-sm capitalize">{row.academic_position}</span>
-      ),
+      key: 'academic_position',
+      header: 'Position',
+      render: (row) => <span className="text-sm capitalize">{row.academic_position}</span>,
     },
     {
-      key: "auto_score",
-      header: "Score",
-      align: "center",
+      key: 'auto_score',
+      header: 'Score',
+      align: 'center',
       render: (row) => (
         <Badge
           variant="outline"
           className={`text-xs ${
             row.auto_score >= 70
-              ? "bg-green-500/10 text-green-700 dark:text-green-400"
+              ? 'bg-green-500/10 text-green-700 dark:text-green-400'
               : row.auto_score >= 40
-              ? "bg-yellow-500/10 text-yellow-700 dark:text-yellow-400"
-              : "bg-red-500/10 text-red-700 dark:text-red-400"
+                ? 'bg-yellow-500/10 text-yellow-700 dark:text-yellow-400'
+                : 'bg-red-500/10 text-red-700 dark:text-red-400'
           }`}
         >
           {row.auto_score}/100
@@ -83,42 +73,39 @@ export function VerificationRequestsTable({
       ),
     },
     {
-      key: "orcid_verified",
-      header: "ORCID",
-      align: "center",
+      key: 'orcid_verified',
+      header: 'ORCID',
+      align: 'center',
       render: (row) => (
         <Badge
           variant="outline"
           className={`text-xs ${
             row.orcid_verified
-              ? "bg-green-500/10 text-green-700 dark:text-green-400"
-              : "bg-gray-500/10 text-gray-700 dark:text-gray-400"
+              ? 'bg-green-500/10 text-green-700 dark:text-green-400'
+              : 'bg-gray-500/10 text-gray-700 dark:text-gray-400'
           }`}
         >
-          {row.orcid_verified ? "Verified" : "Not Verified"}
+          {row.orcid_verified ? 'Verified' : 'Not Verified'}
         </Badge>
       ),
     },
     {
-      key: "status",
-      header: "Status",
+      key: 'status',
+      header: 'Status',
       render: (row) => (
-        <Badge className={`text-xs ${statusColors[row.status]}`}>
-          {row.status}
-        </Badge>
+        <Badge className={`text-xs ${statusColors[row.status]}`}>{row.status}</Badge>
       ),
     },
     {
-      key: "created_at",
-      header: "Submitted",
-      render: (row) =>
-        formatDistanceToNow(new Date(row.created_at), { addSuffix: true }),
-      cellClassName: "text-sm text-muted-foreground",
+      key: 'created_at',
+      header: 'Submitted',
+      render: (row) => formatDistanceToNow(new Date(row.created_at), { addSuffix: true }),
+      cellClassName: 'text-sm text-muted-foreground',
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (row) => (
         <Button
           variant="ghost"

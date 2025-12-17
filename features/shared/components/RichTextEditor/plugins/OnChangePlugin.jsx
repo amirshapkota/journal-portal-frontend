@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useCallback, useRef, useEffect } from "react";
-import { OnChangePlugin as LexicalOnChangePlugin } from "@lexical/react/LexicalOnChangePlugin";
-import { $generateHtmlFromNodes } from "@lexical/html";
-import { debounce } from "@/features/shared/utils/debounce";
+import { useCallback, useRef, useEffect } from 'react';
+import { OnChangePlugin as LexicalOnChangePlugin } from '@lexical/react/LexicalOnChangePlugin';
+import { $generateHtmlFromNodes } from '@lexical/html';
+import { debounce } from '@/features/shared/utils/debounce';
 
 export default function OnChangePlugin({ onChange, debounceMs = 300 }) {
   const debouncedOnChangeRef = useRef(null);

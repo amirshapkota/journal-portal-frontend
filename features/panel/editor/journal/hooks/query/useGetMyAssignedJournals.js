@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getMyAssignedJournals } from "../../api/journalsApi";
+import { useQuery } from '@tanstack/react-query';
+import { getMyAssignedJournals } from '../../api/journalsApi';
 
 /**
  * Hook to fetch journals where the current user is assigned as a staff member
@@ -7,7 +7,7 @@ import { getMyAssignedJournals } from "../../api/journalsApi";
  */
 export const useGetMyAssignedJournals = (params = {}, options = {}) => {
   return useQuery({
-    queryKey: ["assigned-journals", params],
+    queryKey: ['assigned-journals', params],
     queryFn: () => getMyAssignedJournals(params),
     staleTime: 5 * 60 * 1000, // 5 minutes
     gcTime: 10 * 60 * 1000, // 10 minutes

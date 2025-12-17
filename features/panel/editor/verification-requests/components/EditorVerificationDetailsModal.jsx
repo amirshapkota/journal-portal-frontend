@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -6,12 +6,12 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   CheckCircle2,
   XCircle,
@@ -24,16 +24,14 @@ import {
   Lightbulb,
   Info,
   BookOpen,
-} from "lucide-react";
-import InfoItem from "@/features/panel/admin/verification-requests/components/InfoItem";
+} from 'lucide-react';
+import InfoItem from '@/features/panel/admin/verification-requests/components/InfoItem';
 
 const statusColors = {
-  PENDING:
-    "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100",
-  APPROVED: "bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100",
-  REJECTED: "bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100",
-  INFO_REQUESTED:
-    "bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100",
+  PENDING: 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100',
+  APPROVED: 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100',
+  REJECTED: 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-100',
+  INFO_REQUESTED: 'bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-100',
 };
 
 export function EditorVerificationDetailsModal({
@@ -50,11 +48,7 @@ export function EditorVerificationDetailsModal({
   // Helper to render score details
   const renderScoreDetails = (scoreDetails) => {
     if (!scoreDetails || Object.keys(scoreDetails).length === 0) {
-      return (
-        <p className="text-xs text-muted-foreground mt-2">
-          No score breakdown available
-        </p>
-      );
+      return <p className="text-xs text-muted-foreground mt-2">No score breakdown available</p>;
     }
 
     return (
@@ -65,7 +59,7 @@ export function EditorVerificationDetailsModal({
             className="flex items-center justify-between py-1.5 px-2 bg-muted/50 rounded"
           >
             <span className="text-xs font-medium capitalize text-muted-foreground">
-              {key.replace(/_/g, " ")}
+              {key.replace(/_/g, ' ')}
             </span>
             <span className="text-sm ">{value}</span>
           </div>
@@ -88,9 +82,7 @@ export function EditorVerificationDetailsModal({
                 {verification.profile_email}
               </DialogDescription>
             </div>
-            <Badge
-              className={`text-xs ${statusColors[verification.status]} mr-4`}
-            >
+            <Badge className={`text-xs ${statusColors[verification.status]} mr-4`}>
               {verification.status}
             </Badge>
           </div>
@@ -122,11 +114,7 @@ export function EditorVerificationDetailsModal({
             {/* Basic Information */}
             <Card>
               <CardContent className=" grid grid-cols-2 gap-6">
-                <InfoItem
-                  icon={Building2}
-                  label="Affiliation"
-                  value={verification.affiliation}
-                />
+                <InfoItem icon={Building2} label="Affiliation" value={verification.affiliation} />
                 <InfoItem
                   icon={Mail}
                   label="Affiliation Email"
@@ -140,7 +128,7 @@ export function EditorVerificationDetailsModal({
                 <InfoItem
                   icon={Users}
                   label="Requested Roles"
-                  value={verification.requested_roles?.join(", ")}
+                  value={verification.requested_roles?.join(', ')}
                 />
               </CardContent>
             </Card>
@@ -157,21 +145,15 @@ export function EditorVerificationDetailsModal({
                 <div className="space-y-3">
                   <div className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded">
                     <span className="text-sm font-medium">Verified</span>
-                    <Badge
-                      variant={
-                        verification.orcid_verified ? "default" : "outline"
-                      }
-                    >
-                      {verification.orcid_verified ? "Yes" : "No"}
+                    <Badge variant={verification.orcid_verified ? 'default' : 'outline'}>
+                      {verification.orcid_verified ? 'Yes' : 'No'}
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between py-2 px-3 bg-muted/50 rounded">
                     <span className="text-sm font-medium">ORCID ID</span>
                     <span className="font-mono text-sm">
                       {verification.orcid_id || (
-                        <span className="text-muted-foreground italic">
-                          N/A
-                        </span>
+                        <span className="text-muted-foreground italic">N/A</span>
                       )}
                     </span>
                   </div>
@@ -191,9 +173,7 @@ export function EditorVerificationDetailsModal({
                         Auto Score
                       </h3>
                     </div>
-                    <div className="text-xl font-semibold">
-                      {verification.auto_score}
-                    </div>
+                    <div className="text-xl font-semibold">{verification.auto_score}</div>
                   </div>
                   {renderScoreDetails(verification.score_details)}
                 </CardContent>
@@ -237,7 +217,7 @@ export function EditorVerificationDetailsModal({
             </Card>
 
             {/* Timestamps */}
-            <Card className={"p-3!"}>
+            <Card className={'p-3!'}>
               <CardContent className="px-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 <div className="space-y-1.5">
                   <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
@@ -262,9 +242,7 @@ export function EditorVerificationDetailsModal({
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
                       Reviewed By
                     </label>
-                    <p className="text-sm font-mono">
-                      {verification.reviewed_by_email}
-                    </p>
+                    <p className="text-sm font-mono">{verification.reviewed_by_email}</p>
                   </div>
                 )}
               </CardContent>
@@ -310,7 +288,7 @@ export function EditorVerificationDetailsModal({
 
         {/* Action Buttons */}
         <div className="px-6 pb-4">
-          {verification.status === "PENDING" && (
+          {verification.status === 'PENDING' && (
             <div className="flex gap-3 justify-end">
               <Button
                 variant="destructive"
@@ -321,12 +299,7 @@ export function EditorVerificationDetailsModal({
                 <XCircle className="h-4 w-4" />
                 Reject
               </Button>
-              <Button
-                variant=""
-                onClick={onRequestInfo}
-                disabled={isLoading}
-                className="gap-2"
-              >
+              <Button variant="" onClick={onRequestInfo} disabled={isLoading} className="gap-2">
                 <Info className="h-4 w-4" />
                 Request Info
               </Button>
@@ -337,7 +310,7 @@ export function EditorVerificationDetailsModal({
                 className="gap-2 bg-green-600 hover:bg-green-700"
               >
                 <CheckCircle2 className="h-4 w-4" />
-                {isLoading ? "Processing..." : "Approve"}
+                {isLoading ? 'Processing...' : 'Approve'}
               </Button>
             </div>
           )}

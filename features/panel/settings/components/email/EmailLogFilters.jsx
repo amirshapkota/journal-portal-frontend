@@ -2,15 +2,15 @@
  * EmailLogFilters - Filter controls for email log table
  * @module features/panel/settings/components/email/EmailLogFilters
  */
-import React from "react";
+import React from 'react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 
 /**
  * @param {Object} props

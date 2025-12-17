@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { RoleBasedRoute } from "@/features";
+import { RoleBasedRoute } from '@/features';
 
 export default function AdminLayout({ children }) {
-  return <RoleBasedRoute allowedRoles={["ADMIN"]}>{children}</RoleBasedRoute>;
+  return <RoleBasedRoute allowedRoles={['ADMIN']}>{children}</RoleBasedRoute>;
 }

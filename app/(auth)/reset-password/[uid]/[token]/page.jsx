@@ -1,18 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -20,29 +14,29 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Eye, EyeOff, Loader2, Check, ArrowLeft } from "lucide-react";
-import { useConfirmPasswordReset } from "@/features/auth/hooks";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { useRouter, useParams } from "next/navigation";
-import { useToggle } from "@/features/shared/hooks";
+} from '@/components/ui/form';
+import { Eye, EyeOff, Loader2, Check, ArrowLeft } from 'lucide-react';
+import { useConfirmPasswordReset } from '@/features/auth/hooks';
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { useRouter, useParams } from 'next/navigation';
+import { useToggle } from '@/features/shared/hooks';
 
 const resetPasswordSchema = z
   .object({
     new_password: z
       .string()
-      .min(8, "Password must be at least 8 characters")
+      .min(8, 'Password must be at least 8 characters')
       .regex(/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/, {
         message:
-          "Password must contain at least one uppercase letter, one lowercase letter, and one number.",
+          'Password must contain at least one uppercase letter, one lowercase letter, and one number.',
       }),
     confirm_password: z.string(),
   })
   .refine((data) => data.new_password === data.confirm_password, {
     message: "Passwords don't match",
-    path: ["confirm_password"],
+    path: ['confirm_password'],
   });
 
 const ResetPasswordPage = () => {
@@ -61,8 +55,8 @@ const ResetPasswordPage = () => {
   const form = useForm({
     resolver: zodResolver(resetPasswordSchema),
     defaultValues: {
-      new_password: "",
-      confirm_password: "",
+      new_password: '',
+      confirm_password: '',
     },
   });
 
@@ -79,7 +73,7 @@ const ResetPasswordPage = () => {
           setPasswordReset(true);
           form.reset();
           setTimeout(() => {
-            router.push("/login");
+            router.push('/login');
           }, 3000);
         },
       }
@@ -92,7 +86,7 @@ const ResetPasswordPage = () => {
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center pt-2 mb-2">
-            {resolvedTheme === "dark" ? (
+            {resolvedTheme === 'dark' ? (
               <Image
                 width={200}
                 height={100}
@@ -115,13 +109,9 @@ const ResetPasswordPage = () => {
         {/* Reset Password Card */}
         <Card className="border-0 shadow-xl backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-2xl text-center">
-              Set New Password
-            </CardTitle>
+            <CardTitle className="text-2xl text-center">Set New Password</CardTitle>
             <CardDescription className="text-center">
-              {passwordReset
-                ? "Password reset successfully"
-                : "Enter your new password"}
+              {passwordReset ? 'Password reset successfully' : 'Enter your new password'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -130,29 +120,20 @@ const ResetPasswordPage = () => {
                 <div className="flex items-center justify-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                   <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
                     <Check className="h-5 w-5" />
-                    <span className="text-sm font-medium">
-                      Password reset successfully
-                    </span>
+                    <span className="text-sm font-medium">Password reset successfully</span>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground text-center">
-                  Your password has been reset successfully. You will be
-                  redirected to the login page in a few seconds.
+                  Your password has been reset successfully. You will be redirected to the login
+                  page in a few seconds.
                 </p>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => router.push("/login")}
-                >
+                <Button variant="outline" className="w-full" onClick={() => router.push('/login')}>
                   Go to Login
                 </Button>
               </div>
             ) : (
               <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(handleSubmit)}
-                  className="space-y-4"
-                >
+                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
                   <FormField
                     control={form.control}
                     name="new_password"
@@ -163,7 +144,7 @@ const ResetPasswordPage = () => {
                           <div className="relative">
                             <Input
                               {...field}
-                              type={showNewPassword ? "text" : "password"}
+                              type={showNewPassword ? 'text' : 'password'}
                               placeholder="Enter new password"
                               disabled={isPending}
                             />
@@ -195,7 +176,7 @@ const ResetPasswordPage = () => {
                           <div className="relative">
                             <Input
                               {...field}
-                              type={showConfirmPassword ? "text" : "password"}
+                              type={showConfirmPassword ? 'text' : 'password'}
                               placeholder="Confirm new password"
                               disabled={isPending}
                             />
@@ -228,7 +209,7 @@ const ResetPasswordPage = () => {
                         Resetting...
                       </>
                     ) : (
-                      "Reset Password"
+                      'Reset Password'
                     )}
                   </Button>
                 </form>

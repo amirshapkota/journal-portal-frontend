@@ -1,19 +1,13 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Trash2, UserPlus, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User, Mail, Trash2, UserPlus, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,18 +17,15 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
-import { useCopyeditingAssignmentParticipants } from "../../hooks";
-import { AddParticipantDialog } from "./AddParticipantDialog";
+} from '@/components/ui/alert-dialog';
+import { useCopyeditingAssignmentParticipants } from '../../hooks';
+import { AddParticipantDialog } from './AddParticipantDialog';
 
 /**
  * Component to display and manage copyediting participants
  * Shows assigned copyeditors, authors, and editors
  */
-export function CopyeditingParticipants({
-  assignmentId,
-  isAuthorView = false,
-}) {
+export function CopyeditingParticipants({ assignmentId, isAuthorView = false }) {
   const queryClient = useQueryClient();
   const [removingUserId, setRemovingUserId] = useState(null);
   const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);
@@ -66,13 +57,13 @@ export function CopyeditingParticipants({
 
       // Invalidate queries
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-participants", submissionId],
+        queryKey: ['copyediting-participants', submissionId],
       });
 
       setIsRemoveDialogOpen(false);
       setUserToRemove(null);
     } catch (error) {
-      toast.error("Failed to remove participant");
+      toast.error('Failed to remove participant');
     } finally {
       setRemovingUserId(null);
     }
@@ -81,10 +72,10 @@ export function CopyeditingParticipants({
   const ParticipantCard = ({ user, canRemove = false }) => {
     const initials =
       user.name
-        ?.split(" ")
+        ?.split(' ')
         .map((n) => n[0])
-        .join("")
-        .toUpperCase() || "?";
+        .join('')
+        .toUpperCase() || '?';
 
     return (
       <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
@@ -98,7 +89,7 @@ export function CopyeditingParticipants({
               <p className="font-medium">{user.name}</p>
               {user.role && (
                 <Badge variant="secondary" className="text-xs">
-                  {user.role.replace("_", " ")}
+                  {user.role.replace('_', ' ')}
                 </Badge>
               )}
             </div>
@@ -144,16 +135,10 @@ export function CopyeditingParticipants({
             <div className="flex items-start justify-between">
               <div>
                 <CardTitle>Participants</CardTitle>
-                <CardDescription>
-                  All users involved in the copyediting workflow
-                </CardDescription>
+                <CardDescription>All users involved in the copyediting workflow</CardDescription>
               </div>
               {assignmentId && !isAuthorView && (
-                <Button
-                  size="sm"
-                  onClick={() => setIsAddParticipantOpen(true)}
-                  className="gap-2"
-                >
+                <Button size="sm" onClick={() => setIsAddParticipantOpen(true)} className="gap-2">
                   <UserPlus className="h-4 w-4" />
                   Add Participant
                 </Button>
@@ -164,9 +149,7 @@ export function CopyeditingParticipants({
             {isPending ? (
               <div className="text-center py-8">
                 <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mt-2">
-                  Loading participants...
-                </p>
+                <p className="text-sm text-muted-foreground mt-2">Loading participants...</p>
               </div>
             ) : error ? (
               <div className="text-center py-8 text-destructive">
@@ -201,18 +184,13 @@ export function CopyeditingParticipants({
       </div>
 
       {/* Remove Confirmation Dialog */}
-      <AlertDialog
-        open={isRemoveDialogOpen}
-        onOpenChange={setIsRemoveDialogOpen}
-      >
+      <AlertDialog open={isRemoveDialogOpen} onOpenChange={setIsRemoveDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Copyeditor?</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove{" "}
-              <strong>{userToRemove?.name}</strong> from this copyediting
-              workflow? They will lose access to the copyediting files and
-              discussions.
+              Are you sure you want to remove <strong>{userToRemove?.name}</strong> from this
+              copyediting workflow? They will lose access to the copyediting files and discussions.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
