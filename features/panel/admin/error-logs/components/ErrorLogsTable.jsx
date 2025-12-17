@@ -1,13 +1,8 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   AlertCircle,
   AlertTriangle,
@@ -18,9 +13,9 @@ import {
   Hash,
   Users,
   Clock,
-} from "lucide-react";
-import { format } from "date-fns";
-import { DataTable } from "@/features/shared";
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { DataTable } from '@/features/shared';
 
 export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
   const getLevelIcon = (level) => {
@@ -35,28 +30,28 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
 
   const getLevelColor = (level) => {
     const colors = {
-      error: "destructive",
-      warning: "warning",
-      info: "default",
-      fatal: "destructive",
+      error: 'destructive',
+      warning: 'warning',
+      info: 'default',
+      fatal: 'destructive',
     };
-    return colors[level] || "default";
+    return colors[level] || 'default';
   };
 
   const columns = [
     {
-      key: "level",
-      header: "Level",
+      key: 'level',
+      header: 'Level',
       render: (row) => (
         <Badge variant={getLevelColor(row.level)} className="gap-1">
           {getLevelIcon(row.level)}
-          {row.level?.toUpperCase() || "UNKNOWN"}
+          {row.level?.toUpperCase() || 'UNKNOWN'}
         </Badge>
       ),
     },
     {
-      key: "title",
-      header: "Error",
+      key: 'title',
+      header: 'Error',
       render: (row) => (
         <div className="space-y-2 py-1">
           {row.title && row.title.length > 40 ? (
@@ -64,7 +59,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="font-medium truncate cursor-help">
-                    {row.title.slice(0, 40) + "..."}
+                    {row.title.slice(0, 40) + '...'}
                   </div>
                 </TooltipTrigger>
                 <TooltipContent side="top" className="max-w-md">
@@ -73,7 +68,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
               </Tooltip>
             </TooltipProvider>
           ) : (
-            <div className="font-medium">{row.title || "Unknown Error"}</div>
+            <div className="font-medium">{row.title || 'Unknown Error'}</div>
           )}
           {row.culprit && (
             <div className="flex items-center gap-2 text-xs text-muted-foreground">
@@ -83,7 +78,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <code className="bg-muted px-2 py-0.5 rounded truncate cursor-help max-w-xs block">
-                        {row.culprit.slice(0, 40) + "..."}
+                        {row.culprit.slice(0, 40) + '...'}
                       </code>
                     </TooltipTrigger>
                     <TooltipContent side="top" className="max-w-md">
@@ -92,9 +87,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
                   </Tooltip>
                 </TooltipProvider>
               ) : (
-                <code className="bg-muted px-2 py-0.5 rounded">
-                  {row.culprit}
-                </code>
+                <code className="bg-muted px-2 py-0.5 rounded">{row.culprit}</code>
               )}
             </div>
           )}
@@ -104,7 +97,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <p className="text-sm text-muted-foreground line-clamp-1 cursor-help">
-                      {row.metadata.value.slice(0, 40) + "..."}
+                      {row.metadata.value.slice(0, 40) + '...'}
                     </p>
                   </TooltipTrigger>
                   <TooltipContent side="top" className="max-w-md">
@@ -113,34 +106,32 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
                 </Tooltip>
               </TooltipProvider>
             ) : (
-              <p className="text-sm text-muted-foreground line-clamp-1">
-                {row.metadata.value}
-              </p>
+              <p className="text-sm text-muted-foreground line-clamp-1">{row.metadata.value}</p>
             ))}
         </div>
       ),
     },
     {
-      key: "type",
-      header: "Type",
+      key: 'type',
+      header: 'Type',
       render: (row) => (
         <Badge variant="outline" className="font-mono text-xs">
-          {row.metadata?.type || row.short_id || "Unknown"}
+          {row.metadata?.type || row.short_id || 'Unknown'}
         </Badge>
       ),
     },
     {
-      key: "status",
-      header: "Status",
+      key: 'status',
+      header: 'Status',
       render: (row) => (
-        <Badge variant={row.status === "resolved" ? "default" : "secondary"}>
-          {row.status || "unknown"}
+        <Badge variant={row.status === 'resolved' ? 'default' : 'secondary'}>
+          {row.status || 'unknown'}
         </Badge>
       ),
     },
     {
-      key: "stats",
-      header: "Statistics",
+      key: 'stats',
+      header: 'Statistics',
       render: (row) => (
         <div className="space-y-1 text-xs">
           <div className="flex items-center gap-1 text-muted-foreground">
@@ -150,18 +141,16 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
           <div className="flex items-center gap-1 text-muted-foreground">
             <Users className="h-3 w-3" />
             <strong>
-              {row.user_count === "***REDACTED***"
-                ? "N/A"
-                : row.user_count || 0}
-            </strong>{" "}
+              {row.user_count === '***REDACTED***' ? 'N/A' : row.user_count || 0}
+            </strong>{' '}
             users
           </div>
         </div>
       ),
     },
     {
-      key: "lastSeen",
-      header: "Last Seen",
+      key: 'lastSeen',
+      header: 'Last Seen',
       render: (row) => {
         try {
           const date = new Date(row.last_seen);
@@ -176,7 +165,7 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
           return (
             <div className="flex items-center gap-1 text-sm text-muted-foreground">
               <Clock className="h-3 w-3" />
-              {format(date, "PPp")}
+              {format(date, 'PPp')}
             </div>
           );
         } catch (err) {
@@ -190,16 +179,11 @@ export function ErrorLogsTable({ issues, onViewDetails, isPending, error }) {
       },
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (row) => (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onViewDetails(row)}
-          className=""
-        >
+        <Button variant="ghost" size="sm" onClick={() => onViewDetails(row)} className="">
           <Eye className="h-4 w-4 mr-1" />
           View
         </Button>

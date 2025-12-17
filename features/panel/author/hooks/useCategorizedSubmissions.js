@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
 /**
  * Hook to categorize submissions by status and review assignments
@@ -8,20 +8,19 @@ import { useMemo } from "react";
 export const useCategorizedSubmissions = (submissions = []) => {
   const categorized = useMemo(() => {
     return {
-      drafts: submissions.filter((s) => s.status === "DRAFT"),
+      drafts: submissions.filter((s) => s.status === 'DRAFT'),
       unassigned: submissions.filter(
         (s) =>
-          ["SUBMITTED", "UNDER_REVIEW"].includes(s.status) &&
+          ['SUBMITTED', 'UNDER_REVIEW'].includes(s.status) &&
           (!s.review_assignment_count || s.review_assignment_count === 0)
       ),
       active: submissions.filter(
         (s) =>
-          ["SUBMITTED", "UNDER_REVIEW", "REVISION_REQUIRED", "REVISED"].includes(
-            s.status
-          ) && s.review_assignment_count > 0
+          ['SUBMITTED', 'UNDER_REVIEW', 'REVISION_REQUIRED', 'REVISED'].includes(s.status) &&
+          s.review_assignment_count > 0
       ),
       archived: submissions.filter((s) =>
-        ["ACCEPTED", "REJECTED", "WITHDRAWN", "PUBLISHED"].includes(s.status)
+        ['ACCEPTED', 'REJECTED', 'WITHDRAWN', 'PUBLISHED'].includes(s.status)
       ),
     };
   }, [submissions]);

@@ -1,35 +1,32 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { RefreshCw, AlertCircle } from "lucide-react";
+import { useState, useEffect, useMemo } from 'react';
+import { Button } from '@/components/ui/button';
+import { RefreshCw, AlertCircle } from 'lucide-react';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  ErrorLogsTable,
-  ErrorDetailsModal,
-} from "@/features/panel/admin/error-logs";
+} from '@/components/ui/select';
+import { ErrorLogsTable, ErrorDetailsModal } from '@/features/panel/admin/error-logs';
 import {
   useSentryProjects,
   useSentryIssues,
-} from "@/features/panel/admin/error-logs/hooks/useSentry";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { LoadingScreen, FilterToolbar } from "@/features";
-import { useSearchParams, useRouter } from "next/navigation";
+} from '@/features/panel/admin/error-logs/hooks/useSentry';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { LoadingScreen, FilterToolbar } from '@/features';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function ErrorLogsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // Get params from URL
-  const statusFilter = searchParams.get("status") || "unresolved";
-  const levelFilter = searchParams.get("level") || "all";
-  const projectSlug = searchParams.get("project") || null;
+  const statusFilter = searchParams.get('status') || 'unresolved';
+  const levelFilter = searchParams.get('level') || 'all';
+  const projectSlug = searchParams.get('project') || null;
 
   const [selectedIssue, setSelectedIssue] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -47,7 +44,7 @@ export default function ErrorLogsPage() {
     if (projectsData?.results?.length > 0 && !projectSlug) {
       const firstSlug = projectsData.results[0].slug;
       const params = new URLSearchParams(searchParams.toString());
-      params.set("project", firstSlug);
+      params.set('project', firstSlug);
       router.replace(`?${params.toString()}`);
     }
   }, [projectsData?.results, projectSlug, searchParams, router]);
@@ -59,7 +56,7 @@ export default function ErrorLogsPage() {
     error: issuesError,
     refetch: refetchIssues,
   } = useSentryIssues(projectSlug, {
-    status: statusFilter === "all" ? undefined : statusFilter,
+    status: statusFilter === 'all' ? undefined : statusFilter,
     limit: 100,
   });
 
@@ -67,7 +64,7 @@ export default function ErrorLogsPage() {
 
   // Filter issues by level (client-side filtering)
   const filteredIssues = useMemo(() => {
-    if (levelFilter === "all") return issues;
+    if (levelFilter === 'all') return issues;
     return issues.filter((issue) => issue.level === levelFilter);
   }, [issues, levelFilter]);
 
@@ -85,7 +82,7 @@ export default function ErrorLogsPage() {
 
   const handleProjectChange = (slug) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("project", slug);
+    params.set('project', slug);
     router.push(`?${params.toString()}`);
   };
 
@@ -103,13 +100,8 @@ export default function ErrorLogsPage() {
             Track and manage application errors in real-time via Sentry
           </p>
         </div>
-        <Button
-          onClick={handleRefresh}
-          variant="outline"
-          className="gap-2"
-          disabled={isLoading}
-        >
-          <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+        <Button onClick={handleRefresh} variant="outline" className="gap-2" disabled={isLoading}>
+          <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
       </div>
@@ -118,10 +110,7 @@ export default function ErrorLogsPage() {
       {projectsData?.results?.length > 0 && (
         <div className="flex items-center gap-4">
           <label className="text-sm font-medium">Project:</label>
-          <Select
-            value={projectSlug || undefined}
-            onValueChange={handleProjectChange}
-          >
+          <Select value={projectSlug || undefined} onValueChange={handleProjectChange}>
             <SelectTrigger className="w-[300px]">
               <SelectValue placeholder="Select a project" />
             </SelectTrigger>
@@ -141,8 +130,8 @@ export default function ErrorLogsPage() {
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            {error}. Please check your Sentry configuration and ensure the API
-            credentials are correct.
+            {error}. Please check your Sentry configuration and ensure the API credentials are
+            correct.
           </AlertDescription>
         </Alert>
       )}
@@ -158,8 +147,7 @@ export default function ErrorLogsPage() {
       {!projectsLoading && projectsData?.results?.length === 0 && (
         <Alert>
           <AlertDescription>
-            No Sentry projects found. Please check your Sentry organization
-            configuration.
+            No Sentry projects found. Please check your Sentry organization configuration.
           </AlertDescription>
         </Alert>
       )}
@@ -171,21 +159,21 @@ export default function ErrorLogsPage() {
             paramName="status"
             label="Status"
             options={[
-              { value: "all", label: "All Status" },
-              { value: "unresolved", label: "Unresolved" },
-              { value: "resolved", label: "Resolved" },
-              { value: "ignored", label: "Ignored" },
+              { value: 'all', label: 'All Status' },
+              { value: 'unresolved', label: 'Unresolved' },
+              { value: 'resolved', label: 'Resolved' },
+              { value: 'ignored', label: 'Ignored' },
             ]}
           />
           <FilterToolbar.Select
             paramName="level"
             label="Level"
             options={[
-              { value: "all", label: "All Levels" },
-              { value: "fatal", label: "Fatal" },
-              { value: "error", label: "Error" },
-              { value: "warning", label: "Warning" },
-              { value: "info", label: "Info" },
+              { value: 'all', label: 'All Levels' },
+              { value: 'fatal', label: 'Fatal' },
+              { value: 'error', label: 'Error' },
+              { value: 'warning', label: 'Warning' },
+              { value: 'info', label: 'Info' },
             ]}
           />
         </FilterToolbar>
@@ -202,11 +190,7 @@ export default function ErrorLogsPage() {
       )}
 
       {/* Issue Detail Modal */}
-      <ErrorDetailsModal
-        issue={selectedIssue}
-        open={isDetailOpen}
-        onOpenChange={setIsDetailOpen}
-      />
+      <ErrorDetailsModal issue={selectedIssue} open={isDetailOpen} onOpenChange={setIsDetailOpen} />
     </div>
   );
 }

@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getSingleSubmissionById } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { getSingleSubmissionById } from '../../api';
 
 /**
  * React Query hook to fetch a submission by its ID
@@ -8,7 +8,7 @@ import { getSingleSubmissionById } from "../../api";
  */
 export function useGetSubmissionById(submissionId, options = {}) {
   const result = useQuery({
-    queryKey: ["submission", submissionId],
+    queryKey: ['submission', submissionId],
     queryFn: () => {
       return getSingleSubmissionById(submissionId);
     },

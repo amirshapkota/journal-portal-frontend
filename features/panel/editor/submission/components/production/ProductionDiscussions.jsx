@@ -1,23 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Plus, Reply, User, Loader2 } from "lucide-react";
-import { format } from "date-fns";
-import { AddProductionDiscussionDialog } from "./AddProductionDiscussionDialog";
-import { ProductionDiscussionThreadDialog } from "./ProductionDiscussionThreadDialog";
-import {
-  useProductionAssignments,
-  useProductionAssignmentDiscussions,
-} from "../../hooks";
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { MessageSquare, Plus, Reply, User, Loader2 } from 'lucide-react';
+import { format } from 'date-fns';
+import { AddProductionDiscussionDialog } from './AddProductionDiscussionDialog';
+import { ProductionDiscussionThreadDialog } from './ProductionDiscussionThreadDialog';
+import { useProductionAssignments, useProductionAssignmentDiscussions } from '../../hooks';
 
 /**
  * Component to display and manage production discussions
@@ -29,8 +20,9 @@ export function ProductionDiscussions({ submissionId }) {
   const [isThreadDialogOpen, setIsThreadDialogOpen] = useState(false);
 
   // Get the production assignment for this submission
-  const { data: assignmentsData, isLoading: assignmentsLoading } =
-    useProductionAssignments({ submission: submissionId });
+  const { data: assignmentsData, isLoading: assignmentsLoading } = useProductionAssignments({
+    submission: submissionId,
+  });
 
   const assignment = assignmentsData?.results?.[0];
   const assignmentId = assignment?.id;
@@ -53,11 +45,11 @@ export function ProductionDiscussions({ submissionId }) {
 
   const getStatusColor = (status) => {
     const colors = {
-      OPEN: "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-700",
+      OPEN: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-700',
       RESOLVED:
-        "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-200 dark:border-emerald-700",
+        'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-200 dark:border-emerald-700',
       CLOSED:
-        "bg-zinc-100 text-zinc-800 border-zinc-200 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700",
+        'bg-zinc-100 text-zinc-800 border-zinc-200 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700',
     };
     return colors[status] || colors.OPEN;
   };
@@ -70,14 +62,10 @@ export function ProductionDiscussions({ submissionId }) {
             <div>
               <CardTitle>Production Discussions</CardTitle>
               <CardDescription>
-                Communication threads between production assistants, editors,
-                and authors
+                Communication threads between production assistants, editors, and authors
               </CardDescription>
             </div>
-            <Button
-              onClick={() => setIsAddDialogOpen(true)}
-              disabled={!assignmentId}
-            >
+            <Button onClick={() => setIsAddDialogOpen(true)} disabled={!assignmentId}>
               <Plus className="h-4 w-4 mr-2" />
               Start Discussion
             </Button>
@@ -87,9 +75,7 @@ export function ProductionDiscussions({ submissionId }) {
           {isLoading ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mt-2">
-                Loading discussions...
-              </p>
+              <p className="text-sm text-muted-foreground mt-2">Loading discussions...</p>
             </div>
           ) : error ? (
             <div className="text-center py-8 text-destructive">
@@ -110,10 +96,7 @@ export function ProductionDiscussions({ submissionId }) {
               <p className="text-sm text-muted-foreground mb-4">
                 Start a discussion to communicate with the production team
               </p>
-              <Button
-                onClick={() => setIsAddDialogOpen(true)}
-                variant="outline"
-              >
+              <Button onClick={() => setIsAddDialogOpen(true)} variant="outline">
                 <Plus className="h-4 w-4 mr-2" />
                 Start First Discussion
               </Button>
@@ -131,42 +114,34 @@ export function ProductionDiscussions({ submissionId }) {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start gap-2 mb-1">
                         <p className="font-medium flex-1">
-                          {discussion.subject || "Untitled Discussion"}
+                          {discussion.subject || 'Untitled Discussion'}
                         </p>
                         <Badge
                           variant="outline"
                           className={`text-xs shrink-0 ${getStatusColor(
-                            discussion.status || "OPEN"
+                            discussion.status || 'OPEN'
                           )}`}
                         >
-                          {discussion.status_display ||
-                            discussion.status ||
-                            "OPEN"}
+                          {discussion.status_display || discussion.status || 'OPEN'}
                         </Badge>
                       </div>
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <User className="h-3 w-3" />
-                          From: {discussion.started_by?.user?.first_name}{" "}
+                          From: {discussion.started_by?.user?.first_name}{' '}
                           {discussion.started_by?.user?.last_name}
                         </span>
                         <span className="hidden sm:inline">•</span>
                         <span className="flex items-center gap-1">
                           <Reply className="h-3 w-3" />
-                          {discussion.message_count || 0}{" "}
-                          {(discussion.message_count || 0) === 1
-                            ? "reply"
-                            : "replies"}
+                          {discussion.message_count || 0}{' '}
+                          {(discussion.message_count || 0) === 1 ? 'reply' : 'replies'}
                         </span>
                         {discussion.updated_at && (
                           <>
                             <span className="hidden sm:inline">•</span>
                             <span>
-                              Last reply:{" "}
-                              {format(
-                                new Date(discussion.updated_at),
-                                "MMM d, yyyy"
-                              )}
+                              Last reply: {format(new Date(discussion.updated_at), 'MMM d, yyyy')}
                             </span>
                           </>
                         )}
@@ -182,20 +157,10 @@ export function ProductionDiscussions({ submissionId }) {
             <div className="mt-4 p-4 bg-muted/50 rounded-lg border border-dashed">
               <h4 className="font-medium text-sm mb-2">Discussion Tips:</h4>
               <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                <li>
-                  Click on any discussion to view the full thread and reply
-                </li>
-                <li>
-                  Use discussions to clarify galley formats and publication
-                  details
-                </li>
-                <li>
-                  Mark discussions as resolved once the issue is addressed
-                </li>
-                <li>
-                  Tag specific participants to notify them about important
-                  messages
-                </li>
+                <li>Click on any discussion to view the full thread and reply</li>
+                <li>Use discussions to clarify galley formats and publication details</li>
+                <li>Mark discussions as resolved once the issue is addressed</li>
+                <li>Tag specific participants to notify them about important messages</li>
               </ul>
             </div>
           )}

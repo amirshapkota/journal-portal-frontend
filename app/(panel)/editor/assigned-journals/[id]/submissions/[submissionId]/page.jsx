@@ -1,28 +1,15 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { format } from "date-fns";
-import {
-  ArrowLeft,
-  Loader2,
-  RefreshCw,
-  Calendar,
-  FileEdit,
-  Package,
-} from "lucide-react";
-import { useGetSubmissionReviews } from "@/features/panel/editor/submission/hooks/useGetSubmissionReviews";
-import { useGetSubmissionDecisions } from "@/features/panel/editor/submission/hooks/useGetSubmissionDecisions";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
+import React, { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { format } from 'date-fns';
+import { ArrowLeft, Loader2, RefreshCw, Calendar, FileEdit, Package } from 'lucide-react';
+import { useGetSubmissionReviews } from '@/features/panel/editor/submission/hooks/useGetSubmissionReviews';
+import { useGetSubmissionDecisions } from '@/features/panel/editor/submission/hooks/useGetSubmissionDecisions';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   ConfirmationPopup,
   DecisionBadge,
@@ -35,13 +22,13 @@ import {
   useGetEditorSubmissionById,
   useGetReviewerRecommendations,
   useSyncSubmissionToOJS,
-} from "@/features";
-import { SubmissionInfoCard } from "@/features/panel/editor/submission/components/SubmissionInfoCard";
-import { SubmissionDocuments } from "@/features/panel/editor/submission/components/SubmissionDocumentsCard";
-import { SubmissionCoAuthorsCard } from "@/features/panel/editor/submission/components/SubmissionCoAuthorsCard";
-import { ReviewerRecommendations } from "@/features/panel/editor/submission/components/ReviewerRecommendationsCard";
-import { InvitedReviewersCard } from "@/features/panel/editor/submission/components/InvitedReviewersCard";
-import { EditorialDecisionForm } from "@/features/panel/editor/submission/components/EditorialDecisionForm";
+} from '@/features';
+import { SubmissionInfoCard } from '@/features/panel/editor/submission/components/SubmissionInfoCard';
+import { SubmissionDocuments } from '@/features/panel/editor/submission/components/SubmissionDocumentsCard';
+import { SubmissionCoAuthorsCard } from '@/features/panel/editor/submission/components/SubmissionCoAuthorsCard';
+import { ReviewerRecommendations } from '@/features/panel/editor/submission/components/ReviewerRecommendationsCard';
+import { InvitedReviewersCard } from '@/features/panel/editor/submission/components/InvitedReviewersCard';
+import { EditorialDecisionForm } from '@/features/panel/editor/submission/components/EditorialDecisionForm';
 
 export default function AssignedJournalSubmissionDetailPage() {
   const params = useParams();
@@ -74,23 +61,18 @@ export default function AssignedJournalSubmissionDetailPage() {
   } = useGetReviewerRecommendations(submissionId, !!submission);
 
   // Fetch submitted reviews
-  const { data: reviewsData, isPending: isReviewsPending } =
-    useGetSubmissionReviews(submissionId);
+  const { data: reviewsData, isPending: isReviewsPending } = useGetSubmissionReviews(submissionId);
 
   // Fetch editorial decisions
   const { data: decisionsData, isPending: isDecisionsPending } =
     useGetSubmissionDecisions(submissionId);
 
   const reviews = React.useMemo(() => {
-    return Array.isArray(reviewsData)
-      ? reviewsData
-      : reviewsData?.results || [];
+    return Array.isArray(reviewsData) ? reviewsData : reviewsData?.results || [];
   }, [reviewsData]);
 
   const decisions = React.useMemo(() => {
-    return Array.isArray(decisionsData)
-      ? decisionsData
-      : decisionsData?.results || [];
+    return Array.isArray(decisionsData) ? decisionsData : decisionsData?.results || [];
   }, [decisionsData]);
 
   const hasDecision = React.useMemo(() => decisions.length > 0, [decisions]);
@@ -111,8 +93,7 @@ export default function AssignedJournalSubmissionDetailPage() {
     setAssigningReviewerId(reviewerId);
 
     // Get review deadline days from journal settings, default to 30 days
-    const reviewDeadlineDays =
-      submission?.journal_details?.settings?.review_deadline_days || 30;
+    const reviewDeadlineDays = submission?.journal_details?.settings?.review_deadline_days || 30;
 
     // Calculate due date based on journal settings
     const dueDate = new Date();
@@ -122,7 +103,7 @@ export default function AssignedJournalSubmissionDetailPage() {
       {
         submission: submissionId,
         reviewer: reviewerId,
-        due_date: dueDate.toISOString().split("T")[0],
+        due_date: dueDate.toISOString().split('T')[0],
         invitation_message: `You have been invited to review the manuscript "${submission.title}". Please review and provide your feedback within ${reviewDeadlineDays} days.`,
       },
       {
@@ -174,8 +155,7 @@ export default function AssignedJournalSubmissionDetailPage() {
       <ErrorCard
         title="Failed to Load Submission"
         description={
-          submissionError?.message ||
-          "Unable to load submission details. Please try again."
+          submissionError?.message || 'Unable to load submission details. Please try again.'
         }
         onRetry={refetchSubmission}
         onBack={() => router.back()}
@@ -191,10 +171,8 @@ export default function AssignedJournalSubmissionDetailPage() {
           <Button
             variant="ghost"
             size="sm"
-            className={"mb-4"}
-            onClick={() =>
-              router.push(`/editor/assigned-journals/${journalId}/submissions`)
-            }
+            className={'mb-4'}
+            onClick={() => router.push(`/editor/assigned-journals/${journalId}/submissions`)}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Submissions
@@ -208,10 +186,7 @@ export default function AssignedJournalSubmissionDetailPage() {
       <SubmissionInfoCard submission={submission} />
 
       {/* Documents Section */}
-      <SubmissionDocuments
-        submission={submission}
-        submissionId={submissionId}
-      />
+      <SubmissionDocuments submission={submission} submissionId={submissionId} />
 
       {/* Co-authors Section */}
       <SubmissionCoAuthorsCard submission={submission} />
@@ -236,10 +211,10 @@ export default function AssignedJournalSubmissionDetailPage() {
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle>Editorial Decision</CardTitle>
-                <CardDescription className={"mt-1"}>
+                <CardDescription className={'mt-1'}>
                   {hasDecision
-                    ? "Final publishing decision has been made"
-                    : "Make final decision for publication (submission has been accepted by reviewers)"}
+                    ? 'Final publishing decision has been made'
+                    : 'Make final decision for publication (submission has been accepted by reviewers)'}
                 </CardDescription>
               </div>
               {isDecisionsPending && (
@@ -255,18 +230,14 @@ export default function AssignedJournalSubmissionDetailPage() {
                     <div className="space-y-1">
                       <h4 className="font-semibold">Editorial Decision</h4>
                       <p className="text-sm text-muted-foreground">
-                        Made on{" "}
+                        Made on{' '}
                         {format(
-                          new Date(
-                            latestDecision.decision_date ||
-                              latestDecision.created_at
-                          ),
-                          "PPP"
+                          new Date(latestDecision.decision_date || latestDecision.created_at),
+                          'PPP'
                         )}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        Decided by:{" "}
-                        {latestDecision.decided_by_name || "Unknown"}
+                        Decided by: {latestDecision.decided_by_name || 'Unknown'}
                       </p>
                     </div>
                     <div className="flex flex-col items-end gap-2">
@@ -288,10 +259,7 @@ export default function AssignedJournalSubmissionDetailPage() {
                           Revision Deadline:
                         </span>
                         <span className="text-blue-700 dark:text-blue-400">
-                          {format(
-                            new Date(latestDecision.revision_deadline),
-                            "PPP"
-                          )}
+                          {format(new Date(latestDecision.revision_deadline), 'PPP')}
                         </span>
                       </div>
                     </>
@@ -328,62 +296,49 @@ export default function AssignedJournalSubmissionDetailPage() {
 
       {/* Status Information for Other Cases */}
       {reviews.length > 0 &&
-        (submission.status === "REVISION_REQUIRED" ||
-          submission.status === "REJECTED" ||
-          submission.status === "UNDER_REVIEW") && (
+        (submission.status === 'REVISION_REQUIRED' ||
+          submission.status === 'REJECTED' ||
+          submission.status === 'UNDER_REVIEW') && (
           <Card>
             <CardHeader>
               <CardTitle>Current Status</CardTitle>
-              <CardDescription>
-                Submission status based on reviewer feedback
-              </CardDescription>
+              <CardDescription>Submission status based on reviewer feedback</CardDescription>
             </CardHeader>
             <CardContent>
               <div className="p-4 border rounded-lg bg-muted/30">
-                {submission.status === "REVISION_REQUIRED" && (
+                {submission.status === 'REVISION_REQUIRED' && (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
-                      <StatusBadge
-                        status="REVISION_REQUIRED"
-                        statusConfig={statusConfig}
-                      />
+                      <StatusBadge status="REVISION_REQUIRED" statusConfig={statusConfig} />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Reviewers have requested revisions. The author has been
-                      notified and can upload a revised manuscript. Once the
-                      author submits revisions, you can assign the same or new
-                      reviewers for re-evaluation.
+                      Reviewers have requested revisions. The author has been notified and can
+                      upload a revised manuscript. Once the author submits revisions, you can assign
+                      the same or new reviewers for re-evaluation.
                     </p>
                   </div>
                 )}
 
-                {submission.status === "REJECTED" && (
+                {submission.status === 'REJECTED' && (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
-                      <StatusBadge
-                        status="REJECTED"
-                        statusConfig={statusConfig}
-                      />
+                      <StatusBadge status="REJECTED" statusConfig={statusConfig} />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      This submission has been rejected based on reviewer
-                      recommendations. The author has been notified.
+                      This submission has been rejected based on reviewer recommendations. The
+                      author has been notified.
                     </p>
                   </div>
                 )}
 
-                {submission.status === "UNDER_REVIEW" && (
+                {submission.status === 'UNDER_REVIEW' && (
                   <div className="space-y-3">
                     <div className="flex items-center gap-2">
-                      <StatusBadge
-                        status="UNDER_REVIEW"
-                        statusConfig={statusConfig}
-                      />
+                      <StatusBadge status="UNDER_REVIEW" statusConfig={statusConfig} />
                     </div>
                     <p className="text-sm text-muted-foreground">
-                      Waiting for all reviewers to complete their reviews.
-                      Status will automatically update once all reviews are
-                      submitted.
+                      Waiting for all reviewers to complete their reviews. Status will automatically
+                      update once all reviews are submitted.
                     </p>
                   </div>
                 )}

@@ -1,11 +1,6 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardHeader,
-  CardDescription,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardHeader, CardDescription, CardTitle } from '@/components/ui/card';
 
 export function ErrorStatsCards({ stats }) {
   return (
@@ -19,17 +14,13 @@ export function ErrorStatsCards({ stats }) {
       <Card>
         <CardHeader className="pb-3">
           <CardDescription>Unresolved</CardDescription>
-          <CardTitle className="text-3xl text-destructive">
-            {stats.unresolved}
-          </CardTitle>
+          <CardTitle className="text-3xl text-destructive">{stats.unresolved}</CardTitle>
         </CardHeader>
       </Card>
       <Card>
         <CardHeader className="pb-3">
           <CardDescription>Resolved</CardDescription>
-          <CardTitle className="text-3xl text-green-600">
-            {stats.resolved}
-          </CardTitle>
+          <CardTitle className="text-3xl text-green-600">{stats.resolved}</CardTitle>
         </CardHeader>
       </Card>
       <Card>

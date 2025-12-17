@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDiscussion } from "../../api";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createDiscussion } from '../../api';
+import { toast } from 'sonner';
 
 /**
  * Hook to create a new copyediting discussion
@@ -12,16 +12,14 @@ export const useCreateDiscussion = () => {
   return useMutation({
     mutationFn: (data) => createDiscussion(data),
     onSuccess: (data, variables) => {
-      toast.success("Discussion created successfully!");
+      toast.success('Discussion created successfully!');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-discussions", variables.submissionId],
+        queryKey: ['copyediting-discussions', variables.submissionId],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to create discussion.";
+        error?.response?.data?.detail || error?.message || 'Failed to create discussion.';
       toast.error(message);
     },
   });

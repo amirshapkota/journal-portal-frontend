@@ -1,15 +1,9 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { FileText, Eye, Download } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { FileText, Eye, Download } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export function DocumentsTab({ submission, assignmentId }) {
   const router = useRouter();
@@ -20,9 +14,7 @@ export function DocumentsTab({ submission, assignmentId }) {
     <Card>
       <CardHeader>
         <CardTitle>Manuscript Files</CardTitle>
-        <CardDescription>
-          Download and review the submitted documents
-        </CardDescription>
+        <CardDescription>Download and review the submitted documents</CardDescription>
       </CardHeader>
       <CardContent>
         {!submission.documents || submission.documents.length === 0 ? (
@@ -51,9 +43,7 @@ export function DocumentsTab({ submission, assignmentId }) {
                       {doc.file_size && (
                         <>
                           <span>•</span>
-                          <span>
-                            {(doc.file_size / 1024 / 1024).toFixed(2)} MB
-                          </span>
+                          <span>{(doc.file_size / 1024 / 1024).toFixed(2)} MB</span>
                         </>
                       )}
                     </div>
@@ -64,9 +54,7 @@ export function DocumentsTab({ submission, assignmentId }) {
                     variant="ghost"
                     size="sm"
                     onClick={() =>
-                      router.push(
-                        `/reviewer/review/${assignmentId}/document/${doc.id}`
-                      )
+                      router.push(`/reviewer/review/${assignmentId}/document/${doc.id}`)
                     }
                   >
                     <Eye className="h-4 w-4 mr-2" />

@@ -1,13 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getJournalSubmissions } from "../../api/journalsApi";
+import { useQuery } from '@tanstack/react-query';
+import { getJournalSubmissions } from '../../api/journalsApi';
 
-export const useGetJournalSubmissions = (
-  journalId,
-  params = {},
-  options = {}
-) => {
+export const useGetJournalSubmissions = (journalId, params = {}, options = {}) => {
   return useQuery({
-    queryKey: ["journal-submissions", journalId, params],
+    queryKey: ['journal-submissions', journalId, params],
     queryFn: () => getJournalSubmissions(journalId, params),
     enabled: !!journalId,
     staleTime: 1000 * 60 * 5, // 5 minutes - submissions change more frequently

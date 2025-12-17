@@ -1,0 +1,31 @@
+# Node
+node_modules
+
+# Next build
+.next
+out
+
+# Logs
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Python
+__pycache__
+*.py[cod]
+venv/
+env/
+
+# VSCode
+.vscode
+
+# Media and uploads
+media
+frontend-journal-portal/public/uploads
+
+# Misc
+dist
+build
+coverage
+.DS_Store

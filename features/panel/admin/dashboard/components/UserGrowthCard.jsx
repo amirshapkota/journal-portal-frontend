@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { LineChart } from "recharts";
+import { LineChart } from 'recharts';
 
 const data = {
-  "7d": [
-    { date: "Mon", users: 240 },
-    { date: "Tue", users: 321 },
-    { date: "Wed", users: 200 },
-    { date: "Thu", users: 278 },
-    { date: "Fri", users: 189 },
-    { date: "Sat", users: 239 },
-    { date: "Sun", users: 349 },
+  '7d': [
+    { date: 'Mon', users: 240 },
+    { date: 'Tue', users: 321 },
+    { date: 'Wed', users: 200 },
+    { date: 'Thu', users: 278 },
+    { date: 'Fri', users: 189 },
+    { date: 'Sat', users: 239 },
+    { date: 'Sun', users: 349 },
   ],
-  "30d": Array.from({ length: 30 }, (_, i) => ({
+  '30d': Array.from({ length: 30 }, (_, i) => ({
     date: `Day ${i + 1}`,
     users: Math.floor(Math.random() * 500) + 100,
   })),
@@ -23,7 +23,7 @@ export function UserGrowthChart({ dateRange, isLoading, isError }) {
     <LineChart
       title="User Growth"
       data={data[dateRange]}
-      lines={[{ dataKey: "users", color: "var(--primary)" }]}
+      lines={[{ dataKey: 'users', color: 'var(--primary)' }]}
       xAxisKey="date"
       isLoading={isLoading}
       isError={isError}

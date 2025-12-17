@@ -1,10 +1,10 @@
 // EditSubmissionGuidelines.jsx
 // Journal Selection + Submission Guidelines for EDIT mode
 
-import { useMemo, useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
+import { useMemo, useEffect, useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 import {
   FormField,
   FormItem,
@@ -12,16 +12,16 @@ import {
   FormControl,
   FormMessage,
   FormDescription,
-} from "@/components/ui/form";
-import { SearchableSelect } from "@/features/shared/components/SearchableSelect";
-import { AuthorGuidelinesDialog } from "@/features/shared/components/AuthorGuidelinesDialog";
-import { useWatch } from "react-hook-form";
-import { useGetTaxonomyTree } from "@/features/shared/hooks/useGetTaxonomyTree";
-import { Skeleton } from "@/components/ui/skeleton";
-import { JournalInfoCard } from "@/features/panel/reviewer/components/review-detail/JournalInfoCard";
-import { stripHtmlTags } from "@/features/shared/utils";
+} from '@/components/ui/form';
+import { SearchableSelect } from '@/features/shared/components/SearchableSelect';
+import { AuthorGuidelinesDialog } from '@/features/shared/components/AuthorGuidelinesDialog';
+import { useWatch } from 'react-hook-form';
+import { useGetTaxonomyTree } from '@/features/shared/hooks/useGetTaxonomyTree';
+import { Skeleton } from '@/components/ui/skeleton';
+import { JournalInfoCard } from '@/features/panel/reviewer/components/review-detail/JournalInfoCard';
+import { stripHtmlTags } from '@/features/shared/utils';
 
-import { FileText, ExternalLink } from "lucide-react";
+import { FileText, ExternalLink } from 'lucide-react';
 
 export default function EditSubmissionGuidelines({ form, submission }) {
   const [showGuidelinesModal, setShowGuidelinesModal] = useState(false);
@@ -32,24 +32,23 @@ export default function EditSubmissionGuidelines({ form, submission }) {
 
   const sectionId = useWatch({
     control: form.control,
-    name: "section_id",
-    defaultValue: "",
+    name: 'section_id',
+    defaultValue: '',
   });
 
   const categoryId = useWatch({
     control: form.control,
-    name: "category_id",
-    defaultValue: "",
+    name: 'category_id',
+    defaultValue: '',
   });
 
   const researchTypeId = useWatch({
     control: form.control,
-    name: "research_type_id",
-    defaultValue: "",
+    name: 'research_type_id',
+    defaultValue: '',
   });
 
-  const { data: taxonomyTree, isPending: isLoadingTaxonomy } =
-    useGetTaxonomyTree(journalId);
+  const { data: taxonomyTree, isPending: isLoadingTaxonomy } = useGetTaxonomyTree(journalId);
 
   // Get submission requirements and author guidelines from journal settings
   const submissionRequirements = useMemo(
@@ -57,23 +56,18 @@ export default function EditSubmissionGuidelines({ form, submission }) {
     [journal]
   );
 
-  const authorGuidelines = useMemo(
-    () => journal?.settings?.author_guidelines || "",
-    [journal]
-  );
+  const authorGuidelines = useMemo(() => journal?.settings?.author_guidelines || '', [journal]);
 
   const submissionGuidelines = useMemo(
-    () => journal?.settings?.submission_guidelines || "",
+    () => journal?.settings?.submission_guidelines || '',
     [journal]
   );
 
   // Truncate author guidelines to 150 characters
   const truncatedGuidelines = useMemo(() => {
-    if (!authorGuidelines) return "";
+    if (!authorGuidelines) return '';
     const plainText = stripHtmlTags(authorGuidelines);
-    return plainText.length > 150
-      ? plainText.substring(0, 150) + "..."
-      : plainText;
+    return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
   }, [authorGuidelines]);
 
   // Get sections (taxonomy tree root level)
@@ -113,13 +107,10 @@ export default function EditSubmissionGuidelines({ form, submission }) {
 
   // Get areas for selected research type
   const areaOptions = useMemo(() => {
-    if (!sectionId || !categoryId || !researchTypeId || !taxonomyTree)
-      return [];
+    if (!sectionId || !categoryId || !researchTypeId || !taxonomyTree) return [];
     const section = taxonomyTree.find((s) => s.id === sectionId);
     const category = section?.categories?.find((c) => c.id === categoryId);
-    const researchType = category?.research_types?.find(
-      (rt) => rt.id === researchTypeId
-    );
+    const researchType = category?.research_types?.find((rt) => rt.id === researchTypeId);
     return (
       researchType?.areas?.map((area) => ({
         value: area.id,
@@ -130,41 +121,39 @@ export default function EditSubmissionGuidelines({ form, submission }) {
 
   // Reset dependent fields when parent changes (only after user interaction)
   useEffect(() => {
-    const currentCategoryId = form.getValues("category_id");
+    const currentCategoryId = form.getValues('category_id');
     // Only reset if category is not in the current section's categories
     if (sectionId && categoryOptions.length > 0) {
-      const categoryExists = categoryOptions.some(
-        (opt) => opt.value === currentCategoryId
-      );
+      const categoryExists = categoryOptions.some((opt) => opt.value === currentCategoryId);
       if (!categoryExists) {
-        form.setValue("category_id", "");
-        form.setValue("research_type_id", "");
-        form.setValue("area_id", "");
+        form.setValue('category_id', '');
+        form.setValue('research_type_id', '');
+        form.setValue('area_id', '');
       }
     }
   }, [sectionId, categoryOptions, form]);
 
   useEffect(() => {
-    const currentResearchTypeId = form.getValues("research_type_id");
+    const currentResearchTypeId = form.getValues('research_type_id');
     // Only reset if research type is not in the current category's research types
     if (categoryId && researchTypeOptions.length > 0) {
       const researchTypeExists = researchTypeOptions.some(
         (opt) => opt.value === currentResearchTypeId
       );
       if (!researchTypeExists) {
-        form.setValue("research_type_id", "");
-        form.setValue("area_id", "");
+        form.setValue('research_type_id', '');
+        form.setValue('area_id', '');
       }
     }
   }, [categoryId, researchTypeOptions, form]);
 
   useEffect(() => {
-    const currentAreaId = form.getValues("area_id");
+    const currentAreaId = form.getValues('area_id');
     // Only reset if area is not in the current research type's areas
     if (researchTypeId && areaOptions.length > 0) {
       const areaExists = areaOptions.some((opt) => opt.value === currentAreaId);
       if (!areaExists) {
-        form.setValue("area_id", "");
+        form.setValue('area_id', '');
       }
     }
   }, [researchTypeId, areaOptions, form]);
@@ -178,9 +167,7 @@ export default function EditSubmissionGuidelines({ form, submission }) {
           <div className="flex items-center justify-between">
             <div>
               <p className="font-semibold text-foreground">{journal?.title}</p>
-              <p className="text-sm text-muted-foreground">
-                {journal?.short_name}
-              </p>
+              <p className="text-sm text-muted-foreground">{journal?.short_name}</p>
             </div>
             <div className="text-xs text-muted-foreground">
               Journal cannot be changed when editing
@@ -238,9 +225,7 @@ export default function EditSubmissionGuidelines({ form, submission }) {
                   emptyText="No categories available."
                 />
               </FormControl>
-              <FormDescription>
-                Select the category within the chosen section
-              </FormDescription>
+              <FormDescription>Select the category within the chosen section</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -292,9 +277,7 @@ export default function EditSubmissionGuidelines({ form, submission }) {
                   emptyText="No research areas available."
                 />
               </FormControl>
-              <FormDescription>
-                Choose the specific research area for your work
-              </FormDescription>
+              <FormDescription>Choose the specific research area for your work</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -315,9 +298,7 @@ export default function EditSubmissionGuidelines({ form, submission }) {
             <div className="p-2 rounded-lg bg-amber-500/10">
               <FileText className="h-4 w-4 text-amber-600 dark:text-amber-400" />
             </div>
-            <h3 className="font-semibold text-foreground">
-              Submission Guidelines
-            </h3>
+            <h3 className="font-semibold text-foreground">Submission Guidelines</h3>
           </div>
           <div
             className="text-sm text-muted-foreground prose dark:prose-invert max-w-none"
@@ -356,9 +337,7 @@ export default function EditSubmissionGuidelines({ form, submission }) {
       {/* Submission Requirements with Checkboxes */}
       {submissionRequirements.length > 0 && (
         <Card className="p-4 gap-0 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900">
-          <h3 className="font-semibold text-foreground mb-4">
-            Submission Requirements *
-          </h3>
+          <h3 className="font-semibold text-foreground mb-4">Submission Requirements *</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Please confirm all requirements below to proceed:
           </p>
@@ -368,15 +347,10 @@ export default function EditSubmissionGuidelines({ form, submission }) {
             render={({ field }) => (
               <div className="space-y-3">
                 {submissionRequirements.map((requirement, i) => (
-                  <FormItem
-                    key={i}
-                    className="flex items-center space-x-2 space-y-0"
-                  >
+                  <FormItem key={i} className="flex items-center space-x-2 space-y-0">
                     <FormControl>
                       <Checkbox
-                        checked={
-                          Array.isArray(field.value) && field.value[i] === true
-                        }
+                        checked={Array.isArray(field.value) && field.value[i] === true}
                         onCheckedChange={(checked) => {
                           const arr = Array.isArray(field.value)
                             ? [...field.value]

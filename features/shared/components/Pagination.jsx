@@ -3,21 +3,16 @@
  * Reusable pagination component for Django REST Framework paginated responses
  */
 
-import React from "react";
-import { Button } from "@/components/ui/button";
+import React from 'react';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import {
-  ChevronLeft,
-  ChevronRight,
-  ChevronsLeft,
-  ChevronsRight,
-} from "lucide-react";
+} from '@/components/ui/select';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
 
 /**
  * Pagination Component
@@ -46,7 +41,7 @@ export default function Pagination({
   showPageSizeSelector = true,
   showPageInfo = true,
   showFirstLast = true,
-  className = "",
+  className = '',
 }) {
   const startItem = totalCount === 0 ? 0 : (currentPage - 1) * pageSize + 1;
   const endItem = Math.min(currentPage * pageSize, totalCount);
@@ -83,23 +78,23 @@ export default function Pagination({
         for (let i = 1; i <= 4; i++) {
           pages.push(i);
         }
-        pages.push("...");
+        pages.push('...');
         pages.push(totalPages);
       } else if (currentPage >= totalPages - 2) {
         // Near end
         pages.push(1);
-        pages.push("...");
+        pages.push('...');
         for (let i = totalPages - 3; i <= totalPages; i++) {
           pages.push(i);
         }
       } else {
         // Middle
         pages.push(1);
-        pages.push("...");
+        pages.push('...');
         for (let i = currentPage - 1; i <= currentPage + 1; i++) {
           pages.push(i);
         }
-        pages.push("...");
+        pages.push('...');
         pages.push(totalPages);
       }
     }
@@ -118,8 +113,8 @@ export default function Pagination({
       {/* Page Info */}
       {showPageInfo && (
         <div className="text-sm text-muted-foreground w-full sm:w-auto text-center sm:text-left">
-          Showing <span className="font-medium">{startItem}</span> to{" "}
-          <span className="font-medium">{endItem}</span> of{" "}
+          Showing <span className="font-medium">{startItem}</span> to{' '}
+          <span className="font-medium">{endItem}</span> of{' '}
           <span className="font-medium">{totalCount}</span> results
         </div>
       )}
@@ -155,12 +150,9 @@ export default function Pagination({
         {/* Page Numbers */}
         <div className="flex items-center gap-1 overflow-x-auto scrollbar-thin max-w-full sm:max-w-none">
           {getPageNumbers().map((page, index) => {
-            if (page === "...") {
+            if (page === '...') {
               return (
-                <span
-                  key={`ellipsis-${index}`}
-                  className="px-2 text-muted-foreground"
-                >
+                <span key={`ellipsis-${index}`} className="px-2 text-muted-foreground">
                   ...
                 </span>
               );
@@ -169,7 +161,7 @@ export default function Pagination({
             return (
               <Button
                 key={page}
-                variant={currentPage === page ? "default" : "outline"}
+                variant={currentPage === page ? 'default' : 'outline'}
                 size="sm"
                 onClick={() => handlePageChange(page)}
                 className="h-8 min-w-8 px-2 sm:px-3 text-xs sm:text-sm"
@@ -210,9 +202,7 @@ export default function Pagination({
       {/* Page Size Selector */}
       {showPageSizeSelector && (
         <div className="flex items-center gap-2 w-full sm:w-auto justify-center sm:justify-end">
-          <span className="text-sm text-muted-foreground whitespace-nowrap">
-            Items per page:
-          </span>
+          <span className="text-sm text-muted-foreground whitespace-nowrap">Items per page:</span>
           <Select value={String(pageSize)} onValueChange={handlePageSizeChange}>
             <SelectTrigger className="h-8 w-[70px]">
               <SelectValue />

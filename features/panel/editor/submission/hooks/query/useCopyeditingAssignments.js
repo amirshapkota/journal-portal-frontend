@@ -1,24 +1,20 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery } from '@tanstack/react-query';
 import {
   listCopyeditingAssignments,
   getCopyeditingAssignment,
   getCopyeditingAssignmentFiles,
   getCopyeditingAssignmentDiscussions,
   getCopyeditingAssignmentParticipants,
-} from "../../api";
+} from '../../api';
 
 /**
  * Hook to fetch copyediting assignments list
  */
 export function useCopyeditingAssignments(options = {}) {
-  const { copyeditor, submission, status, search, ordering, ...queryOptions } =
-    options;
+  const { copyeditor, submission, status, search, ordering, ...queryOptions } = options;
 
   return useQuery({
-    queryKey: [
-      "copyediting-assignments",
-      { copyeditor, submission, status, search, ordering },
-    ],
+    queryKey: ['copyediting-assignments', { copyeditor, submission, status, search, ordering }],
     queryFn: () =>
       listCopyeditingAssignments({
         copyeditor,
@@ -37,7 +33,7 @@ export function useCopyeditingAssignments(options = {}) {
  */
 export function useCopyeditingAssignment(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["copyediting-assignment", assignmentId],
+    queryKey: ['copyediting-assignment', assignmentId],
     queryFn: () => getCopyeditingAssignment(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,
@@ -50,7 +46,7 @@ export function useCopyeditingAssignment(assignmentId, options = {}) {
  */
 export function useCopyeditingAssignmentFiles(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["copyediting-assignment-files", assignmentId],
+    queryKey: ['copyediting-assignment-files', assignmentId],
     queryFn: () => getCopyeditingAssignmentFiles(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,
@@ -61,12 +57,9 @@ export function useCopyeditingAssignmentFiles(assignmentId, options = {}) {
 /**
  * Hook to fetch discussions for a copyediting assignment
  */
-export function useCopyeditingAssignmentDiscussions(
-  assignmentId,
-  options = {}
-) {
+export function useCopyeditingAssignmentDiscussions(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["copyediting-assignment-discussions", assignmentId],
+    queryKey: ['copyediting-assignment-discussions', assignmentId],
     queryFn: () => getCopyeditingAssignmentDiscussions(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,
@@ -77,12 +70,9 @@ export function useCopyeditingAssignmentDiscussions(
 /**
  * Hook to fetch participants for a copyediting assignment
  */
-export function useCopyeditingAssignmentParticipants(
-  assignmentId,
-  options = {}
-) {
+export function useCopyeditingAssignmentParticipants(assignmentId, options = {}) {
   return useQuery({
-    queryKey: ["copyediting-assignment-participants", assignmentId],
+    queryKey: ['copyediting-assignment-participants', assignmentId],
     queryFn: () => getCopyeditingAssignmentParticipants(assignmentId),
     enabled: !!assignmentId && options.enabled !== false,
     ...options,

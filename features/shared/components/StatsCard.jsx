@@ -2,9 +2,9 @@
  * StatsCard - Global stats card component for displaying a stat value with icon and label
  * @module features/shared/components/StatsCard
  */
-import { Card, CardContent } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import React from "react";
+import { Card, CardContent } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import React from 'react';
 
 /**
  * @param {Object} props
@@ -20,9 +20,9 @@ export default function StatsCard({
   icon: Icon,
   title,
   value,
-  iconClass = "text-primary",
-  valueClass = "text-foreground",
-  cardClass = "",
+  iconClass = 'text-primary',
+  valueClass = 'text-foreground',
+  cardClass = '',
   isLoading = false,
 }) {
   return (
@@ -37,12 +37,8 @@ export default function StatsCard({
               </>
             ) : (
               <>
-                <p className="text-sm font-medium text-muted-foreground">
-                  {title}
-                </p>
-                <p className={`text-2xl font-semibold ${valueClass}`}>
-                  {value}
-                </p>
+                <p className="text-sm font-medium text-muted-foreground">{title}</p>
+                <p className={`text-2xl font-semibold ${valueClass}`}>{value}</p>
               </>
             )}
           </div>

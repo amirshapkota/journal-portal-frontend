@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { FilterToolbar, LoadingScreen } from "@/features/shared";
+import { useState } from 'react';
+import { FilterToolbar, LoadingScreen } from '@/features/shared';
 import {
   InactiveJournalsTable,
   InactiveJournalDetailsModal,
   useGetInactiveJournals,
   useActivateJournal,
-} from "@/features/panel/admin/journal";
-import { Button } from "@/components/ui/button";
-import { RefreshCw } from "lucide-react";
+} from '@/features/panel/admin/journal';
+import { Button } from '@/components/ui/button';
+import { RefreshCw } from 'lucide-react';
 
 export default function InactiveJournalsPage() {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [selectedJournal, setSelectedJournal] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
@@ -20,15 +20,9 @@ export default function InactiveJournalsPage() {
     search: searchQuery || undefined,
   };
 
-  const {
-    data: journalsData,
-    isPending,
-    error,
-    refetch,
-  } = useGetInactiveJournals({ params });
+  const { data: journalsData, isPending, error, refetch } = useGetInactiveJournals({ params });
 
-  const { mutate: activateJournal, isPending: isActivating } =
-    useActivateJournal();
+  const { mutate: activateJournal, isPending: isActivating } = useActivateJournal();
 
   const journals = journalsData?.results || [];
 
@@ -57,12 +51,8 @@ export default function InactiveJournalsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="space-y-2">
-          <h1 className="text-3xl font-semibold text-foreground">
-            Inactive Journals
-          </h1>
-          <p className="text-muted-foreground">
-            Review and activate inactive journals
-          </p>
+          <h1 className="text-3xl font-semibold text-foreground">Inactive Journals</h1>
+          <p className="text-muted-foreground">Review and activate inactive journals</p>
         </div>
         <Button variant="outline" size="sm" onClick={handleRefresh}>
           <RefreshCw className="h-4 w-4 mr-2" />
@@ -75,13 +65,9 @@ export default function InactiveJournalsPage() {
         <div className="grid gap-4 md:grid-cols-3">
           <div className="rounded-lg border bg-card p-6">
             <div className="flex items-center justify-between">
-              <p className="text-sm font-medium text-muted-foreground">
-                Total Inactive
-              </p>
+              <p className="text-sm font-medium text-muted-foreground">Total Inactive</p>
             </div>
-            <p className="text-3xl font-semibold mt-2">
-              {journalsData?.count || 0}
-            </p>
+            <p className="text-3xl font-semibold mt-2">{journalsData?.count || 0}</p>
           </div>
         </div>
       )}

@@ -1,18 +1,13 @@
-"use client";
+'use client';
 
-import { useParams, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
-import {
-  SuperDocEditor,
-  LoadingScreen,
-  ErrorCard,
-  PDFViewer,
-} from "@/features";
-import { loadDocument } from "@/features/panel/author/api/superdocApi";
-import { useSelector } from "react-redux";
+import { useParams, useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
+import { SuperDocEditor, LoadingScreen, ErrorCard, PDFViewer } from '@/features';
+import { loadDocument } from '@/features/panel/author/api/superdocApi';
+import { useSelector } from 'react-redux';
 
 export default function EditorDocumentViewPage() {
   const params = useParams();
@@ -28,7 +23,7 @@ export default function EditorDocumentViewPage() {
     error: loadError,
     refetch,
   } = useQuery({
-    queryKey: ["superdoc-document", documentId],
+    queryKey: ['superdoc-document', documentId],
     queryFn: () => loadDocument(documentId),
     enabled: !!documentId,
     // 5 minutes
@@ -39,9 +34,7 @@ export default function EditorDocumentViewPage() {
     return (
       <ErrorCard
         title="Failed to Load Document"
-        description={
-          loadError?.message || "Unable to load the document. Please try again."
-        }
+        description={loadError?.message || 'Unable to load the document. Please try again.'}
         onRetry={refetch}
         onBack={() => router.push(`/editor/submissions/${submissionId}`)}
       />
@@ -57,9 +50,7 @@ export default function EditorDocumentViewPage() {
       {/* Header with Back Button */}
       <div className="flex flex-col-reverse sm:flex-row gap-2 sm:gap-0 items-start sm:items-center sm:justify-between">
         <div className="space-y-1">
-          <h2 className="text-2xl font-semibold capitalize">
-            {documentData.title}
-          </h2>
+          <h2 className="text-2xl font-semibold capitalize">{documentData.title}</h2>
           <p className="text-sm text-muted-foreground">
             {documentData?.document_type} • View and Comment
           </p>
@@ -72,18 +63,14 @@ export default function EditorDocumentViewPage() {
 
       <Card
         className={`flex flex-col ${
-          documentData.file_name?.toLowerCase().endsWith(".pdf")
-            ? "p-0 border-none"
-            : ""
+          documentData.file_name?.toLowerCase().endsWith('.pdf') ? 'p-0 border-none' : ''
         }`}
       >
         {isLoading && <LoadingScreen />}
         <CardContent
-          className={`${
-            documentData.file_name?.toLowerCase().endsWith(".pdf") ? "p-0" : ""
-          }`}
+          className={`${documentData.file_name?.toLowerCase().endsWith('.pdf') ? 'p-0' : ''}`}
         >
-          {documentData.file_name?.toLowerCase().endsWith(".pdf") ? (
+          {documentData.file_name?.toLowerCase().endsWith('.pdf') ? (
             <PDFViewer
               fileUrl={documentData.file_url}
               fileName={documentData.file_name}

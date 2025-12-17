@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Fetch inactive journals
@@ -6,7 +6,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise} API response
  */
 export const getInactiveJournals = async (params = {}) => {
-  const response = await instance.get("journals/journals/", {
+  const response = await instance.get('journals/journals/', {
     params: { ...params, is_active: false },
   });
   return response.data;

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   AuthorDashboardStats,
   AuthorDashboardTable,
@@ -11,9 +11,9 @@ import {
   RoleBasedRoute,
   useGetMyAnalytics,
   useGetSubmissions,
-} from "@/features";
-import { Plus } from "lucide-react";
-import Link from "next/link";
+} from '@/features';
+import { Plus } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AuthorDashboard() {
   const {
@@ -36,9 +36,7 @@ export default function AuthorDashboard() {
     return (
       <ErrorCard
         title="Failed to load dashboard"
-        description={
-          analyticsError?.message || "Unable to fetch analytics data"
-        }
+        description={analyticsError?.message || 'Unable to fetch analytics data'}
         onRetry={refetchAnalytics}
       />
     );
@@ -50,9 +48,7 @@ export default function AuthorDashboard() {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold">Author Dashboard</h1>
-        <p className="text-muted-foreground">
-          Manage and track your manuscript submissions
-        </p>
+        <p className="text-muted-foreground">Manage and track your manuscript submissions</p>
       </div>
 
       {/* Stats Cards */}

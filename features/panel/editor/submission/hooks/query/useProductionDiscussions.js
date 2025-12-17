@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getProductionDiscussion } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { getProductionDiscussion } from '../../api';
 
 /**
  * Hook to fetch a single production discussion with messages
@@ -7,7 +7,7 @@ import { getProductionDiscussion } from "../../api";
  */
 export function useProductionDiscussion(discussionId, options = {}) {
   return useQuery({
-    queryKey: ["production-discussion", discussionId],
+    queryKey: ['production-discussion', discussionId],
     queryFn: () => getProductionDiscussion(discussionId),
     enabled: !!discussionId && options.enabled !== false,
     ...options,

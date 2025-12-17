@@ -1,11 +1,11 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Change user password
  * POST /api/auth/password/change/
  */
 export const changePassword = async (data) => {
-  const response = await instance.post("/auth/password/change/", data);
+  const response = await instance.post('/auth/password/change/', data);
   return response.data;
 };
 
@@ -24,7 +24,7 @@ export const verifyEmail = async ({ uid, token }) => {
  * Note: Requires authentication, gets email from authenticated user
  */
 export const resendVerificationEmail = async (email) => {
-  const response = await instance.post("/auth/resend-verification/", {
+  const response = await instance.post('/auth/resend-verification/', {
     email,
   });
   return response.data;
@@ -35,7 +35,7 @@ export const resendVerificationEmail = async (email) => {
  * POST /api/auth/password/reset/
  */
 export const requestPasswordReset = async (email) => {
-  const response = await instance.post("/auth/password/reset/", { email });
+  const response = await instance.post('/auth/password/reset/', { email });
   return response.data;
 };
 
@@ -43,13 +43,8 @@ export const requestPasswordReset = async (email) => {
  * Confirm password reset with token
  * POST /api/auth/password/reset/confirm/
  */
-export const confirmPasswordReset = async ({
-  uid,
-  token,
-  new_password,
-  confirm_password,
-}) => {
-  const response = await instance.post("/auth/password/reset/confirm/", {
+export const confirmPasswordReset = async ({ uid, token, new_password, confirm_password }) => {
+  const response = await instance.post('/auth/password/reset/confirm/', {
     uid,
     token,
     new_password,
@@ -63,7 +58,7 @@ export const confirmPasswordReset = async ({
  * POST /api/auth/password/setup/request/
  */
 export const requestPasswordSetup = async (email) => {
-  const response = await instance.post("/auth/password/setup/request/", {
+  const response = await instance.post('/auth/password/setup/request/', {
     email,
   });
   return response.data;
@@ -74,7 +69,7 @@ export const requestPasswordSetup = async (email) => {
  * POST /api/auth/password/setup/
  */
 export const setupPassword = async ({ uid, token, password }) => {
-  const response = await instance.post("/auth/password/setup/", {
+  const response = await instance.post('/auth/password/setup/', {
     uid,
     token,
     password,

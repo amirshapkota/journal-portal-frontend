@@ -1,27 +1,23 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Command,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Check, ChevronsUpDown } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Check, ChevronsUpDown } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 
 export const SearchableSelect = ({
   options = [],
-  value = "",
+  value = '',
   onChange,
-  placeholder = "Select an option",
-  emptyText = "No option found.",
-  searchPlaceholder = "Search...",
+  placeholder = 'Select an option',
+  emptyText = 'No option found.',
+  searchPlaceholder = 'Search...',
   className,
   disabled = false,
 }) => {
@@ -38,8 +34,8 @@ export const SearchableSelect = ({
           aria-expanded={open}
           disabled={disabled}
           className={cn(
-            "w-full justify-between font-normal hover:bg-secondary/60",
-            !value && "text-muted-foreground",
+            'w-full justify-between font-normal hover:bg-secondary/60 ',
+            !value && 'text-muted-foreground',
             className
           )}
         >
@@ -59,18 +55,16 @@ export const SearchableSelect = ({
                 data-id={option.value}
                 onSelect={(selectedLabel) => {
                   // Find the option by label, then set value to its ID
-                  const selected = options.find(
-                    (opt) => opt.label === selectedLabel
-                  );
-                  onChange(selected ? selected.value : "");
+                  const selected = options.find((opt) => opt.label === selectedLabel);
+                  onChange(selected ? selected.value : '');
                   setOpen(false);
                 }}
                 className="capitalize"
               >
                 <Check
                   className={cn(
-                    "mr-2 h-4 w-4",
-                    value === option.value ? "opacity-100" : "opacity-0"
+                    'mr-2 h-4 w-4',
+                    value === option.value ? 'opacity-100' : 'opacity-0'
                   )}
                 />
                 {option.label}

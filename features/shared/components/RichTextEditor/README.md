@@ -9,6 +9,7 @@
 - ```jsx
 
   ```
+
 - <RichTextEditor
 - placeholder="Start typing..."
 - onChange={(html) => console.log(html)}
@@ -16,11 +17,13 @@
 - ```
 
   ```
+
 -
 - With Form (React Hook Form):
 - ```jsx
 
   ```
+
 - import { RichTextEditor } from "@/features/shared";
 - import { useForm, Controller } from "react-hook-form";
 -
@@ -51,6 +54,7 @@
 - ```
 
   ```
+
 -
 - Features:
 - - Text formatting: Bold, Italic, Underline, Strikethrough, Code

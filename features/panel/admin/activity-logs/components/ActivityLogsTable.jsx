@@ -1,13 +1,8 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   LogIn,
   LogOut,
@@ -25,10 +20,10 @@ import {
   Clock,
   MapPin,
   Activity,
-} from "lucide-react";
-import { format } from "date-fns";
-import { DataTable } from "@/features/shared";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+} from 'lucide-react';
+import { format } from 'date-fns';
+import { DataTable } from '@/features/shared';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
 
 export function ActivityLogsTable({ logs, onViewDetails, isPending, error }) {
   const getActionIcon = (actionType) => {
@@ -51,40 +46,40 @@ export function ActivityLogsTable({ logs, onViewDetails, isPending, error }) {
 
   const getActionColor = (actionType) => {
     const colors = {
-      CREATE: "default",
-      SUBMIT: "default",
-      APPROVE: "success",
-      UPDATE: "secondary",
-      REVIEW: "secondary",
-      DELETE: "destructive",
-      REJECT: "destructive",
-      WITHDRAW: "destructive",
-      LOGIN: "outline",
-      LOGOUT: "outline",
-      PUBLISH: "default",
-      READ: "outline",
+      CREATE: 'default',
+      SUBMIT: 'default',
+      APPROVE: 'success',
+      UPDATE: 'secondary',
+      REVIEW: 'secondary',
+      DELETE: 'destructive',
+      REJECT: 'destructive',
+      WITHDRAW: 'destructive',
+      LOGIN: 'outline',
+      LOGOUT: 'outline',
+      PUBLISH: 'default',
+      READ: 'outline',
     };
-    return colors[actionType] || "outline";
+    return colors[actionType] || 'outline';
   };
 
   const getResourceColor = (resourceType) => {
     const colors = {
-      USER: "default",
-      PROFILE: "default",
-      SUBMISSION: "secondary",
-      DOCUMENT: "secondary",
-      REVIEW: "outline",
-      JOURNAL: "outline",
-      PLAGIARISM_REPORT: "warning",
-      FORMAT_CHECK: "warning",
+      USER: 'default',
+      PROFILE: 'default',
+      SUBMISSION: 'secondary',
+      DOCUMENT: 'secondary',
+      REVIEW: 'outline',
+      JOURNAL: 'outline',
+      PLAGIARISM_REPORT: 'warning',
+      FORMAT_CHECK: 'warning',
     };
-    return colors[resourceType] || "outline";
+    return colors[resourceType] || 'outline';
   };
 
   const columns = [
     {
-      key: "action",
-      header: "Action",
+      key: 'action',
+      header: 'Action',
       render: (row) => (
         <Badge variant={getActionColor(row.action_type)} className="gap-1">
           {getActionIcon(row.action_type)}
@@ -93,14 +88,11 @@ export function ActivityLogsTable({ logs, onViewDetails, isPending, error }) {
       ),
     },
     {
-      key: "resource",
-      header: "Resource",
+      key: 'resource',
+      header: 'Resource',
       render: (row) => (
         <div className="space-y-1">
-          <Badge
-            variant={getResourceColor(row.resource_type)}
-            className="text-xs"
-          >
+          <Badge variant={getResourceColor(row.resource_type)} className="text-xs">
             {row.resource_type_display || row.resource_type}
           </Badge>
           {row.resource_id && (
@@ -116,15 +108,15 @@ export function ActivityLogsTable({ logs, onViewDetails, isPending, error }) {
       ),
     },
     {
-      key: "user",
-      header: "User",
+      key: 'user',
+      header: 'User',
       render: (row) => (
         <div className="space-y-1">
           {row.user_email ? (
             <>
               <div className="flex items-center gap-1.5">
                 <User className="h-3 w-3 text-muted-foreground" />
-                <EllipsisTooltip text={row.user_email || "-"} />
+                <EllipsisTooltip text={row.user_email || '-'} />
               </div>
               <Badge variant="outline" className="text-xs">
                 {row.actor_type_display || row.actor_type}
@@ -140,8 +132,8 @@ export function ActivityLogsTable({ logs, onViewDetails, isPending, error }) {
       ),
     },
     {
-      key: "timestamp",
-      header: "Timestamp",
+      key: 'timestamp',
+      header: 'Timestamp',
       render: (row) => {
         try {
           const date = new Date(row.created_at);
@@ -157,7 +149,7 @@ export function ActivityLogsTable({ logs, onViewDetails, isPending, error }) {
             <div className="space-y-1">
               <div className="flex items-center gap-1 text-sm">
                 <Clock className="h-3 w-3 text-muted-foreground" />
-                {format(date, "PPp")}
+                {format(date, 'PPp')}
               </div>
             </div>
           );
@@ -172,31 +164,24 @@ export function ActivityLogsTable({ logs, onViewDetails, isPending, error }) {
       },
     },
     {
-      key: "ip",
-      header: "IP Address",
+      key: 'ip',
+      header: 'IP Address',
       render: (row) =>
         row.ip_address ? (
           <div className="flex items-center gap-1 text-sm text-muted-foreground">
             <MapPin className="h-3 w-3" />
-            <code className="bg-muted px-1.5 py-0.5 rounded text-xs">
-              {row.ip_address}
-            </code>
+            <code className="bg-muted px-1.5 py-0.5 rounded text-xs">{row.ip_address}</code>
           </div>
         ) : (
           <span className="text-xs text-muted-foreground">N/A</span>
         ),
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (row) => (
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={() => onViewDetails(row)}
-          className=""
-        >
+        <Button variant="ghost" size="sm" onClick={() => onViewDetails(row)} className="">
           <Eye className="h-4 w-4 mr-1" />
           View
         </Button>

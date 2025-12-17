@@ -1,16 +1,10 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { LoginForm } from "@/features";
-import Link from "next/link";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { LoginForm } from '@/features';
+import Link from 'next/link';
 
 const LoginPage = () => {
   const { resolvedTheme } = useTheme();
@@ -20,7 +14,7 @@ const LoginPage = () => {
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center pt-2 mb-2">
-            {resolvedTheme == "dark" ? (
+            {resolvedTheme == 'dark' ? (
               <Image
                 width={200}
                 height={100}
@@ -43,9 +37,7 @@ const LoginPage = () => {
         {/* Login Card */}
         <Card className="border-0 shadow-xl  backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-1">
-            <CardTitle className="text-2xl text-center ">
-              Welcome Back
-            </CardTitle>
+            <CardTitle className="text-2xl text-center ">Welcome Back</CardTitle>
             <CardDescription className="text-center ">
               Sign in to your account to continue
             </CardDescription>
@@ -60,7 +52,7 @@ const LoginPage = () => {
           <Card className="border py-3 border-blue-200 dark:border-blue-800 bg-blue-50/50 dark:bg-blue-900/10">
             <CardContent className="pt-1 pb-1">
               <p className="text-sm text-center text-blue-700 dark:text-blue-300">
-                <span className="font-medium">Imported from OJS?</span>{" "}
+                <span className="font-medium">Imported from OJS?</span>{' '}
                 <Link
                   href="/setup-password"
                   className="underline text-foreground hover:text-blue-800 dark:hover:text-blue-200"

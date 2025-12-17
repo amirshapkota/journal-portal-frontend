@@ -1,18 +1,12 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -20,15 +14,15 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Mail, Loader2, Check, ArrowLeft } from "lucide-react";
-import { useRequestPasswordReset } from "@/features/auth/hooks";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import Image from "next/image";
+} from '@/components/ui/form';
+import { Mail, Loader2, Check, ArrowLeft } from 'lucide-react';
+import { useRequestPasswordReset } from '@/features/auth/hooks';
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
 
 const forgotPasswordSchema = z.object({
-  email: z.string().email("Please enter a valid email address"),
+  email: z.string().email('Please enter a valid email address'),
 });
 
 const ForgotPasswordPage = () => {
@@ -39,7 +33,7 @@ const ForgotPasswordPage = () => {
   const form = useForm({
     resolver: zodResolver(forgotPasswordSchema),
     defaultValues: {
-      email: "",
+      email: '',
     },
   });
 
@@ -58,7 +52,7 @@ const ForgotPasswordPage = () => {
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center pt-2 mb-2">
-            {resolvedTheme === "dark" ? (
+            {resolvedTheme === 'dark' ? (
               <Image
                 width={200}
                 height={100}
@@ -81,13 +75,11 @@ const ForgotPasswordPage = () => {
         {/* Forgot Password Card */}
         <Card className="border-0 shadow-xl backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-2xl text-center">
-              Reset Password
-            </CardTitle>
+            <CardTitle className="text-2xl text-center">Reset Password</CardTitle>
             <CardDescription className="text-center">
               {emailSent
-                ? "Check your email for reset instructions"
-                : "Enter your email address to receive a password reset link"}
+                ? 'Check your email for reset instructions'
+                : 'Enter your email address to receive a password reset link'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -102,24 +94,16 @@ const ForgotPasswordPage = () => {
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground text-center">
-                  Please check your email inbox and follow the instructions to
-                  reset your password. If you don&apos;t see the email, check
-                  your spam folder.
+                  Please check your email inbox and follow the instructions to reset your password.
+                  If you don&apos;t see the email, check your spam folder.
                 </p>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => setEmailSent(false)}
-                >
+                <Button variant="outline" className="w-full" onClick={() => setEmailSent(false)}>
                   Send another email
                 </Button>
               </div>
             ) : (
               <Form {...form}>
-                <form
-                  onSubmit={form.handleSubmit(handleSubmit)}
-                  className="space-y-4"
-                >
+                <form onSubmit={form.handleSubmit(handleSubmit)} className="space-y-4">
                   <FormField
                     control={form.control}
                     name="email"
@@ -154,7 +138,7 @@ const ForgotPasswordPage = () => {
                         Sending...
                       </>
                     ) : (
-                      "Send Reset Link"
+                      'Send Reset Link'
                     )}
                   </Button>
                 </form>

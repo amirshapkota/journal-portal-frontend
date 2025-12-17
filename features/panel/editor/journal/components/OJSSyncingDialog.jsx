@@ -4,16 +4,9 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
   AlertDialogDescription,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import {
-  Loader2,
-  FileText,
-  Upload,
-  Database,
-  AlertCircle,
-  XCircle,
-} from "lucide-react";
+} from '@/components/ui/alert-dialog';
+import { Button } from '@/components/ui/button';
+import { Loader2, FileText, Upload, Database, AlertCircle, XCircle } from 'lucide-react';
 
 export function OJSSyncingDialog({
   open,
@@ -24,17 +17,17 @@ export function OJSSyncingDialog({
   stoppedByError,
 }) {
   const steps = [
-    { icon: Upload, label: "Connecting to OJS", threshold: 0 },
-    { icon: Database, label: "Fetching submissions", threshold: 25 },
-    { icon: FileText, label: "Processing data", threshold: 60 },
+    { icon: Upload, label: 'Connecting to OJS', threshold: 0 },
+    { icon: Database, label: 'Fetching submissions', threshold: 25 },
+    { icon: FileText, label: 'Processing data', threshold: 60 },
   ];
 
   // Derive current step directly from progress (no state needed)
   const getCurrentStep = () => {
-    if (progressData.status === "completed") return 3;
-    if (progressData.status === "processing") return 2;
-    if (progressData.status === "fetching") return 1;
-    if (progressData.status === "idle") return 0;
+    if (progressData.status === 'completed') return 3;
+    if (progressData.status === 'processing') return 2;
+    if (progressData.status === 'fetching') return 1;
+    if (progressData.status === 'idle') return 0;
 
     return 0;
   };
@@ -44,22 +37,20 @@ export function OJSSyncingDialog({
   // Display stage from backend or derive from status
   const displayStage =
     progressData?.stage ||
-    (progressData?.status === "fetching"
-      ? "Fetching submissions from OJS"
-      : progressData?.status === "processing"
-      ? "Processing submissions"
-      : progressData?.status === "completed"
-      ? "Import completed"
-      : "Initializing...");
+    (progressData?.status === 'fetching'
+      ? 'Fetching submissions from OJS'
+      : progressData?.status === 'processing'
+        ? 'Processing submissions'
+        : progressData?.status === 'completed'
+          ? 'Import completed'
+          : 'Initializing...');
 
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       <AlertDialogContent className="pointer-events-none select-none max-w-md">
         <AlertDialogHeader>
           <AlertDialogTitle className="text-center text-xl">
-            {stoppedByError
-              ? "Import Failed"
-              : "Importing Submissions from OJS"}
+            {stoppedByError ? 'Import Failed' : 'Importing Submissions from OJS'}
           </AlertDialogTitle>
           <AlertDialogDescription className="space-y-6 items-center text-center pt-6">
             {/* Error UI */}
@@ -82,7 +73,7 @@ export function OJSSyncingDialog({
                         {error?.message ||
                           error?.response?.data?.message ||
                           error?.response?.data?.error ||
-                          "The import process encountered multiple errors and was stopped. Please check your OJS connection and try again."}
+                          'The import process encountered multiple errors and was stopped. Please check your OJS connection and try again.'}
                       </p>
                     </div>
                   </div>
@@ -121,9 +112,7 @@ export function OJSSyncingDialog({
                   <p className="text-sm font-semibold text-gray-700 dark:text-gray-300">
                     {progress.toFixed(1)}% Complete
                   </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400">
-                    {displayStage}
-                  </p>
+                  <p className="text-xs text-gray-600 dark:text-gray-400">{displayStage}</p>
                 </div>
 
                 {/* Progress counts from backend */}
@@ -138,9 +127,7 @@ export function OJSSyncingDialog({
                           <span className="font-semibold text-green-600 dark:text-green-400">
                             {progressData.imported}
                           </span>
-                          <span className="text-gray-500 dark:text-gray-400">
-                            Imported
-                          </span>
+                          <span className="text-gray-500 dark:text-gray-400">Imported</span>
                         </div>
                       )}
 
@@ -149,9 +136,7 @@ export function OJSSyncingDialog({
                           <span className="font-semibold text-blue-600 dark:text-blue-400">
                             {progressData.updated}
                           </span>
-                          <span className="text-gray-500 dark:text-gray-400">
-                            Updated
-                          </span>
+                          <span className="text-gray-500 dark:text-gray-400">Updated</span>
                         </div>
                       )}
                       {progressData.skipped > 0 && (
@@ -159,9 +144,7 @@ export function OJSSyncingDialog({
                           <span className="font-semibold text-amber-600 dark:text-amber-400">
                             {progressData.skipped}
                           </span>
-                          <span className="text-gray-500 dark:text-gray-400">
-                            Skipped
-                          </span>
+                          <span className="text-gray-500 dark:text-gray-400">Skipped</span>
                         </div>
                       )}
                       {progressData.errors > 0 && (
@@ -169,9 +152,7 @@ export function OJSSyncingDialog({
                           <span className="font-semibold text-red-600 dark:text-red-400">
                             {progressData.errors}
                           </span>
-                          <span className="text-gray-500 dark:text-gray-400">
-                            Errors
-                          </span>
+                          <span className="text-gray-500 dark:text-gray-400">Errors</span>
                         </div>
                       )}
                     </div>
@@ -188,25 +169,25 @@ export function OJSSyncingDialog({
                       <div
                         key={index}
                         className={`flex flex-col items-center gap-2 transition-all duration-300 ${
-                          isActive ? "scale-110" : "scale-100 opacity-60"
+                          isActive ? 'scale-110' : 'scale-100 opacity-60'
                         }`}
                       >
                         <div
                           className={`rounded-full p-2 ${
                             isComplete
-                              ? "bg-green-100 dark:bg-green-900/30"
+                              ? 'bg-green-100 dark:bg-green-900/30'
                               : isActive
-                              ? "bg-blue-100 dark:bg-blue-900/30 animate-pulse"
-                              : "bg-gray-100 dark:bg-gray-800"
+                                ? 'bg-blue-100 dark:bg-blue-900/30 animate-pulse'
+                                : 'bg-gray-100 dark:bg-gray-800'
                           }`}
                         >
                           <Icon
                             className={`h-5 w-5 ${
                               isComplete
-                                ? "text-green-600 dark:text-green-400"
+                                ? 'text-green-600 dark:text-green-400'
                                 : isActive
-                                ? "text-blue-600 dark:text-blue-400"
-                                : "text-gray-400 dark:text-gray-500"
+                                  ? 'text-blue-600 dark:text-blue-400'
+                                  : 'text-gray-400 dark:text-gray-500'
                             }`}
                           />
                         </div>
@@ -225,23 +206,19 @@ export function OJSSyncingDialog({
                       The import will continue in the background.
                     </strong>
                     <br />
-                    You can safely close this dialog or navigate away; the
-                    import process will not be interrupted.
+                    You can safely close this dialog or navigate away; the import process will not
+                    be interrupted.
                   </p>
                 </div>
 
                 {/* Fun fact or tip */}
                 <p className="text-xs text-gray-500 dark:text-gray-400 italic">
-                  Tip: All imported submissions will appear in your page once
-                  complete.
+                  Tip: All imported submissions will appear in your page once complete.
                 </p>
 
                 {/* Close button for dialog */}
                 <div className="flex justify-center pt-2">
-                  <Button
-                    type="button"
-                    onClick={() => onOpenChange && onOpenChange()}
-                  >
+                  <Button type="button" onClick={() => onOpenChange && onOpenChange()}>
                     Close
                   </Button>
                 </div>

@@ -1,26 +1,20 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
+import { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 import {
   Dialog,
   DialogContent,
@@ -28,15 +22,15 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/components/ui/accordion";
-import { toast } from "sonner";
-import { Plus, Edit, Trash2, ChevronRight, Loader2 } from "lucide-react";
+} from '@/components/ui/accordion';
+import { toast } from 'sonner';
+import { Plus, Edit, Trash2, ChevronRight, Loader2 } from 'lucide-react';
 import {
   useGetTaxonomyTree,
   useCreateSection,
@@ -52,7 +46,7 @@ import {
   useUpdateArea,
   useDeleteArea,
   useGetJournalStaff,
-} from "@/features";
+} from '@/features';
 
 export function TaxonomySettings({ journalId }) {
   const [isAddSectionOpen, setIsAddSectionOpen] = useState(false);
@@ -79,11 +73,7 @@ export function TaxonomySettings({ journalId }) {
   const [editingArea, setEditingArea] = useState(null);
 
   // Fetch taxonomy tree from backend
-  const {
-    data: sections = [],
-    isPending,
-    error,
-  } = useGetTaxonomyTree(journalId);
+  const { data: sections = [], isPending, error } = useGetTaxonomyTree(journalId);
 
   // Section mutations
   const createSectionMutation = useCreateSection();
@@ -108,50 +98,42 @@ export function TaxonomySettings({ journalId }) {
   // Sample data structure
   const mockSections = [
     {
-      id: "1",
-      name: "Computer Science",
-      code: "CS",
-      description: "Computing and Information Technology",
+      id: '1',
+      name: 'Computer Science',
+      code: 'CS',
+      description: 'Computing and Information Technology',
       categories: [
         {
-          id: "1",
-          name: "Artificial Intelligence",
-          code: "AI",
-          description: "AI and Machine Learning",
+          id: '1',
+          name: 'Artificial Intelligence',
+          code: 'AI',
+          description: 'AI and Machine Learning',
           research_types: [
             {
-              id: "1",
-              name: "Original Research",
-              code: "ORIGINAL",
-              description: "Novel research contributions",
+              id: '1',
+              name: 'Original Research',
+              code: 'ORIGINAL',
+              description: 'Novel research contributions',
               areas: [
                 {
-                  id: "1",
-                  name: "Machine Learning",
-                  code: "ML",
-                  keywords: [
-                    "neural networks",
-                    "deep learning",
-                    "supervised learning",
-                  ],
+                  id: '1',
+                  name: 'Machine Learning',
+                  code: 'ML',
+                  keywords: ['neural networks', 'deep learning', 'supervised learning'],
                 },
                 {
-                  id: "2",
-                  name: "Natural Language Processing",
-                  code: "NLP",
-                  keywords: [
-                    "text mining",
-                    "language models",
-                    "sentiment analysis",
-                  ],
+                  id: '2',
+                  name: 'Natural Language Processing',
+                  code: 'NLP',
+                  keywords: ['text mining', 'language models', 'sentiment analysis'],
                 },
               ],
             },
             {
-              id: "2",
-              name: "Review Article",
-              code: "REVIEW",
-              description: "Comprehensive review of existing research",
+              id: '2',
+              name: 'Review Article',
+              code: 'REVIEW',
+              description: 'Comprehensive review of existing research',
               areas: [],
             },
           ],
@@ -176,7 +158,7 @@ export function TaxonomySettings({ journalId }) {
 
   const handleAddCategory = (data) => {
     if (!selectedSection) {
-      toast.error("No section selected");
+      toast.error('No section selected');
       return;
     }
 
@@ -196,7 +178,7 @@ export function TaxonomySettings({ journalId }) {
 
   const handleAddResearchType = (data) => {
     if (!selectedCategory) {
-      toast.error("No category selected");
+      toast.error('No category selected');
       return;
     }
 
@@ -216,7 +198,7 @@ export function TaxonomySettings({ journalId }) {
 
   const handleAddArea = (data) => {
     if (!selectedResearchType) {
-      toast.error("No research type selected");
+      toast.error('No research type selected');
       return;
     }
 
@@ -359,12 +341,11 @@ export function TaxonomySettings({ journalId }) {
   return (
     <div className="space-y-6">
       <Card>
-        <CardHeader className="flex flex-row items-center justify-between">
+        <CardHeader className="flex flex-col gap-3 sm:gap-0 sm:flex-row sm:items-center justify-between">
           <div>
             <CardTitle>Taxonomy Structure</CardTitle>
             <CardDescription>
-              Define hierarchical classification: Section → Category → Research
-              Type → Area
+              Define hierarchical classification: Section → Category → Research Type → Area
             </CardDescription>
           </div>
           <Button onClick={() => setIsAddSectionOpen(true)} size="sm">
@@ -375,20 +356,14 @@ export function TaxonomySettings({ journalId }) {
         <CardContent>
           <Accordion type="multiple" className="space-y-2">
             {sections.map((section) => (
-              <AccordionItem
-                key={section.id}
-                value={section.id}
-                className="border rounded-lg px-4"
-              >
+              <AccordionItem key={section.id} value={section.id} className="border rounded-lg px-4">
                 <div className="flex items-center justify-between gap-3">
                   <AccordionTrigger className="hover:no-underline flex-1">
                     <div className="flex items-center gap-3">
                       <Badge variant="outline">{section.code}</Badge>
                       <div className="text-left">
                         <p className="font-medium">{section.name}</p>
-                        <p className="text-sm text-muted-foreground">
-                          {section.description}
-                        </p>
+                        <p className="text-sm text-muted-foreground">{section.description}</p>
                       </div>
                     </div>
                   </AccordionTrigger>
@@ -430,19 +405,14 @@ export function TaxonomySettings({ journalId }) {
                     {section.categories && section.categories.length > 0 ? (
                       <div className="space-y-2">
                         {section.categories.map((category) => (
-                          <div
-                            key={category.id}
-                            className="border rounded-lg p-3 ml-4"
-                          >
-                            <div className="flex items-center justify-between gap-3">
+                          <div key={category.id} className="border rounded-lg p-3 sm:ml-4">
+                            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                               <div className="flex items-center gap-3 flex-1">
                                 <Badge variant="secondary" className="text-xs">
                                   {category.code}
                                 </Badge>
                                 <div>
-                                  <p className="font-medium text-sm">
-                                    {category.name}
-                                  </p>
+                                  <p className="font-medium text-sm">{category.name}</p>
                                   {category.description && (
                                     <p className="text-xs text-muted-foreground">
                                       {category.description}
@@ -490,9 +460,7 @@ export function TaxonomySettings({ journalId }) {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-sm text-muted-foreground ml-4">
-                        No categories defined
-                      </p>
+                      <p className="text-sm text-muted-foreground ml-4">No categories defined</p>
                     )}
                   </div>
                 </AccordionContent>
@@ -503,9 +471,7 @@ export function TaxonomySettings({ journalId }) {
           {sections.length === 0 && (
             <div className="text-center py-12 text-muted-foreground">
               <p>No sections defined yet</p>
-              <p className="text-sm mt-1">
-                Click &quot;Add Section&quot; to get started
-              </p>
+              <p className="text-sm mt-1">Click &quot;Add Section&quot; to get started</p>
             </div>
           )}
         </CardContent>
@@ -517,7 +483,7 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddSectionOpen(false)}
         title="Add Section"
         onSubmit={handleAddSection}
-        fields={["name", "code", "description", "section_editor", "is_active"]}
+        fields={['name', 'code', 'description', 'section_editor', 'is_active']}
         journalId={journalId}
         taxonomyType="section"
       />
@@ -528,7 +494,7 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddCategoryOpen(false)}
         title="Add Category"
         onSubmit={handleAddCategory}
-        fields={["name", "code", "description", "is_active"]}
+        fields={['name', 'code', 'description', 'is_active']}
         taxonomyType="category"
       />
 
@@ -538,7 +504,7 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddResearchTypeOpen(false)}
         title="Add Research Type"
         onSubmit={handleAddResearchType}
-        fields={["name", "code", "description", "requirements", "is_active"]}
+        fields={['name', 'code', 'description', 'requirements', 'is_active']}
         taxonomyType="researchType"
       />
 
@@ -548,7 +514,7 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddAreaOpen(false)}
         title="Add Area"
         onSubmit={handleAddArea}
-        fields={["name", "code", "description", "keywords", "is_active"]}
+        fields={['name', 'code', 'description', 'keywords', 'is_active']}
         taxonomyType="area"
       />
 
@@ -562,13 +528,7 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Section"
           onSubmit={handleEditSection}
-          fields={[
-            "name",
-            "code",
-            "description",
-            "section_editor",
-            "is_active",
-          ]}
+          fields={['name', 'code', 'description', 'section_editor', 'is_active']}
           initialData={editingSection}
           journalId={journalId}
           taxonomyType="section"
@@ -585,7 +545,7 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Category"
           onSubmit={handleEditCategory}
-          fields={["name", "code", "description", "is_active"]}
+          fields={['name', 'code', 'description', 'is_active']}
           initialData={editingCategory}
           taxonomyType="category"
         />
@@ -601,7 +561,7 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Research Type"
           onSubmit={handleEditResearchType}
-          fields={["name", "code", "description", "requirements", "is_active"]}
+          fields={['name', 'code', 'description', 'requirements', 'is_active']}
           initialData={editingResearchType}
           taxonomyType="researchType"
         />
@@ -617,28 +577,22 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Area"
           onSubmit={handleEditArea}
-          fields={["name", "code", "description", "keywords", "is_active"]}
+          fields={['name', 'code', 'description', 'keywords', 'is_active']}
           initialData={editingArea}
           taxonomyType="area"
         />
       )}
 
       {/* Research Types Dialog */}
-      <Dialog
-        open={researchTypesDialogOpen}
-        onOpenChange={setResearchTypesDialogOpen}
-      >
+      <Dialog open={researchTypesDialogOpen} onOpenChange={setResearchTypesDialogOpen}>
         <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>Research Types in {viewingCategory?.name}</DialogTitle>
-            <DialogDescription>
-              Manage research types and their areas
-            </DialogDescription>
+            <DialogDescription>Manage research types and their areas</DialogDescription>
           </DialogHeader>
 
           <div className="space-y-4 mt-4">
-            {viewingCategory?.research_types &&
-            viewingCategory.research_types.length > 0 ? (
+            {viewingCategory?.research_types && viewingCategory.research_types.length > 0 ? (
               <div className="space-y-4">
                 <div className="flex justify-between items-center">
                   <p className="text-sm font-medium">Research Types</p>
@@ -664,9 +618,7 @@ export function TaxonomySettings({ journalId }) {
                       <div className="flex items-center justify-between gap-3">
                         <AccordionTrigger className="hover:no-underline flex-1">
                           <div className="flex items-center gap-3">
-                            <Badge variant="secondary">
-                              {researchType.code}
-                            </Badge>
+                            <Badge variant="secondary">{researchType.code}</Badge>
                             <div className="text-left">
                               <p className="font-medium">{researchType.name}</p>
                               {researchType.description && (
@@ -691,9 +643,7 @@ export function TaxonomySettings({ journalId }) {
                           <Button
                             size="sm"
                             variant="ghost"
-                            onClick={() =>
-                              handleDeleteResearchType(researchType)
-                            }
+                            onClick={() => handleDeleteResearchType(researchType)}
                             className="text-destructive hover:text-destructive"
                           >
                             <Trash2 className="h-4 w-4" />
@@ -703,9 +653,7 @@ export function TaxonomySettings({ journalId }) {
                       <AccordionContent className="pt-4 pb-2">
                         <div className="space-y-3">
                           <div className="flex justify-between items-center">
-                            <p className="text-sm font-medium text-muted-foreground">
-                              Areas
-                            </p>
+                            <p className="text-sm font-medium text-muted-foreground">Areas</p>
                             <Button
                               size="sm"
                               variant="outline"
@@ -719,8 +667,7 @@ export function TaxonomySettings({ journalId }) {
                             </Button>
                           </div>
 
-                          {researchType.areas &&
-                          researchType.areas.length > 0 ? (
+                          {researchType.areas && researchType.areas.length > 0 ? (
                             <div className="space-y-2">
                               {researchType.areas.map((area) => (
                                 <div
@@ -729,29 +676,23 @@ export function TaxonomySettings({ journalId }) {
                                 >
                                   <div className="flex-1">
                                     <div className="flex items-center gap-2 mb-1">
-                                      <Badge
-                                        variant="secondary"
-                                        className="text-xs"
-                                      >
+                                      <Badge variant="secondary" className="text-xs">
                                         {area.code}
                                       </Badge>
-                                      <span className="font-medium">
-                                        {area.name}
-                                      </span>
+                                      <span className="font-medium">{area.name}</span>
                                     </div>
-                                    {area.keywords &&
-                                      area.keywords.length > 0 && (
-                                        <div className="flex flex-wrap gap-1 mt-1">
-                                          {area.keywords.map((keyword, idx) => (
-                                            <span
-                                              key={idx}
-                                              className="bg-muted px-1.5 py-0.5 rounded text-xs"
-                                            >
-                                              {keyword}
-                                            </span>
-                                          ))}
-                                        </div>
-                                      )}
+                                    {area.keywords && area.keywords.length > 0 && (
+                                      <div className="flex flex-wrap gap-1 mt-1">
+                                        {area.keywords.map((keyword, idx) => (
+                                          <span
+                                            key={idx}
+                                            className="bg-muted px-1.5 py-0.5 rounded text-xs"
+                                          >
+                                            {keyword}
+                                          </span>
+                                        ))}
+                                      </div>
+                                    )}
                                   </div>
                                   <div className="flex gap-1 ml-2">
                                     <Button
@@ -778,9 +719,7 @@ export function TaxonomySettings({ journalId }) {
                               ))}
                             </div>
                           ) : (
-                            <p className="text-sm text-muted-foreground">
-                              No areas defined
-                            </p>
+                            <p className="text-sm text-muted-foreground">No areas defined</p>
                           )}
                         </div>
                       </AccordionContent>
@@ -824,15 +763,15 @@ function TaxonomyFormDialog({
   taxonomyType,
 }) {
   const [formData, setFormData] = useState({
-    name: "",
-    code: "",
-    description: "",
-    keywords: "",
+    name: '',
+    code: '',
+    description: '',
+    keywords: '',
     is_active: true,
-    section_editor: "",
+    section_editor: '',
     // Requirements as separate fields instead of JSON
-    word_count: "",
-    required_sections: "",
+    word_count: '',
+    required_sections: '',
   });
 
   const [isLoadingData, setIsLoadingData] = useState(false);
@@ -850,29 +789,25 @@ function TaxonomyFormDialog({
           let response;
 
           // Import the API functions dynamically
-          const {
-            getSectionById,
-            getCategoryById,
-            getResearchTypeById,
-            getAreaById,
-          } = await import("../../api/journalsApi");
+          const { getSectionById, getCategoryById, getResearchTypeById, getAreaById } =
+            await import('../../api/journalsApi');
 
           // Fetch based on taxonomy type
-          if (taxonomyType === "section") {
+          if (taxonomyType === 'section') {
             response = await getSectionById(initialData.id);
-          } else if (taxonomyType === "category") {
+          } else if (taxonomyType === 'category') {
             response = await getCategoryById(initialData.id);
-          } else if (taxonomyType === "researchType") {
+          } else if (taxonomyType === 'researchType') {
             response = await getResearchTypeById(initialData.id);
-          } else if (taxonomyType === "area") {
+          } else if (taxonomyType === 'area') {
             response = await getAreaById(initialData.id);
           }
 
           if (response) {
             // Handle section_editor - could be ID string or object with id property
-            let sectionEditorValue = "";
+            let sectionEditorValue = '';
             if (response.section_editor) {
-              if (typeof response.section_editor === "string") {
+              if (typeof response.section_editor === 'string') {
                 sectionEditorValue = response.section_editor;
               } else if (response.section_editor.id) {
                 sectionEditorValue = response.section_editor.id;
@@ -883,38 +818,35 @@ function TaxonomyFormDialog({
             const requirements = response.requirements || {};
 
             setFormData({
-              name: response.name || "",
-              code: response.code || "",
-              description: response.description || "",
-              keywords: Array.isArray(response.keywords)
-                ? response.keywords.join(", ")
-                : "",
-              is_active:
-                response.is_active !== undefined ? response.is_active : true,
+              name: response.name || '',
+              code: response.code || '',
+              description: response.description || '',
+              keywords: Array.isArray(response.keywords) ? response.keywords.join(', ') : '',
+              is_active: response.is_active !== undefined ? response.is_active : true,
               section_editor: sectionEditorValue,
-              word_count: requirements.word_count || "",
+              word_count: requirements.word_count || '',
               required_sections: Array.isArray(requirements.required_sections)
-                ? requirements.required_sections.join(", ")
-                : "",
+                ? requirements.required_sections.join(', ')
+                : '',
             });
           }
         } catch (error) {
-          console.error("Error fetching taxonomy data:", error);
-          toast.error("Failed to load data");
+          console.error('Error fetching taxonomy data:', error);
+          toast.error('Failed to load data');
         } finally {
           setIsLoadingData(false);
         }
       } else if (!initialData && isOpen) {
         // Reset form for add mode
         setFormData({
-          name: "",
-          code: "",
-          description: "",
-          keywords: "",
+          name: '',
+          code: '',
+          description: '',
+          keywords: '',
           is_active: true,
-          section_editor: "",
-          word_count: "",
-          required_sections: "",
+          section_editor: '',
+          word_count: '',
+          required_sections: '',
         });
       }
     };
@@ -927,15 +859,15 @@ function TaxonomyFormDialog({
     const data = { ...formData };
 
     // Process keywords
-    if (fields.includes("keywords")) {
+    if (fields.includes('keywords')) {
       data.keywords = formData.keywords
-        .split(",")
+        .split(',')
         .map((k) => k.trim())
         .filter(Boolean);
     }
 
     // Process requirements - build JSON from form fields
-    if (fields.includes("requirements")) {
+    if (fields.includes('requirements')) {
       const requirements = {};
 
       if (formData.word_count) {
@@ -944,13 +876,12 @@ function TaxonomyFormDialog({
 
       if (formData.required_sections && formData.required_sections.trim()) {
         requirements.required_sections = formData.required_sections
-          .split(",")
+          .split(',')
           .map((s) => s.trim())
           .filter(Boolean);
       }
 
-      data.requirements =
-        Object.keys(requirements).length > 0 ? requirements : {};
+      data.requirements = Object.keys(requirements).length > 0 ? requirements : {};
 
       // Remove the individual fields from data
       delete data.word_count;
@@ -958,26 +889,26 @@ function TaxonomyFormDialog({
     }
 
     // Ensure is_active is boolean
-    if (fields.includes("is_active")) {
+    if (fields.includes('is_active')) {
       data.is_active = Boolean(formData.is_active);
     }
 
     // Only include section_editor if it has a value
-    if (fields.includes("section_editor") && !formData.section_editor) {
+    if (fields.includes('section_editor') && !formData.section_editor) {
       delete data.section_editor;
     }
 
     onSubmit(data);
     if (!initialData) {
       setFormData({
-        name: "",
-        code: "",
-        description: "",
-        keywords: "",
+        name: '',
+        code: '',
+        description: '',
+        keywords: '',
         is_active: true,
-        section_editor: "",
-        word_count: "",
-        required_sections: "",
+        section_editor: '',
+        word_count: '',
+        required_sections: '',
       });
     }
   };
@@ -989,8 +920,8 @@ function TaxonomyFormDialog({
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
             {initialData
-              ? "Update the taxonomy entry details"
-              : "Fill in the details below to create a new taxonomy entry"}
+              ? 'Update the taxonomy entry details'
+              : 'Fill in the details below to create a new taxonomy entry'}
           </DialogDescription>
         </DialogHeader>
         {isLoadingData ? (
@@ -999,20 +930,18 @@ function TaxonomyFormDialog({
           </div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
-            {fields.includes("name") && (
+            {fields.includes('name') && (
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
                 <Input
                   id="name"
                   value={formData.name}
-                  onChange={(e) =>
-                    setFormData({ ...formData, name: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   required
                 />
               </div>
             )}
-            {fields.includes("code") && (
+            {fields.includes('code') && (
               <div className="space-y-2">
                 <Label htmlFor="code">Code</Label>
                 <Input
@@ -1029,36 +958,30 @@ function TaxonomyFormDialog({
                 />
               </div>
             )}
-            {fields.includes("description") && (
+            {fields.includes('description') && (
               <div className="space-y-2">
                 <Label htmlFor="description">Description</Label>
                 <Textarea
                   id="description"
                   value={formData.description}
-                  onChange={(e) =>
-                    setFormData({ ...formData, description: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                   rows={3}
                 />
               </div>
             )}
-            {fields.includes("keywords") && (
+            {fields.includes('keywords') && (
               <div className="space-y-2">
                 <Label htmlFor="keywords">Keywords</Label>
                 <Input
                   id="keywords"
                   value={formData.keywords}
-                  onChange={(e) =>
-                    setFormData({ ...formData, keywords: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, keywords: e.target.value })}
                   placeholder="keyword1, keyword2, keyword3"
                 />
-                <p className="text-xs text-muted-foreground">
-                  Separate keywords with commas
-                </p>
+                <p className="text-xs text-muted-foreground">Separate keywords with commas</p>
               </div>
             )}
-            {fields.includes("requirements") && (
+            {fields.includes('requirements') && (
               <div className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="word_count">Word Count</Label>
@@ -1066,9 +989,7 @@ function TaxonomyFormDialog({
                     id="word_count"
                     type="number"
                     value={formData.word_count}
-                    onChange={(e) =>
-                      setFormData({ ...formData, word_count: e.target.value })
-                    }
+                    onChange={(e) => setFormData({ ...formData, word_count: e.target.value })}
                     placeholder="e.g., 5000"
                   />
                 </div>
@@ -1092,17 +1013,15 @@ function TaxonomyFormDialog({
                 </div>
               </div>
             )}
-            {fields.includes("section_editor") && (
+            {fields.includes('section_editor') && (
               <div className="space-y-2">
-                <Label htmlFor="section_editor">
-                  Section Editor (Optional)
-                </Label>
+                <Label htmlFor="section_editor">Section Editor (Optional)</Label>
                 <Select
                   value={formData.section_editor || undefined}
                   onValueChange={(value) =>
                     setFormData({
                       ...formData,
-                      section_editor: value === "none" ? "" : value,
+                      section_editor: value === 'none' ? '' : value,
                     })
                   }
                 >
@@ -1112,15 +1031,9 @@ function TaxonomyFormDialog({
                   <SelectContent>
                     <SelectItem value="none">None</SelectItem>
                     {staffMembers.map((staff, index) => (
-                      <SelectItem
-                        key={`${index}${staff.id}`}
-                        value={staff.profile?.id || staff.id}
-                      >
-                        {staff.profile?.display_name ||
-                          staff.profile?.user_name ||
-                          "Unknown User"}
-                        {staff.profile?.affiliation_name &&
-                          ` (${staff.profile.affiliation_name})`}
+                      <SelectItem key={`${index}${staff.id}`} value={staff.profile?.id || staff.id}>
+                        {staff.profile?.display_name || staff.profile?.user_name || 'Unknown User'}
+                        {staff.profile?.affiliation_name && ` (${staff.profile.affiliation_name})`}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -1130,7 +1043,7 @@ function TaxonomyFormDialog({
                 </p>
               </div>
             )}
-            {fields.includes("order") && (
+            {fields.includes('order') && (
               <div className="space-y-2">
                 <Label htmlFor="order">Display Order</Label>
                 <Input
@@ -1138,9 +1051,7 @@ function TaxonomyFormDialog({
                   type="number"
                   min="0"
                   value={formData.order}
-                  onChange={(e) =>
-                    setFormData({ ...formData, order: e.target.value })
-                  }
+                  onChange={(e) => setFormData({ ...formData, order: e.target.value })}
                   placeholder="0"
                 />
                 <p className="text-xs text-muted-foreground">
@@ -1148,7 +1059,7 @@ function TaxonomyFormDialog({
                 </p>
               </div>
             )}
-            {fields.includes("is_active") && (
+            {fields.includes('is_active') && (
               <div className="flex items-center justify-between space-y-2">
                 <div className="space-y-0.5">
                   <Label htmlFor="is_active">Active Status</Label>
@@ -1159,9 +1070,7 @@ function TaxonomyFormDialog({
                 <Switch
                   id="is_active"
                   checked={formData.is_active}
-                  onCheckedChange={(checked) =>
-                    setFormData({ ...formData, is_active: checked })
-                  }
+                  onCheckedChange={(checked) => setFormData({ ...formData, is_active: checked })}
                 />
               </div>
             )}
@@ -1169,7 +1078,7 @@ function TaxonomyFormDialog({
               <Button type="button" variant="outline" onClick={onClose}>
                 Cancel
               </Button>
-              <Button type="submit">{initialData ? "Update" : "Create"}</Button>
+              <Button type="submit">{initialData ? 'Update' : 'Create'}</Button>
             </DialogFooter>
           </form>
         )}

@@ -1,12 +1,7 @@
-import React from "react";
-import StatsCard from "@/features/shared/components/StatsCard";
-import { StatsErrorCard } from "@/features/shared";
-import {
-  ClipboardList,
-  CheckCircle2,
-  Clock,
-  AlertTriangle,
-} from "lucide-react";
+import React from 'react';
+import StatsCard from '@/features/shared/components/StatsCard';
+import { StatsErrorCard } from '@/features/shared';
+import { ClipboardList, CheckCircle2, Clock, AlertTriangle } from 'lucide-react';
 
 /**
  * ReviewerDashboardStats - Displays reviewer statistics cards
@@ -26,7 +21,7 @@ export default function ReviewerDashboardStats({
     return (
       <StatsErrorCard
         title="Failed to load reviewer stats"
-        message={error?.message || "Unknown error"}
+        message={error?.message || 'Unknown error'}
       />
     );
   }
@@ -34,37 +29,37 @@ export default function ReviewerDashboardStats({
   const statsCards = [
     {
       icon: ClipboardList,
-      title: "Pending Invitations",
+      title: 'Pending Invitations',
       value: statistics?.pending || 0,
-      iconClass: "text-yellow-500",
-      valueClass: "text-foreground",
-      description: "Awaiting your response",
+      iconClass: 'text-yellow-500',
+      valueClass: 'text-foreground',
+      description: 'Awaiting your response',
     },
     {
       icon: CheckCircle2,
-      title: "Accepted Reviews",
+      title: 'Accepted Reviews',
       value: statistics?.accepted || 0,
-      iconClass: "text-blue-500",
-      valueClass: "text-foreground",
-      description: "In progress or completed",
+      iconClass: 'text-blue-500',
+      valueClass: 'text-foreground',
+      description: 'In progress or completed',
     },
     {
       icon: Clock,
-      title: "Completed Reviews",
+      title: 'Completed Reviews',
       value: statistics?.completed || 0,
-      iconClass: "text-green-500",
-      valueClass: "text-foreground",
+      iconClass: 'text-green-500',
+      valueClass: 'text-foreground',
       description: statistics?.average_review_time?.avg_days
         ? `Avg time: ${statistics.average_review_time.avg_days} days`
-        : "No data",
+        : 'No data',
     },
     {
       icon: AlertTriangle,
-      title: "Overdue Reviews",
+      title: 'Overdue Reviews',
       value: statistics?.overdue || 0,
-      iconClass: "text-red-500",
-      valueClass: "text-foreground",
-      description: "Action required",
+      iconClass: 'text-red-500',
+      valueClass: 'text-foreground',
+      description: 'Action required',
     },
   ];
 

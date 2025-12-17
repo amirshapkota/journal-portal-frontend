@@ -1,16 +1,16 @@
-"use client";
+'use client';
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Separator } from '@/components/ui/separator';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from '@/components/ui/dialog';
+import { ScrollArea } from '@/components/ui/scroll-area';
 import {
   AlertCircle,
   AlertTriangle,
@@ -19,8 +19,8 @@ import {
   ExternalLink,
   Calendar,
   Clock,
-} from "lucide-react";
-import { format } from "date-fns";
+} from 'lucide-react';
+import { format } from 'date-fns';
 
 export function ErrorDetailsModal({ issue, open, onOpenChange }) {
   if (!issue) return null;
@@ -37,12 +37,12 @@ export function ErrorDetailsModal({ issue, open, onOpenChange }) {
 
   const getLevelColor = (level) => {
     const colors = {
-      error: "destructive",
-      warning: "warning",
-      info: "default",
-      fatal: "destructive",
+      error: 'destructive',
+      warning: 'warning',
+      info: 'default',
+      fatal: 'destructive',
     };
-    return colors[level] || "default";
+    return colors[level] || 'default';
   };
 
   return (
@@ -50,9 +50,7 @@ export function ErrorDetailsModal({ issue, open, onOpenChange }) {
       <DialogContent className="md:max-w-[85%] lg:max-w-[60%] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-xl">{issue.title}</DialogTitle>
-          <DialogDescription>
-            Detailed information about this error
-          </DialogDescription>
+          <DialogDescription>Detailed information about this error</DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[70vh] overflow-auto">
@@ -73,9 +71,7 @@ export function ErrorDetailsModal({ issue, open, onOpenChange }) {
                   {issue.metadata?.type || issue.type}
                 </Badge>
               )}
-              <Badge
-                variant={issue.status === "resolved" ? "default" : "secondary"}
-              >
+              <Badge variant={issue.status === 'resolved' ? 'default' : 'secondary'}>
                 {issue.status}
               </Badge>
             </div>
@@ -89,14 +85,12 @@ export function ErrorDetailsModal({ issue, open, onOpenChange }) {
                 <div>
                   <span className="font-medium">Type:</span>
                   <p className="text-muted-foreground">
-                    {issue.metadata?.type || issue.type || "N/A"}
+                    {issue.metadata?.type || issue.type || 'N/A'}
                   </p>
                 </div>
                 <div>
                   <span className="font-medium">Status:</span>
-                  <p className="text-muted-foreground">
-                    {issue.status || "unknown"}
-                  </p>
+                  <p className="text-muted-foreground">{issue.status || 'unknown'}</p>
                 </div>
                 <div>
                   <span className="font-medium">Event Count:</span>
@@ -105,7 +99,7 @@ export function ErrorDetailsModal({ issue, open, onOpenChange }) {
                 <div>
                   <span className="font-medium">Users Affected:</span>
                   <p className="text-muted-foreground">
-                    {issue.user_count || issue.userCount || "N/A"}
+                    {issue.user_count || issue.userCount || 'N/A'}
                   </p>
                 </div>
                 {issue.culprit && (
@@ -153,20 +147,14 @@ export function ErrorDetailsModal({ issue, open, onOpenChange }) {
                   <Calendar className="h-4 w-4 text-muted-foreground" />
                   <span className="font-medium">First Seen:</span>
                   <span className="text-muted-foreground">
-                    {format(
-                      new Date(issue.first_seen || issue.firstSeen),
-                      "PPpp"
-                    )}
+                    {format(new Date(issue.first_seen || issue.firstSeen), 'PPpp')}
                   </span>
                 </div>
                 <div className="flex items-center gap-2">
                   <Clock className="h-4 w-4 text-muted-foreground" />
                   <span className="font-medium">Last Seen:</span>
                   <span className="text-muted-foreground">
-                    {format(
-                      new Date(issue.last_seen || issue.lastSeen),
-                      "PPpp"
-                    )}
+                    {format(new Date(issue.last_seen || issue.lastSeen), 'PPpp')}
                   </span>
                 </div>
               </div>
@@ -203,12 +191,8 @@ export function ErrorDetailsModal({ issue, open, onOpenChange }) {
 
             {/* Action Button */}
             <div className="pt-4">
-              <Button asChild size={"sm"} className="gap-2">
-                <a
-                  href={issue.permalink}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+              <Button asChild size={'sm'} className="gap-2">
+                <a href={issue.permalink} target="_blank" rel="noopener noreferrer">
                   <ExternalLink className="h-4 w-4" />
                   View Full Details in Sentry
                 </a>

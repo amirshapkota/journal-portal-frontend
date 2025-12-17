@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { useMemo, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
 import {
   useGetSubmissionById,
   SubmissionDetailsCard,
@@ -11,8 +11,8 @@ import {
   CoAuthorsCard,
   DocumentVersionsModal,
   ReviewSummaryCard,
-} from "@/features";
-import { useGetSubmissionReviews } from "@/features/panel/editor/submission/hooks/useGetSubmissionReviews";
+} from '@/features';
+import { useGetSubmissionReviews } from '@/features/panel/editor/submission/hooks/useGetSubmissionReviews';
 
 export default function ArchivedDetailPage() {
   const params = useParams();
@@ -22,11 +22,7 @@ export default function ArchivedDetailPage() {
   const [versionsDialogOpen, setVersionsDialogOpen] = useState(false);
   const [selectedDocumentId, setSelectedDocumentId] = useState(null);
 
-  const {
-    data: submission,
-    isPending,
-    error,
-  } = useGetSubmissionById(submissionId);
+  const { data: submission, isPending, error } = useGetSubmissionById(submissionId);
 
   const handleViewVersions = (documentId) => {
     setSelectedDocumentId(documentId);
@@ -44,7 +40,7 @@ export default function ArchivedDetailPage() {
 
   return (
     <>
-      {" "}
+      {' '}
       <div className="space-y-6">
         {/* Header */}
         <div className="flex items-center justify-between">
@@ -52,7 +48,7 @@ export default function ArchivedDetailPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/author/submissions/archived")}
+              onClick={() => router.push('/author/submissions/archived')}
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
               Back to Archived Submissions
@@ -64,14 +60,9 @@ export default function ArchivedDetailPage() {
         <SubmissionDetailsCard submission={submission} />
 
         {/* Review Summary Card (latest review only, no confidential comments) */}
-        {reviewsData &&
-          Array.isArray(reviewsData) &&
-          reviewsData.length > 0 && (
-            <ReviewSummaryCard
-              reviews={reviewsData}
-              showViewFullReview={false}
-            />
-          )}
+        {reviewsData && Array.isArray(reviewsData) && reviewsData.length > 0 && (
+          <ReviewSummaryCard reviews={reviewsData} showViewFullReview={false} />
+        )}
 
         {/* Documents Card */}
         <SubmissionDocumentsCard

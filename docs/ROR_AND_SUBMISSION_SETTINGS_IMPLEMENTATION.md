@@ -46,7 +46,7 @@ This document summarizes the implementation of ROR (Research Organization Regist
 1. **ROR ID Extraction**: Automatically extracts ROR ID from institution.id field
 
    ```javascript
-   const rorId = institution.id.replace("https://ror.org/", "");
+   const rorId = institution.id.replace('https://ror.org/', '');
    onRorIdChange(rorId);
    ```
 
@@ -56,7 +56,7 @@ This document summarizes the implementation of ROR (Research Organization Regist
    {
      institution.id && (
        <Badge variant="outline" className="text-xs px-2 py-0 font-mono">
-         ROR: {institution.id.replace("https://ror.org/", "")}
+         ROR: {institution.id.replace('https://ror.org/', '')}
        </Badge>
      );
    }
@@ -71,20 +71,17 @@ This document summarizes the implementation of ROR (Research Organization Regist
 #### ROR Integration Features
 
 1. **ROR ID Storage**:
-
    - Form field for `affiliation_ror_id`
    - Automatically updated when institution is selected from ROR API
 
 2. **Pre-fetch on Edit**:
-
    - Fetches ROR institution data when `affiliation_ror_id` exists
    - Auto-populates institution name from ROR data
 
    ```javascript
-   const { data: rorInstitution } = useGetRORInstitution(
-     defaultValues?.affiliation_ror_id,
-     { enabled: Boolean(defaultValues?.affiliation_ror_id) }
-   );
+   const { data: rorInstitution } = useGetRORInstitution(defaultValues?.affiliation_ror_id, {
+     enabled: Boolean(defaultValues?.affiliation_ror_id),
+   });
    ```
 
 3. **onRorIdChange Handler**:
@@ -93,7 +90,7 @@ This document summarizes the implementation of ROR (Research Organization Regist
      value={field.value}
      onChange={field.onChange}
      onRorIdChange={(rorId) => {
-       form.setValue("affiliation_ror_id", rorId, { shouldDirty: true });
+       form.setValue('affiliation_ror_id', rorId, { shouldDirty: true });
      }}
    />
    ```
@@ -138,8 +135,8 @@ Both pages now include `affiliation_ror_id` in defaultValues:
 ```javascript
 const defaultValues = {
   // ...other fields
-  affiliation_name: profileData?.affiliation_name || "",
-  affiliation_ror_id: profileData?.affiliation_ror_id || "",
+  affiliation_name: profileData?.affiliation_name || '',
+  affiliation_ror_id: profileData?.affiliation_ror_id || '',
   // ...
 };
 ```

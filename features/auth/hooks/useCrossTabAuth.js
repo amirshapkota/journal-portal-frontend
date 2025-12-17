@@ -1,9 +1,9 @@
-import { useEffect, useRef } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { logout as authLogout, login as authLogin } from "../redux/authSlice";
-import { usePathname, useRouter } from "next/navigation";
-import { useRoleRedirect } from "@/features/shared";
-import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout as authLogout, login as authLogin } from '../redux/authSlice';
+import { usePathname, useRouter } from 'next/navigation';
+import { useRoleRedirect } from '@/features/shared';
+import { useQueryClient } from '@tanstack/react-query';
 
 const useCrossTabAuth = () => {
   const dispatch = useDispatch();
@@ -15,28 +15,25 @@ const useCrossTabAuth = () => {
   const queryClient = useQueryClient();
 
   useEffect(() => {
-    const channel = new BroadcastChannel("auth-channel");
+    const channel = new BroadcastChannel('auth-channel');
     channelRef.current = channel;
 
     const handleMessage = (event) => {
-      if (event.data === "logout") {
+      if (event.data === 'logout') {
         queryClient.clear();
         dispatch(authLogout());
-        router.push("/login");
+        router.push('/login');
       }
-      if (event.data === "login") {
+      if (event.data === 'login') {
         // Sync auth from localStorage
         try {
-          const persistedState = localStorage.getItem("persist:auth");
+          const persistedState = localStorage.getItem('persist:auth');
           if (persistedState) {
             const authData = JSON.parse(persistedState);
             // Parse the double-stringified tokens
             const access = authData.access ? JSON.parse(authData.access) : null;
 
-            const userData =
-              authData.userData !== "null"
-                ? JSON.parse(authData.userData)
-                : null;
+            const userData = authData.userData !== 'null' ? JSON.parse(authData.userData) : null;
 
             if (access) {
               // Update Redux state
@@ -49,29 +46,28 @@ const useCrossTabAuth = () => {
                 })
               );
 
-              if (pathname === "/login") {
+              if (pathname === '/login') {
                 const userRoles = userData?.roles || [];
                 redirectUser(userRoles);
               }
             }
           }
         } catch (error) {
-          console.error("Failed to sync auth state:", error);
+          console.error('Failed to sync auth state:', error);
         }
       }
     };
 
     // Also listen to storage changes (more reliable)
     const handleStorageChange = (e) => {
-      if (e.key === "persist:auth" && e.newValue) {
+      if (e.key === 'persist:auth' && e.newValue) {
         try {
           const authData = JSON.parse(e.newValue);
 
           // Parse the double-stringified tokens
           const access = authData.access ? JSON.parse(authData.access) : null;
 
-          const userData =
-            authData.userData !== "null" ? JSON.parse(authData.userData) : null;
+          const userData = authData.userData !== 'null' ? JSON.parse(authData.userData) : null;
 
           // Login detected
           if (access && !currentAuth) {
@@ -84,7 +80,7 @@ const useCrossTabAuth = () => {
               })
             );
 
-            if (pathname === "/login") {
+            if (pathname === '/login') {
               const userRoles = userData?.roles || [];
               redirectUser(userRoles);
             }
@@ -94,20 +90,20 @@ const useCrossTabAuth = () => {
           if (!access && currentAuth) {
             queryClient.clear();
             dispatch(authLogout());
-            router.push("/login");
+            router.push('/login');
           }
         } catch (error) {
-          console.error("Storage sync error:", error);
+          console.error('Storage sync error:', error);
         }
       }
     };
 
-    channel.addEventListener("message", handleMessage);
-    window.addEventListener("storage", handleStorageChange);
+    channel.addEventListener('message', handleMessage);
+    window.addEventListener('storage', handleStorageChange);
 
     return () => {
-      channel.removeEventListener("message", handleMessage);
-      window.removeEventListener("storage", handleStorageChange);
+      channel.removeEventListener('message', handleMessage);
+      window.removeEventListener('storage', handleStorageChange);
       channel.close();
     };
   }, [dispatch, router, pathname, currentAuth, redirectUser, queryClient]);

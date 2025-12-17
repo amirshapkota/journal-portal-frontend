@@ -77,28 +77,26 @@ yarn add superdoc
 Replace the placeholder section with actual SuperDoc initialization:
 
 ```jsx
-import { SuperDoc } from "superdoc";
+import { SuperDoc } from 'superdoc';
 
 // In component:
 useEffect(() => {
   if (documentData && documentData.file_url) {
     const superdoc = new SuperDoc({
-      container: document.getElementById("superdoc-editor"),
+      container: document.getElementById('superdoc-editor'),
       fileUrl: documentData.file_url,
       editable: documentData.can_edit,
       user: {
         id: currentUser.id,
         name: currentUser.name,
-        role: "author", // Disable comment creation for author
+        role: 'author', // Disable comment creation for author
       },
       comments: {
         enabled: true,
         readOnly: true, // Authors can only read comments
       },
       onSave: async (yjsState) => {
-        const base64State = btoa(
-          String.fromCharCode.apply(null, new Uint8Array(yjsState))
-        );
+        const base64State = btoa(String.fromCharCode.apply(null, new Uint8Array(yjsState)));
         await saveMutation.mutateAsync({
           docId: documentId,
           yjsState: base64State,
@@ -129,9 +127,7 @@ useEffect(() => {
 
   const interval = setInterval(() => {
     const yjsState = superdoc.getYjsState();
-    const base64State = btoa(
-      String.fromCharCode.apply(null, new Uint8Array(yjsState))
-    );
+    const base64State = btoa(String.fromCharCode.apply(null, new Uint8Array(yjsState)));
     saveMutation.mutate({ docId: documentId, yjsState: base64State });
   }, 30000); // Save every 30 seconds
 
@@ -142,7 +138,6 @@ useEffect(() => {
 ## Testing
 
 1. **As Author**:
-
    - Go to Author Submissions page
    - Click "View Documents" on any submission
    - Click "Edit" button on a document

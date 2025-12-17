@@ -1,11 +1,8 @@
-"use client";
+'use client';
 
-import { DoughnutChart } from "@/features/shared";
+import { DoughnutChart } from '@/features/shared';
 
-const COLORS = [
-  "var(--chart-1)",
-  "var(--chart-4)",
-];
+const COLORS = ['var(--chart-1)', 'var(--chart-4)'];
 
 /**
  * @param {Object} props
@@ -13,14 +10,10 @@ const COLORS = [
  * @param {boolean} [props.isLoading]
  * @param {boolean} [props.isError]
  */
-export default function EditorJournalsDoughnutChart({
-  data,
-  isLoading,
-  isError,
-}) {
+export default function EditorJournalsDoughnutChart({ data, isLoading, isError }) {
   const chartData = [
-    { name: "Submissions Managed", value: data?.submissions_managed || 0 },
-    { name: "Pending Submissions", value: data?.pending_submissions || 0 },
+    { name: 'Submissions Managed', value: data?.submissions_managed || 0 },
+    { name: 'Pending Submissions', value: data?.pending_submissions || 0 },
   ];
 
   return (

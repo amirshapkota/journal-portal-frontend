@@ -1,9 +1,9 @@
-import { getTaxonomyTree } from "@/features/panel/editor/journal/api/journalsApi";
-import { useQuery } from "@tanstack/react-query";
+import { getTaxonomyTree } from '@/features/panel/editor/journal/api/journalsApi';
+import { useQuery } from '@tanstack/react-query';
 
 export const useGetTaxonomyTree = (journalId) => {
   return useQuery({
-    queryKey: ["taxonomy-tree", journalId],
+    queryKey: ['taxonomy-tree', journalId],
     queryFn: () => getTaxonomyTree(journalId),
     enabled: !!journalId,
     staleTime: 5 * 60 * 1000, // 5 minutes

@@ -1,11 +1,11 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Sentry API Service
  * Handles all API calls to the Sentry integration endpoints
  */
 
-const SENTRY_BASE = "integrations/sentry";
+const SENTRY_BASE = 'integrations/sentry';
 
 /**
  * Fetch all projects from Sentry
@@ -27,12 +27,7 @@ export const fetchProjects = async () => {
  * @returns {Promise} API response
  */
 export const fetchIssues = async (projectSlug, options = {}) => {
-  const {
-    status = "unresolved",
-    query = "",
-    limit = 50,
-    cursor = null,
-  } = options;
+  const { status = 'unresolved', query = '', limit = 50, cursor = null } = options;
 
   const params = {
     status,
@@ -42,10 +37,7 @@ export const fetchIssues = async (projectSlug, options = {}) => {
   if (query) params.query = query;
   if (cursor) params.cursor = cursor;
 
-  const response = await instance.get(
-    `${SENTRY_BASE}/projects/${projectSlug}/issues/`,
-    { params }
-  );
+  const response = await instance.get(`${SENTRY_BASE}/projects/${projectSlug}/issues/`, { params });
   return response.data;
 };
 
@@ -76,10 +68,7 @@ export const fetchIssueEvents = async (issueId, options = {}) => {
 
   if (cursor) params.cursor = cursor;
 
-  const response = await instance.get(
-    `${SENTRY_BASE}/issues/${issueId}/events/`,
-    { params }
-  );
+  const response = await instance.get(`${SENTRY_BASE}/issues/${issueId}/events/`, { params });
   return response.data;
 };
 
@@ -90,9 +79,7 @@ export const fetchIssueEvents = async (issueId, options = {}) => {
  * @returns {Promise} API response
  */
 export const fetchEventDetail = async (eventId, projectSlug) => {
-  const response = await instance.get(
-    `${SENTRY_BASE}/projects/${projectSlug}/events/${eventId}/`
-  );
+  const response = await instance.get(`${SENTRY_BASE}/projects/${projectSlug}/events/${eventId}/`);
   return response.data;
 };
 
@@ -107,12 +94,7 @@ export const fetchEventDetail = async (eventId, projectSlug) => {
  * @returns {Promise} API response
  */
 export const fetchProjectStats = async (projectSlug, options = {}) => {
-  const {
-    stat = "received",
-    since = null,
-    until = null,
-    resolution = "1h",
-  } = options;
+  const { stat = 'received', since = null, until = null, resolution = '1h' } = options;
 
   const params = {
     stat,
@@ -122,9 +104,6 @@ export const fetchProjectStats = async (projectSlug, options = {}) => {
   if (since) params.since = since;
   if (until) params.until = until;
 
-  const response = await instance.get(
-    `${SENTRY_BASE}/projects/${projectSlug}/stats/`,
-    { params }
-  );
+  const response = await instance.get(`${SENTRY_BASE}/projects/${projectSlug}/stats/`, { params });
   return response.data;
 };

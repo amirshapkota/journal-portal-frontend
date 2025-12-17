@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -6,17 +6,10 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Badge } from "@/components/ui/badge";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  AlertTriangle,
-  Shield,
-  Users,
-  FileText,
-  Eye,
-  BarChart,
-} from "lucide-react";
+} from '@/components/ui/dialog';
+import { Badge } from '@/components/ui/badge';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { AlertTriangle, Shield, Users, FileText, Eye, BarChart } from 'lucide-react';
 
 export function AnomalyDetailsModal({
   anomaly,
@@ -33,11 +26,9 @@ export function AnomalyDetailsModal({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {getSeverityIcon(anomaly.severity)}
-            {anomaly.type?.replace(/_/g, " ")}
+            {anomaly.type?.replace(/_/g, ' ')}
           </DialogTitle>
-          <DialogDescription>
-            Complete details about this detected anomaly
-          </DialogDescription>
+          <DialogDescription>Complete details about this detected anomaly</DialogDescription>
         </DialogHeader>
 
         <ScrollArea className="max-h-[65vh] overflow-auto">
@@ -49,8 +40,8 @@ export function AnomalyDetailsModal({
                 <Badge
                   variant={getSeverityColor(anomaly.severity)}
                   className={` ${
-                    anomaly.severity === "MEDIUM" &&
-                    "text-yellow-700 dark:text-primary-foreground bg-yellow-100 dark:bg-yellow-600"
+                    anomaly.severity === 'MEDIUM' &&
+                    'text-yellow-700 dark:text-primary-foreground bg-yellow-100 dark:bg-yellow-600'
                   }`}
                 >
                   <span className="flex items-center gap-1">
@@ -61,9 +52,7 @@ export function AnomalyDetailsModal({
               </div>
               <div>
                 <span className="font-semibold">Description:</span>
-                <p className="mt-1 text-muted-foreground">
-                  {anomaly.description}
-                </p>
+                <p className="mt-1 text-muted-foreground">{anomaly.description}</p>
               </div>
             </div>
 
@@ -76,9 +65,7 @@ export function AnomalyDetailsModal({
                     <div className="flex items-start gap-2">
                       <Users className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div className="flex-1">
-                        <span className="text-sm text-muted-foreground">
-                          Reviewer:
-                        </span>
+                        <span className="text-sm text-muted-foreground">Reviewer:</span>
                         <p className="font-medium">{anomaly.reviewer}</p>
                         {anomaly.reviewer_id && (
                           <p className="text-xs text-muted-foreground mt-1">
@@ -92,9 +79,7 @@ export function AnomalyDetailsModal({
                     <div className="flex items-start gap-2">
                       <Users className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div className="flex-1">
-                        <span className="text-sm text-muted-foreground">
-                          User:
-                        </span>
+                        <span className="text-sm text-muted-foreground">User:</span>
                         <p className="font-medium">{anomaly.user_email}</p>
                         {anomaly.user_id && (
                           <p className="text-xs text-muted-foreground mt-1">
@@ -117,12 +102,8 @@ export function AnomalyDetailsModal({
                     <div className="flex items-start gap-2">
                       <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div className="flex-1">
-                        <span className="text-sm text-muted-foreground">
-                          Submission:
-                        </span>
-                        <p className="font-medium">
-                          {anomaly.submission_title}
-                        </p>
+                        <span className="text-sm text-muted-foreground">Submission:</span>
+                        <p className="font-medium">{anomaly.submission_title}</p>
                         {anomaly.submission_id && (
                           <p className="text-xs text-muted-foreground mt-1">
                             ID: {anomaly.submission_id}
@@ -135,12 +116,8 @@ export function AnomalyDetailsModal({
                     <div className="flex items-start gap-2">
                       <FileText className="h-4 w-4 text-muted-foreground mt-0.5" />
                       <div className="flex-1">
-                        <span className="text-sm text-muted-foreground">
-                          Similar Submission:
-                        </span>
-                        <p className="font-medium">
-                          {anomaly.similar_submission_title}
-                        </p>
+                        <span className="text-sm text-muted-foreground">Similar Submission:</span>
+                        <p className="font-medium">{anomaly.similar_submission_title}</p>
                         {anomaly.similar_submission_id && (
                           <p className="text-xs text-muted-foreground mt-1">
                             ID: {anomaly.similar_submission_id}
@@ -166,9 +143,7 @@ export function AnomalyDetailsModal({
                     <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                       <BarChart className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">
-                          Similarity Score
-                        </p>
+                        <p className="text-xs text-muted-foreground">Similarity Score</p>
                         <p className="font-semibold">
                           {(anomaly.similarity_score * 100).toFixed(1)}%
                         </p>
@@ -179,12 +154,8 @@ export function AnomalyDetailsModal({
                     <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                       <AlertTriangle className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">
-                          Time Taken
-                        </p>
-                        <p className="font-semibold">
-                          {anomaly.hours_taken.toFixed(2)} hours
-                        </p>
+                        <p className="text-xs text-muted-foreground">Time Taken</p>
+                        <p className="font-semibold">{anomaly.hours_taken.toFixed(2)} hours</p>
                       </div>
                     </div>
                   )}
@@ -192,12 +163,8 @@ export function AnomalyDetailsModal({
                     <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                       <BarChart className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">
-                          Accept Rate
-                        </p>
-                        <p className="font-semibold">
-                          {(anomaly.accept_rate * 100).toFixed(1)}%
-                        </p>
+                        <p className="text-xs text-muted-foreground">Accept Rate</p>
+                        <p className="font-semibold">{(anomaly.accept_rate * 100).toFixed(1)}%</p>
                       </div>
                     </div>
                   )}
@@ -205,9 +172,7 @@ export function AnomalyDetailsModal({
                     <div className="flex items-center gap-2 p-3 bg-muted rounded-md">
                       <FileText className="h-5 w-5 text-muted-foreground" />
                       <div>
-                        <p className="text-xs text-muted-foreground">
-                          Total Reviews
-                        </p>
+                        <p className="text-xs text-muted-foreground">Total Reviews</p>
                         <p className="font-semibold">{anomaly.total_reviews}</p>
                       </div>
                     </div>
@@ -216,12 +181,8 @@ export function AnomalyDetailsModal({
                     <div className="flex items-start gap-2 p-3 bg-muted rounded-md sm:col-span-2">
                       <FileText className="h-5 w-5 text-muted-foreground mt-0.5" />
                       <div className="flex-1 min-w-0">
-                        <p className="text-xs text-muted-foreground">
-                          Review ID
-                        </p>
-                        <p className="font-mono text-xs break-all">
-                          {anomaly.review_id}
-                        </p>
+                        <p className="text-xs text-muted-foreground">Review ID</p>
+                        <p className="font-mono text-xs break-all">{anomaly.review_id}</p>
                       </div>
                     </div>
                   )}
@@ -235,9 +196,7 @@ export function AnomalyDetailsModal({
                 <h4 className="font-semibold mb-3">Recommendation</h4>
                 <div className="flex items-start gap-3 p-4 bg-amber-50 dark:bg-amber-950/20 rounded-md border border-amber-200 dark:border-amber-900">
                   <Shield className="h-5 w-5 text-amber-600 dark:text-amber-500 mt-0.5" />
-                  <p className="text-sm text-foreground">
-                    {anomaly.recommendation}
-                  </p>
+                  <p className="text-sm text-foreground">{anomaly.recommendation}</p>
                 </div>
               </div>
             )}

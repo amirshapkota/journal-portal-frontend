@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { assignReviewers } from "../../api";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { assignReviewers } from '../../api';
+import { toast } from 'sonner';
 
 /**
  * Hook to assign reviewers to a submission
@@ -12,22 +12,20 @@ export const useAssignReviewers = () => {
   return useMutation({
     mutationFn: (reviewer_ids) => assignReviewers(reviewer_ids),
     onSuccess: (data) => {
-      toast.success("Reviewer assigned successfully!");
+      toast.success('Reviewer assigned successfully!');
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission"],
+        queryKey: ['editor-submission'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["journal-submissions"],
+        queryKey: ['journal-submissions'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["reviewer-recommendations"],
+        queryKey: ['reviewer-recommendations'],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to assign reviewer.";
+        error?.response?.data?.detail || error?.message || 'Failed to assign reviewer.';
       toast.error(message);
     },
   });

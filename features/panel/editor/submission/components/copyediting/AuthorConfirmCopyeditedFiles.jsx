@@ -1,32 +1,15 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  FileText,
-  Download,
-  CheckCircle,
-  Loader2,
-  Edit,
-  Eye,
-} from "lucide-react";
-import { format } from "date-fns";
-import {
-  useCopyeditingFiles,
-  useConfirmFileFinal,
-  useCopyEditedFiles,
-} from "../../hooks";
-import { ConfirmationPopup } from "@/features/shared";
+import { useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Textarea } from '@/components/ui/textarea';
+import { FileText, Download, CheckCircle, Loader2, Edit, Eye } from 'lucide-react';
+import { format } from 'date-fns';
+import { useCopyeditingFiles, useConfirmFileFinal, useCopyEditedFiles } from '../../hooks';
+import { ConfirmationPopup } from '@/features/shared';
 
 /**
  * Component for authors to review and confirm copyedited files
@@ -39,7 +22,7 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
 
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
   const [selectedFile, setSelectedFile] = useState(null);
-  const [confirmationNotes, setConfirmationNotes] = useState("");
+  const [confirmationNotes, setConfirmationNotes] = useState('');
 
   // Fetch copyediting files with COPYEDITED status
   const {
@@ -51,14 +34,13 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
   });
 
   // Fetch files with AUTHOR_FINAL status
-  const { data: confirmedFilesData, isPending: isConfirmedLoading } =
-    useCopyeditingFiles(
-      {
-        submission: assignmentId,
-        file_type: "AUTHOR_FINAL",
-      },
-      { enabled: !!assignmentId }
-    );
+  const { data: confirmedFilesData, isPending: isConfirmedLoading } = useCopyeditingFiles(
+    {
+      submission: assignmentId,
+      file_type: 'AUTHOR_FINAL',
+    },
+    { enabled: !!assignmentId }
+  );
 
   const files = filesData?.results || [];
   const confirmedFiles = confirmedFilesData?.results || [];
@@ -68,7 +50,7 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
 
   const handleConfirmClick = (file) => {
     setSelectedFile(file);
-    setConfirmationNotes("");
+    setConfirmationNotes('');
     setIsConfirmDialogOpen(true);
   };
 
@@ -86,14 +68,14 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
         onSuccess: () => {
           setIsConfirmDialogOpen(false);
           setSelectedFile(null);
-          setConfirmationNotes("");
+          setConfirmationNotes('');
         },
       }
     );
   };
 
   const handleDownload = (fileUrl, fileName) => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = fileUrl;
     link.download = fileName;
     document.body.appendChild(link);
@@ -145,20 +127,17 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
             {file.created_at && (
               <>
                 <span className="hidden sm:inline">•</span>
-                <span>{format(new Date(file.created_at), "MMM d, yyyy")}</span>
+                <span>{format(new Date(file.created_at), 'MMM d, yyyy')}</span>
               </>
             )}
           </div>
           {file.uploaded_by && (
             <p className="text-xs text-muted-foreground mt-1">
-              Uploaded by: {file.uploaded_by.user?.first_name}{" "}
-              {file.uploaded_by.user?.last_name}
+              Uploaded by: {file.uploaded_by.user?.first_name} {file.uploaded_by.user?.last_name}
             </p>
           )}
           {file.description && (
-            <p className="text-xs text-muted-foreground mt-1">
-              {file.description}
-            </p>
+            <p className="text-xs text-muted-foreground mt-1">{file.description}</p>
           )}
         </div>
       </div>
@@ -172,7 +151,7 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
               `/author/submissions/active/${submissionIdFromParams}/copyediting/edit/${file.id}?readOnly=${isConfirmed}`
             )
           }
-          title={isConfirmed ? "View in Editor" : "Review and Edit in Editor"}
+          title={isConfirmed ? 'View in Editor' : 'Review and Edit in Editor'}
         >
           {isConfirmed ? (
             <>
@@ -218,8 +197,8 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
             <div>
               <CardTitle>Review Copyedited Files</CardTitle>
               <CardDescription>
-                Review the copyedited files and confirm them as final. Once
-                confirmed, the editor can complete the copyediting stage.
+                Review the copyedited files and confirm them as final. Once confirmed, the editor
+                can complete the copyediting stage.
               </CardDescription>
             </div>
           </div>
@@ -228,9 +207,7 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
           {isPending ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mt-2">
-                Loading files...
-              </p>
+              <p className="text-sm text-muted-foreground mt-2">Loading files...</p>
             </div>
           ) : error ? (
             <div className="text-center py-8 text-destructive">
@@ -258,9 +235,7 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
                     <h3 className="font-semibold text-sm">
                       Confirmed Files ({confirmedFiles.length})
                     </h3>
-                    <Badge variant="success">
-                      {confirmedFiles.length} confirmed
-                    </Badge>
+                    <Badge variant="success">{confirmedFiles.length} confirmed</Badge>
                   </div>
                   {confirmedFiles.map((file) => renderFileCard(file, true))}
                 </div>
@@ -270,13 +245,10 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
               {files.length === 0 && confirmedFiles.length === 0 && (
                 <div className="text-center py-12 border-2 border-dashed rounded-lg">
                   <FileText className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <h3 className="font-semibold mb-2">
-                    No Copyedited Files Yet
-                  </h3>
+                  <h3 className="font-semibold mb-2">No Copyedited Files Yet</h3>
                   <p className="text-sm text-muted-foreground mb-4">
-                    The copyeditor has not yet completed editing the files. Once
-                    they submit copyedited files, they will appear here for your
-                    review.
+                    The copyeditor has not yet completed editing the files. Once they submit
+                    copyedited files, they will appear here for your review.
                   </p>
                 </div>
               )}
@@ -293,8 +265,8 @@ export function AuthorConfirmCopyeditedFiles({ submissionId, assignmentId }) {
         description={
           <>
             <p className="mb-4">
-              You are about to confirm this file as final. Please review it
-              carefully before confirming.
+              You are about to confirm this file as final. Please review it carefully before
+              confirming.
             </p>
           </>
         }

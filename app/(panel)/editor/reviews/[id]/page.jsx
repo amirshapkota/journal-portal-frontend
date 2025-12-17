@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useParams, useRouter } from "next/navigation";
-import { format } from "date-fns";
+import { useParams, useRouter } from 'next/navigation';
+import { format } from 'date-fns';
 import {
   ArrowLeft,
   Calendar,
@@ -13,22 +13,16 @@ import {
   CheckCircle2,
   XCircle,
   AlertTriangle,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Skeleton } from "@/components/ui/skeleton";
-import { LoadingScreen, ErrorCard, DecisionBadge } from "@/features/shared";
-import { reviewRecommendationConfig } from "@/features";
-import { useGetReviewById } from "@/features/panel/editor/submission/hooks/useGetReviewById";
-import { ScrollArea } from "@/components/ui/scroll-area";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { Skeleton } from '@/components/ui/skeleton';
+import { LoadingScreen, ErrorCard, DecisionBadge } from '@/features/shared';
+import { reviewRecommendationConfig } from '@/features';
+import { useGetReviewById } from '@/features/panel/editor/submission/hooks/useGetReviewById';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 export default function ReviewDetailPage() {
   const params = useParams();
@@ -45,7 +39,7 @@ export default function ReviewDetailPage() {
     return (
       <ErrorCard
         title="Failed to load review"
-        description={error?.message || "Review not found"}
+        description={error?.message || 'Review not found'}
         onBack={() => router.back()}
       />
     );
@@ -55,7 +49,7 @@ export default function ReviewDetailPage() {
     return (
       <ErrorCard
         title="Review not found"
-        description={"No review data was returned from the server."}
+        description={'No review data was returned from the server.'}
         onBack={() => router.back()}
       />
     );
@@ -64,12 +58,12 @@ export default function ReviewDetailPage() {
   // Helper function to get recommendation icon
   const getRecommendationIcon = (recommendation) => {
     switch (recommendation) {
-      case "ACCEPT":
+      case 'ACCEPT':
         return <CheckCircle2 className="h-4 w-4" />;
-      case "REJECT":
+      case 'REJECT':
         return <XCircle className="h-4 w-4" />;
-      case "MINOR_REVISION":
-      case "MAJOR_REVISION":
+      case 'MINOR_REVISION':
+      case 'MAJOR_REVISION':
         return <AlertTriangle className="h-4 w-4" />;
       default:
         return null;
@@ -87,18 +81,12 @@ export default function ReviewDetailPage() {
               Back
             </Button>
           </div>
-          <h1 className="text-3xl font-semibold text-foreground">
-            Review Details
-          </h1>
-          <p className="text-muted-foreground">
-            Detailed review submitted by the reviewer
-          </p>
+          <h1 className="text-3xl font-semibold text-foreground">Review Details</h1>
+          <p className="text-muted-foreground">Detailed review submitted by the reviewer</p>
         </div>
         <Button
           variant="outline"
-          onClick={() =>
-            router.push(`/editor/submissions/${review.submission}`)
-          }
+          onClick={() => router.push(`/editor/submissions/${review.submission}`)}
         >
           <FileText className="h-4 w-4 mr-2" />
           View Submission
@@ -112,8 +100,7 @@ export default function ReviewDetailPage() {
             <div className="space-y-1">
               <CardTitle>Review Overview</CardTitle>
               <CardDescription>
-                Submitted on{" "}
-                {format(new Date(review.submitted_at), "PPP 'at' p")}
+                Submitted on {format(new Date(review.submitted_at), "PPP 'at' p")}
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
@@ -132,7 +119,7 @@ export default function ReviewDetailPage() {
             {/* Submission Info */}
             <div className="space-y-1">
               <p className="text-sm text-muted-foreground">Submission</p>
-              <p className="font-medium">{review.submission_title || "N/A"}</p>
+              <p className="font-medium">{review.submission_title || 'N/A'}</p>
             </div>
 
             {/* Reviewer Info (if not anonymous) */}
@@ -144,7 +131,7 @@ export default function ReviewDetailPage() {
                   <p className="font-medium">
                     {review.reviewer_info.full_name ||
                       review.reviewer_info.display_name ||
-                      "Anonymous"}
+                      'Anonymous'}
                   </p>
                 </div>
               </div>
@@ -155,9 +142,7 @@ export default function ReviewDetailPage() {
                 <p className="text-sm text-muted-foreground">Reviewer</p>
                 <div className="flex items-center gap-2">
                   <Eye className="h-4 w-4 text-muted-foreground" />
-                  <p className="font-medium text-muted-foreground">
-                    Anonymous Review
-                  </p>
+                  <p className="font-medium text-muted-foreground">Anonymous Review</p>
                 </div>
               </div>
             )}
@@ -179,14 +164,13 @@ export default function ReviewDetailPage() {
                     <div
                       key={i}
                       className={`h-2 w-2 rounded-full mr-1 ${
-                        i < review.confidence_level ? "bg-primary" : "bg-muted"
+                        i < review.confidence_level ? 'bg-primary' : 'bg-muted'
                       }`}
                     />
                   ))}
                 </div>
                 <span className="text-sm font-medium">
-                  {review.confidence_level}/5 -{" "}
-                  {review.confidence_display || "N/A"}
+                  {review.confidence_level}/5 - {review.confidence_display || 'N/A'}
                 </span>
               </div>
             </div>
@@ -208,9 +192,7 @@ export default function ReviewDetailPage() {
                 <p className="text-sm text-muted-foreground">Due Date</p>
                 <div className="flex items-center gap-2">
                   <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <p className="font-medium">
-                    {format(new Date(review.due_date), "PPP")}
-                  </p>
+                  <p className="font-medium">{format(new Date(review.due_date), 'PPP')}</p>
                 </div>
               </div>
             )}
@@ -230,15 +212,12 @@ export default function ReviewDetailPage() {
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
               {Object.entries(review.scores).map(([key, value]) => (
-                <div
-                  key={key}
-                  className="text-center p-4 bg-muted/50 rounded-lg"
-                >
+                <div key={key} className="text-center p-4 bg-muted/50 rounded-lg">
                   <p className="text-xs text-muted-foreground capitalize mb-2">
-                    {key.replace(/_/g, " ")}
+                    {key.replace(/_/g, ' ')}
                   </p>
                   <p className="text-2xl font-semibold">
-                    {typeof value === "number" ? value.toFixed(1) : value}/10
+                    {typeof value === 'number' ? value.toFixed(1) : value}/10
                   </p>
                 </div>
               ))}
@@ -247,9 +226,7 @@ export default function ReviewDetailPage() {
               <>
                 <Separator className="my-4" />
                 <div className="text-center p-4 bg-primary/10 rounded-lg">
-                  <p className="text-sm text-muted-foreground mb-2">
-                    Overall Score
-                  </p>
+                  <p className="text-sm text-muted-foreground mb-2">Overall Score</p>
                   <p className="text-3xl font-semibold text-primary">
                     {review.overall_score.toFixed(1)}/10
                   </p>
@@ -264,9 +241,7 @@ export default function ReviewDetailPage() {
       <Card>
         <CardHeader>
           <CardTitle>Detailed Review Comments</CardTitle>
-          <CardDescription>
-            Reviewer&apos;s detailed feedback for the authors
-          </CardDescription>
+          <CardDescription>Reviewer&apos;s detailed feedback for the authors</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="prose prose-sm max-w-none dark:prose-invert">
@@ -293,8 +268,7 @@ export default function ReviewDetailPage() {
               </CardTitle>
             </div>
             <CardDescription className="text-yellow-800 dark:text-yellow-200">
-              These comments are only visible to editors and not shared with
-              authors
+              These comments are only visible to editors and not shared with authors
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -317,9 +291,7 @@ export default function ReviewDetailPage() {
         <Card>
           <CardHeader>
             <CardTitle>AI-Generated Summary</CardTitle>
-            <CardDescription>
-              Automated summary of the review (for quick reference)
-            </CardDescription>
+            <CardDescription>Automated summary of the review (for quick reference)</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="prose prose-sm max-w-none dark:prose-invert">
@@ -336,9 +308,7 @@ export default function ReviewDetailPage() {
         <Card>
           <CardHeader>
             <CardTitle>Attached Files</CardTitle>
-            <CardDescription>
-              Additional files provided by the reviewer
-            </CardDescription>
+            <CardDescription>Additional files provided by the reviewer</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-2">
@@ -384,16 +354,12 @@ export default function ReviewDetailPage() {
             </div>
             <div>
               <p className="text-muted-foreground">Assignment ID</p>
-              <p className="font-mono text-xs mt-1">
-                {review.assignment_id || review.assignment}
-              </p>
+              <p className="font-mono text-xs mt-1">{review.assignment_id || review.assignment}</p>
             </div>
             <div>
               <p className="text-muted-foreground">Assigned At</p>
               <p className="font-medium mt-1">
-                {review.assigned_at
-                  ? format(new Date(review.assigned_at), "PPP")
-                  : "N/A"}
+                {review.assigned_at ? format(new Date(review.assigned_at), 'PPP') : 'N/A'}
               </p>
             </div>
             <div>
@@ -402,22 +368,16 @@ export default function ReviewDetailPage() {
                 {format(new Date(review.submitted_at), "PPP 'at' p")}
               </p>
             </div>
-            {review.quality_score !== undefined &&
-              review.quality_score !== null && (
-                <div>
-                  <p className="text-muted-foreground">Quality Score</p>
-                  <p className="font-medium mt-1">
-                    {review.quality_score.toFixed(2)}/10
-                  </p>
-                </div>
-              )}
+            {review.quality_score !== undefined && review.quality_score !== null && (
+              <div>
+                <p className="text-muted-foreground">Quality Score</p>
+                <p className="font-medium mt-1">{review.quality_score.toFixed(2)}/10</p>
+              </div>
+            )}
             <div>
               <p className="text-muted-foreground">Published Status</p>
-              <Badge
-                variant={review.is_published ? "default" : "secondary"}
-                className="mt-1"
-              >
-                {review.is_published ? "Published" : "Not Published"}
+              <Badge variant={review.is_published ? 'default' : 'secondary'} className="mt-1">
+                {review.is_published ? 'Published' : 'Not Published'}
               </Badge>
             </div>
           </div>

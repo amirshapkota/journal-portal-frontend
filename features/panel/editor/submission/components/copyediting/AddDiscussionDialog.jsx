@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -11,9 +11,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -21,29 +21,26 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Loader2 } from "lucide-react";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { RichTextEditor } from "@/features/shared/components/RichTextEditor";
-import { stripHtmlTags } from "@/features/shared/utils";
-import {
-  useCopyeditingAssignmentParticipants,
-  useCreateCopyeditingDiscussion,
-} from "../../hooks";
-import { useParams } from "next/navigation";
+} from '@/components/ui/select';
+import { Loader2 } from 'lucide-react';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
+import { RichTextEditor } from '@/features/shared/components/RichTextEditor';
+import { stripHtmlTags } from '@/features/shared/utils';
+import { useCopyeditingAssignmentParticipants, useCreateCopyeditingDiscussion } from '../../hooks';
+import { useParams } from 'next/navigation';
 
 // Form validation schema
 const discussionSchema = z.object({
-  subject: z.string().min(3, "Subject must be at least 3 characters"),
-  status: z.enum(["OPEN", "RESOLVED", "CLOSED"]).default("OPEN"),
+  subject: z.string().min(3, 'Subject must be at least 3 characters'),
+  status: z.enum(['OPEN', 'RESOLVED', 'CLOSED']).default('OPEN'),
 });
 
 /**
@@ -58,10 +55,10 @@ export function AddDiscussionDialog({ isOpen, onClose, assignmentId }) {
   const form = useForm({
     resolver: zodResolver(discussionSchema),
     defaultValues: {
-      subject: "",
-      message: "",
+      subject: '',
+      message: '',
       participants: [],
-      status: "OPEN",
+      status: 'OPEN',
     },
   });
 
@@ -110,8 +107,7 @@ export function AddDiscussionDialog({ isOpen, onClose, assignmentId }) {
         <DialogHeader>
           <DialogTitle>Start New Discussion</DialogTitle>
           <DialogDescription>
-            Create a discussion thread to communicate with participants about
-            this manuscript
+            Create a discussion thread to communicate with participants about this manuscript
           </DialogDescription>
         </DialogHeader>
 
@@ -168,9 +164,7 @@ export function AddDiscussionDialog({ isOpen, onClose, assignmentId }) {
                 Cancel
               </Button>
               <Button type="submit" disabled={createMutation.isPending}>
-                {createMutation.isPending && (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                )}
+                {createMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Start Discussion
               </Button>
             </DialogFooter>

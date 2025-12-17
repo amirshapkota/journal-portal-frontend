@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import {
   Dialog,
   DialogContent,
@@ -10,9 +10,9 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -20,45 +20,40 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { RichTextEditor } from "@/features/shared/components/RichTextEditor";
-import { stripHtmlTags } from "@/features/shared/utils";
-import { useCreateProductionDiscussion } from "../../hooks";
-import { addProductionMessage } from "../../api";
+} from '@/components/ui/form';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { RichTextEditor } from '@/features/shared/components/RichTextEditor';
+import { stripHtmlTags } from '@/features/shared/utils';
+import { useCreateProductionDiscussion } from '../../hooks';
+import { addProductionMessage } from '../../api';
 
 // Form validation schema
 const productionDiscussionSchema = z.object({
-  subject: z.string().min(3, "Subject must be at least 3 characters"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  subject: z.string().min(3, 'Subject must be at least 3 characters'),
+  message: z.string().min(10, 'Message must be at least 10 characters'),
 });
 
-export function AddProductionDiscussionDialog({
-  isOpen,
-  onClose,
-  assignmentId,
-  submissionId,
-}) {
+export function AddProductionDiscussionDialog({ isOpen, onClose, assignmentId, submissionId }) {
   const createMutation = useCreateProductionDiscussion();
 
   const form = useForm({
     resolver: zodResolver(productionDiscussionSchema),
     defaultValues: {
-      subject: "",
-      message: "",
+      subject: '',
+      message: '',
     },
   });
 
   const onSubmit = async (data) => {
     const plainText = stripHtmlTags(data.message);
     if (!plainText || plainText.trim().length < 10) {
-      toast.error("Message must contain at least 10 characters of text");
+      toast.error('Message must contain at least 10 characters of text');
       return;
     }
 
     if (!assignmentId || !submissionId) {
-      toast.error("Assignment ID and Submission ID are required");
+      toast.error('Assignment ID and Submission ID are required');
       return;
     }
 
@@ -79,9 +74,9 @@ export function AddProductionDiscussionDialog({
             });
             form.reset();
             onClose();
-            toast.success("Discussion started successfully");
+            toast.success('Discussion started successfully');
           } catch (error) {
-            toast.error("Discussion created but failed to add message");
+            toast.error('Discussion created but failed to add message');
             form.reset();
             onClose();
           }
@@ -101,8 +96,8 @@ export function AddProductionDiscussionDialog({
         <DialogHeader>
           <DialogTitle>Start Production Discussion</DialogTitle>
           <DialogDescription>
-            Create a discussion thread to communicate with production
-            participants about this manuscript
+            Create a discussion thread to communicate with production participants about this
+            manuscript
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -115,10 +110,7 @@ export function AddProductionDiscussionDialog({
                 <FormItem>
                   <FormLabel>Subject</FormLabel>
                   <FormControl>
-                    <Input
-                      placeholder="e.g., Galley file format clarification"
-                      {...field}
-                    />
+                    <Input placeholder="e.g., Galley file format clarification" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -133,7 +125,7 @@ export function AddProductionDiscussionDialog({
                   <FormLabel>Message</FormLabel>
                   <FormControl>
                     <RichTextEditor
-                      initialValue={field.value || ""}
+                      initialValue={field.value || ''}
                       onChange={field.onChange}
                       placeholder="Type your message here..."
                     />
@@ -152,9 +144,7 @@ export function AddProductionDiscussionDialog({
                 Cancel
               </Button>
               <Button type="submit" disabled={createMutation.isPending}>
-                {createMutation.isPending && (
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                )}
+                {createMutation.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
                 Start Discussion
               </Button>
             </DialogFooter>

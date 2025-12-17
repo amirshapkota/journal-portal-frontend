@@ -1,6 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { importFromOJS } from "../../api/ojsConnectionApi";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { importFromOJS } from '../../api/ojsConnectionApi';
+import { toast } from 'sonner';
 
 /**
  * Custom hook to initiate import from OJS
@@ -14,22 +14,22 @@ export function useImportFromOJS() {
     onSuccess: (data, journalId) => {
       toast.success(
         data.message ||
-          "Import started successfully. Please wait while we sync submissions from OJS."
+          'Import started successfully. Please wait while we sync submissions from OJS.'
       );
 
       // Invalidate queries after import starts
       queryClient.invalidateQueries({
-        queryKey: ["journal-submissions", journalId],
+        queryKey: ['journal-submissions', journalId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["journal", journalId],
+        queryKey: ['journal', journalId],
       });
     },
     onError: (error) => {
       const errorMessage =
         error?.response?.data?.error ||
         error?.response?.data?.message ||
-        "Failed to start import from OJS";
+        'Failed to start import from OJS';
       toast.error(errorMessage);
     },
   });

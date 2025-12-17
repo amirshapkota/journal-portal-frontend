@@ -1,12 +1,6 @@
-import React from "react";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 
 /**
  * CardSkeleton - A generic skeleton loader for card layouts.
@@ -15,7 +9,7 @@ import { Skeleton } from "@/components/ui/skeleton";
  * @param {number} rows - Number of info rows (default: 6)
  * @param {string} className - Additional classes for the card
  */
-export default function CardSkeleton({ rows = 6, className = "" }) {
+export default function CardSkeleton({ rows = 6, className = '' }) {
   return (
     <Card className={`w-full animate-pulse opacity-80 ${className}`}>
       <CardHeader>

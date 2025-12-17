@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -8,25 +8,25 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { SearchableSelect } from "@/features/shared";
-import { useGetUsers } from "@/features";
-import { useCreateCopyeditingAssignment } from "../../hooks";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { SearchableSelect } from '@/features/shared';
+import { useGetUsers } from '@/features';
+import { useCreateCopyeditingAssignment } from '../../hooks';
 
 /**
  * Dialog to assign a copyeditor to a submission
  * Reuses the pattern from StaffSettings AddStaffDialog
  */
 export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
-  const [selectedUserId, setSelectedUserId] = useState("");
-  const [dueDate, setDueDate] = useState("");
-  const [instructions, setInstructions] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState('');
+  const [dueDate, setDueDate] = useState('');
+  const [instructions, setInstructions] = useState('');
 
   // Fetch users with COPY_EDITOR or EDITOR role
   const {
@@ -34,7 +34,7 @@ export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
     isPending: loadingUsers,
     error: usersError,
   } = useGetUsers(
-    { userRole: "EDITOR" }, // or "COPY_EDITOR" if you have this role
+    { userRole: 'EDITOR' }, // or "COPY_EDITOR" if you have this role
     {
       enabled: isOpen,
     }
@@ -44,12 +44,10 @@ export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
   const userOptions =
     usersData?.results?.map((user) => ({
       value: user?.profile?.id.toString(),
-      label: `${user.profile.display_name || user.profile.user_name} (${
-        user.email
-      })`,
+      label: `${user.profile.display_name || user.profile.user_name} (${user.email})`,
     })) || [];
 
-  console.log("User Options:", userOptions);
+  console.log('User Options:', userOptions);
 
   // Use the create assignment hook
   const createAssignment = useCreateCopyeditingAssignment();
@@ -58,7 +56,7 @@ export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
     e.preventDefault();
 
     if (!selectedUserId) {
-      toast.error("Please select a copyeditor");
+      toast.error('Please select a copyeditor');
       return;
     }
 
@@ -71,15 +69,14 @@ export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
         submission: submissionId,
         copyeditor_id: selectedUserId,
         due_date: assignmentDueDate,
-        instructions:
-          instructions || "Please review and copyedit this manuscript.",
+        instructions: instructions || 'Please review and copyedit this manuscript.',
       },
       {
         onSuccess: () => {
           // Reset and close
-          setSelectedUserId("");
-          setDueDate("");
-          setInstructions("");
+          setSelectedUserId('');
+          setDueDate('');
+          setInstructions('');
           onClose();
         },
       }
@@ -87,9 +84,9 @@ export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
   };
 
   const handleClose = () => {
-    setSelectedUserId("");
-    setDueDate("");
-    setInstructions("");
+    setSelectedUserId('');
+    setDueDate('');
+    setInstructions('');
     onClose();
   };
 
@@ -109,15 +106,13 @@ export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
               options={userOptions}
               value={selectedUserId}
               onChange={(value) => setSelectedUserId(value)}
-              placeholder={
-                loadingUsers ? "Loading users..." : "Select a copyeditor"
-              }
+              placeholder={loadingUsers ? 'Loading users...' : 'Select a copyeditor'}
               emptyText={
                 usersError
-                  ? "Error loading users"
+                  ? 'Error loading users'
                   : userOptions.length === 0
-                  ? "No copyeditors found"
-                  : "No user found."
+                    ? 'No copyeditors found'
+                    : 'No user found.'
               }
               searchPlaceholder="Search by name or email..."
               disabled={loadingUsers || createAssignment.isPending}
@@ -162,13 +157,8 @@ export function AssignCopyeditorDialog({ isOpen, onClose, submissionId }) {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={!selectedUserId || createAssignment.isPending}
-            >
-              {createAssignment.isPending && (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              )}
+            <Button type="submit" disabled={!selectedUserId || createAssignment.isPending}>
+              {createAssignment.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               Assign
             </Button>
           </DialogFooter>

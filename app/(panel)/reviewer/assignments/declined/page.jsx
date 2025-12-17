@@ -1,26 +1,20 @@
-"use client";
+'use client';
 
-import { XCircle } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { useGetDeclinedAssignments } from "@/features/panel/reviewer/hooks/query/useGetDeclinedAssignments";
-import { AssignmentCard } from "../../../../../features/panel/reviewer/components/assignments/AssignmentCard";
-import { EmptyState } from "../../../../../features/panel/reviewer/components/assignments/EmptyState";
-import { ErrorCard } from "@/features";
-import { Pagination } from "@/features/shared";
-import { useSearchParams, useRouter } from "next/navigation";
+import { XCircle } from 'lucide-react';
+import { Skeleton } from '@/components/ui/skeleton';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { useGetDeclinedAssignments } from '@/features/panel/reviewer/hooks/query/useGetDeclinedAssignments';
+import { AssignmentCard } from '../../../../../features/panel/reviewer/components/assignments/AssignmentCard';
+import { EmptyState } from '../../../../../features/panel/reviewer/components/assignments/EmptyState';
+import { ErrorCard } from '@/features';
+import { Pagination } from '@/features/shared';
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function DeclinedAssignmentsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
+  const pageParam = searchParams.get('page');
   const currentPage = pageParam ? parseInt(pageParam) : 1;
 
   const params = {
@@ -40,7 +34,7 @@ export default function DeclinedAssignmentsPage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -54,7 +48,7 @@ export default function DeclinedAssignmentsPage() {
                 <Skeleton className="h-6 w-3/4" />
                 <Skeleton className="h-6 w-1/2" />
               </CardHeader>
-              <CardContent className={"space-y-4"}>
+              <CardContent className={'space-y-4'}>
                 <div className="space-y-2">
                   <Skeleton className="h-6 w-2/3" />
                   <Skeleton className="h-6 w-2/3" />
@@ -82,8 +76,7 @@ export default function DeclinedAssignmentsPage() {
         <ErrorCard
           title="Failed to Load Declined Assignments"
           description={
-            error?.message ||
-            "Unable to load your declined review assignments. Please try again."
+            error?.message || 'Unable to load your declined review assignments. Please try again.'
           }
           onRetry={refetch}
         />

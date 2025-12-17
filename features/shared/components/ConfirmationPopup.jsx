@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import {
   Dialog,
@@ -6,10 +6,10 @@ import {
   DialogDescription,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { useEffect } from "react";
-import { Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 /**
  * Reusable Confirmation Popup Component
@@ -63,19 +63,19 @@ import { Button } from "@/components/ui/button";
  * />
  */
 const ConfirmationPopup = ({
-  title = "Confirm Action",
-  description = "Are you sure you want to proceed?",
+  title = 'Confirm Action',
+  description = 'Are you sure you want to proceed?',
   icon,
-  cancelText = "Cancel",
-  confirmText = "Confirm",
+  cancelText = 'Cancel',
+  confirmText = 'Confirm',
   onConfirm,
   isPending = false,
   isSuccess = false,
   onOpenChange,
   open,
-  variant = "danger",
+  variant = 'danger',
   autoClose = true,
-  loadingText = "Processing...",
+  loadingText = 'Processing...',
   triggerButton,
 }) => {
   /**
@@ -97,14 +97,14 @@ const ConfirmationPopup = ({
    */
   const getConfirmButtonStyles = () => {
     const baseStyles =
-      "rounded-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed";
+      'rounded-sm transition-colors disabled:opacity-60 disabled:cursor-not-allowed';
 
     switch (variant) {
-      case "danger":
+      case 'danger':
         return `${baseStyles} bg-red-500 hover:bg-red-600`;
-      case "primary":
+      case 'primary':
         return `${baseStyles} bg-primary text-primary-foreground shadow-xs hover:bg-primary/90`;
-      case "warning":
+      case 'warning':
         return `${baseStyles} bg-yellow-600 hover:bg-yellow-700`;
       default:
         return `${baseStyles} bg-red-500 hover:bg-red-600`;
@@ -114,16 +114,11 @@ const ConfirmationPopup = ({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogTrigger asChild>{triggerButton}</DialogTrigger>
-      <DialogContent
-        showCloseButton={false}
-        className="bg-card flex flex-col items-center gap-2"
-      >
+      <DialogContent showCloseButton={false} className="bg-card flex flex-col items-center gap-2">
         {/* Header with icon and title */}
         {icon && <div className="shrink-0">{icon}</div>}
         <div className="flex items-center">
-          <DialogTitle className="text-lg font-semibold leading-6">
-            {title}
-          </DialogTitle>
+          <DialogTitle className="text-lg font-semibold leading-6">{title}</DialogTitle>
         </div>
 
         {/* Description */}

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { FilterToolbar, Pagination } from "@/features/shared";
-import { ActionConfirmationPopup, LoadingScreen } from "@/features";
+import { useMemo, useState } from 'react';
+import { FilterToolbar, Pagination } from '@/features/shared';
+import { ActionConfirmationPopup, LoadingScreen } from '@/features';
 import {
   useGetEditorVerificationRequests,
   useGetEditorJournals,
@@ -11,28 +11,26 @@ import {
   useRequestInfoEditorVerification,
   EditorVerificationRequestsTable,
   EditorVerificationDetailsModal,
-} from "@/features/panel/editor/verification-requests";
+} from '@/features/panel/editor/verification-requests';
 
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter } from 'next/navigation';
 
 export default function EditorVerificationsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
+  const pageParam = searchParams.get('page');
   const currentPage = pageParam ? parseInt(pageParam) : 1;
-  const searchParam = searchParams.get("search");
-  const status = searchParams.get("status");
-  const journalParam = searchParams.get("journal");
+  const searchParam = searchParams.get('search');
+  const status = searchParams.get('status');
+  const journalParam = searchParams.get('journal');
 
   // Get editor's journals
-  const { data: journalsData, isPending: isJournalsLoading } =
-    useGetEditorJournals();
+  const { data: journalsData, isPending: isJournalsLoading } = useGetEditorJournals();
 
   const journals = useMemo(() => journalsData?.results || [], [journalsData]);
 
   // Store user's explicit selection (null = no selection yet)
-  const [userSelectedJournalId, setUserSelectedJournalId] =
-    useState(journalParam);
+  const [userSelectedJournalId, setUserSelectedJournalId] = useState(journalParam);
 
   // Derive the effective selected journal ID
   // Priority: URL param > user selection > first journal > null
@@ -61,14 +59,12 @@ export default function EditorVerificationsPage() {
   );
 
   // Mutations
-  const { mutate: approveVerification, isPending: isApproving } =
-    useApproveEditorVerification();
-  const { mutate: rejectVerification, isPending: isRejecting } =
-    useRejectEditorVerification();
+  const { mutate: approveVerification, isPending: isApproving } = useApproveEditorVerification();
+  const { mutate: rejectVerification, isPending: isRejecting } = useRejectEditorVerification();
   const { mutate: requestInfoVerification, isPending: isRequestingInfo } =
     useRequestInfoEditorVerification();
 
-  const [statusFilter, setStatusFilter] = useState(status || "all");
+  const [statusFilter, setStatusFilter] = useState(status || 'all');
   const [selectedVerification, setSelectedVerification] = useState(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [confirmAction, setConfirmAction] = useState(null);
@@ -80,17 +76,17 @@ export default function EditorVerificationsPage() {
   };
 
   const handleApprove = () => {
-    setConfirmAction("approve");
+    setConfirmAction('approve');
     setIsConfirmOpen(true);
   };
 
   const handleRequestInfo = () => {
-    setConfirmAction("request-info");
+    setConfirmAction('request-info');
     setIsConfirmOpen(true);
   };
 
   const handleReject = () => {
-    setConfirmAction("reject");
+    setConfirmAction('reject');
     setIsConfirmOpen(true);
   };
 
@@ -155,8 +151,8 @@ export default function EditorVerificationsPage() {
   const handleJournalChange = (value) => {
     setUserSelectedJournalId(value);
     const params = new URLSearchParams(searchParams.toString());
-    params.set("journal", value);
-    params.delete("page"); // Reset page when changing journal
+    params.set('journal', value);
+    params.delete('page'); // Reset page when changing journal
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -175,9 +171,7 @@ export default function EditorVerificationsPage() {
 
       {/* Header */}
       <div className="space-y-2">
-        <h1 className="text-3xl font-semibold text-foreground">
-          Verification Requests
-        </h1>
+        <h1 className="text-3xl font-semibold text-foreground">Verification Requests</h1>
         <p className="text-muted-foreground">
           Review and manage user verification requests for your journals
         </p>
@@ -188,7 +182,7 @@ export default function EditorVerificationsPage() {
         <FilterToolbar.Select
           paramName="journal"
           label="Journal"
-          value={selectedJournalId || ""}
+          value={selectedJournalId || ''}
           onChange={handleJournalChange}
           options={journalOptions}
           disabled={isJournalsLoading}
@@ -200,11 +194,11 @@ export default function EditorVerificationsPage() {
           value={statusFilter}
           onChange={setStatusFilter}
           options={[
-            { value: "all", label: "All Status" },
-            { value: "PENDING", label: "Pending" },
-            { value: "APPROVED", label: "Approved" },
-            { value: "REJECTED", label: "Rejected" },
-            { value: "INFO_REQUESTED", label: "Info Requested" },
+            { value: 'all', label: 'All Status' },
+            { value: 'PENDING', label: 'Pending' },
+            { value: 'APPROVED', label: 'Approved' },
+            { value: 'REJECTED', label: 'Rejected' },
+            { value: 'INFO_REQUESTED', label: 'Info Requested' },
           ]}
         />
       </FilterToolbar>
@@ -216,8 +210,7 @@ export default function EditorVerificationsPage() {
             <div>
               <h3 className="font-medium">{verificationsData.journal?.name}</h3>
               <p className="text-sm text-muted-foreground">
-                Total imported users:{" "}
-                {verificationsData.total_imported_users || 0}
+                Total imported users: {verificationsData.total_imported_users || 0}
               </p>
             </div>
             <div className="text-right">
@@ -251,7 +244,7 @@ export default function EditorVerificationsPage() {
       <ActionConfirmationPopup
         isOpen={isConfirmOpen}
         action={confirmAction}
-        userName={selectedVerification?.profile_name || ""}
+        userName={selectedVerification?.profile_name || ''}
         onApprove={handleApproveConfirm}
         onReject={handleRejectConfirm}
         onRequestInfo={handleRequestInfoConfirm}

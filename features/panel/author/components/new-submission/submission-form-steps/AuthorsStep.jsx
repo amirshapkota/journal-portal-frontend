@@ -1,26 +1,20 @@
 // AuthorsStep.jsx
-import { useMemo, useCallback } from "react";
-import { Card } from "@/components/ui/card";
-import {
-  FormField,
-  FormItem,
-  FormLabel,
-  FormControl,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Trash2, Plus } from "lucide-react";
-import { useWatch } from "react-hook-form";
+import { useMemo, useCallback } from 'react';
+import { Card } from '@/components/ui/card';
+import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Trash2, Plus } from 'lucide-react';
+import { useWatch } from 'react-hook-form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { InstitutionSearchSelect } from "@/features";
-import CoAuthorInstitutionDetails from "./CoAuthorInstitutionDetails";
+} from '@/components/ui/select';
+import { InstitutionSearchSelect } from '@/features';
+import CoAuthorInstitutionDetails from './CoAuthorInstitutionDetails';
 
 export default function AuthorsStep({
   form,
@@ -30,14 +24,14 @@ export default function AuthorsStep({
 }) {
   const coAuthors = useWatch({
     control: form.control,
-    name: "co_authors",
+    name: 'co_authors',
     defaultValue: [],
   });
 
   // Helper to handle institution selection and ROR assignment
   const handleInstitutionChange = useCallback(
     (index, val, rorId) => {
-      form.setValue(`co_authors.${index}.institution`, val || "", {
+      form.setValue(`co_authors.${index}.institution`, val || '', {
         shouldDirty: true,
       });
       if (rorId) {
@@ -45,7 +39,7 @@ export default function AuthorsStep({
           shouldDirty: true,
         });
       } else {
-        form.setValue(`co_authors.${index}.affiliation_ror_id`, "", {
+        form.setValue(`co_authors.${index}.affiliation_ror_id`, '', {
           shouldDirty: true,
         });
       }
@@ -54,10 +48,7 @@ export default function AuthorsStep({
   );
 
   // Default roles if none provided from backend
-  const defaultRoles = useMemo(
-    () => ["Author", "Co-Author", "Researcher", "Contributor"],
-    []
-  );
+  const defaultRoles = useMemo(() => ['Author', 'Co-Author', 'Researcher', 'Contributor'], []);
   const availableRoles = useMemo(
     () => (coauthorRoles.length > 0 ? coauthorRoles : defaultRoles),
     [coauthorRoles, defaultRoles]
@@ -123,14 +114,9 @@ export default function AuthorsStep({
           </Button>
         </div>
         {coAuthors?.map((_, index) => (
-          <Card
-            key={index}
-            className="p-4 gap-2 bg-muted/30 border border-border"
-          >
+          <Card key={index} className="p-4 gap-2 bg-muted/30 border border-border">
             <div className="flex items-start justify-between ">
-              <h4 className="font-medium text-foreground">
-                Co-Author {index + 1}
-              </h4>
+              <h4 className="font-medium text-foreground">Co-Author {index + 1}</h4>
               <Button
                 type="button"
                 variant="ghost"
@@ -179,13 +165,9 @@ export default function AuthorsStep({
                           value={field.value}
                           onChange={field.onChange}
                           onRorIdChange={(rorId) => {
-                            form.setValue(
-                              `co_authors.${index}.affiliation_ror_id`,
-                              rorId,
-                              {
-                                shouldDirty: true,
-                              }
-                            );
+                            form.setValue(`co_authors.${index}.affiliation_ror_id`, rorId, {
+                              shouldDirty: true,
+                            });
                           }}
                           placeholder="e.g., Stanford University"
                         />
@@ -195,9 +177,7 @@ export default function AuthorsStep({
                   )}
                 />
                 {/* ROR Institution display (always render, handles null/empty internally) */}
-                <CoAuthorInstitutionDetails
-                  rorId={coAuthors[index]?.affiliation_ror_id}
-                />
+                <CoAuthorInstitutionDetails rorId={coAuthors[index]?.affiliation_ror_id} />
               </div>
               <FormField
                 control={form.control}

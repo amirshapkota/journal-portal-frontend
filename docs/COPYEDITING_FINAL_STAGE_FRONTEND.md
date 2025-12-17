@@ -136,7 +136,7 @@ export const confirmFileFinal = async (fileId, data = {}) => {
 
 ```javascript
 {
-  confirmation_notes: "All changes look good"; // optional
+  confirmation_notes: 'All changes look good'; // optional
 }
 ```
 
@@ -183,7 +183,7 @@ export const completeCopyediting = async (assignmentId, data = {}) => {
 
 ```javascript
 {
-  completion_notes: "All files reviewed and approved"; // optional
+  completion_notes: 'All files reviewed and approved'; // optional
 }
 ```
 
@@ -225,25 +225,22 @@ export function useConfirmFileFinal() {
 
   return useMutation({
     mutationFn: ({ fileId, data }) => {
-      const { confirmFileFinal } = require("../../api");
+      const { confirmFileFinal } = require('../../api');
       return confirmFileFinal(fileId, data);
     },
     onSuccess: (data) => {
-      toast.success("File confirmed as final successfully");
+      toast.success('File confirmed as final successfully');
 
       // Invalidate queries to refresh data
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-file", data.file?.id],
+        queryKey: ['copyediting-file', data.file?.id],
       });
     },
     onError: (error) => {
-      const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to confirm file";
+      const message = error?.response?.data?.detail || error?.message || 'Failed to confirm file';
       toast.error(message);
     },
   });
@@ -258,7 +255,7 @@ const confirmMutation = useConfirmFileFinal();
 const handleConfirm = (fileId) => {
   confirmMutation.mutate({
     fileId: fileId,
-    data: { confirmation_notes: "Looks good!" },
+    data: { confirmation_notes: 'Looks good!' },
   });
 };
 ```
@@ -274,22 +271,19 @@ export function useCompleteCopyeditingAssignment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ assignmentId, data }) =>
-      completeCopyeditingAssignment(assignmentId, data),
+    mutationFn: ({ assignmentId, data }) => completeCopyeditingAssignment(assignmentId, data),
     onSuccess: (data) => {
-      toast.success("Copyediting completed successfully");
+      toast.success('Copyediting completed successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignment", data.id],
+        queryKey: ['copyediting-assignment', data.id],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to complete assignment";
+        error?.response?.data?.detail || error?.message || 'Failed to complete assignment';
       toast.error(message);
     },
   });
@@ -309,32 +303,25 @@ export function useCompleteCopyeditingAssignment() {
 #### Component Structure
 
 ```jsx
-export function AuthorConfirmCopyeditedFiles({
-  assignmentId,
-  submission,
-  submissionId,
-}) {
+export function AuthorConfirmCopyeditedFiles({ assignmentId, submission, submissionId }) {
   // State management
   const [selectedFile, setSelectedFile] = useState(null);
   const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false);
-  const [confirmationNotes, setConfirmationNotes] = useState("");
+  const [confirmationNotes, setConfirmationNotes] = useState('');
 
   // Data fetching
   const {
     data: filesData,
     isLoading,
     error,
-  } = useCopyeditingFiles(
-    { submission: submissionId },
-    { enabled: !!submissionId }
-  );
+  } = useCopyeditingFiles({ submission: submissionId }, { enabled: !!submissionId });
 
   // Categorize files
   const { awaitingConfirmation, confirmed } = useMemo(() => {
     const files = filesData?.results || [];
     return {
-      awaitingConfirmation: files.filter((f) => f.file_type === "COPYEDITED"),
-      confirmed: files.filter((f) => f.file_type === "AUTHOR_FINAL"),
+      awaitingConfirmation: files.filter((f) => f.file_type === 'COPYEDITED'),
+      confirmed: files.filter((f) => f.file_type === 'AUTHOR_FINAL'),
     };
   }, [filesData]);
 
@@ -352,7 +339,7 @@ export function AuthorConfirmCopyeditedFiles({
         onSuccess: () => {
           setIsConfirmDialogOpen(false);
           setSelectedFile(null);
-          setConfirmationNotes("");
+          setConfirmationNotes('');
         },
       }
     );
@@ -374,18 +361,15 @@ export function AuthorConfirmCopyeditedFiles({
 #### Key Features
 
 1. **Two File Sections**
-
    - Files Awaiting Confirmation (COPYEDITED status)
    - Already Confirmed Files (AUTHOR_FINAL status)
 
 2. **File Actions**
-
    - Review button (opens file in SuperDoc editor)
    - Confirm Final button (with confirmation dialog)
    - Download button
 
 3. **Status Indicators**
-
    - Badge showing file status
    - Visual distinction between confirmed and pending files
    - File metadata display (size, version, upload date)
@@ -429,33 +413,26 @@ graph TD
 #### Component Structure
 
 ```jsx
-export function EditorCompleteCopyediting({
-  assignmentId,
-  submission,
-  submissionId,
-}) {
+export function EditorCompleteCopyediting({ assignmentId, submission, submissionId }) {
   // State
   const [isCompleteDialogOpen, setIsCompleteDialogOpen] = useState(false);
-  const [completionNotes, setCompletionNotes] = useState("");
+  const [completionNotes, setCompletionNotes] = useState('');
 
   // Fetch all files
   const {
     data: filesData,
     isLoading,
     error,
-  } = useCopyeditingFiles(
-    { submission: submissionId },
-    { enabled: !!submissionId }
-  );
+  } = useCopyeditingFiles({ submission: submissionId }, { enabled: !!submissionId });
 
   // Categorize files by status
   const filesByStatus = useMemo(() => {
     const files = filesData?.results || [];
     return {
-      draft: files.filter((f) => f.file_type === "DRAFT"),
-      copyedited: files.filter((f) => f.file_type === "COPYEDITED"),
-      authorFinal: files.filter((f) => f.file_type === "AUTHOR_FINAL"),
-      final: files.filter((f) => f.file_type === "FINAL"),
+      draft: files.filter((f) => f.file_type === 'DRAFT'),
+      copyedited: files.filter((f) => f.file_type === 'COPYEDITED'),
+      authorFinal: files.filter((f) => f.file_type === 'AUTHOR_FINAL'),
+      final: files.filter((f) => f.file_type === 'FINAL'),
     };
   }, [filesData]);
 
@@ -489,20 +466,17 @@ export function EditorCompleteCopyediting({
 #### Key Features
 
 1. **File Status Dashboard**
-
    - Draft Files count
    - Awaiting Author Confirmation count (with warning if > 0)
    - Author Confirmed count (with success indicator)
    - Final (Production) count
 
 2. **Validation Requirements Display**
-
    - ✅ At least one file confirmed by author
    - ✅ All copyedited files confirmed by author
    - Visual indicators (green check or red X)
 
 3. **Status Alerts**
-
    - Info alert when waiting for author
    - Success alert when ready to complete
    - Shows specific counts and details
@@ -560,26 +534,21 @@ const canComplete = hasAuthorConfirmation && noPendingFiles;
 
 // After - Enhanced with file status
 {
-  file.file_type === "AUTHOR_FINAL" && (
+  file.file_type === 'AUTHOR_FINAL' && (
     <Badge variant="success" className="text-xs">
       Author Confirmed
     </Badge>
   );
 }
 {
-  file.file_type === "COPYEDITED" && (
-    <Badge
-      variant="outline"
-      className="text-xs border-orange-500 text-orange-600"
-    >
+  file.file_type === 'COPYEDITED' && (
+    <Badge variant="outline" className="text-xs border-orange-500 text-orange-600">
       Awaiting Author
     </Badge>
   );
 }
 {
-  file.file_type === "FINAL" && (
-    <Badge className="text-xs bg-blue-600">Final</Badge>
-  );
+  file.file_type === 'FINAL' && <Badge className="text-xs bg-blue-600">Final</Badge>;
 }
 ```
 
@@ -723,7 +692,7 @@ frontend-journal-portal/
 **File:** `app/(panel)/author/submissions/active/[id]/copyediting/page.jsx`
 
 ```jsx
-import { AuthorConfirmCopyeditedFiles } from "@/features/panel/editor/submission/components/copyediting/AuthorConfirmCopyeditedFiles";
+import { AuthorConfirmCopyeditedFiles } from '@/features/panel/editor/submission/components/copyediting/AuthorConfirmCopyeditedFiles';
 
 export default function AuthorCopyeditingPage() {
   // ... existing code ...
@@ -742,10 +711,7 @@ export default function AuthorCopyeditingPage() {
             />
           </div>
           <div>
-            <CopyeditingParticipants
-              assignmentId={assignmentId}
-              isAuthorView={true}
-            />
+            <CopyeditingParticipants assignmentId={assignmentId} isAuthorView={true} />
           </div>
         </div>
       </TabsContent>
@@ -759,7 +725,7 @@ export default function AuthorCopyeditingPage() {
 **File:** `app/(panel)/editor/submissions/[id]/copyediting/page.jsx`
 
 ```jsx
-import { EditorCompleteCopyediting } from "@/features/panel/editor/submission/components/copyediting/EditorCompleteCopyediting";
+import { EditorCompleteCopyediting } from '@/features/panel/editor/submission/components/copyediting/EditorCompleteCopyediting';
 
 export default function CopyeditingWorkflowPage() {
   // ... existing code ...
@@ -796,33 +762,29 @@ export default function CopyeditingWorkflowPage() {
 #### Test API Functions
 
 ```javascript
-import {
-  getCopyeditedFiles,
-  confirmFileFinal,
-  completeCopyediting,
-} from "./copyeditingApi";
+import { getCopyeditedFiles, confirmFileFinal, completeCopyediting } from './copyeditingApi';
 
-describe("Copyediting API", () => {
-  test("getCopyeditedFiles returns filtered files", async () => {
-    const files = await getCopyeditedFiles("assignment-id");
+describe('Copyediting API', () => {
+  test('getCopyeditedFiles returns filtered files', async () => {
+    const files = await getCopyeditedFiles('assignment-id');
     expect(files.results).toBeInstanceOf(Array);
-    expect(files.results[0].file_type).toBe("COPYEDITED");
+    expect(files.results[0].file_type).toBe('COPYEDITED');
   });
 
-  test("confirmFileFinal sends correct payload", async () => {
-    const response = await confirmFileFinal("file-id", {
-      confirmation_notes: "Test note",
+  test('confirmFileFinal sends correct payload', async () => {
+    const response = await confirmFileFinal('file-id', {
+      confirmation_notes: 'Test note',
     });
-    expect(response.status).toBe("success");
-    expect(response.file.file_type).toBe("AUTHOR_FINAL");
+    expect(response.status).toBe('success');
+    expect(response.file.file_type).toBe('AUTHOR_FINAL');
   });
 
-  test("completeCopyediting validates requirements", async () => {
-    const response = await completeCopyediting("assignment-id", {
-      completion_notes: "Test",
+  test('completeCopyediting validates requirements', async () => {
+    const response = await completeCopyediting('assignment-id', {
+      completion_notes: 'Test',
     });
-    expect(response.assignment_status).toBe("COMPLETED");
-    expect(response.submission_status).toBe("PRODUCTION");
+    expect(response.assignment_status).toBe('COMPLETED');
+    expect(response.submission_status).toBe('PRODUCTION');
   });
 });
 ```
@@ -830,22 +792,22 @@ describe("Copyediting API", () => {
 #### Test React Query Hooks
 
 ```javascript
-import { renderHook, waitFor } from "@testing-library/react";
-import { useConfirmFileFinal } from "./useCopyeditingFiles";
+import { renderHook, waitFor } from '@testing-library/react';
+import { useConfirmFileFinal } from './useCopyeditingFiles';
 
-describe("useConfirmFileFinal", () => {
-  test("successfully confirms file", async () => {
+describe('useConfirmFileFinal', () => {
+  test('successfully confirms file', async () => {
     const { result } = renderHook(() => useConfirmFileFinal());
 
     act(() => {
       result.current.mutate({
-        fileId: "test-id",
-        data: { confirmation_notes: "Looks good" },
+        fileId: 'test-id',
+        data: { confirmation_notes: 'Looks good' },
       });
     });
 
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
-    expect(result.current.data.file.file_type).toBe("AUTHOR_FINAL");
+    expect(result.current.data.file.file_type).toBe('AUTHOR_FINAL');
   });
 });
 ```
@@ -855,43 +817,31 @@ describe("useConfirmFileFinal", () => {
 #### Test Author Confirmation Flow
 
 ```javascript
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import AuthorConfirmCopyeditedFiles from "./AuthorConfirmCopyeditedFiles";
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import AuthorConfirmCopyeditedFiles from './AuthorConfirmCopyeditedFiles';
 
-describe("AuthorConfirmCopyeditedFiles", () => {
-  test("displays files awaiting confirmation", async () => {
-    render(
-      <AuthorConfirmCopyeditedFiles
-        assignmentId="test-id"
-        submissionId="sub-id"
-      />
-    );
+describe('AuthorConfirmCopyeditedFiles', () => {
+  test('displays files awaiting confirmation', async () => {
+    render(<AuthorConfirmCopyeditedFiles assignmentId="test-id" submissionId="sub-id" />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText("Files Awaiting Your Confirmation")
-      ).toBeInTheDocument();
+      expect(screen.getByText('Files Awaiting Your Confirmation')).toBeInTheDocument();
     });
   });
 
-  test("confirms file successfully", async () => {
-    render(
-      <AuthorConfirmCopyeditedFiles
-        assignmentId="test-id"
-        submissionId="sub-id"
-      />
-    );
+  test('confirms file successfully', async () => {
+    render(<AuthorConfirmCopyeditedFiles assignmentId="test-id" submissionId="sub-id" />);
 
     // Click confirm button
-    const confirmBtn = await screen.findByText("Confirm Final");
+    const confirmBtn = await screen.findByText('Confirm Final');
     fireEvent.click(confirmBtn);
 
     // Fill dialog
     const notesInput = screen.getByPlaceholderText(/notes/i);
-    fireEvent.change(notesInput, { target: { value: "Test notes" } });
+    fireEvent.change(notesInput, { target: { value: 'Test notes' } });
 
     // Submit
-    const submitBtn = screen.getByText("Confirm as Final");
+    const submitBtn = screen.getByText('Confirm as Final');
     fireEvent.click(submitBtn);
 
     // Verify success
@@ -905,44 +855,36 @@ describe("AuthorConfirmCopyeditedFiles", () => {
 #### Test Editor Completion Flow
 
 ```javascript
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import EditorCompleteCopyediting from "./EditorCompleteCopyediting";
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import EditorCompleteCopyediting from './EditorCompleteCopyediting';
 
-describe("EditorCompleteCopyediting", () => {
-  test("shows warning when files not confirmed", async () => {
+describe('EditorCompleteCopyediting', () => {
+  test('shows warning when files not confirmed', async () => {
     // Mock files with COPYEDITED status
-    render(
-      <EditorCompleteCopyediting assignmentId="test-id" submissionId="sub-id" />
-    );
+    render(<EditorCompleteCopyediting assignmentId="test-id" submissionId="sub-id" />);
 
     await waitFor(() => {
-      expect(
-        screen.getByText(/awaiting author confirmation/i)
-      ).toBeInTheDocument();
+      expect(screen.getByText(/awaiting author confirmation/i)).toBeInTheDocument();
     });
 
-    const completeBtn = screen.getByText("Complete Copyediting");
+    const completeBtn = screen.getByText('Complete Copyediting');
     expect(completeBtn).toBeDisabled();
   });
 
-  test("enables completion when ready", async () => {
+  test('enables completion when ready', async () => {
     // Mock files with AUTHOR_FINAL status
-    render(
-      <EditorCompleteCopyediting assignmentId="test-id" submissionId="sub-id" />
-    );
+    render(<EditorCompleteCopyediting assignmentId="test-id" submissionId="sub-id" />);
 
     await waitFor(() => {
       expect(screen.getByText(/ready to complete/i)).toBeInTheDocument();
     });
 
-    const completeBtn = screen.getByText("Complete Copyediting");
+    const completeBtn = screen.getByText('Complete Copyediting');
     expect(completeBtn).not.toBeDisabled();
   });
 
-  test("completes assignment successfully", async () => {
-    render(
-      <EditorCompleteCopyediting assignmentId="test-id" submissionId="sub-id" />
-    );
+  test('completes assignment successfully', async () => {
+    render(<EditorCompleteCopyediting assignmentId="test-id" submissionId="sub-id" />);
 
     // Wait for ready state
     await waitFor(() => {
@@ -950,11 +892,11 @@ describe("EditorCompleteCopyediting", () => {
     });
 
     // Click complete
-    const completeBtn = screen.getByText("Complete Copyediting");
+    const completeBtn = screen.getByText('Complete Copyediting');
     fireEvent.click(completeBtn);
 
     // Confirm in dialog
-    const confirmBtn = await screen.findByText("Complete Assignment");
+    const confirmBtn = await screen.findByText('Complete Assignment');
     fireEvent.click(confirmBtn);
 
     // Verify success
@@ -1011,7 +953,7 @@ onError: (error) => {
   const message =
     error?.response?.data?.detail || // Backend validation error
     error?.message || // Network error
-    "Failed to [action]"; // Generic fallback
+    'Failed to [action]'; // Generic fallback
   toast.error(message);
 };
 ```
@@ -1048,9 +990,9 @@ const { data } = useCopyeditingFiles(
 
 ```javascript
 // Invalidate specific queries after mutations
-queryClient.invalidateQueries({ queryKey: ["copyediting-files"] });
-queryClient.invalidateQueries({ queryKey: ["copyediting-file", fileId] });
-queryClient.invalidateQueries({ queryKey: ["copyediting-assignments"] });
+queryClient.invalidateQueries({ queryKey: ['copyediting-files'] });
+queryClient.invalidateQueries({ queryKey: ['copyediting-file', fileId] });
+queryClient.invalidateQueries({ queryKey: ['copyediting-assignments'] });
 ```
 
 ### 3. Memoization
@@ -1060,10 +1002,10 @@ queryClient.invalidateQueries({ queryKey: ["copyediting-assignments"] });
 const filesByStatus = useMemo(() => {
   const files = filesData?.results || [];
   return {
-    draft: files.filter((f) => f.file_type === "DRAFT"),
-    copyedited: files.filter((f) => f.file_type === "COPYEDITED"),
-    authorFinal: files.filter((f) => f.file_type === "AUTHOR_FINAL"),
-    final: files.filter((f) => f.file_type === "FINAL"),
+    draft: files.filter((f) => f.file_type === 'DRAFT'),
+    copyedited: files.filter((f) => f.file_type === 'COPYEDITED'),
+    authorFinal: files.filter((f) => f.file_type === 'AUTHOR_FINAL'),
+    final: files.filter((f) => f.file_type === 'FINAL'),
   };
 }, [filesData]);
 ```
@@ -1075,24 +1017,22 @@ const filesByStatus = useMemo(() => {
 const confirmMutation = useConfirmFileFinal({
   onMutate: async ({ fileId }) => {
     // Cancel outgoing queries
-    await queryClient.cancelQueries(["copyediting-files"]);
+    await queryClient.cancelQueries(['copyediting-files']);
 
     // Snapshot previous value
-    const previousFiles = queryClient.getQueryData(["copyediting-files"]);
+    const previousFiles = queryClient.getQueryData(['copyediting-files']);
 
     // Optimistically update
-    queryClient.setQueryData(["copyediting-files"], (old) => ({
+    queryClient.setQueryData(['copyediting-files'], (old) => ({
       ...old,
-      results: old.results.map((f) =>
-        f.id === fileId ? { ...f, file_type: "AUTHOR_FINAL" } : f
-      ),
+      results: old.results.map((f) => (f.id === fileId ? { ...f, file_type: 'AUTHOR_FINAL' } : f)),
     }));
 
     return { previousFiles };
   },
   onError: (err, variables, context) => {
     // Rollback on error
-    queryClient.setQueryData(["copyediting-files"], context.previousFiles);
+    queryClient.setQueryData(['copyediting-files'], context.previousFiles);
   },
 });
 ```

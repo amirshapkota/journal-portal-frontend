@@ -72,13 +72,11 @@ Implemented a comprehensive solution for editors (Managing Editor, Associate Edi
 1. **Editor logs in** with any of the staff roles (Managing Editor, Associate Editor, Section Editor, Guest Editor, Reviewer)
 
 2. **Navigates to "My Journals"** from the sidebar
-
    - Sees a list of journals where they are assigned
    - Each journal shows their role, submission count, staff count, and status
    - View statistics at the top (total journals, submissions, active roles)
 
 3. **Clicks "View Submissions"** on any journal
-
    - Navigates to `/editor/my-journals/[journalId]/submissions`
    - Sees their role badge in the header
    - Can search and filter submissions

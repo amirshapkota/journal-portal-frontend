@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getReviewerRecommendations } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { getReviewerRecommendations } from '../../api';
 
 /**
  * Hook to get reviewer recommendations for a submission
@@ -9,7 +9,7 @@ import { getReviewerRecommendations } from "../../api";
  */
 export const useGetReviewerRecommendations = (id, enabled = true) => {
   return useQuery({
-    queryKey: ["reviewer-recommendations", id],
+    queryKey: ['reviewer-recommendations', id],
     queryFn: () => getReviewerRecommendations(id),
     enabled: !!id && enabled,
     staleTime: 5 * 60 * 1000, // 5 minutes

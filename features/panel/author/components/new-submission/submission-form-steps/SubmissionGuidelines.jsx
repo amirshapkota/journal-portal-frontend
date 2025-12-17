@@ -1,10 +1,10 @@
 // SubmissionGuidelines.jsx
 // Step 1: Journal Selection + Submission Guidelines
 
-import { useMemo, useEffect, useState } from "react";
-import { Card } from "@/components/ui/card";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Button } from "@/components/ui/button";
+import { useMemo, useEffect, useState } from 'react';
+import { Card } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Button } from '@/components/ui/button';
 import {
   FormField,
   FormItem,
@@ -12,24 +12,24 @@ import {
   FormControl,
   FormMessage,
   FormDescription,
-} from "@/components/ui/form";
-import { SearchableSelect } from "@/features/shared/components/SearchableSelect";
-import { AuthorGuidelinesDialog } from "@/features/shared/components/AuthorGuidelinesDialog";
-import { useWatch } from "react-hook-form";
-import { useGetJournals } from "@/features/shared/hooks/useGetJournals";
-import { useGetTaxonomyTree } from "@/features/shared/hooks/useGetTaxonomyTree";
-import { useGetJournalById } from "@/features/panel/author/hooks";
-import { Skeleton } from "@/components/ui/skeleton";
-import { JournalInfoCard } from "@/features/panel/reviewer/components/review-detail/JournalInfoCard";
-import { stripHtmlTags } from "@/features/shared/utils";
+} from '@/components/ui/form';
+import { SearchableSelect } from '@/features/shared/components/SearchableSelect';
+import { AuthorGuidelinesDialog } from '@/features/shared/components/AuthorGuidelinesDialog';
+import { useWatch } from 'react-hook-form';
+import { useGetJournals } from '@/features/shared/hooks/useGetJournals';
+import { useGetTaxonomyTree } from '@/features/shared/hooks/useGetTaxonomyTree';
+import { useGetJournalById } from '@/features/panel/author/hooks';
+import { Skeleton } from '@/components/ui/skeleton';
+import { JournalInfoCard } from '@/features/panel/reviewer/components/review-detail/JournalInfoCard';
+import { stripHtmlTags } from '@/features/shared/utils';
 
-import { FileText, ExternalLink } from "lucide-react";
+import { FileText, ExternalLink } from 'lucide-react';
 
 export default function SubmissionGuidelines({ form }) {
   const [showGuidelinesModal, setShowGuidelinesModal] = useState(false);
 
   const params = {
-    active_role: "AUTHOR",
+    active_role: 'AUTHOR',
     is_accepting_submissions: true,
     is_active: true,
   };
@@ -42,36 +42,37 @@ export default function SubmissionGuidelines({ form }) {
 
   const journalId = useWatch({
     control: form.control,
-    name: "journal_id",
-    defaultValue: "",
+    name: 'journal_id',
+    defaultValue: '',
   });
 
   // Fetch full journal details when journal is selected
-  const { data: selectedJournalDetails, isPending: isLoadingJournalDetails } =
-    useGetJournalById(journalId, {
+  const { data: selectedJournalDetails, isPending: isLoadingJournalDetails } = useGetJournalById(
+    journalId,
+    {
       enabled: !!journalId,
-    });
+    }
+  );
 
   const sectionId = useWatch({
     control: form.control,
-    name: "section_id",
-    defaultValue: "",
+    name: 'section_id',
+    defaultValue: '',
   });
 
   const categoryId = useWatch({
     control: form.control,
-    name: "category_id",
-    defaultValue: "",
+    name: 'category_id',
+    defaultValue: '',
   });
 
   const researchTypeId = useWatch({
     control: form.control,
-    name: "research_type_id",
-    defaultValue: "",
+    name: 'research_type_id',
+    defaultValue: '',
   });
 
-  const { data: taxonomyTree, isPending: isLoadingTaxonomy } =
-    useGetTaxonomyTree(journalId);
+  const { data: taxonomyTree, isPending: isLoadingTaxonomy } = useGetTaxonomyTree(journalId);
 
   const selectedJournal = useMemo(
     () => journals?.find((journal) => journal.id === journalId),
@@ -85,22 +86,20 @@ export default function SubmissionGuidelines({ form }) {
   );
 
   const authorGuidelines = useMemo(
-    () => selectedJournalDetails?.settings?.author_guidelines || "",
+    () => selectedJournalDetails?.settings?.author_guidelines || '',
     [selectedJournalDetails]
   );
 
   const submissionGuidelines = useMemo(
-    () => selectedJournalDetails?.settings?.submission_guidelines || "",
+    () => selectedJournalDetails?.settings?.submission_guidelines || '',
     [selectedJournalDetails]
   );
 
   // Truncate author guidelines to 150 characters
   const truncatedGuidelines = useMemo(() => {
-    if (!authorGuidelines) return "";
+    if (!authorGuidelines) return '';
     const plainText = stripHtmlTags(authorGuidelines);
-    return plainText.length > 150
-      ? plainText.substring(0, 150) + "..."
-      : plainText;
+    return plainText.length > 150 ? plainText.substring(0, 150) + '...' : plainText;
   }, [authorGuidelines]);
 
   // Transform journals for SearchableSelect
@@ -150,13 +149,10 @@ export default function SubmissionGuidelines({ form }) {
 
   // Get areas for selected research type
   const areaOptions = useMemo(() => {
-    if (!sectionId || !categoryId || !researchTypeId || !taxonomyTree)
-      return [];
+    if (!sectionId || !categoryId || !researchTypeId || !taxonomyTree) return [];
     const section = taxonomyTree.find((s) => s.id === sectionId);
     const category = section?.categories?.find((c) => c.id === categoryId);
-    const researchType = category?.research_types?.find(
-      (rt) => rt.id === researchTypeId
-    );
+    const researchType = category?.research_types?.find((rt) => rt.id === researchTypeId);
     return (
       researchType?.areas?.map((area) => ({
         value: area.id,
@@ -167,25 +163,25 @@ export default function SubmissionGuidelines({ form }) {
 
   // Reset dependent fields when parent changes
   useEffect(() => {
-    form.setValue("section_id", "");
-    form.setValue("category_id", "");
-    form.setValue("research_type_id", "");
-    form.setValue("area_id", "");
+    form.setValue('section_id', '');
+    form.setValue('category_id', '');
+    form.setValue('research_type_id', '');
+    form.setValue('area_id', '');
   }, [journalId, form]);
 
   useEffect(() => {
-    form.setValue("category_id", "");
-    form.setValue("research_type_id", "");
-    form.setValue("area_id", "");
+    form.setValue('category_id', '');
+    form.setValue('research_type_id', '');
+    form.setValue('area_id', '');
   }, [sectionId, form]);
 
   useEffect(() => {
-    form.setValue("research_type_id", "");
-    form.setValue("area_id", "");
+    form.setValue('research_type_id', '');
+    form.setValue('area_id', '');
   }, [categoryId, form]);
 
   useEffect(() => {
-    form.setValue("area_id", "");
+    form.setValue('area_id', '');
   }, [researchTypeId, form]);
 
   return (
@@ -265,9 +261,7 @@ export default function SubmissionGuidelines({ form }) {
                   emptyText="No categories available."
                 />
               </FormControl>
-              <FormDescription>
-                Select the category within the chosen section
-              </FormDescription>
+              <FormDescription>Select the category within the chosen section</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -319,9 +313,7 @@ export default function SubmissionGuidelines({ form }) {
                   emptyText="No research areas available."
                 />
               </FormControl>
-              <FormDescription>
-                Choose the specific research area for your work
-              </FormDescription>
+              <FormDescription>Choose the specific research area for your work</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -331,10 +323,7 @@ export default function SubmissionGuidelines({ form }) {
       {/* Journal Details Card */}
       {selectedJournalDetails && !isLoadingJournalDetails && (
         <Card className="p-5 sm:p-6">
-          <JournalInfoCard
-            journal={selectedJournalDetails}
-            isPending={isLoadingJournalDetails}
-          />
+          <JournalInfoCard journal={selectedJournalDetails} isPending={isLoadingJournalDetails} />
         </Card>
       )}
 
@@ -351,9 +340,7 @@ export default function SubmissionGuidelines({ form }) {
             <div className="p-2 rounded-lg bg-amber-500/10">
               <FileText className="h-4 w-4 text-amber-600 dark:text-amber-400" />
             </div>
-            <h3 className="font-semibold text-foreground">
-              Submission Guidelines
-            </h3>
+            <h3 className="font-semibold text-foreground">Submission Guidelines</h3>
           </div>
           <div
             className="text-sm text-muted-foreground prose dark:prose-invert max-w-none"
@@ -392,9 +379,7 @@ export default function SubmissionGuidelines({ form }) {
       {/* Submission Requirements with Checkboxes */}
       {submissionRequirements.length > 0 && (
         <Card className="p-4 gap-0 bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-900">
-          <h3 className="font-semibold text-foreground mb-4">
-            Submission Requirements *
-          </h3>
+          <h3 className="font-semibold text-foreground mb-4">Submission Requirements *</h3>
           <p className="text-sm text-muted-foreground mb-4">
             Please confirm all requirements below to proceed:
           </p>
@@ -404,15 +389,10 @@ export default function SubmissionGuidelines({ form }) {
             render={({ field }) => (
               <div className="space-y-3">
                 {submissionRequirements.map((requirement, i) => (
-                  <FormItem
-                    key={i}
-                    className="flex items-center space-x-2 space-y-0"
-                  >
+                  <FormItem key={i} className="flex items-center space-x-2 space-y-0">
                     <FormControl>
                       <Checkbox
-                        checked={
-                          Array.isArray(field.value) && field.value[i] === true
-                        }
+                        checked={Array.isArray(field.value) && field.value[i] === true}
                         onCheckedChange={(checked) => {
                           const arr = Array.isArray(field.value)
                             ? [...field.value]

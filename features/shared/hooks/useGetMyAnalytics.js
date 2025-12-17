@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getMyAnalytics } from "@/features/shared/api/analyticsApi";
+import { useQuery } from '@tanstack/react-query';
+import { getMyAnalytics } from '@/features/shared/api/analyticsApi';
 
 export const useGetMyAnalytics = (options = {}) => {
   return useQuery({
-    queryKey: ["my-analytics"],
+    queryKey: ['my-analytics'],
     queryFn: getMyAnalytics,
     staleTime: 1000 * 60 * 5, // 5 minutes - analytics can change
     gcTime: 5 * 60 * 1000, // 5 minutes

@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Check, ChevronsUpDown, Loader2, BookOpen, Edit3 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { Check, ChevronsUpDown, Loader2, BookOpen, Edit3 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -12,30 +12,23 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { searchDOAJJournals } from "../api/doajApi";
-import { useDebounce } from "use-debounce";
-import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import CountryFlag from "react-country-flag";
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { searchDOAJJournals } from '../api/doajApi';
+import { useDebounce } from 'use-debounce';
+import { Badge } from '@/components/ui/badge';
+import { useQuery } from '@tanstack/react-query';
+import CountryFlag from 'react-country-flag';
 
-export function DOAJSearchSelect({
-  onSelect,
-  placeholder = "Search DOAJ journals...",
-}) {
+export function DOAJSearchSelect({ onSelect, placeholder = 'Search DOAJ journals...' }) {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [journals, setJournals] = useState([]);
   const [debouncedSearch] = useDebounce(searchQuery, 500);
 
   // Fetch journals using useQuery
   const { data: queryData, isFetching: isLoading } = useQuery({
-    queryKey: ["doaj-journals", debouncedSearch],
+    queryKey: ['doaj-journals', debouncedSearch],
     queryFn: async () => await searchDOAJJournals(debouncedSearch),
     enabled: Boolean(debouncedSearch && debouncedSearch.trim().length >= 2),
 
@@ -52,7 +45,7 @@ export function DOAJSearchSelect({
   const handleSelect = (journal) => {
     onSelect(journal);
     setOpen(false);
-    setSearchQuery(""); // Optional: clear search after selection
+    setSearchQuery(''); // Optional: clear search after selection
   };
 
   return (
@@ -80,9 +73,7 @@ export function DOAJSearchSelect({
               {isLoading ? (
                 <div className="flex items-center justify-center py-6">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  <span className="text-sm text-muted-foreground">
-                    Searching DOAJ...
-                  </span>
+                  <span className="text-sm text-muted-foreground">Searching DOAJ...</span>
                 </div>
               ) : searchQuery.trim().length < 2 ? (
                 <div className="py-6 text-center text-sm text-muted-foreground">
@@ -90,9 +81,7 @@ export function DOAJSearchSelect({
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-6 gap-3">
-                  <span className="text-sm text-muted-foreground">
-                    No journals found
-                  </span>
+                  <span className="text-sm text-muted-foreground">No journals found</span>
                 </div>
               )}
             </CommandEmpty>
@@ -112,36 +101,28 @@ export function DOAJSearchSelect({
                           countryCode={journal.country}
                           svg
                           style={{
-                            width: "1.5em",
-                            height: "1.5em",
-                            borderRadius: "0.25em",
+                            width: '1.5em',
+                            height: '1.5em',
+                            borderRadius: '0.25em',
                           }}
                           title={journal.country}
                         />
                       )}
                       <div className="flex flex-col gap-1 flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <span className="font-semibold text-sm">
-                            {journal.title}
-                          </span>
+                          <span className="font-semibold text-sm">{journal.title}</span>
                         </div>
                         <div className="flex items-center gap-2 text-xs text-muted-foreground">
                           <span>{journal.publisher?.name}</span>
                         </div>
                         <div className="flex gap-1 flex-wrap mt-1">
                           {journal.issn_print && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs px-2 py-0 font-mono"
-                            >
+                            <Badge variant="outline" className="text-xs px-2 py-0 font-mono">
                               Print: {journal.issn_print}
                             </Badge>
                           )}
                           {journal.issn_online && (
-                            <Badge
-                              variant="outline"
-                              className="text-xs px-2 py-0 font-mono"
-                            >
+                            <Badge variant="outline" className="text-xs px-2 py-0 font-mono">
                               Online: {journal.issn_online}
                             </Badge>
                           )}

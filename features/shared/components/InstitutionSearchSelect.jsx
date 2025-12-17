@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useState, useEffect } from "react";
-import { Check, ChevronsUpDown, Loader2, Building2, Edit3 } from "lucide-react";
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+import { useState, useEffect } from 'react';
+import { Check, ChevronsUpDown, Loader2, Building2, Edit3 } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { Button } from '@/components/ui/button';
 import {
   Command,
   CommandEmpty,
@@ -12,30 +12,21 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { Input } from "@/components/ui/input";
-import { searchRORInstitutions } from "../api/rorApi";
-import { useDebounce } from "use-debounce";
-import { Badge } from "@/components/ui/badge";
-import { useQuery } from "@tanstack/react-query";
-import CountryFlag from "react-country-flag";
+} from '@/components/ui/command';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Input } from '@/components/ui/input';
+import { searchRORInstitutions } from '../api/rorApi';
+import { useDebounce } from 'use-debounce';
+import { Badge } from '@/components/ui/badge';
+import { useQuery } from '@tanstack/react-query';
+import CountryFlag from 'react-country-flag';
 
-export function InstitutionSearchSelect({
-  value,
-  onChange,
-  placeholder,
-  onRorIdChange,
-}) {
+export function InstitutionSearchSelect({ value, onChange, placeholder, onRorIdChange }) {
   const [open, setOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [institutions, setInstitutions] = useState([]);
   const [manualEntry, setManualEntry] = useState(false);
-  const [manualValue, setManualValue] = useState("");
+  const [manualValue, setManualValue] = useState('');
   const [debouncedSearch] = useDebounce(searchQuery, 500);
 
   // Fetch institutions using useQuery
@@ -44,7 +35,7 @@ export function InstitutionSearchSelect({
     isFetching: isLoading,
     isError,
   } = useQuery({
-    queryKey: ["institutions", debouncedSearch],
+    queryKey: ['institutions', debouncedSearch],
     queryFn: async () => await searchRORInstitutions(debouncedSearch),
     enabled: Boolean(debouncedSearch && debouncedSearch.trim().length >= 2),
 
@@ -63,7 +54,7 @@ export function InstitutionSearchSelect({
 
     // Extract ROR ID from the full URL (e.g., "https://ror.org/02rg1r889" -> "02rg1r889")
     if (institution.id && onRorIdChange) {
-      const rorId = institution.id.replace("https://ror.org/", "");
+      const rorId = institution.id.replace('https://ror.org/', '');
       onRorIdChange(rorId);
     }
 
@@ -73,7 +64,7 @@ export function InstitutionSearchSelect({
 
   const handleManualEntry = () => {
     setManualEntry(true);
-    setManualValue(value || "");
+    setManualValue(value || '');
   };
 
   const handleManualSave = () => {
@@ -81,7 +72,7 @@ export function InstitutionSearchSelect({
       onChange(manualValue.trim());
       // Clear ROR ID when manual entry is used
       if (onRorIdChange) {
-        onRorIdChange("");
+        onRorIdChange('');
       }
       setManualEntry(false);
       setOpen(false);
@@ -90,10 +81,10 @@ export function InstitutionSearchSelect({
 
   const handleManualCancel = () => {
     setManualEntry(false);
-    setManualValue("");
+    setManualValue('');
   };
 
-  const displayValue = value || placeholder || "Select institution...";
+  const displayValue = value || placeholder || 'Select institution...';
 
   if (manualEntry) {
     return (
@@ -105,20 +96,10 @@ export function InstitutionSearchSelect({
           className="flex-1"
           autoFocus
         />
-        <Button
-          type="button"
-          onClick={handleManualSave}
-          size="sm"
-          disabled={!manualValue.trim()}
-        >
+        <Button type="button" onClick={handleManualSave} size="sm" disabled={!manualValue.trim()}>
           Save
         </Button>
-        <Button
-          type="button"
-          onClick={handleManualCancel}
-          variant="outline"
-          size="sm"
-        >
+        <Button type="button" onClick={handleManualCancel} variant="outline" size="sm">
           Cancel
         </Button>
       </div>
@@ -134,9 +115,7 @@ export function InstitutionSearchSelect({
           aria-expanded={open}
           className="w-full justify-between font-normal hover:bg-muted/30!"
         >
-          <span className={cn(!value && "text-muted-foreground")}>
-            {displayValue}
-          </span>
+          <span className={cn(!value && 'text-muted-foreground')}>{displayValue}</span>
           <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -152,9 +131,7 @@ export function InstitutionSearchSelect({
               {isLoading ? (
                 <div className="flex items-center justify-center py-6">
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  <span className="text-sm text-muted-foreground">
-                    Searching institutions...
-                  </span>
+                  <span className="text-sm text-muted-foreground">Searching institutions...</span>
                 </div>
               ) : searchQuery.trim().length < 2 ? (
                 <div className="py-6 text-center text-sm text-muted-foreground">
@@ -162,9 +139,7 @@ export function InstitutionSearchSelect({
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-6 gap-3">
-                  <span className="text-sm text-muted-foreground">
-                    No institutions found
-                  </span>
+                  <span className="text-sm text-muted-foreground">No institutions found</span>
                   <Button
                     type="button"
                     variant="outline"
@@ -193,31 +168,27 @@ export function InstitutionSearchSelect({
                     >
                       <Check
                         className={cn(
-                          "mr-3 h-4 w-4 shrink-0",
-                          value === institution.name
-                            ? "opacity-100"
-                            : "opacity-0"
+                          'mr-3 h-4 w-4 shrink-0',
+                          value === institution.name ? 'opacity-100' : 'opacity-0'
                         )}
                       />
                       <div className="flex items-center gap-3 flex-1 min-w-0">
                         <CountryFlag
-                          countryCode={institution.country_code || ""}
+                          countryCode={institution.country_code || ''}
                           svg
                           style={{
-                            width: "2em",
-                            height: "2em",
-                            borderRadius: "0.25em",
+                            width: '2em',
+                            height: '2em',
+                            borderRadius: '0.25em',
                           }}
                           title={institution.country}
                         />
                         <div className="flex flex-col gap-1 flex-1 min-w-0">
                           <div className="flex items-center gap-2 flex-wrap">
-                            <span className="font-semibold text-sm">
-                              {institution.name}
-                            </span>
+                            <span className="font-semibold text-sm">{institution.name}</span>
                             {institution.acronyms?.length > 0 && (
                               <span className="text-xs text-muted-foreground">
-                                ({institution.acronyms.join(", ")})
+                                ({institution.acronyms.join(', ')})
                               </span>
                             )}
                           </div>
@@ -232,21 +203,13 @@ export function InstitutionSearchSelect({
                           </div>
                           <div className="flex gap-1 flex-wrap mt-1">
                             {institution.id && (
-                              <Badge
-                                variant="outline"
-                                className="text-xs px-2 py-0 font-mono"
-                              >
-                                ROR:{" "}
-                                {institution.id.replace("https://ror.org/", "")}
+                              <Badge variant="outline" className="text-xs px-2 py-0 font-mono">
+                                ROR: {institution.id.replace('https://ror.org/', '')}
                               </Badge>
                             )}
                             {institution.types?.length > 0 &&
                               institution.types.map((type) => (
-                                <Badge
-                                  key={type}
-                                  variant="secondary"
-                                  className="text-xs px-2 py-0"
-                                >
+                                <Badge key={type} variant="secondary" className="text-xs px-2 py-0">
                                   {type}
                                 </Badge>
                               ))}

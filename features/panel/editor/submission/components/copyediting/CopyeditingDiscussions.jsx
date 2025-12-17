@@ -1,20 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { MessageSquare, Plus, Reply, User, Loader2 } from "lucide-react";
-import { format } from "date-fns";
-import { DiscussionThreadDialog } from "./DiscussionThreadDialog";
-import { AddDiscussionDialog } from "./AddDiscussionDialog";
-import { useCopyeditingDiscussions } from "../../hooks";
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { MessageSquare, Plus, Reply, User, Loader2 } from 'lucide-react';
+import { format } from 'date-fns';
+import { DiscussionThreadDialog } from './DiscussionThreadDialog';
+import { AddDiscussionDialog } from './AddDiscussionDialog';
+import { useCopyeditingDiscussions } from '../../hooks';
 
 /**
  * Component to display and manage copyediting discussions
@@ -26,11 +20,7 @@ export function CopyeditingDiscussions({ assignmentId }) {
   const [isThreadDialogOpen, setIsThreadDialogOpen] = useState(false);
 
   // Fetch discussions from API
-  const {
-    data: discussions = [],
-    isLoading,
-    error,
-  } = useCopyeditingDiscussions({ assignmentId });
+  const { data: discussions = [], isLoading, error } = useCopyeditingDiscussions({ assignmentId });
 
   const handleViewThread = (discussion) => {
     setSelectedDiscussion(discussion);
@@ -39,11 +29,11 @@ export function CopyeditingDiscussions({ assignmentId }) {
 
   const getStatusColor = (status) => {
     const colors = {
-      OPEN: "bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-700",
+      OPEN: 'bg-blue-100 text-blue-800 border-blue-200 dark:bg-blue-900 dark:text-blue-200 dark:border-blue-700',
       RESOLVED:
-        "bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-200 dark:border-emerald-700",
+        'bg-emerald-100 text-emerald-800 border-emerald-200 dark:bg-emerald-900 dark:text-emerald-200 dark:border-emerald-700',
       CLOSED:
-        "bg-zinc-100 text-zinc-800 border-zinc-200 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700",
+        'bg-zinc-100 text-zinc-800 border-zinc-200 dark:bg-zinc-900 dark:text-zinc-200 dark:border-zinc-700',
     };
     return colors[status] || colors.OPEN;
   };
@@ -69,9 +59,7 @@ export function CopyeditingDiscussions({ assignmentId }) {
           {isLoading ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mt-2">
-                Loading discussions...
-              </p>
+              <p className="text-sm text-muted-foreground mt-2">Loading discussions...</p>
             </div>
           ) : error ? (
             <div className="text-center py-8 text-destructive">
@@ -84,10 +72,7 @@ export function CopyeditingDiscussions({ assignmentId }) {
               <p className="text-sm text-muted-foreground mb-4">
                 Start a discussion to communicate with the copyeditor and author
               </p>
-              <Button
-                onClick={() => setIsAddDialogOpen(true)}
-                variant="outline"
-              >
+              <Button onClick={() => setIsAddDialogOpen(true)} variant="outline">
                 <Plus className="h-4 w-4 mr-2" />
                 Start First Discussion
               </Button>
@@ -105,40 +90,34 @@ export function CopyeditingDiscussions({ assignmentId }) {
                     <div className="flex-1 min-w-0">
                       <div className="flex items-start gap-2 mb-1">
                         <p className="font-medium flex-1">
-                          {discussion.subject || "Untitled Discussion"}
+                          {discussion.subject || 'Untitled Discussion'}
                         </p>
                         <Badge
                           variant="outline"
                           className={`text-xs shrink-0 ${getStatusColor(
-                            discussion.status || "OPEN"
+                            discussion.status || 'OPEN'
                           )}`}
                         >
-                          {discussion.status || "OPEN"}
+                          {discussion.status || 'OPEN'}
                         </Badge>
                       </div>
                       <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
                         <span className="flex items-center gap-1">
                           <User className="h-3 w-3" />
-                          From: {discussion.created_by?.user?.first_name}{" "}
+                          From: {discussion.created_by?.user?.first_name}{' '}
                           {discussion.created_by?.user?.last_name}
                         </span>
                         <span className="hidden sm:inline">•</span>
                         <span className="flex items-center gap-1">
                           <Reply className="h-3 w-3" />
-                          {discussion.messages?.length || 0}{" "}
-                          {(discussion.messages?.length || 0) === 1
-                            ? "reply"
-                            : "replies"}
+                          {discussion.messages?.length || 0}{' '}
+                          {(discussion.messages?.length || 0) === 1 ? 'reply' : 'replies'}
                         </span>
                         {discussion.updated_at && (
                           <>
                             <span className="hidden sm:inline">•</span>
                             <span>
-                              Last reply:{" "}
-                              {format(
-                                new Date(discussion.updated_at),
-                                "MMM d, yyyy"
-                              )}
+                              Last reply: {format(new Date(discussion.updated_at), 'MMM d, yyyy')}
                             </span>
                           </>
                         )}
@@ -159,20 +138,10 @@ export function CopyeditingDiscussions({ assignmentId }) {
             <div className="mt-4 p-4 bg-muted/50 rounded-lg border border-dashed">
               <h4 className="font-medium text-sm mb-2">Discussion Tips:</h4>
               <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                <li>
-                  Click on any discussion to view the full thread and reply
-                </li>
-                <li>
-                  Use discussions to clarify queries instead of making direct
-                  changes
-                </li>
-                <li>
-                  Mark discussions as resolved once the issue is addressed
-                </li>
-                <li>
-                  Tag specific participants to notify them about important
-                  messages
-                </li>
+                <li>Click on any discussion to view the full thread and reply</li>
+                <li>Use discussions to clarify queries instead of making direct changes</li>
+                <li>Mark discussions as resolved once the issue is addressed</li>
+                <li>Tag specific participants to notify them about important messages</li>
               </ul>
             </div>
           )}

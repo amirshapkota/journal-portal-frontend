@@ -1,20 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect, useRef, useState } from "react";
-import { toast } from "sonner";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Loader2, Save, Download, CheckCircle2 } from "lucide-react";
-import "@harbour-enterprises/superdoc/style.css";
-import {
-  loadCopyeditingFile,
-  saveCopyeditingFile,
-} from "@/features/panel/editor/submission/api";
-import { useApproveCopyeditingFile } from "@/features/panel/editor/submission/hooks/mutation/useCopyeditingFiles";
-import ConfirmationPopup from "@/features/shared/components/ConfirmationPopup";
-import { ErrorCard } from "..";
-import { useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from 'react';
+import { toast } from 'sonner';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Save, Download, CheckCircle2 } from 'lucide-react';
+import '@harbour-enterprises/superdoc/style.css';
+import { loadCopyeditingFile, saveCopyeditingFile } from '@/features/panel/editor/submission/api';
+import { useApproveCopyeditingFile } from '@/features/panel/editor/submission/hooks/mutation/useCopyeditingFiles';
+import ConfirmationPopup from '@/features/shared/components/ConfirmationPopup';
+import { ErrorCard } from '..';
+import { useRouter } from 'next/navigation';
 
 /**
  * Copyediting SuperDoc Editor Component
@@ -29,14 +26,14 @@ import { useRouter } from "next/navigation";
 export default function CopyeditingSuperDocEditor({
   fileId,
   userData,
-  className = "",
+  className = '',
   readOnly = false,
   commentsReadOnly = false,
   goBack,
   onApprove, // Pass approve/confirm function from parent
-  approveButtonText = "Approve Copyediting", // Customizable button text
-  approveDialogTitle = "Approve Copyediting File",
-  approveDialogDescription = "Are you sure you want to approve this copyediting file? This action cannot be undone.",
+  approveButtonText = 'Approve Copyediting', // Customizable button text
+  approveDialogTitle = 'Approve Copyediting File',
+  approveDialogDescription = 'Are you sure you want to approve this copyediting file? This action cannot be undone.',
   showApproveButton = true, // Show/hide approve button
 }) {
   const queryClient = useQueryClient();
@@ -60,7 +57,7 @@ export default function CopyeditingSuperDocEditor({
           router.push(goBack);
         }
       } catch (error) {
-        console.error("Approve error:", error);
+        console.error('Approve error:', error);
       } finally {
         setIsApproving(false);
       }
@@ -74,7 +71,7 @@ export default function CopyeditingSuperDocEditor({
     error,
     refetch,
   } = useQuery({
-    queryKey: ["copyediting-file", fileId],
+    queryKey: ['copyediting-file', fileId],
     queryFn: () => loadCopyeditingFile(fileId),
   });
 
@@ -84,50 +81,50 @@ export default function CopyeditingSuperDocEditor({
 
     onSuccess: (data) => {
       setHasUnsavedChanges(false);
-      toast.success("File saved successfully");
+      toast.success('File saved successfully');
 
       // Invalidate queries to refresh file lists
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-files"],
+        queryKey: ['copyediting-files'],
       });
 
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-file"],
+        queryKey: ['copyediting-file'],
       });
     },
     onError: (error) => {
-      toast.error(error?.response?.data?.detail || "Failed to save file");
+      toast.error(error?.response?.data?.detail || 'Failed to save file');
     },
   });
 
   // Handle save button click
   const handleSave = async () => {
     if (!superDocInstanceRef.current) {
-      toast.error("Editor not ready");
+      toast.error('Editor not ready');
       return;
     }
 
     if (!superDocInstanceRef.current.activeEditor) {
-      toast.error("Editor not initialized");
+      toast.error('Editor not initialized');
       return;
     }
 
     try {
       // Export as DOCX blob
       const blob = await superDocInstanceRef.current.export({
-        commentsType: "external",
+        commentsType: 'external',
         triggerDownload: false,
       });
 
       // Create FormData and append the file
       const formData = new FormData();
-      formData.append("file", blob, fileData.original_filename);
+      formData.append('file', blob, fileData.original_filename);
 
       // Save using mutation
       saveMutation.mutate(formData);
     } catch (error) {
-      console.error("Error preparing document:", error);
-      toast.error("Failed to prepare document for saving");
+      console.error('Error preparing document:', error);
+      toast.error('Failed to prepare document for saving');
     }
   };
 
@@ -141,61 +138,59 @@ export default function CopyeditingSuperDocEditor({
 
     const initializeEditor = async () => {
       try {
-        const { SuperDoc } = await import("@harbour-enterprises/superdoc");
+        const { SuperDoc } = await import('@harbour-enterprises/superdoc');
 
         if (!mounted) return;
 
         // Initialize SuperDoc
         const editor = new SuperDoc({
-          selector: "#copyediting-superdoc-editor",
+          selector: '#copyediting-superdoc-editor',
           document: fileData.file_url,
           pagination: true,
-          theme: "light",
-          role: readOnly ? "viewer" : "editor",
+          theme: 'light',
+          role: readOnly ? 'viewer' : 'editor',
           user: {
-            name: userData?.first_name || "User",
-            email: userData?.email || "user@example.com",
+            name: userData?.first_name || 'User',
+            email: userData?.email || 'user@example.com',
           },
           modules: {
             comments: { readOnly: commentsReadOnly },
             toolbar: readOnly
               ? false
               : {
-                  selector: "#copyediting-superdoc-toolbar",
+                  selector: '#copyediting-superdoc-toolbar',
                   excludeItems: [
-                    "documentMode",
-                    "acceptTrackedChangeBySelection",
-                    "rejectTrackedChangeOnSelection",
+                    'documentMode',
+                    'acceptTrackedChangeBySelection',
+                    'rejectTrackedChangeOnSelection',
                   ],
                 },
           },
           onReady: () => {
-            const superdocRoot = document.getElementById(
-              "copyediting-superdoc-editor"
-            );
+            const superdocRoot = document.getElementById('copyediting-superdoc-editor');
             if (superdocRoot) {
-              superdocRoot.style.setProperty("color", "#222", "important");
-              const allElements = superdocRoot.querySelectorAll("*");
+              superdocRoot.style.setProperty('color', '#222', 'important');
+              const allElements = superdocRoot.querySelectorAll('*');
               allElements.forEach((el) => {
-                el.style.setProperty("color", "#222", "important");
+                el.style.setProperty('color', '#222', 'important');
               });
             }
-            toast.success("Document loaded successfully");
+            toast.success('Document loaded successfully');
           },
           onEditorUpdate: () => {
             setHasUnsavedChanges(true);
           },
           onError: (error) => {
-            console.error("SuperDoc error:", error);
-            toast.error("Failed to load document");
+            console.error('SuperDoc error:', error);
+            toast.error('Failed to load document');
           },
         });
 
         superDocInstanceRef.current = editor;
         isInitializedRef.current = true;
       } catch (error) {
-        console.error("Failed to initialize editor:", error);
-        toast.error("Failed to initialize document editor");
+        console.error('Failed to initialize editor:', error);
+        toast.error('Failed to initialize document editor');
       }
     };
 
@@ -207,7 +202,7 @@ export default function CopyeditingSuperDocEditor({
         try {
           superDocInstanceRef.current.destroy?.();
         } catch (error) {
-          console.error("Error destroying editor:", error);
+          console.error('Error destroying editor:', error);
         }
         superDocInstanceRef.current = null;
         isInitializedRef.current = false;
@@ -220,9 +215,7 @@ export default function CopyeditingSuperDocEditor({
       <div className="flex items-center justify-center h-96">
         <div className="text-center">
           <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-          <p className="text-sm text-muted-foreground mt-2">
-            Loading document...
-          </p>
+          <p className="text-sm text-muted-foreground mt-2">Loading document...</p>
         </div>
       </div>
     );
@@ -232,9 +225,7 @@ export default function CopyeditingSuperDocEditor({
     return (
       <ErrorCard
         title="Failed to load files"
-        description={
-          error.message || " Unable to load the document. Please try again."
-        }
+        description={error.message || ' Unable to load the document. Please try again.'}
         onRetry={refetch}
       />
     );
@@ -245,15 +236,14 @@ export default function CopyeditingSuperDocEditor({
       <div className="p-3 border rounded-lg bg-muted/50 mb-4">
         <div className="grid grid-cols-3 gap-2 text-sm">
           <div>
-            <span className="font-medium">File:</span>{" "}
-            {fileData.original_filename}
+            <span className="font-medium">File:</span> {fileData.original_filename}
           </div>
           <div>
-            <span className="font-medium">Size:</span>{" "}
+            <span className="font-medium">Size:</span>{' '}
             {(fileData.file_size / (1024 * 1024)).toFixed(2)} MB
           </div>
           <div>
-            <span className="font-medium">Last Edited:</span>{" "}
+            <span className="font-medium">Last Edited:</span>{' '}
             {new Date(fileData.last_edited_at).toLocaleString()}
           </div>
         </div>
@@ -274,7 +264,7 @@ export default function CopyeditingSuperDocEditor({
             )}
             {fileData?.last_edited_by && (
               <Badge variant="secondary" className="text-xs">
-                Last edited by {fileData.last_edited_by.name} at{" "}
+                Last edited by {fileData.last_edited_by.name} at{' '}
                 {new Date(fileData.last_edited_at).toLocaleString()}
               </Badge>
             )}
@@ -341,10 +331,10 @@ export default function CopyeditingSuperDocEditor({
             id="copyediting-superdoc-editor"
             className="text-black max-w-[320px] md:max-w-[600px] lg:max-w-[700px] xl:max-w-[800px] 2xl:max-w-5xl mx-auto"
             style={{
-              minHeight: "600px",
-              padding: "20px",
-              background: "#fff",
-              color: "#222",
+              minHeight: '600px',
+              padding: '20px',
+              background: '#fff',
+              color: '#222',
             }}
           />
         </div>

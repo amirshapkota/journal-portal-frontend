@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { format } from "date-fns";
+import React, { useState } from 'react';
+import { format } from 'date-fns';
 import {
   File,
   Download,
@@ -12,17 +12,11 @@ import {
   CheckCircle2,
   FileText,
   Globe,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -30,25 +24,25 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
+} from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
-import { useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+} from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
+import { useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   useApproveProductionFile,
   useProductionFiles,
   useUploadProductionFile,
   usePublishGalleyFile,
-} from "../../hooks";
-import DataTable from "@/features/shared/components/DataTable";
+} from '../../hooks';
+import DataTable from '@/features/shared/components/DataTable';
 
 /**
  * Component to manage production galley files
@@ -56,12 +50,12 @@ import DataTable from "@/features/shared/components/DataTable";
  */
 export function ProductionGalleys({ submission, submissionId, assignmentId }) {
   const queryClient = useQueryClient();
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [uploadData, setUploadData] = useState({
-    galley_format: "PDF",
-    label: "PDF",
-    description: "",
+    galley_format: 'PDF',
+    label: 'PDF',
+    description: '',
     file: null,
   });
 
@@ -71,7 +65,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
     isLoading,
     error,
   } = useProductionFiles(assignmentId, {
-    file_type: "GALLEY",
+    file_type: 'GALLEY',
   });
 
   // Mutations
@@ -81,9 +75,9 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
 
   const resetUploadForm = () => {
     setUploadData({
-      galley_format: "PDF",
-      label: "PDF",
-      description: "",
+      galley_format: 'PDF',
+      label: 'PDF',
+      description: '',
       file: null,
     });
   };
@@ -102,16 +96,16 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
 
   const handleUpload = () => {
     if (!uploadData.file) {
-      toast.error("Please select a file to upload");
+      toast.error('Please select a file to upload');
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", uploadData.file);
-    formData.append("file_type", "GALLEY");
-    formData.append("galley_format", uploadData.galley_format);
+    formData.append('file', uploadData.file);
+    formData.append('file_type', 'GALLEY');
+    formData.append('galley_format', uploadData.galley_format);
     if (uploadData.description) {
-      formData.append("description", uploadData.description);
+      formData.append('description', uploadData.description);
     }
 
     uploadMutation.mutate(formData, {
@@ -132,7 +126,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
   );
 
   const handleDownload = (fileUrl, fileName) => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = fileUrl;
     link.download = fileName;
     document.body.appendChild(link);
@@ -141,14 +135,14 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
   };
 
   const handleView = (fileUrl) => {
-    window.open(fileUrl, "_blank");
+    window.open(fileUrl, '_blank');
   };
 
   const getFormatIcon = (format) => {
     switch (format) {
-      case "PDF":
+      case 'PDF':
         return <FileText className="h-4 w-4" />;
-      case "HTML":
+      case 'HTML':
         return <Globe className="h-4 w-4" />;
       default:
         return <File className="h-4 w-4" />;
@@ -158,50 +152,45 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
   // DataTable columns definition
   const columns = [
     {
-      key: "galley_format",
-      header: "Format",
+      key: 'galley_format',
+      header: 'Format',
       render: (row) => (
         <div className="flex items-center gap-2">
           {getFormatIcon(row.galley_format)}
-          <Badge variant="secondary">
-            {row.galley_format_display || row.galley_format}
-          </Badge>
+          <Badge variant="secondary">{row.galley_format_display || row.galley_format}</Badge>
         </div>
       ),
     },
     {
-      key: "label",
-      header: "File Name",
+      key: 'label',
+      header: 'File Name',
       render: (row) => (
         <div>
           <p className="font-medium">{row.label}</p>
-          <p className="text-sm text-muted-foreground">
-            {row.original_filename}
-          </p>
+          <p className="text-sm text-muted-foreground">{row.original_filename}</p>
         </div>
       ),
     },
     {
-      key: "version",
-      header: "Version",
+      key: 'version',
+      header: 'Version',
       render: (row) => <span>v{row.version}</span>,
     },
     {
-      key: "created_at",
-      header: "Uploaded",
+      key: 'created_at',
+      header: 'Uploaded',
       render: (row) => (
         <div className="text-sm">
-          <p>{format(new Date(row.created_at), "MMM d, yyyy")}</p>
+          <p>{format(new Date(row.created_at), 'MMM d, yyyy')}</p>
           <p className="text-muted-foreground">
-            {row.uploaded_by?.user?.first_name}{" "}
-            {row.uploaded_by?.user?.last_name}
+            {row.uploaded_by?.user?.first_name} {row.uploaded_by?.user?.last_name}
           </p>
         </div>
       ),
     },
     {
-      key: "is_published",
-      header: "Status",
+      key: 'is_published',
+      header: 'Status',
       render: (row) => (
         <div className="flex flex-col gap-1">
           {row.is_published ? (
@@ -223,16 +212,12 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
       ),
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (row) => (
         <div className="flex items-center justify-end gap-2">
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => handleView(row.file_url)}
-          >
+          <Button size="sm" variant="ghost" onClick={() => handleView(row.file_url)}>
             <Eye className="h-4 w-4" />
           </Button>
           <Button
@@ -249,11 +234,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
               onClick={() => approveMutation.mutate(row.id)}
               disabled={approveMutation.isPending}
             >
-              {approveMutation.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Approve"
-              )}
+              {approveMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Approve'}
             </Button>
           )}
           {row.is_approved && !row.is_published && (
@@ -262,11 +243,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
               onClick={() => publishMutation.mutate(row.id)}
               disabled={publishMutation.isPending}
             >
-              {publishMutation.isPending ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : (
-                "Publish"
-              )}
+              {publishMutation.isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Publish'}
             </Button>
           )}
         </div>
@@ -285,11 +262,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
                 Final publication-ready files in various formats
               </CardDescription>
             </div>
-            <Button
-              size="sm"
-              onClick={() => setIsUploadDialogOpen(true)}
-              disabled={!assignmentId}
-            >
+            <Button size="sm" onClick={() => setIsUploadDialogOpen(true)} disabled={!assignmentId}>
               <Upload className="h-4 w-4 mr-2" />
               Upload Galley
             </Button>
@@ -317,8 +290,8 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
         columns={columns}
         emptyMessage={
           searchQuery
-            ? "No files match your search criteria."
-            : "Upload galley files in different formats (PDF, HTML, XML, EPUB) for publication."
+            ? 'No files match your search criteria.'
+            : 'Upload galley files in different formats (PDF, HTML, XML, EPUB) for publication.'
         }
         error={error}
         errorMessage="Error loading galley files"
@@ -339,10 +312,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
           <div className="space-y-4 py-4">
             <div className="space-y-2">
               <Label htmlFor="format">Format</Label>
-              <Select
-                value={uploadData.galley_format}
-                onValueChange={handleFormatChange}
-              >
+              <Select value={uploadData.galley_format} onValueChange={handleFormatChange}>
                 <SelectTrigger id="format">
                   <SelectValue placeholder="Select format" />
                 </SelectTrigger>
@@ -362,9 +332,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
               <Input
                 id="label"
                 value={uploadData.label}
-                onChange={(e) =>
-                  setUploadData((prev) => ({ ...prev, label: e.target.value }))
-                }
+                onChange={(e) => setUploadData((prev) => ({ ...prev, label: e.target.value }))}
                 placeholder="e.g., PDF, Full Text HTML"
               />
             </div>
@@ -378,9 +346,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
                 accept=".pdf,.html,.xml,.epub,.mobi"
               />
               {uploadData.file && (
-                <p className="text-sm text-muted-foreground">
-                  Selected: {uploadData.file.name}
-                </p>
+                <p className="text-sm text-muted-foreground">Selected: {uploadData.file.name}</p>
               )}
             </div>
 
@@ -410,10 +376,7 @@ export function ProductionGalleys({ submission, submissionId, assignmentId }) {
             >
               Cancel
             </Button>
-            <Button
-              onClick={handleUpload}
-              disabled={!uploadData.file || uploadMutation.isPending}
-            >
+            <Button onClick={handleUpload} disabled={!uploadData.file || uploadMutation.isPending}>
               {uploadMutation.isPending ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />

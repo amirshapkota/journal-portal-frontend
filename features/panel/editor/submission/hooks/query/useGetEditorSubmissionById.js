@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getSubmissionById } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { getSubmissionById } from '../../api';
 
 /**
  * Hook to get a single submission by ID
@@ -8,7 +8,7 @@ import { getSubmissionById } from "../../api";
  */
 export const useGetEditorSubmissionById = (id) => {
   return useQuery({
-    queryKey: ["editor-submission", id],
+    queryKey: ['editor-submission', id],
     queryFn: () => getSubmissionById(id),
     enabled: !!id,
     staleTime: 1000 * 60 * 5, // 5 minutes

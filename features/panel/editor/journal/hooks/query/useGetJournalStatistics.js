@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getJournalStatistics } from "../../api/journalsApi";
+import { useQuery } from '@tanstack/react-query';
+import { getJournalStatistics } from '../../api/journalsApi';
 
 export const useGetJournalStatistics = (journalId, options = {}) => {
   return useQuery({
-    queryKey: ["journal-statistics", journalId],
+    queryKey: ['journal-statistics', journalId],
     queryFn: () => getJournalStatistics(journalId),
     enabled: !!journalId,
     staleTime: 5 * 60 * 1000, // 5 minutes

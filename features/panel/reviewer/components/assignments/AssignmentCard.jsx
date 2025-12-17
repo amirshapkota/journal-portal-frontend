@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { format } from "date-fns";
+import { format } from 'date-fns';
 import {
   Calendar,
   FileText,
@@ -10,18 +10,12 @@ import {
   XCircle,
   Clock,
   AlertCircle,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
-import { StatusBadge, statusConfig } from "@/features";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+} from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { StatusBadge, statusConfig } from '@/features';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
 
 export function AssignmentCard({
   assignment,
@@ -43,20 +37,17 @@ export function AssignmentCard({
           <div className="space-y-1 flex-1">
             <CardTitle className="text-lg">
               <EllipsisTooltip
-                text={assignment.submission_title || "Untitled Submission"}
+                text={assignment.submission_title || 'Untitled Submission'}
                 maxLength={45}
-                spanProps={{ className: "whitespace-normal!" }}
+                spanProps={{ className: 'whitespace-normal!' }}
               />
             </CardTitle>
             <CardDescription className="flex items-center gap-2 text-sm">
               <FileText className="h-4 w-4" />
-              {assignment.submission_number || "N/A"}
+              {assignment.submission_number || 'N/A'}
             </CardDescription>
           </div>
-          <StatusBadge
-            status={assignment?.submission_details.status}
-            statusConfig={statusConfig}
-          />
+          <StatusBadge status={assignment?.submission_details.status} statusConfig={statusConfig} />
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -64,24 +55,22 @@ export function AssignmentCard({
         <div className="space-y-2 text-sm">
           <div className="flex items-center gap-2 text-muted-foreground">
             <Calendar className="h-4 w-4" />
-            <span>
-              Invited: {format(new Date(assignment.invited_at), "PPP")}
-            </span>
+            <span>Invited: {format(new Date(assignment.invited_at), 'PPP')}</span>
           </div>
           <div className="flex items-center gap-2 text-muted-foreground">
             <Clock className="h-4 w-4" />
-            <span>Due: {format(new Date(assignment.due_date), "PPP")}</span>
+            <span>Due: {format(new Date(assignment.due_date), 'PPP')}</span>
           </div>
           {assignment.days_remaining != null &&
-            (assignment?.submission_details?.status !== "ACCEPTED" ||
-              assignment.status !== "DECLINED") && (
+            (assignment?.submission_details?.status !== 'ACCEPTED' ||
+              assignment.status !== 'DECLINED') && (
               <div
                 className={`flex items-center gap-2 font-medium ${
                   assignment.is_overdue
-                    ? "text-destructive"
+                    ? 'text-destructive'
                     : assignment.days_remaining <= 3
-                    ? "text-amber-600"
-                    : "text-green-600"
+                      ? 'text-amber-600'
+                      : 'text-green-600'
                 }`}
               >
                 <AlertCircle className="h-4 w-4" />
@@ -96,9 +85,8 @@ export function AssignmentCard({
             <div className="flex items-center gap-2 text-muted-foreground">
               <Mail className="h-4 w-4" />
               <span>
-                Assigned by:{" "}
-                {assignment.assigned_by_info.display_name ||
-                  assignment.assigned_by_info.full_name}
+                Assigned by:{' '}
+                {assignment.assigned_by_info.display_name || assignment.assigned_by_info.full_name}
               </span>
             </div>
           )}
@@ -107,36 +95,32 @@ export function AssignmentCard({
         {/* Invitation Message */}
         {assignment.invitation_message && (
           <div className="p-3 bg-muted rounded-md">
-            <p className="text-sm text-muted-foreground">
-              {assignment.invitation_message}
-            </p>
+            <p className="text-sm text-muted-foreground">{assignment.invitation_message}</p>
           </div>
         )}
 
         {/* Decline Reason */}
-        {assignment.status === "DECLINED" && assignment.decline_reason && (
+        {assignment.status === 'DECLINED' && assignment.decline_reason && (
           <div className="p-3 bg-destructive/10 border border-destructive/20 rounded-md">
             <p className="text-sm font-medium mb-1">Decline Reason:</p>
-            <p className="text-sm text-muted-foreground">
-              {assignment.decline_reason}
-            </p>
+            <p className="text-sm text-muted-foreground">{assignment.decline_reason}</p>
           </div>
         )}
 
         {/* Accepted/Completed Date */}
         {assignment.accepted_at && (
           <div className="text-xs text-muted-foreground">
-            Accepted on {format(new Date(assignment.accepted_at), "PPP")}
+            Accepted on {format(new Date(assignment.accepted_at), 'PPP')}
           </div>
         )}
         {assignment.completed_at && (
           <div className="text-xs text-muted-foreground">
-            Completed on {format(new Date(assignment.completed_at), "PPP")}
+            Completed on {format(new Date(assignment.completed_at), 'PPP')}
           </div>
         )}
 
         {/* Actions */}
-        {assignment.status === "PENDING" && (
+        {assignment.status === 'PENDING' && (
           <div className="flex gap-2 pt-2">
             <Button
               size="sm"
@@ -145,7 +129,7 @@ export function AssignmentCard({
               className="flex-1"
             >
               <CheckCircle2 className="h-4 w-4 mr-2" />
-              {acceptMutation?.isPending ? "Accepting..." : "Accept"}
+              {acceptMutation?.isPending ? 'Accepting...' : 'Accept'}
             </Button>
             <Button
               size="sm"
@@ -159,15 +143,11 @@ export function AssignmentCard({
             </Button>
           </div>
         )}
-        {(assignment?.status === "ACCEPTED" ||
-          (assignment?.status === "COMPLETED" &&
-            (assignment?.submission_details.status === "REVISED" ||
-              assignment?.submission_details.status === "UNDER_REVIEW"))) && (
-          <Button
-            size="sm"
-            onClick={() => handleViewSubmission(assignment)}
-            className="flex-1"
-          >
+        {(assignment?.status === 'ACCEPTED' ||
+          (assignment?.status === 'COMPLETED' &&
+            (assignment?.submission_details.status === 'REVISED' ||
+              assignment?.submission_details.status === 'UNDER_REVIEW'))) && (
+          <Button size="sm" onClick={() => handleViewSubmission(assignment)} className="flex-1">
             <Eye className="h-4 w-4 mr-2" />
             Start Review
           </Button>

@@ -1,16 +1,10 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter, useParams } from "next/navigation";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
+import { useState } from 'react';
+import { useRouter, useParams } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import {
   Dialog,
   DialogContent,
@@ -18,18 +12,18 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { FileText, Download, Upload, Loader2, Edit, Eye } from "lucide-react";
-import { format } from "date-fns";
-import { toast } from "sonner";
+} from '@/components/ui/dialog';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import { FileText, Download, Upload, Loader2, Edit, Eye } from 'lucide-react';
+import { format } from 'date-fns';
+import { toast } from 'sonner';
 import {
   useCopyeditingFiles,
   useDeleteCopyeditingFile,
   useUploadCopyeditingFile,
-} from "../../hooks";
+} from '../../hooks';
 
 /**
  * Component to display draft files in copyediting workflow
@@ -48,10 +42,10 @@ export function CopyeditingDraftFiles({
     data: files = [],
     isLoading,
     error,
-  } = useCopyeditingFiles({ assignmentId, file_type: "INITIAL_DRAFT" });
+  } = useCopyeditingFiles({ assignmentId, file_type: 'INITIAL_DRAFT' });
 
   const handleDownload = (fileUrl, fileName) => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = fileUrl;
     link.download = fileName;
     document.body.appendChild(link);
@@ -67,8 +61,8 @@ export function CopyeditingDraftFiles({
             <div>
               <CardTitle>Draft Files</CardTitle>
               <CardDescription>
-                Original submission files provided by the author. These serve as
-                the base for copyediting.
+                Original submission files provided by the author. These serve as the base for
+                copyediting.
               </CardDescription>
             </div>
           </div>
@@ -77,9 +71,7 @@ export function CopyeditingDraftFiles({
           {isLoading ? (
             <div className="text-center py-8">
               <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-              <p className="text-sm text-muted-foreground mt-2">
-                Loading files...
-              </p>
+              <p className="text-sm text-muted-foreground mt-2">Loading files...</p>
             </div>
           ) : error ? (
             <div className="text-center py-8 text-destructive">
@@ -105,9 +97,7 @@ export function CopyeditingDraftFiles({
                       <FileText className="h-8 w-8 text-primary stroke-[1.5] shrink-0 mt-1" />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 mb-1">
-                          <p className="font-medium truncate">
-                            {file.original_filename}
-                          </p>
+                          <p className="font-medium truncate">{file.original_filename}</p>
                           {file.version && (
                             <Badge variant="secondary" className="text-xs">
                               v{file.version}
@@ -121,33 +111,24 @@ export function CopyeditingDraftFiles({
                           {file.file_size && (
                             <>
                               <span className="hidden sm:inline">•</span>
-                              <span>
-                                {(file.file_size / 1024 / 1024).toFixed(2)} MB
-                              </span>
+                              <span>{(file.file_size / 1024 / 1024).toFixed(2)} MB</span>
                             </>
                           )}
                           {file.created_at && (
                             <>
                               <span className="hidden sm:inline">•</span>
-                              <span>
-                                {format(
-                                  new Date(file.created_at),
-                                  "MMM d, yyyy"
-                                )}
-                              </span>
+                              <span>{format(new Date(file.created_at), 'MMM d, yyyy')}</span>
                             </>
                           )}
                         </div>
                         {file.uploaded_by && (
                           <p className="text-xs text-muted-foreground mt-1">
-                            Uploaded by: {file.uploaded_by.user?.first_name}{" "}
+                            Uploaded by: {file.uploaded_by.user?.first_name}{' '}
                             {file.uploaded_by.user?.last_name}
                           </p>
                         )}
                         {file.description && (
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {file.description}
-                          </p>
+                          <p className="text-xs text-muted-foreground mt-1">{file.description}</p>
                         )}
                       </div>
                     </div>
@@ -186,9 +167,7 @@ export function CopyeditingDraftFiles({
                       <Button
                         variant="ghost"
                         size="sm"
-                        onClick={() =>
-                          handleDownload(file.file, file.original_filename)
-                        }
+                        onClick={() => handleDownload(file.file, file.original_filename)}
                         title="Download file"
                       >
                         <Download className="h-4 w-4 sm:mr-2" />

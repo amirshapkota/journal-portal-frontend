@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, X, RotateCw } from "lucide-react";
+import { useState } from 'react';
+import { Card, CardContent } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, X, RotateCw } from 'lucide-react';
 
 export default function ErrorCard({
-  title = "Something went wrong",
-  description = "An unexpected error occurred. Please try again or contact support.",
-  details = "",
+  title = 'Something went wrong',
+  description = 'An unexpected error occurred. Please try again or contact support.',
+  details = '',
   onRetry,
   onBack,
   showDetails: initialShowDetails = false,
@@ -29,8 +29,8 @@ export default function ErrorCard({
           onMouseLeave={() => setIsHovered(false)}
           className={`relative py-0 max-w-md w-full border transition-all duration-300 ${
             isHovered
-              ? "border-red-400/50 dark:border-red-500/50 shadow-lg shadow-red-500/10"
-              : "border-red-200/50 dark:border-red-900/50 shadow-md"
+              ? 'border-red-400/50 dark:border-red-500/50 shadow-lg shadow-red-500/10'
+              : 'border-red-200/50 dark:border-red-900/50 shadow-md'
           }`}
         >
           <CardContent className="pt-8 pb-6 px-6">
@@ -40,24 +40,20 @@ export default function ErrorCard({
                 {/* Animated icon */}
                 <div
                   className={`shrink-0 p-3 rounded-full bg-red-100/20 dark:bg-red-950/30 transition-all duration-300 ${
-                    isHovered ? "scale-110" : "scale-100"
+                    isHovered ? 'scale-110' : 'scale-100'
                   }`}
                 >
                   <AlertTriangle
                     className={`w-6 h-6 text-red-600 dark:text-red-400 transition-all duration-300 ${
-                      isHovered ? "animate-pulse" : ""
+                      isHovered ? 'animate-pulse' : ''
                     }`}
                   />
                 </div>
 
                 {/* Title and description */}
                 <div className="flex-1">
-                  <h2 className="text-lg font-semibold text-foreground mb-1">
-                    {title}
-                  </h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
-                    {description}
-                  </p>
+                  <h2 className="text-lg font-semibold text-foreground mb-1">{title}</h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{description}</p>
                 </div>
               </div>
               {/* Back button */}
@@ -81,8 +77,7 @@ export default function ErrorCard({
                   onClick={() => setShowDetails(!showDetails)}
                   className="text-xs font-medium text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 transition-colors mb-2"
                 >
-                  {showDetails ? "▼" : "▶"} {showDetails ? "Hide" : "Show"}{" "}
-                  details
+                  {showDetails ? '▼' : '▶'} {showDetails ? 'Hide' : 'Show'} details
                 </button>
 
                 {showDetails && (

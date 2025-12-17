@@ -1,5 +1,5 @@
-import { API_URL } from "@/lib/constants";
-import axios from "axios";
+import { API_URL } from '@/lib/constants';
+import axios from 'axios';
 
 export const loginUser = async (loginData) => {
   try {

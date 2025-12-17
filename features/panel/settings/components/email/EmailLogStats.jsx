@@ -2,10 +2,10 @@
  * EmailLogStats - Displays user email log statistics
  * @module features/panel/settings/components/email/EmailLogStats
  */
-import { StatsErrorCard } from "@/features/shared";
-import StatsCard from "@/features/shared/components/StatsCard";
-import { Mail, CheckCircle, Clock, XCircle, TrendingUp } from "lucide-react";
-import React from "react";
+import { StatsErrorCard } from '@/features/shared';
+import StatsCard from '@/features/shared/components/StatsCard';
+import { Mail, CheckCircle, Clock, XCircle, TrendingUp } from 'lucide-react';
+import React from 'react';
 
 /**
  * @param {Object} props
@@ -16,12 +16,7 @@ export default function EmailLogStats({ data, isPending, isError, error }) {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
         {[...Array(5)].map((_, i) => (
-          <StatsCard
-            key={i}
-            icon={Mail}
-            isLoading={true}
-            cardClass="animate-pulse"
-          />
+          <StatsCard key={i} icon={Mail} isLoading={true} cardClass="animate-pulse" />
         ))}
       </div>
     );
@@ -31,7 +26,7 @@ export default function EmailLogStats({ data, isPending, isError, error }) {
     return (
       <StatsErrorCard
         title="Failed to load email stats"
-        message={error?.message || "Unknown error"}
+        message={error?.message || 'Unknown error'}
       />
     );
   }
@@ -42,8 +37,7 @@ export default function EmailLogStats({ data, isPending, isError, error }) {
     pending: 0,
     failed: 0,
   };
-  const successRate =
-    stats.total > 0 ? Math.round((stats.sent / stats.total) * 100) : 0;
+  const successRate = stats.total > 0 ? Math.round((stats.sent / stats.total) * 100) : 0;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">

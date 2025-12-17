@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useEffect, useState } from "react";
-import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
-import { ThemeProvider } from "next-themes";
-import { Toaster } from "@/components/ui/sonner";
-import store, { persistor } from "@/store/store";
-import { useRouter } from "next/navigation";
-import { setAxiosRouter, setStoreReference } from "@/lib/instance";
-import { useCrossTabAuth } from "@/features/auth/hooks";
-import { logout } from "@/features/auth/redux/authSlice";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { useEffect, useState } from 'react';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
+import { ThemeProvider } from 'next-themes';
+import { Toaster } from '@/components/ui/sonner';
+import store, { persistor } from '@/store/store';
+import { useRouter } from 'next/navigation';
+import { setAxiosRouter, setStoreReference } from '@/lib/instance';
+import { useCrossTabAuth } from '@/features/auth/hooks';
+import { logout } from '@/features/auth/redux/authSlice';
 
 const AuthSetupWrapper = ({ children }) => {
   const router = useRouter();

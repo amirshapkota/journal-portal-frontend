@@ -1,14 +1,14 @@
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import { loginSchema } from "../utils/authSchema";
-import { useLoginUser } from "../hooks";
-import Link from "next/link";
-import { FormInputField, useToggle } from "@/features/shared";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Eye, EyeOff, Loader2 } from 'lucide-react';
+import { loginSchema } from '../utils/authSchema';
+import { useLoginUser } from '../hooks';
+import Link from 'next/link';
+import { FormInputField, useToggle } from '@/features/shared';
 import {
   Form,
   FormControl,
@@ -16,7 +16,7 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 
 export function LoginForm() {
   const [showPassword, handleShowPassword] = useToggle();
@@ -24,8 +24,8 @@ export function LoginForm() {
   const form = useForm({
     resolver: zodResolver(loginSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
   });
 
@@ -58,7 +58,7 @@ export function LoginForm() {
                 <div className="relative">
                   <Input
                     id="password"
-                    type={showPassword ? "text" : "password"}
+                    type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your Password"
                     className=" h-11 "
                     {...field}
@@ -78,10 +78,7 @@ export function LoginForm() {
               </FormControl>
               <FormMessage />
               <div className="text-right">
-                <Link
-                  href="/forgot-password"
-                  className="text-sm  hover:underline"
-                >
+                <Link href="/forgot-password" className="text-sm  hover:underline">
                   Forgot Password?
                 </Link>
               </div>
@@ -89,29 +86,21 @@ export function LoginForm() {
           )}
         />
 
-        <Button
-          type="submit"
-          className="w-full cursor-pointer"
-          disabled={LoginPending}
-        >
+        <Button type="submit" className="w-full cursor-pointer" disabled={LoginPending}>
           {LoginPending ? (
             <>
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
               Signing in...
             </>
           ) : (
-            "Sign in"
+            'Sign in'
           )}
         </Button>
 
         <div className="text-center text-sm text-muted-foreground">
-          Don&apos;t have an account?{" "}
+          Don&apos;t have an account?{' '}
           <Link href="/register">
-            <Button
-              type="button"
-              variant="link"
-              className="p-0 h-auto font-normal text-foreground"
-            >
+            <Button type="button" variant="link" className="p-0 h-auto font-normal text-foreground">
               Sign up
             </Button>
           </Link>

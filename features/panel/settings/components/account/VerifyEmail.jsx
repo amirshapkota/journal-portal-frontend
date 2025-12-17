@@ -1,15 +1,14 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { Mail, Loader2, Check } from "lucide-react";
-import { useResendVerificationEmail } from "@/features/auth/hooks";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Mail, Loader2, Check } from 'lucide-react';
+import { useResendVerificationEmail } from '@/features/auth/hooks';
 
 export default function VerifyEmail() {
   const [emailSent, setEmailSent] = useState(false);
-  const { mutate: resendVerificationEmail, isPending } =
-    useResendVerificationEmail();
+  const { mutate: resendVerificationEmail, isPending } = useResendVerificationEmail();
 
   const handleSendVerification = () => {
     resendVerificationEmail(undefined, {

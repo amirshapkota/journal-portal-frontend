@@ -1,5 +1,5 @@
 // ManuscriptInfoStep.jsx
-import { useState } from "react";
+import { useState } from 'react';
 import {
   FormField,
   FormItem,
@@ -7,26 +7,26 @@ import {
   FormControl,
   FormDescription,
   FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { X } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { FormRichTextEditor } from "@/features/shared";
+} from '@/components/ui/form';
+import { Input } from '@/components/ui/input';
+import { Textarea } from '@/components/ui/textarea';
+import { X } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { FormRichTextEditor } from '@/features/shared';
 
 export default function ManuscriptInfoStep({ form }) {
-  const [keywordInput, setKeywordInput] = useState("");
+  const [keywordInput, setKeywordInput] = useState('');
 
   const handleAddKeyword = (field) => {
     const trimmedKeyword = keywordInput.trim();
     if (trimmedKeyword && !field.value?.includes(trimmedKeyword)) {
       field.onChange([...(field.value || []), trimmedKeyword]);
-      setKeywordInput("");
+      setKeywordInput('');
     }
   };
 
   const handleKeywordKeyPress = (e, field) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleAddKeyword(field);
     }
@@ -47,9 +47,7 @@ export default function ManuscriptInfoStep({ form }) {
             <FormControl>
               <Input placeholder="Enter manuscript title..." {...field} />
             </FormControl>
-            <FormDescription>
-              Max 500 characters ({field.value?.length || 0}/500)
-            </FormDescription>
+            <FormDescription>Max 500 characters ({field.value?.length || 0}/500)</FormDescription>
             <FormMessage />
           </FormItem>
         )}

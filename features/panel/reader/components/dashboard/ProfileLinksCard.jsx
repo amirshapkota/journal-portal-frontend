@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Edit2 } from "lucide-react";
+import { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Edit2 } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
+} from '@/components/ui/dialog';
 
 export function ProfileLinksCard({ links }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,12 +31,7 @@ export function ProfileLinksCard({ links }) {
         <div className="space-y-2">
           <label className="text-sm font-medium">Google Scholar</label>
           <div className="flex items-center gap-2">
-            <Input
-              value={googleScholar}
-              readOnly
-              className="text-xs"
-              placeholder="Not set"
-            />
+            <Input value={googleScholar} readOnly className="text-xs" placeholder="Not set" />
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -49,9 +44,7 @@ export function ProfileLinksCard({ links }) {
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium">
-                      Google Scholar URL
-                    </label>
+                    <label className="text-sm font-medium">Google Scholar URL</label>
                     <Input
                       value={googleScholar}
                       onChange={(e) => setGoogleScholar(e.target.value)}
@@ -60,9 +53,7 @@ export function ProfileLinksCard({ links }) {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">
-                      ResearchGate URL
-                    </label>
+                    <label className="text-sm font-medium">ResearchGate URL</label>
                     <Input
                       value={researchGate}
                       onChange={(e) => setResearchGate(e.target.value)}
@@ -83,12 +74,7 @@ export function ProfileLinksCard({ links }) {
         <div className="space-y-2">
           <label className="text-sm font-medium">ResearchGate</label>
           <div className="flex items-center gap-2">
-            <Input
-              value={researchGate}
-              readOnly
-              className="text-xs"
-              placeholder="Not set"
-            />
+            <Input value={researchGate} readOnly className="text-xs" placeholder="Not set" />
             <Dialog open={isOpen} onOpenChange={setIsOpen}>
               <DialogTrigger asChild>
                 <Button variant="outline" size="sm">
@@ -101,9 +87,7 @@ export function ProfileLinksCard({ links }) {
                 </DialogHeader>
                 <div className="space-y-4">
                   <div>
-                    <label className="text-sm font-medium">
-                      Google Scholar URL
-                    </label>
+                    <label className="text-sm font-medium">Google Scholar URL</label>
                     <Input
                       value={googleScholar}
                       onChange={(e) => setGoogleScholar(e.target.value)}
@@ -112,9 +96,7 @@ export function ProfileLinksCard({ links }) {
                     />
                   </div>
                   <div>
-                    <label className="text-sm font-medium">
-                      ResearchGate URL
-                    </label>
+                    <label className="text-sm font-medium">ResearchGate URL</label>
                     <Input
                       value={researchGate}
                       onChange={(e) => setResearchGate(e.target.value)}

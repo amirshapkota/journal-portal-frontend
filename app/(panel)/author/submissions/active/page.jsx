@@ -1,22 +1,22 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   AuthorSubmissionsTable,
   LoadingScreen,
   Pagination,
   RoleBasedRoute,
   SubmissionsLayout,
-} from "@/features";
-import { useGetActiveSubmissions } from "@/features/panel/author/hooks/query/useGetActiveSubmissions";
-import DocumentUploadModal from "@/features/panel/author/components/submission/DocumentUploadModal";
-import DocumentViewModal from "@/features/panel/author/components/submission/DocumentViewModal";
-import { useSubmitForReview } from "@/features/panel/author/hooks/mutation/useSubmitForReview";
-import { useSearchParams } from "next/navigation";
+} from '@/features';
+import { useGetActiveSubmissions } from '@/features/panel/author/hooks/query/useGetActiveSubmissions';
+import DocumentUploadModal from '@/features/panel/author/components/submission/DocumentUploadModal';
+import DocumentViewModal from '@/features/panel/author/components/submission/DocumentViewModal';
+import { useSubmitForReview } from '@/features/panel/author/hooks/mutation/useSubmitForReview';
+import { useSearchParams } from 'next/navigation';
 
 export default function ActivePage() {
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
+  const pageParam = searchParams.get('page');
   const currentPage = pageParam ? parseInt(pageParam) : 1;
 
   const params = {
@@ -30,7 +30,7 @@ export default function ActivePage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -68,9 +68,7 @@ export default function ActivePage() {
           onAddDocuments={handleAddDocuments}
           onViewDocuments={handleViewDocuments}
           onSubmit={handleSubmit}
-          viewUrl={(submission) =>
-            `/author/submissions/active/${submission.id}`
-          }
+          viewUrl={(submission) => `/author/submissions/active/${submission.id}`}
         />
       </SubmissionsLayout>
 

@@ -1,18 +1,12 @@
-"use client";
+'use client';
 
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetReviewAssignments } from "@/features/panel/reviewer/hooks/query/useGetReviewAssignments";
-import { StatsCard, useGetMyAnalytics } from "@/features";
-import { AlertCircle, CheckCircle2, Clock } from "lucide-react";
+import Link from 'next/link';
+import { usePathname } from 'next/navigation';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useGetReviewAssignments } from '@/features/panel/reviewer/hooks/query/useGetReviewAssignments';
+import { StatsCard, useGetMyAnalytics } from '@/features';
+import { AlertCircle, CheckCircle2, Clock } from 'lucide-react';
 
 export default function AssignmentsLayout({ children }) {
   const pathname = usePathname();
@@ -22,11 +16,11 @@ export default function AssignmentsLayout({ children }) {
 
   // Determine active tab from pathname
   const getActiveTab = () => {
-    if (pathname.includes("/pending")) return "pending";
-    if (pathname.includes("/accepted")) return "accepted";
-    if (pathname.includes("/completed")) return "completed";
-    if (pathname.includes("/declined")) return "declined";
-    return "overview";
+    if (pathname.includes('/pending')) return 'pending';
+    if (pathname.includes('/accepted')) return 'accepted';
+    if (pathname.includes('/completed')) return 'completed';
+    if (pathname.includes('/declined')) return 'declined';
+    return 'overview';
   };
 
   return (
@@ -34,9 +28,7 @@ export default function AssignmentsLayout({ children }) {
       {/* Header */}
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold">Review Assignments</h1>
-        <p className="text-muted-foreground">
-          Manage your peer review invitations and assignments
-        </p>
+        <p className="text-muted-foreground">Manage your peer review invitations and assignments</p>
       </div>
 
       {/* Stats Summary */}
@@ -86,22 +78,22 @@ export default function AssignmentsLayout({ children }) {
           </Link>
           <Link href="/reviewer/assignments/pending">
             <TabsTrigger className="w-full" value="pending">
-              Pending ({isPending ? "..." : reviewerStats.pending})
+              Pending ({isPending ? '...' : reviewerStats.pending})
             </TabsTrigger>
           </Link>
           <Link href="/reviewer/assignments/accepted">
             <TabsTrigger className="w-full" value="accepted">
-              Accepted ({isPending ? "..." : reviewerStats.accepted})
+              Accepted ({isPending ? '...' : reviewerStats.accepted})
             </TabsTrigger>
           </Link>
           <Link href="/reviewer/assignments/completed">
             <TabsTrigger className="w-full" value="completed">
-              Completed ({isPending ? "..." : reviewerStats.completed})
+              Completed ({isPending ? '...' : reviewerStats.completed})
             </TabsTrigger>
           </Link>
           <Link href="/reviewer/assignments/declined">
             <TabsTrigger className="w-full" value="declined">
-              Declined ({isPending ? "..." : reviewerStats.declined})
+              Declined ({isPending ? '...' : reviewerStats.declined})
             </TabsTrigger>
           </Link>
         </TabsList>

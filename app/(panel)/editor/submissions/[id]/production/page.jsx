@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { useParams, useRouter } from "next/navigation";
+import React, { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
 import {
   ArrowLeft,
   HelpCircle,
@@ -13,19 +13,13 @@ import {
   Clock,
   AlertCircle,
   PlayCircle,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Separator } from "@/components/ui/separator";
-import { Badge } from "@/components/ui/badge";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Separator } from '@/components/ui/separator';
+import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import {
   Sheet,
   SheetContent,
@@ -33,12 +27,8 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet";
-import {
-  ErrorCard,
-  LoadingScreen,
-  useGetEditorSubmissionById,
-} from "@/features";
+} from '@/components/ui/sheet';
+import { ErrorCard, LoadingScreen, useGetEditorSubmissionById } from '@/features';
 import {
   AssignProductionAssistantDialog,
   ProductionDiscussions,
@@ -47,14 +37,14 @@ import {
   ProductionReadyFilesFromCopyediting,
   PublicationScheduleDialog,
   ProductionInfoCard,
-} from "@/features/panel/editor/submission/components";
+} from '@/features/panel/editor/submission/components';
 import {
   useProductionAssignments,
   useStartProductionAssignment,
   useCompleteProductionAssignment,
-} from "@/features/panel/editor/submission/hooks";
-import { format } from "date-fns";
-import { useSelector } from "react-redux";
+} from '@/features/panel/editor/submission/hooks';
+import { format } from 'date-fns';
+import { useSelector } from 'react-redux';
 
 export default function ProductionWorkflowPage() {
   const params = useParams();
@@ -95,7 +85,7 @@ export default function ProductionWorkflowPage() {
     if (!assignment?.id) return;
     completeMutation.mutate({
       assignmentId: assignment.id,
-      data: { completion_notes: "" },
+      data: { completion_notes: '' },
     });
   };
 
@@ -106,23 +96,23 @@ export default function ProductionWorkflowPage() {
   const getStatusBadge = (status) => {
     const statusConfig = {
       PENDING: {
-        label: "Pending",
-        variant: "secondary",
+        label: 'Pending',
+        variant: 'secondary',
         icon: Clock,
       },
       IN_PROGRESS: {
-        label: "In Progress",
-        variant: "default",
+        label: 'In Progress',
+        variant: 'default',
         icon: PlayCircle,
       },
       COMPLETED: {
-        label: "Completed",
-        variant: "success",
+        label: 'Completed',
+        variant: 'success',
         icon: CheckCircle2,
       },
       CANCELLED: {
-        label: "Cancelled",
-        variant: "destructive",
+        label: 'Cancelled',
+        variant: 'destructive',
         icon: AlertCircle,
       },
     };
@@ -145,10 +135,7 @@ export default function ProductionWorkflowPage() {
   if (submissionError) {
     return (
       <div className="container mx-auto p-6">
-        <ErrorCard
-          title="Error Loading Submission"
-          onRetry={refetchSubmission}
-        />
+        <ErrorCard title="Error Loading Submission" onRetry={refetchSubmission} />
       </div>
     );
   }
@@ -156,10 +143,7 @@ export default function ProductionWorkflowPage() {
   if (assignmentsError) {
     return (
       <div className="container mx-auto p-6">
-        <ErrorCard
-          title="Error Loading production assignment"
-          onRetry={refetchAssignment}
-        />
+        <ErrorCard title="Error Loading production assignment" onRetry={refetchAssignment} />
       </div>
     );
   }
@@ -170,8 +154,7 @@ export default function ProductionWorkflowPage() {
       {/* Header with breadcrumbs and actions */}
       <div className="flex flex-col gap-4">
         {assignmentsData &&
-          userEmail ===
-            assignmentsData?.results[0]?.production_assistant?.user_email && (
+          userEmail === assignmentsData?.results[0]?.production_assistant?.user_email && (
             <Button
               variant="ghost"
               onClick={() => router.push(`/editor/submissions/${submissionId}`)}
@@ -184,19 +167,15 @@ export default function ProductionWorkflowPage() {
 
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <h1 className="text-3xl font-semibold tracking-tight">
-              Production Workflow
-            </h1>
+            <h1 className="text-3xl font-semibold tracking-tight">Production Workflow</h1>
             <p className="text-muted-foreground mt-2">
-              {submission?.title || "Untitled Submission"}
+              {submission?.title || 'Untitled Submission'}
             </p>
-            <p className="text-sm text-muted-foreground mt-1">
-              Submission ID: {submissionId}
-            </p>
+            <p className="text-sm text-muted-foreground mt-1">Submission ID: {submissionId}</p>
           </div>
 
           <div className="flex items-center gap-2">
-            {assignment?.status === "COMPLETED" && (
+            {assignment?.status === 'COMPLETED' && (
               <Button onClick={handleScheduleForPublication} variant="default">
                 <CalendarCheck className="h-4 w-4 mr-2" />
                 Schedule for Publication
@@ -204,10 +183,7 @@ export default function ProductionWorkflowPage() {
             )}
 
             {!assignment && (
-              <Button
-                onClick={() => setIsAssignDialogOpen(true)}
-                variant="default"
-              >
+              <Button onClick={() => setIsAssignDialogOpen(true)} variant="default">
                 <UserPlus className="h-4 w-4 mr-2" />
                 Assign Production Assistant
               </Button>
@@ -221,20 +197,17 @@ export default function ProductionWorkflowPage() {
                 </Button>
               </SheetTrigger>
               <SheetContent className="overflow-y-auto w-full sm:max-w-xl p-6 bg-card">
-                <SheetHeader className={"p-0"}>
+                <SheetHeader className={'p-0'}>
                   <SheetTitle>Production Help</SheetTitle>
-                  <SheetDescription>
-                    Guidance for managing the production workflow
-                  </SheetDescription>
+                  <SheetDescription>Guidance for managing the production workflow</SheetDescription>
                 </SheetHeader>
                 <div className="mt-6 space-y-4 text-sm">
                   <div>
                     <h3 className="font-semibold text-base mb-2">Production</h3>
                     <p className="text-muted-foreground leading-relaxed">
-                      During the Production stage, the editor assigns production
-                      assistants who will help prepare the final publication
-                      files, known as galleys. For more detailed information,
-                      see Learning OJS 3: Production.
+                      During the Production stage, the editor assigns production assistants who will
+                      help prepare the final publication files, known as galleys. For more detailed
+                      information, see Learning OJS 3: Production.
                     </p>
                   </div>
 
@@ -243,35 +216,29 @@ export default function ProductionWorkflowPage() {
                   <div>
                     <h4 className="font-semibold mb-2">Orientation</h4>
                     <p className="text-muted-foreground leading-relaxed">
-                      The Production stage provides panels to create files ready
-                      for publication and manage the production team.
+                      The Production stage provides panels to create files ready for publication and
+                      manage the production team.
                     </p>
                   </div>
 
                   <Separator />
 
                   <div>
-                    <h4 className="font-semibold mb-2">
-                      Production Ready Files
-                    </h4>
+                    <h4 className="font-semibold mb-2">Production Ready Files</h4>
                     <p className="text-muted-foreground leading-relaxed">
-                      Upload and manage galley files (PDF, HTML, XML, EPUB,
-                      MOBI) that are ready for publication. Each galley should
-                      have a clear label and format specified.
+                      Upload and manage galley files (PDF, HTML, XML, EPUB, MOBI) that are ready for
+                      publication. Each galley should have a clear label and format specified.
                     </p>
                   </div>
 
                   <Separator />
 
                   <div>
-                    <h4 className="font-semibold mb-2">
-                      Production Discussions
-                    </h4>
+                    <h4 className="font-semibold mb-2">Production Discussions</h4>
                     <p className="text-muted-foreground leading-relaxed">
-                      Editors and production assistants can use this panel to
-                      initiate conversations if there are any details that need
-                      to be clarified before the final publication files can be
-                      created.
+                      Editors and production assistants can use this panel to initiate conversations
+                      if there are any details that need to be clarified before the final
+                      publication files can be created.
                     </p>
                   </div>
 
@@ -280,23 +247,19 @@ export default function ProductionWorkflowPage() {
                   <div>
                     <h4 className="font-semibold mb-2">Participants</h4>
                     <p className="text-muted-foreground leading-relaxed">
-                      Editors can add production assistants, layout editors, or
-                      other collaborators from this panel. Participants have
-                      access to files and discussions.
+                      Editors can add production assistants, layout editors, or other collaborators
+                      from this panel. Participants have access to files and discussions.
                     </p>
                   </div>
 
                   <Separator />
 
                   <div>
-                    <h4 className="font-semibold mb-2">
-                      Publishing the Submission
-                    </h4>
+                    <h4 className="font-semibold mb-2">Publishing the Submission</h4>
                     <p className="text-muted-foreground leading-relaxed">
-                      Once all galley files are uploaded and approved, complete
-                      the production workflow. Then use the Schedule for
-                      Publication button to set publication date, volume, issue,
-                      and other metadata.
+                      Once all galley files are uploaded and approved, complete the production
+                      workflow. Then use the Schedule for Publication button to set publication
+                      date, volume, issue, and other metadata.
                     </p>
                   </div>
                 </div>

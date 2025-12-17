@@ -1,12 +1,12 @@
-import { useQuery } from "@tanstack/react-query";
-import { listProductionFiles, getProductionFile } from "../../api";
+import { useQuery } from '@tanstack/react-query';
+import { listProductionFiles, getProductionFile } from '../../api';
 
 /**
  * Hook to fetch production files (galleys) list
  */
 export function useProductionFiles(params = {}, options = {}) {
   return useQuery({
-    queryKey: ["production-files", params],
+    queryKey: ['production-files', params],
     queryFn: () => listProductionFiles(params),
     ...options,
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -18,7 +18,7 @@ export function useProductionFiles(params = {}, options = {}) {
  */
 export function useProductionFile(fileId, options = {}) {
   return useQuery({
-    queryKey: ["production-file", fileId],
+    queryKey: ['production-file', fileId],
     queryFn: () => getProductionFile(fileId),
     enabled: !!fileId && options.enabled !== false,
     ...options,

@@ -5,14 +5,14 @@ import {
   FormMessage,
   FormLabel,
   FormDescription,
-} from "@/components/ui/form";
+} from '@/components/ui/form';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from '@/components/ui/select';
 
 export const FormSelectField = ({
   control,
@@ -20,8 +20,8 @@ export const FormSelectField = ({
   label,
   placeholder,
   description,
-  options = [], 
-  className = "",
+  options = [],
+  className = '',
 }) => {
   return (
     <FormField
@@ -34,16 +34,13 @@ export const FormSelectField = ({
           <Select onValueChange={field.onChange} defaultValue={field.value}>
             <FormControl>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder={placeholder || "Select an option"} />
+                <SelectValue placeholder={placeholder || 'Select an option'} />
               </SelectTrigger>
             </FormControl>
 
             <SelectContent>
               {options.map((option) => (
-                <SelectItem
-                  key={option.id || option.value}
-                  value={option.id || option.value}
-                >
+                <SelectItem key={option.id || option.value} value={option.id || option.value}>
                   {option.name || option.label}
                 </SelectItem>
               ))}

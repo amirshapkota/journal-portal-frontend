@@ -1,28 +1,22 @@
-"use client";
+'use client';
 
-import { useState, useEffect, useRef } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Loader2, Check, XCircle, ArrowLeft } from "lucide-react";
-import { useVerifyEmail } from "@/features/auth/hooks";
-import Link from "next/link";
-import { useTheme } from "next-themes";
-import Image from "next/image";
-import { useRouter, useParams } from "next/navigation";
-import { useSelector } from "react-redux";
+import { useState, useEffect, useRef } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, Check, XCircle, ArrowLeft } from 'lucide-react';
+import { useVerifyEmail } from '@/features/auth/hooks';
+import Link from 'next/link';
+import { useTheme } from 'next-themes';
+import Image from 'next/image';
+import { useRouter, useParams } from 'next/navigation';
+import { useSelector } from 'react-redux';
 
 const VerifyEmailPage = () => {
   const { resolvedTheme } = useTheme();
   const router = useRouter();
   const params = useParams();
   const hasVerified = useRef(false);
-  const [status, setStatus] = useState("verifying"); // "verifying" | "success" | "error"
+  const [status, setStatus] = useState('verifying'); // "verifying" | "success" | "error"
   const isAuthenticated = useSelector((state) => state.auth.status);
 
   const uid = params.uid;
@@ -37,24 +31,24 @@ const VerifyEmailPage = () => {
       const verify = async () => {
         try {
           await verifyEmail({ uid, token });
-          setStatus("success");
+          setStatus('success');
 
           // Broadcast verification event for cross-tab communication
-          if (typeof window !== "undefined") {
-            localStorage.setItem("email-verified", Date.now().toString());
-            window.dispatchEvent(new Event("storage"));
+          if (typeof window !== 'undefined') {
+            localStorage.setItem('email-verified', Date.now().toString());
+            window.dispatchEvent(new Event('storage'));
           }
 
           setTimeout(() => {
             // If user is logged in, reload the page to update auth state
             if (isAuthenticated) {
-              router.push("/");
+              router.push('/');
             } else {
-              router.push("/login");
+              router.push('/login');
             }
           }, 3000);
         } catch (error) {
-          setStatus("error");
+          setStatus('error');
         }
       };
 
@@ -68,7 +62,7 @@ const VerifyEmailPage = () => {
         {/* Logo/Brand Section */}
         <div className="text-center mb-8">
           <div className="flex flex-col items-center pt-2 mb-2">
-            {resolvedTheme === "dark" ? (
+            {resolvedTheme === 'dark' ? (
               <Image
                 width={200}
                 height={100}
@@ -91,17 +85,15 @@ const VerifyEmailPage = () => {
         {/* Verification Card */}
         <Card className="border-0 shadow-xl backdrop-blur-sm">
           <CardHeader className="space-y-1 pb-0">
-            <CardTitle className="text-2xl text-center">
-              Email Verification
-            </CardTitle>
+            <CardTitle className="text-2xl text-center">Email Verification</CardTitle>
             <CardDescription className="text-center">
-              {status === "verifying" && "Verifying your email address..."}
-              {status === "success" && "Email verified successfully"}
-              {status === "error" && "Verification failed"}
+              {status === 'verifying' && 'Verifying your email address...'}
+              {status === 'success' && 'Email verified successfully'}
+              {status === 'error' && 'Verification failed'}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {status === "verifying" && (
+            {status === 'verifying' && (
               <div className="flex flex-col items-center justify-center py-8">
                 <Loader2 className="h-12 w-12 animate-spin text-primary mb-4" />
                 <p className="text-sm text-muted-foreground text-center">
@@ -110,7 +102,7 @@ const VerifyEmailPage = () => {
               </div>
             )}
 
-            {status === "success" && (
+            {status === 'success' && (
               <div className="space-y-4">
                 <div className="flex flex-row items-center justify-center gap-2">
                   <Loader2 className="h-6 w-6 animate-spin text-primary " />
@@ -121,37 +113,29 @@ const VerifyEmailPage = () => {
                 <div className="flex items-center justify-center p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
                   <div className="flex items-center gap-2 text-green-600 dark:text-green-400">
                     <Check className="h-5 w-5" />
-                    <span className="text-sm font-medium">
-                      Email verified successfully
-                    </span>
+                    <span className="text-sm font-medium">Email verified successfully</span>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground text-center">
-                  Your email has been verified successfully. You will be
-                  redirected to the login page in a few seconds.
+                  Your email has been verified successfully. You will be redirected to the login
+                  page in a few seconds.
                 </p>
               </div>
             )}
 
-            {status === "error" && (
+            {status === 'error' && (
               <div className="space-y-4">
                 <div className="flex items-center justify-center p-4 bg-red-50 dark:bg-red-900/20 rounded-lg">
                   <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
                     <XCircle className="h-5 w-5" />
-                    <span className="text-sm font-medium">
-                      Verification failed
-                    </span>
+                    <span className="text-sm font-medium">Verification failed</span>
                   </div>
                 </div>
                 <p className="text-sm text-muted-foreground text-center">
-                  The verification link is invalid or has expired. Please
-                  request a new verification email from your account settings.
+                  The verification link is invalid or has expired. Please request a new verification
+                  email from your account settings.
                 </p>
-                <Button
-                  variant="outline"
-                  className="w-full"
-                  onClick={() => router.push("/login")}
-                >
+                <Button variant="outline" className="w-full" onClick={() => router.push('/login')}>
                   Go to Login
                 </Button>
               </div>

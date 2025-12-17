@@ -1,9 +1,9 @@
-import { useQuery } from "@tanstack/react-query";
-import { getJournalById } from "../../api/journalsApi";
+import { useQuery } from '@tanstack/react-query';
+import { getJournalById } from '../../api/journalsApi';
 
 export const useGetJournalById = (id, options = {}) => {
   return useQuery({
-    queryKey: ["journal", id],
+    queryKey: ['journal', id],
     queryFn: () => getJournalById(id),
     enabled: !!id,
     staleTime: 5 * 60 * 1000, // 5 minutes - journal details are relatively static

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 import {
   Form,
   FormControl,
@@ -10,24 +10,24 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Eye, EyeOff } from "lucide-react";
-import { FormInputField, useToggle } from "@/features/shared";
-import Link from "next/link";
-import { useForm } from "react-hook-form";
-import { registerFormSchema } from "../utils/authSchema";
-import { useRegisterUser } from "../hooks";
+} from '@/components/ui/form';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Eye, EyeOff } from 'lucide-react';
+import { FormInputField, useToggle } from '@/features/shared';
+import Link from 'next/link';
+import { useForm } from 'react-hook-form';
+import { registerFormSchema } from '../utils/authSchema';
+import { useRegisterUser } from '../hooks';
 
 const RegisterForm = () => {
   const form = useForm({
     resolver: zodResolver(registerFormSchema),
     defaultValues: {
-      first_name: "",
-      last_name: "",
-      email: "",
-      password: "",
-      password_confirm: "",
+      first_name: '',
+      last_name: '',
+      email: '',
+      password: '',
+      password_confirm: '',
       agree_to_terms: false,
     },
   });
@@ -81,7 +81,7 @@ const RegisterForm = () => {
                   <div className="relative">
                     <Input
                       id="password"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Create strong password"
                       className=" h-11 "
                       {...field}
@@ -109,14 +109,12 @@ const RegisterForm = () => {
             name="password_confirm"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="password_confirm">
-                  Confirm Password
-                </FormLabel>
+                <FormLabel htmlFor="password_confirm">Confirm Password</FormLabel>
                 <FormControl>
                   <div className="relative">
                     <Input
                       id="password_confirm"
-                      type={showConfirmPassword ? "text" : "password"}
+                      type={showConfirmPassword ? 'text' : 'password'}
                       placeholder="Confirm your password"
                       className=" h-11 "
                       {...field}
@@ -146,26 +144,16 @@ const RegisterForm = () => {
               render={({ field }) => (
                 <FormItem className="flex flex-row items-center space-x-1 space-y-0">
                   <FormControl>
-                    <Checkbox
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                      className=""
-                    />
+                    <Checkbox checked={field.value} onCheckedChange={field.onChange} className="" />
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormLabel className="text-sm font-normal inline-block leading-6">
                       I agree to the &nbsp;
-                      <a
-                        href="#"
-                        className="hover:text-skeleton underline underline-offset-4"
-                      >
+                      <a href="#" className="hover:text-skeleton underline underline-offset-4">
                         Terms of Service
                       </a>
                       &nbsp; and &nbsp;
-                      <a
-                        href="#"
-                        className="hover:text-skeleton underline underline-offset-4"
-                      >
+                      <a href="#" className="hover:text-skeleton underline underline-offset-4">
                         Privacy Policy
                       </a>
                     </FormLabel>
@@ -181,22 +169,18 @@ const RegisterForm = () => {
             className="w-full h-11 font-medium tracking-wide mt-1 mb-4 rounded-sm"
             disabled={form.formState.isSubmitting || isPending}
           >
-            {isPending ? "Creating Account..." : "Create Account"}
+            {isPending ? 'Creating Account...' : 'Create Account'}
           </Button>
         </form>
       </Form>
 
       <div className="text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
+        Already have an account?{' '}
         <Link
           href="/login"
           className=" hover:text-skeleton underline underline-offset-4 font-medium"
         >
-          <Button
-            type="button"
-            variant="link"
-            className="p-0 h-auto font-normal text-foreground"
-          >
+          <Button type="button" variant="link" className="p-0 h-auto font-normal text-foreground">
             Sign in here
           </Button>
         </Link>

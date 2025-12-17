@@ -1,21 +1,17 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
-import { BarChart, PieChart } from "@/features/shared";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
+import { BarChart, PieChart } from '@/features/shared';
 
 const COLORS = {
-  pending: "var(--chart-1)",
-  accepted: "var(--chart-2)",
-  completed: "var(--chart-3)",
-  declined: "var(--chart-4)",
+  pending: 'var(--chart-1)',
+  accepted: 'var(--chart-2)',
+  completed: 'var(--chart-3)',
+  declined: 'var(--chart-4)',
 };
 
-export default function ReviewerStatsChart({
-  reviewerStats,
-  isLoading,
-  isError,
-}) {
+export default function ReviewerStatsChart({ reviewerStats, isLoading, isError }) {
   if (isLoading) {
     return (
       <div className="grid gap-6 xl:grid-cols-2">
@@ -54,22 +50,22 @@ export default function ReviewerStatsChart({
 
   const barChartData = [
     {
-      name: "Pending",
+      name: 'Pending',
       value: reviewerStats?.pending || 0,
       color: COLORS.pending,
     },
     {
-      name: "Accepted",
+      name: 'Accepted',
       value: reviewerStats?.accepted || 0,
       color: COLORS.accepted,
     },
     {
-      name: "Completed",
+      name: 'Completed',
       value: reviewerStats?.completed || 0,
       color: COLORS.completed,
     },
     {
-      name: "Declined",
+      name: 'Declined',
       value: reviewerStats?.declined || 0,
       color: COLORS.declined,
     },
@@ -77,22 +73,22 @@ export default function ReviewerStatsChart({
 
   const pieChartData = [
     {
-      name: "Pending",
+      name: 'Pending',
       value: reviewerStats?.pending || 0,
       color: COLORS.pending,
     },
     {
-      name: "Accepted",
+      name: 'Accepted',
       value: reviewerStats?.accepted || 0,
       color: COLORS.accepted,
     },
     {
-      name: "Completed",
+      name: 'Completed',
       value: reviewerStats?.completed || 0,
       color: COLORS.completed,
     },
     {
-      name: "Declined",
+      name: 'Declined',
       value: reviewerStats?.declined || 0,
       color: COLORS.declined,
     },

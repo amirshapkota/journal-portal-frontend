@@ -1,23 +1,17 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Switch } from "@/components/ui/switch";
-import { Input } from "@/components/ui/input";
-import { FormRichTextEditor, FormInputField } from "@/features";
-import { toast } from "sonner";
-import { Save } from "lucide-react";
-import { stripHtmlTags } from "@/features/shared/utils";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import { useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Switch } from '@/components/ui/switch';
+import { Input } from '@/components/ui/input';
+import { FormRichTextEditor, FormInputField } from '@/features';
+import { toast } from 'sonner';
+import { Save } from 'lucide-react';
+import { stripHtmlTags } from '@/features/shared/utils';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import * as z from 'zod';
 import {
   Form,
   FormControl,
@@ -25,13 +19,13 @@ import {
   FormItem,
   FormLabel,
   FormMessage,
-} from "@/components/ui/form";
-import { useQueryClient } from "@tanstack/react-query";
-import { useUpdateJournal } from "../../hooks";
+} from '@/components/ui/form';
+import { useQueryClient } from '@tanstack/react-query';
+import { useUpdateJournal } from '../../hooks';
 
 const generalSettingsSchema = z.object({
-  title: z.string().min(1, "Title is required"),
-  short_name: z.string().min(1, "Short name is required"),
+  title: z.string().min(1, 'Title is required'),
+  short_name: z.string().min(1, 'Short name is required'),
   publisher: z.string().optional(),
   description: z
     .string()
@@ -40,27 +34,19 @@ const generalSettingsSchema = z.object({
       if (!val) return true;
       const plainText = stripHtmlTags(val);
       return plainText.length <= 2000;
-    }, "Description must not exceed 2,000 characters of text"),
+    }, 'Description must not exceed 2,000 characters of text'),
   issn_print: z
     .string()
-    .regex(/^\d{4}-\d{4}$/, "ISSN must be in format: 1234-5678")
+    .regex(/^\d{4}-\d{4}$/, 'ISSN must be in format: 1234-5678')
     .optional()
-    .or(z.literal("")),
+    .or(z.literal('')),
   issn_online: z
     .string()
-    .regex(/^\d{4}-\d{4}$/, "Online ISSN must be in format: 1234-5678")
+    .regex(/^\d{4}-\d{4}$/, 'Online ISSN must be in format: 1234-5678')
     .optional()
-    .or(z.literal("")),
-  website_url: z
-    .string()
-    .url("Must be a valid URL")
-    .optional()
-    .or(z.literal("")),
-  contact_email: z
-    .string()
-    .email("Must be a valid email")
-    .optional()
-    .or(z.literal("")),
+    .or(z.literal('')),
+  website_url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
+  contact_email: z.string().email('Must be a valid email').optional().or(z.literal('')),
   is_active: z.boolean().default(true),
   is_accepting_submissions: z.boolean().default(true),
 });
@@ -69,14 +55,14 @@ export function GeneralSettings({ journal }) {
   const form = useForm({
     resolver: zodResolver(generalSettingsSchema),
     defaultValues: {
-      title: "",
-      short_name: "",
-      publisher: "",
-      description: "",
-      issn_print: "",
-      issn_online: "",
-      website_url: "",
-      contact_email: "",
+      title: '',
+      short_name: '',
+      publisher: '',
+      description: '',
+      issn_print: '',
+      issn_online: '',
+      website_url: '',
+      contact_email: '',
       is_active: true,
       is_accepting_submissions: true,
     },
@@ -88,14 +74,14 @@ export function GeneralSettings({ journal }) {
   useEffect(() => {
     if (journal) {
       form.reset({
-        title: journal.title || "",
-        short_name: journal.short_name || "",
-        publisher: journal.publisher || "",
-        description: journal.description || "",
-        issn_print: journal.issn_print || "",
-        issn_online: journal.issn_online || "",
-        website_url: journal.website_url || "",
-        contact_email: journal.contact_email || "",
+        title: journal.title || '',
+        short_name: journal.short_name || '',
+        publisher: journal.publisher || '',
+        description: journal.description || '',
+        issn_print: journal.issn_print || '',
+        issn_online: journal.issn_online || '',
+        website_url: journal.website_url || '',
+        contact_email: journal.contact_email || '',
         is_active: journal.is_active ?? true,
         is_accepting_submissions: journal.is_accepting_submissions ?? true,
       });
@@ -106,7 +92,7 @@ export function GeneralSettings({ journal }) {
 
   const handleSubmit = (data) => {
     if (!journal?.id) {
-      toast.error("Journal ID not found");
+      toast.error('Journal ID not found');
       return;
     }
 
@@ -188,9 +174,9 @@ export function GeneralSettings({ journal }) {
                         placeholder="1234-5678"
                         maxLength={9}
                         onChange={(e) => {
-                          let value = e.target.value.replace(/[^0-9]/g, "");
+                          let value = e.target.value.replace(/[^0-9]/g, '');
                           if (value.length > 4) {
-                            value = value.slice(0, 4) + "-" + value.slice(4, 8);
+                            value = value.slice(0, 4) + '-' + value.slice(4, 8);
                           }
                           field.onChange(value);
                         }}
@@ -213,9 +199,9 @@ export function GeneralSettings({ journal }) {
                         placeholder="1234-5678"
                         maxLength={9}
                         onChange={(e) => {
-                          let value = e.target.value.replace(/[^0-9]/g, "");
+                          let value = e.target.value.replace(/[^0-9]/g, '');
                           if (value.length > 4) {
-                            value = value.slice(0, 4) + "-" + value.slice(4, 8);
+                            value = value.slice(0, 4) + '-' + value.slice(4, 8);
                           }
                           field.onChange(value);
                         }}
@@ -232,9 +218,7 @@ export function GeneralSettings({ journal }) {
         <Card>
           <CardHeader>
             <CardTitle>Contact Information</CardTitle>
-            <CardDescription>
-              Journal&apos;s website and contact details
-            </CardDescription>
+            <CardDescription>Journal&apos;s website and contact details</CardDescription>
           </CardHeader>
           <CardContent className="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <FormInputField
@@ -257,9 +241,7 @@ export function GeneralSettings({ journal }) {
         <Card>
           <CardHeader>
             <CardTitle>Status Settings</CardTitle>
-            <CardDescription>
-              Control journal visibility and submission acceptance
-            </CardDescription>
+            <CardDescription>Control journal visibility and submission acceptance</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             <FormField
@@ -274,10 +256,7 @@ export function GeneralSettings({ journal }) {
                     </p>
                   </div>
                   <FormControl>
-                    <Switch
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
-                    />
+                    <Switch checked={field.value} onCheckedChange={field.onChange} />
                   </FormControl>
                 </FormItem>
               )}
@@ -288,12 +267,10 @@ export function GeneralSettings({ journal }) {
         <div className="flex justify-end">
           <Button
             type="submit"
-            disabled={
-              updateJournalMutation.isPending || !form.formState.isDirty
-            }
+            disabled={updateJournalMutation.isPending || !form.formState.isDirty}
           >
             <Save className="h-4 w-4 mr-2" />
-            {updateJournalMutation.isPending ? "Saving..." : "Save Changes"}
+            {updateJournalMutation.isPending ? 'Saving...' : 'Save Changes'}
           </Button>
         </div>
       </form>

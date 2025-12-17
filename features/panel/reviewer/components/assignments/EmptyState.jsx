@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { Card, CardContent } from "@/components/ui/card";
+import { Card, CardContent } from '@/components/ui/card';
 
 export function EmptyState({ icon: Icon, title, description }) {
   return (

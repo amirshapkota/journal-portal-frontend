@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { updateSubmissionStatus } from "../../api";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateSubmissionStatus } from '../../api';
 
 /**
  * Hook to update submission status
@@ -13,11 +13,11 @@ export const useUpdateSubmissionStatus = () => {
     onSuccess: (data, variables) => {
       // Invalidate and refetch submission details
       queryClient.invalidateQueries({
-        queryKey: ["admin-submission", variables.id],
+        queryKey: ['admin-submission', variables.id],
       });
       // Invalidate journal submissions list
       queryClient.invalidateQueries({
-        queryKey: ["journal-submissions"],
+        queryKey: ['journal-submissions'],
       });
     },
   });

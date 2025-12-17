@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
 // Polyfill DOMMatrix for SSR
-if (typeof global !== "undefined" && typeof global.DOMMatrix === "undefined") {
+if (typeof global !== 'undefined' && typeof global.DOMMatrix === 'undefined') {
   global.DOMMatrix = class DOMMatrix {
     constructor() {
       this.a = 1;
@@ -14,8 +14,8 @@ if (typeof global !== "undefined" && typeof global.DOMMatrix === "undefined") {
   };
 }
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Skeleton } from '@/components/ui/skeleton';
 import {
   PieChart as RechartsPieChart,
   Pie,
@@ -23,7 +23,7 @@ import {
   ResponsiveContainer,
   Legend,
   Tooltip,
-} from "recharts";
+} from 'recharts';
 
 /**
  * Reusable Pie Chart Component
@@ -47,23 +47,22 @@ export function PieChart({
   title,
   data = [],
   colors = [
-    "var(--chart-1)",
-    "var(--chart-2)",
-    "var(--chart-3)",
-    "var(--chart-4)",
-    "var(--chart-5)",
+    'var(--chart-1)',
+    'var(--chart-2)',
+    'var(--chart-3)',
+    'var(--chart-4)',
+    'var(--chart-5)',
   ],
   isLoading = false,
   isError = false,
-  emptyMessage = "No data to display",
-  errorMessage = "Failed to load chart data",
+  emptyMessage = 'No data to display',
+  errorMessage = 'Failed to load chart data',
   showLegend = true,
   showTooltip = true,
   outerRadius = 80,
-  labelFormatter = (entry) =>
-    `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`,
+  labelFormatter = (entry) => `${entry.name}: ${(entry.percent * 100).toFixed(0)}%`,
   height = 300,
-  className = "",
+  className = '',
 }) {
   // Loading state
   if (isLoading) {
@@ -72,10 +71,7 @@ export function PieChart({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
-        <CardContent
-          className="flex items-center justify-center"
-          style={{ height: `${height}px` }}
-        >
+        <CardContent className="flex items-center justify-center" style={{ height: `${height}px` }}>
           <Skeleton className="h-[200px] w-[200px] rounded-full" />
         </CardContent>
       </Card>
@@ -89,10 +85,7 @@ export function PieChart({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
-        <CardContent
-          className="flex items-center justify-center"
-          style={{ height: `${height}px` }}
-        >
+        <CardContent className="flex items-center justify-center" style={{ height: `${height}px` }}>
           <p className="text-destructive text-center">{errorMessage}</p>
         </CardContent>
       </Card>
@@ -109,10 +102,7 @@ export function PieChart({
         <CardHeader>
           <CardTitle>{title}</CardTitle>
         </CardHeader>
-        <CardContent
-          className="flex items-center justify-center"
-          style={{ height: `${height}px` }}
-        >
+        <CardContent className="flex items-center justify-center" style={{ height: `${height}px` }}>
           <p className="text-muted-foreground text-center">{emptyMessage}</p>
         </CardContent>
       </Card>
@@ -138,20 +128,17 @@ export function PieChart({
               dataKey="value"
             >
               {filteredData.map((entry, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={entry.color || colors[index % colors.length]}
-                />
+                <Cell key={`cell-${index}`} fill={entry.color || colors[index % colors.length]} />
               ))}
             </Pie>
             {showTooltip && (
               <Tooltip
                 contentStyle={{
-                  backgroundColor: "var(--card)",
-                  border: "1px solid var(--border)",
+                  backgroundColor: 'var(--card)',
+                  border: '1px solid var(--border)',
                 }}
-                itemStyle={{ color: "var(--popover-foreground)" }}
-                labelStyle={{ color: "var(--muted-foreground)" }}
+                itemStyle={{ color: 'var(--popover-foreground)' }}
+                labelStyle={{ color: 'var(--muted-foreground)' }}
               />
             )}
             {showLegend && <Legend />}

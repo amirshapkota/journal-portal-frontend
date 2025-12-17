@@ -48,7 +48,6 @@ This document confirms the complete implementation of the copyediting workflow w
   - Shows "View" button for read-only mode (authors viewing drafts)
   - Shows "Edit" button for edit mode (editors/copyeditors)
 - ✅ `CopyeditedFiles.jsx` - Updated with `isAuthorView` and `readOnly` props
-
   - Dynamic routing for author vs editor views
   - Conditional approve button (editors only)
   - Edit button respects read-only mode
@@ -60,7 +59,6 @@ This document confirms the complete implementation of the copyediting workflow w
 #### SuperDoc Editors
 
 - ✅ `CopyeditingSuperDocEditor.jsx` - Specialized editor for copyediting files
-
   - Manual save workflow (replaces file)
   - Tracks last_edited_by and last_edited_at
   - Shows unsaved changes badge
@@ -77,7 +75,6 @@ This document confirms the complete implementation of the copyediting workflow w
 #### Editor Pages
 
 - ✅ `/editor/submissions/[id]/copyediting/page.jsx` - Main copyediting workflow page
-
   - Tabs for draft files, discussions, copyedited files
   - Assignment management
   - Participant management with Add Participant button
@@ -90,7 +87,6 @@ This document confirms the complete implementation of the copyediting workflow w
 #### Author Pages
 
 - ✅ `/author/submissions/active/[id]/copyediting/page.jsx` - Author copyediting view
-
   - Same UI as editor view with appropriate permissions
   - Draft files shown as read-only
   - Copyedited files are editable

@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useLexicalComposerContext } from "@lexical/react/LexicalComposerContext";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useLexicalComposerContext } from '@lexical/react/LexicalComposerContext';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   CAN_REDO_COMMAND,
   CAN_UNDO_COMMAND,
@@ -14,33 +14,25 @@ import {
   $isRangeSelection,
   $createParagraphNode,
   $getNodeByKey,
-} from "lexical";
-import { $isLinkNode, TOGGLE_LINK_COMMAND } from "@lexical/link";
-import {
-  $isParentElementRTL,
-  $wrapNodes,
-  $isAtNodeEnd,
-} from "@lexical/selection";
-import { $getNearestNodeOfType, mergeRegister } from "@lexical/utils";
+} from 'lexical';
+import { $isLinkNode, TOGGLE_LINK_COMMAND } from '@lexical/link';
+import { $isParentElementRTL, $wrapNodes, $isAtNodeEnd } from '@lexical/selection';
+import { $getNearestNodeOfType, mergeRegister } from '@lexical/utils';
 import {
   INSERT_ORDERED_LIST_COMMAND,
   INSERT_UNORDERED_LIST_COMMAND,
   REMOVE_LIST_COMMAND,
   $isListNode,
   ListNode,
-} from "@lexical/list";
-import { createPortal } from "react-dom";
-import {
-  $createHeadingNode,
-  $createQuoteNode,
-  $isHeadingNode,
-} from "@lexical/rich-text";
+} from '@lexical/list';
+import { createPortal } from 'react-dom';
+import { $createHeadingNode, $createQuoteNode, $isHeadingNode } from '@lexical/rich-text';
 import {
   $createCodeNode,
   $isCodeNode,
   getDefaultCodeLanguage,
   getCodeLanguages,
-} from "@lexical/code";
+} from '@lexical/code';
 import {
   Bold,
   Italic,
@@ -60,43 +52,43 @@ import {
   Heading1,
   Heading2,
   Heading3,
-} from "lucide-react";
-import { Button } from "@/components/ui/button";
+} from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { Separator } from "@/components/ui/separator";
+} from '@/components/ui/select';
+import { Separator } from '@/components/ui/separator';
 
 const LowPriority = 1;
 
 const supportedBlockTypes = new Set([
-  "paragraph",
-  "quote",
-  "code",
-  "h1",
-  "h2",
-  "h3",
-  "h4",
-  "h5",
-  "ul",
-  "ol",
+  'paragraph',
+  'quote',
+  'code',
+  'h1',
+  'h2',
+  'h3',
+  'h4',
+  'h5',
+  'ul',
+  'ol',
 ]);
 
 const blockTypeToBlockName = {
-  code: "Code Block",
-  h1: "Heading 1",
-  h2: "Heading 2",
-  h3: "Heading 3",
-  h4: "Heading 4",
-  h5: "Heading 5",
-  ol: "Numbered List",
-  paragraph: "Normal",
-  quote: "Quote",
-  ul: "Bulleted List",
+  code: 'Code Block',
+  h1: 'Heading 1',
+  h2: 'Heading 2',
+  h3: 'Heading 3',
+  h4: 'Heading 4',
+  h5: 'Heading 5',
+  ol: 'Numbered List',
+  paragraph: 'Normal',
+  quote: 'Quote',
+  ul: 'Bulleted List',
 };
 
 function Divider() {
@@ -105,11 +97,11 @@ function Divider() {
 
 function positionEditorElement(editor, rect) {
   if (rect === null) {
-    editor.style.opacity = "0";
-    editor.style.top = "-1000px";
-    editor.style.left = "-1000px";
+    editor.style.opacity = '0';
+    editor.style.top = '-1000px';
+    editor.style.left = '-1000px';
   } else {
-    editor.style.opacity = "1";
+    editor.style.opacity = '1';
     editor.style.top = `${rect.top + rect.height + window.pageYOffset + 10}px`;
     editor.style.left = `${
       rect.left + window.pageXOffset - editor.offsetWidth / 2 + rect.width / 2
@@ -121,7 +113,7 @@ function FloatingLinkEditor({ editor }) {
   const editorRef = useRef(null);
   const inputRef = useRef(null);
   const mouseDownRef = useRef(false);
-  const [linkUrl, setLinkUrl] = useState("");
+  const [linkUrl, setLinkUrl] = useState('');
   const [isEditMode, setEditMode] = useState(false);
   const [lastSelection, setLastSelection] = useState(null);
 
@@ -135,7 +127,7 @@ function FloatingLinkEditor({ editor }) {
       } else if ($isLinkNode(node)) {
         setLinkUrl(node.getURL());
       } else {
-        setLinkUrl("");
+        setLinkUrl('');
       }
     }
     const editorElem = editorRef.current;
@@ -169,11 +161,11 @@ function FloatingLinkEditor({ editor }) {
         positionEditorElement(editorElem, rect);
       }
       setLastSelection(selection);
-    } else if (!activeElement || activeElement.className !== "link-input") {
+    } else if (!activeElement || activeElement.className !== 'link-input') {
       positionEditorElement(editorElem, null);
       setLastSelection(null);
       setEditMode(false);
-      setLinkUrl("");
+      setLinkUrl('');
     }
 
     return true;
@@ -221,15 +213,15 @@ function FloatingLinkEditor({ editor }) {
             setLinkUrl(event.target.value);
           }}
           onKeyDown={(event) => {
-            if (event.key === "Enter") {
+            if (event.key === 'Enter') {
               event.preventDefault();
               if (lastSelection !== null) {
-                if (linkUrl !== "") {
+                if (linkUrl !== '') {
                   editor.dispatchCommand(TOGGLE_LINK_COMMAND, linkUrl);
                 }
                 setEditMode(false);
               }
-            } else if (event.key === "Escape") {
+            } else if (event.key === 'Escape') {
               event.preventDefault();
               setEditMode(false);
             }
@@ -280,7 +272,7 @@ export default function ToolbarPlugin() {
   const toolbarRef = useRef(null);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
-  const [blockType, setBlockType] = useState("paragraph");
+  const [blockType, setBlockType] = useState('paragraph');
   const [selectedElementKey, setSelectedElementKey] = useState(null);
   const [isLink, setIsLink] = useState(false);
   const [isBold, setIsBold] = useState(false);
@@ -294,9 +286,7 @@ export default function ToolbarPlugin() {
     if ($isRangeSelection(selection)) {
       const anchorNode = selection.anchor.getNode();
       const element =
-        anchorNode.getKey() === "root"
-          ? anchorNode
-          : anchorNode.getTopLevelElementOrThrow();
+        anchorNode.getKey() === 'root' ? anchorNode : anchorNode.getTopLevelElementOrThrow();
       const elementKey = element.getKey();
       const elementDOM = editor.getElementByKey(elementKey);
       if (elementDOM !== null) {
@@ -306,18 +296,16 @@ export default function ToolbarPlugin() {
           const type = parentList ? parentList.getTag() : element.getTag();
           setBlockType(type);
         } else {
-          const type = $isHeadingNode(element)
-            ? element.getTag()
-            : element.getType();
+          const type = $isHeadingNode(element) ? element.getTag() : element.getType();
           setBlockType(type);
         }
       }
       // Update text format
-      setIsBold(selection.hasFormat("bold"));
-      setIsItalic(selection.hasFormat("italic"));
-      setIsUnderline(selection.hasFormat("underline"));
-      setIsStrikethrough(selection.hasFormat("strikethrough"));
-      setIsCode(selection.hasFormat("code"));
+      setIsBold(selection.hasFormat('bold'));
+      setIsItalic(selection.hasFormat('italic'));
+      setIsUnderline(selection.hasFormat('underline'));
+      setIsStrikethrough(selection.hasFormat('strikethrough'));
+      setIsCode(selection.hasFormat('code'));
 
       // Update links
       const node = getSelectedNode(selection);
@@ -365,7 +353,7 @@ export default function ToolbarPlugin() {
   }, [editor, updateToolbar]);
 
   const formatParagraph = () => {
-    if (blockType !== "paragraph") {
+    if (blockType !== 'paragraph') {
       editor.update(() => {
         const selection = $getSelection();
         if ($isRangeSelection(selection)) {
@@ -387,21 +375,21 @@ export default function ToolbarPlugin() {
   };
 
   const formatBulletList = () => {
-    if (blockType !== "ul") {
+    if (blockType !== 'ul') {
       editor.dispatchCommand(INSERT_UNORDERED_LIST_COMMAND, undefined);
     }
     // Don't remove list, allow switching between list types
   };
 
   const formatNumberedList = () => {
-    if (blockType !== "ol") {
+    if (blockType !== 'ol') {
       editor.dispatchCommand(INSERT_ORDERED_LIST_COMMAND, undefined);
     }
     // Don't remove list, allow switching between list types
   };
 
   const formatQuote = () => {
-    if (blockType !== "quote") {
+    if (blockType !== 'quote') {
       editor.update(() => {
         const selection = $getSelection();
         if ($isRangeSelection(selection)) {
@@ -412,7 +400,7 @@ export default function ToolbarPlugin() {
   };
 
   const formatCode = () => {
-    if (blockType !== "code") {
+    if (blockType !== 'code') {
       editor.update(() => {
         const selection = $getSelection();
         if ($isRangeSelection(selection)) {
@@ -424,7 +412,7 @@ export default function ToolbarPlugin() {
 
   const insertLink = useCallback(() => {
     if (!isLink) {
-      editor.dispatchCommand(TOGGLE_LINK_COMMAND, "https://");
+      editor.dispatchCommand(TOGGLE_LINK_COMMAND, 'https://');
     } else {
       editor.dispatchCommand(TOGGLE_LINK_COMMAND, null);
     }
@@ -465,7 +453,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={formatBulletList}
-        className={`toolbar-item ${blockType === "ul" ? "active" : ""}`}
+        className={`toolbar-item ${blockType === 'ul' ? 'active' : ''}`}
         aria-label="Bullet List"
       >
         <List className="h-4 w-4" />
@@ -476,7 +464,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={formatNumberedList}
-        className={`toolbar-item ${blockType === "ol" ? "active" : ""}`}
+        className={`toolbar-item ${blockType === 'ol' ? 'active' : ''}`}
         aria-label="Numbered List"
       >
         <ListOrdered className="h-4 w-4" />
@@ -485,21 +473,21 @@ export default function ToolbarPlugin() {
       <Select
         value={blockType}
         onValueChange={(value) => {
-          if (value === "paragraph") {
+          if (value === 'paragraph') {
             formatParagraph();
-          } else if (value === "h1") {
-            formatHeading("h1");
-          } else if (value === "h2") {
-            formatHeading("h2");
-          } else if (value === "h3") {
-            formatHeading("h3");
-          } else if (value === "quote") {
+          } else if (value === 'h1') {
+            formatHeading('h1');
+          } else if (value === 'h2') {
+            formatHeading('h2');
+          } else if (value === 'h3') {
+            formatHeading('h3');
+          } else if (value === 'quote') {
             formatQuote();
-          } else if (value === "code") {
+          } else if (value === 'code') {
             formatCode();
-          } else if (value === "ul") {
+          } else if (value === 'ul') {
             formatBulletList();
-          } else if (value === "ol") {
+          } else if (value === 'ol') {
             formatNumberedList();
           }
         }}
@@ -524,9 +512,9 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "bold");
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'bold');
         }}
-        className={`toolbar-item ${isBold ? "active" : ""}`}
+        className={`toolbar-item ${isBold ? 'active' : ''}`}
         aria-label="Format Bold"
       >
         <Bold className="h-4 w-4" />
@@ -536,9 +524,9 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "italic");
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'italic');
         }}
-        className={`toolbar-item ${isItalic ? "active" : ""}`}
+        className={`toolbar-item ${isItalic ? 'active' : ''}`}
         aria-label="Format Italics"
       >
         <Italic className="h-4 w-4" />
@@ -548,9 +536,9 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "underline");
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'underline');
         }}
-        className={`toolbar-item ${isUnderline ? "active" : ""}`}
+        className={`toolbar-item ${isUnderline ? 'active' : ''}`}
         aria-label="Format Underline"
       >
         <Underline className="h-4 w-4" />
@@ -560,9 +548,9 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "strikethrough");
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'strikethrough');
         }}
-        className={`toolbar-item ${isStrikethrough ? "active" : ""}`}
+        className={`toolbar-item ${isStrikethrough ? 'active' : ''}`}
         aria-label="Format Strikethrough"
       >
         <Strikethrough className="h-4 w-4" />
@@ -572,9 +560,9 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_TEXT_COMMAND, "code");
+          editor.dispatchCommand(FORMAT_TEXT_COMMAND, 'code');
         }}
-        className={`toolbar-item ${isCode ? "active" : ""}`}
+        className={`toolbar-item ${isCode ? 'active' : ''}`}
         aria-label="Insert Code"
       >
         <Code className="h-4 w-4" />
@@ -584,20 +572,19 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={insertLink}
-        className={`toolbar-item ${isLink ? "active" : ""}`}
+        className={`toolbar-item ${isLink ? 'active' : ''}`}
         aria-label="Insert Link"
       >
         <Link className="h-4 w-4" />
       </Button>
-      {isLink &&
-        createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
+      {isLink && createPortal(<FloatingLinkEditor editor={editor} />, document.body)}
       <Divider />
       <Button
         type="button"
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "left");
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'left');
         }}
         className="toolbar-item"
         aria-label="Left Align"
@@ -609,7 +596,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "center");
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'center');
         }}
         className="toolbar-item"
         aria-label="Center Align"
@@ -621,7 +608,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "right");
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'right');
         }}
         className="toolbar-item"
         aria-label="Right Align"
@@ -633,7 +620,7 @@ export default function ToolbarPlugin() {
         variant="ghost"
         size="sm"
         onClick={() => {
-          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, "justify");
+          editor.dispatchCommand(FORMAT_ELEMENT_COMMAND, 'justify');
         }}
         className="toolbar-item"
         aria-label="Justify Align"

@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 // ==================== REVIEW APIs ====================
 
@@ -54,9 +54,7 @@ export const createEditorialDecision = async (data) => {
  * @returns {Promise} API response
  */
 export const sendDecisionLetter = async (decisionId) => {
-  const response = await instance.post(
-    `reviews/decisions/${decisionId}/send_letter/`
-  );
+  const response = await instance.post(`reviews/decisions/${decisionId}/send_letter/`);
   return response.data;
 };
 
@@ -67,8 +65,6 @@ export const sendDecisionLetter = async (decisionId) => {
  */
 export const getDecisionLetterTemplates = async (params = {}) => {
   const queryString = new URLSearchParams(params).toString();
-  const response = await instance.get(
-    `reviews/decision-templates/?${queryString}`
-  );
+  const response = await instance.get(`reviews/decision-templates/?${queryString}`);
   return response.data;
 };

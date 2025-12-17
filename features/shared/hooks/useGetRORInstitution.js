@@ -1,5 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import { getRORInstitutionById } from "../api/rorApi";
+import { useQuery } from '@tanstack/react-query';
+import { getRORInstitutionById } from '../api/rorApi';
 
 /**
  * Hook to fetch institution details by ROR ID
@@ -9,7 +9,7 @@ import { getRORInstitutionById } from "../api/rorApi";
  */
 export const useGetRORInstitution = (rorId, options = {}) => {
   return useQuery({
-    queryKey: ["ror-institution", rorId],
+    queryKey: ['ror-institution', rorId],
     queryFn: () => getRORInstitutionById(rorId),
     enabled: Boolean(rorId),
     staleTime: 10 * 60 * 1000, // Cache for 10 minutes

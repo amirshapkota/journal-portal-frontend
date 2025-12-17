@@ -155,17 +155,14 @@ features/panel/editor/submission/components/
 The following components are ready for API integration:
 
 1. **ProductionReadyFiles**:
-
    - `useGetProductionFiles(submissionId)` - fetch files
    - `useUploadProductionFile()` - upload mutation
 
 2. **ProductionDiscussions**:
-
    - `useGetProductionDiscussions(submissionId)` - fetch discussions
    - `useCreateProductionDiscussion()` - create mutation
 
 3. **ProductionParticipants**:
-
    - `useGetProductionParticipants(submissionId)` - fetch participants
    - `useAssignProductionParticipant()` - assign mutation
    - `useRemoveProductionParticipant()` - remove mutation
@@ -177,25 +174,21 @@ The following components are ready for API integration:
 ## Next Steps
 
 1. **Backend API Development**:
-
    - Create production file endpoints
    - Create production discussion endpoints
    - Create production participant endpoints
 
 2. **API Integration**:
-
    - Create React Query hooks for production operations
    - Connect components to backend APIs
    - Add error handling and success notifications
 
 3. **File Upload**:
-
    - Implement file upload dialog
    - Add file validation
    - Support multiple file formats
 
 4. **Discussion System**:
-
    - Implement discussion detail view
    - Add reply functionality
    - Support closing/reopening discussions

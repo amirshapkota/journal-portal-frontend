@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import { useMemo, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, FileEdit, Send } from "lucide-react";
+import { useMemo, useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, FileEdit, Send } from 'lucide-react';
 import {
   RoleBasedRoute,
   LoadingScreen,
@@ -17,10 +17,10 @@ import {
   CoAuthorsCard,
   DocumentVersionsModal,
   ReviewSummaryCard,
-} from "@/features";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { useGetSubmissionReviews } from "@/features/panel/editor/submission/hooks/useGetSubmissionReviews";
-import { DecisionBadge, reviewRecommendationConfig } from "@/features";
+} from '@/features';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { useGetSubmissionReviews } from '@/features/panel/editor/submission/hooks/useGetSubmissionReviews';
+import { DecisionBadge, reviewRecommendationConfig } from '@/features';
 
 export default function ActiveDetailPage() {
   const params = useParams();
@@ -41,7 +41,7 @@ export default function ActiveDetailPage() {
   const handleSubmitForReview = () => {
     submitForReviewMutation.mutate(submissionId, {
       onSuccess: () => {
-        router.push("/author/submissions/active");
+        router.push('/author/submissions/active');
       },
     });
   };
@@ -71,7 +71,7 @@ export default function ActiveDetailPage() {
           <Button
             variant="ghost"
             size="sm"
-            onClick={() => router.push("/author/submissions/active")}
+            onClick={() => router.push('/author/submissions/active')}
           >
             <ArrowLeft className="h-4 w-4 mr-2" />
             Back to Active Submissions
@@ -96,14 +96,14 @@ export default function ActiveDetailPage() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/author/submissions/active")}
-              className={"hover:text-primary-foreground"}
+              onClick={() => router.push('/author/submissions/active')}
+              className={'hover:text-primary-foreground'}
             >
               <ArrowLeft className="h-4 w-4 mr-1" />
               Back to Active Submissions
             </Button>
           </div>
-          {submission?.status === "REVISION_REQUIRED" && (
+          {submission?.status === 'REVISION_REQUIRED' && (
             <div>
               <Button
                 onClick={handleSubmitForReview}
@@ -115,19 +115,13 @@ export default function ActiveDetailPage() {
                 className="gap-2"
               >
                 <Send className="h-4 w-4" />
-                {submitForReviewMutation.isPending
-                  ? "Submitting..."
-                  : "Submit for Review"}
+                {submitForReviewMutation.isPending ? 'Submitting...' : 'Submit for Review'}
               </Button>
             </div>
           )}
-          {submission?.status === "COPYEDITING" && (
+          {submission?.status === 'COPYEDITING' && (
             <Button
-              onClick={() =>
-                router.push(
-                  `/author/submissions/active/${submissionId}/copyediting`
-                )
-              }
+              onClick={() => router.push(`/author/submissions/active/${submissionId}/copyediting`)}
             >
               <FileEdit className="h-4 w-4 mr-2" />
               Copyediting
@@ -136,32 +130,20 @@ export default function ActiveDetailPage() {
         </div>
 
         {/* Submission Details Card */}
-        <SubmissionDetailsCard
-          submission={submission}
-          isSubmissionPending={isSubmissionPending}
-        />
+        <SubmissionDetailsCard submission={submission} isSubmissionPending={isSubmissionPending} />
 
         {/* Review Summary Card (latest review only, no confidential comments) */}
-        {reviewsData &&
-          Array.isArray(reviewsData) &&
-          reviewsData.length > 0 && (
-            <ReviewSummaryCard
-              reviews={reviewsData}
-              showViewFullReview={false}
-            />
-          )}
+        {reviewsData && Array.isArray(reviewsData) && reviewsData.length > 0 && (
+          <ReviewSummaryCard reviews={reviewsData} showViewFullReview={false} />
+        )}
 
         {/* Documents Card */}
         <SubmissionDocumentsCard
           submission={submission}
-          onUpload={
-            submission?.status === "REVISION_REQUIRED" ? handleUpload : null
-          }
+          onUpload={submission?.status === 'REVISION_REQUIRED' ? handleUpload : null}
           onViewVersions={handleViewVersions}
           editBasePath={
-            submission?.status === "REVISION_REQUIRED"
-              ? "/author/submissions/active"
-              : null
+            submission?.status === 'REVISION_REQUIRED' ? '/author/submissions/active' : null
           }
           isEditable={true}
         />

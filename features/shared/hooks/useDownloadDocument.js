@@ -1,6 +1,6 @@
-import { instance } from "@/lib/instance";
-import { useMutation } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { instance } from '@/lib/instance';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 /**
  * Download a document file
@@ -9,15 +9,15 @@ import { toast } from "sonner";
  */
 const downloadDocument = async ({ url, fileName }) => {
   const response = await instance.get(url, {
-    responseType: "blob",
+    responseType: 'blob',
   });
 
   // Create download link
   const blob = new Blob([response.data]);
   const downloadUrl = window.URL.createObjectURL(blob);
-  const link = document.createElement("a");
+  const link = document.createElement('a');
   link.href = downloadUrl;
-  link.setAttribute("download", fileName);
+  link.setAttribute('download', fileName);
   document.body.appendChild(link);
   link.click();
   link.remove();
@@ -33,7 +33,7 @@ export const useDownloadDocument = () => {
       toast.success(`${variables.fileName} downloaded successfully`);
     },
     onError: (error) => {
-      toast.error(error?.message || "Failed to download document");
+      toast.error(error?.message || 'Failed to download document');
     },
   });
 };

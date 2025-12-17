@@ -1,11 +1,11 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Get all review assignments for the current user
  * @returns {Promise} API response
  */
 export const getReviewAssignments = async () => {
-  const response = await instance.get("/reviews/assignments/");
+  const response = await instance.get('/reviews/assignments/');
   return response.data;
 };
 
@@ -15,7 +15,7 @@ export const getReviewAssignments = async () => {
  * @returns {Promise} API response
  */
 export const getPendingReviewAssignments = async (params = {}) => {
-  const response = await instance.get("/reviews/assignments/pending/", {
+  const response = await instance.get('/reviews/assignments/pending/', {
     params,
   });
   return response.data;
@@ -27,7 +27,7 @@ export const getPendingReviewAssignments = async (params = {}) => {
  * @returns {Promise} API response
  */
 export const getAcceptedReviewAssignments = async (params = {}) => {
-  const response = await instance.get("/reviews/assignments/accepted/", {
+  const response = await instance.get('/reviews/assignments/accepted/', {
     params,
   });
   return response.data;
@@ -39,7 +39,7 @@ export const getAcceptedReviewAssignments = async (params = {}) => {
  * @returns {Promise} API response
  */
 export const getCompletedReviewAssignments = async (params = {}) => {
-  const response = await instance.get("/reviews/assignments/completed/", {
+  const response = await instance.get('/reviews/assignments/completed/', {
     params,
   });
   return response.data;
@@ -51,7 +51,7 @@ export const getCompletedReviewAssignments = async (params = {}) => {
  * @returns {Promise} API response
  */
 export const getDeclinedReviewAssignments = async (params = {}) => {
-  const response = await instance.get("/reviews/assignments/declined/", {
+  const response = await instance.get('/reviews/assignments/declined/', {
     params,
   });
   return response.data;
@@ -63,7 +63,7 @@ export const getDeclinedReviewAssignments = async (params = {}) => {
  * @returns {Promise} API response
  */
 export const getReviewAssignmentById = async (id) => {
-  const response = await instance.get("/reviews/assignments/" + id + "/");
+  const response = await instance.get('/reviews/assignments/' + id + '/');
   return response.data;
 };
 
@@ -73,9 +73,7 @@ export const getReviewAssignmentById = async (id) => {
  * @returns {Promise} API response
  */
 export const acceptReviewAssignment = async (id) => {
-  const response = await instance.post(
-    "/reviews/assignments/" + id + "/accept/"
-  );
+  const response = await instance.post('/reviews/assignments/' + id + '/accept/');
   return response.data;
 };
 
@@ -86,10 +84,7 @@ export const acceptReviewAssignment = async (id) => {
  * @returns {Promise} API response
  */
 export const declineReviewAssignment = async (id, data) => {
-  const response = await instance.post(
-    "/reviews/assignments/" + id + "/decline/",
-    data
-  );
+  const response = await instance.post('/reviews/assignments/' + id + '/decline/', data);
   return response.data;
 };
 
@@ -98,7 +93,7 @@ export const declineReviewAssignment = async (id, data) => {
  * @returns {Promise} API response
  */
 export const getMyReviews = async () => {
-  const response = await instance.get("/reviews/my_reviews/");
+  const response = await instance.get('/reviews/my_reviews/');
   return response.data;
 };
 
@@ -108,6 +103,6 @@ export const getMyReviews = async () => {
  * @returns {Promise} API response
  */
 export const submitReview = async (data) => {
-  const response = await instance.post("/reviews/reviews/", data);
+  const response = await instance.post('/reviews/reviews/', data);
   return response.data;
 };

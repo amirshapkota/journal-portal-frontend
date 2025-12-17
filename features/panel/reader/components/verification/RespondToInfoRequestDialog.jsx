@@ -1,47 +1,35 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
+import { Button } from '@/components/ui/button';
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  FormInputField,
-  FormTextareaField,
-  MultiSelect,
-} from "@/features/shared/components";
-import { Loader2 } from "lucide-react";
-import React from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
-import * as z from "zod";
-import { useRespondRequest } from "../../hooks";
+} from '@/components/ui/dialog';
+import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { FormInputField, FormTextareaField, MultiSelect } from '@/features/shared/components';
+import { Loader2 } from 'lucide-react';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
+import * as z from 'zod';
+import { useRespondRequest } from '../../hooks';
 
 // Schema for responding to info request
 const respondToInfoRequestSchema = z.object({
-  requested_roles: z
-    .array(z.string())
-    .min(1, "At least one role must be selected"),
-  affiliation: z.string().min(1, "Institution is required"),
+  requested_roles: z.array(z.string()).min(1, 'At least one role must be selected'),
+  affiliation: z.string().min(1, 'Institution is required'),
   affiliation_email: z
     .string()
-    .min(1, "Institutional email is required")
-    .email("Invalid email address"),
-  research_interests: z.string().min(1, "Research interests are required"),
-  academic_position: z.string().min(1, "Academic position is required"),
-  supporting_letter: z.string().min(1, "Supporting letter is required"),
+    .min(1, 'Institutional email is required')
+    .email('Invalid email address'),
+  research_interests: z.string().min(1, 'Research interests are required'),
+  academic_position: z.string().min(1, 'Academic position is required'),
+  supporting_letter: z.string().min(1, 'Supporting letter is required'),
   //   user_response: z
   //     .string()
   //     .min(1, "Response to the admin's request is required"),
@@ -49,19 +37,18 @@ const respondToInfoRequestSchema = z.object({
 
 const RespondToInfoRequestDialog = ({ request, open, onClose }) => {
   const queryClient = useQueryClient();
-  const { mutate: respondRequest, isPending: isSubmitting } =
-    useRespondRequest();
+  const { mutate: respondRequest, isPending: isSubmitting } = useRespondRequest();
 
   const respondForm = useForm({
     resolver: zodResolver(respondToInfoRequestSchema),
     defaultValues: {
       requested_roles: request?.requested_roles || [],
-      affiliation: request?.affiliation || "",
-      affiliation_email: request?.affiliation_email || "",
-      research_interests: request?.research_interests || "",
-      academic_position: request?.academic_position || "",
-      supporting_letter: request?.supporting_letter || "",
-      user_response: request?.user_response || "",
+      affiliation: request?.affiliation || '',
+      affiliation_email: request?.affiliation_email || '',
+      research_interests: request?.research_interests || '',
+      academic_position: request?.academic_position || '',
+      supporting_letter: request?.supporting_letter || '',
+      user_response: request?.user_response || '',
     },
   });
 
@@ -70,7 +57,7 @@ const RespondToInfoRequestDialog = ({ request, open, onClose }) => {
       { id: request.id, data },
       {
         onSuccess: () => {
-          queryClient.invalidateQueries(["my-verification-requests"]);
+          queryClient.invalidateQueries(['my-verification-requests']);
           respondForm.reset();
           onClose();
         },
@@ -91,8 +78,8 @@ const RespondToInfoRequestDialog = ({ request, open, onClose }) => {
         <DialogHeader>
           <DialogTitle>Respond to Additional Information Request</DialogTitle>
           <DialogDescription>
-            The admin has requested additional information. Please review and
-            update your submission.
+            The admin has requested additional information. Please review and update your
+            submission.
           </DialogDescription>
         </DialogHeader>
         {request?.additional_info_requested && (
@@ -181,25 +168,12 @@ const RespondToInfoRequestDialog = ({ request, open, onClose }) => {
             /> */}
 
             <div className="flex gap-3 mt-2 lg:col-span-2">
-              <Button
-                type="submit"
-                disabled={isSubmitting}
-                className="w-fit"
-                size="md"
-              >
-                {isSubmitting && (
-                  <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                )}
-                {isSubmitting ? "Submitting..." : "Submit Response"}
+              <Button type="submit" disabled={isSubmitting} className="w-fit" size="md">
+                {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                {isSubmitting ? 'Submitting...' : 'Submit Response'}
               </Button>
 
-              <Button
-                type="button"
-                onClick={onClose}
-                className="w-fit"
-                size="md"
-                variant="outline"
-              >
+              <Button type="button" onClick={onClose} className="w-fit" size="md" variant="outline">
                 Cancel
               </Button>
             </div>

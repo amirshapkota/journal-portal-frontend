@@ -1,41 +1,27 @@
-"use client";
+'use client';
 
-import { useState } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Plus, Trash2 } from "lucide-react";
-import {
-  JournalFormModal,
-  JournalsTable,
-  useGetJournals,
-  useDeleteJournal,
-} from "@/features";
-import {
-  FilterToolbar,
-  ConfirmationPopup,
-  Pagination,
-} from "@/features/shared";
+import { useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button';
+import { Plus, Trash2 } from 'lucide-react';
+import { JournalFormModal, JournalsTable, useGetJournals, useDeleteJournal } from '@/features';
+import { FilterToolbar, ConfirmationPopup, Pagination } from '@/features/shared';
 
 export default function JournalsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
-  const searchParam = searchParams.get("search");
-  const statusParam = searchParams.get("status");
-  const submissionsParam = searchParams.get("submissions");
+  const pageParam = searchParams.get('page');
+  const searchParam = searchParams.get('search');
+  const statusParam = searchParams.get('status');
+  const submissionsParam = searchParams.get('submissions');
 
   const currentPage = pageParam ? parseInt(pageParam) : 1;
-  const is_active =
-    statusParam === "active" ? true : statusParam === "inactive" ? false : "";
+  const is_active = statusParam === 'active' ? true : statusParam === 'inactive' ? false : '';
   const is_accepting_submissions =
-    submissionsParam === "accepting"
-      ? true
-      : submissionsParam === "not-accepting"
-      ? false
-      : "";
+    submissionsParam === 'accepting' ? true : submissionsParam === 'not-accepting' ? false : '';
 
   const params = {
-    search: searchParam || "",
+    search: searchParam || '',
     is_active: is_active,
     is_accepting_submissions: is_accepting_submissions,
     page: currentPage,
@@ -55,7 +41,7 @@ export default function JournalsPage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -86,20 +72,14 @@ export default function JournalsPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-semibold text-foreground">
-            Journal Management
-          </h1>
+          <h1 className="text-3xl font-semibold text-foreground">Journal Management</h1>
           <p className="text-muted-foreground mt-1">
             Manage all academic journals and their submission settings.
           </p>
         </div>
         {/* Hide the button on first load (while data is loading) */}
         {JournalData && journals && journals.length < 1 ? (
-          <Button
-            variant="secondary"
-            onClick={() => setIsFormOpen(true)}
-            className="gap-2"
-          >
+          <Button variant="secondary" onClick={() => setIsFormOpen(true)} className="gap-2">
             <Plus className="h-4 w-4" />
             Create Journal
           </Button>
@@ -118,9 +98,9 @@ export default function JournalsPage() {
           label="Status"
           paramName="status"
           options={[
-            { value: "all", label: "All Status" },
-            { value: "active", label: "Active" },
-            { value: "inactive", label: "Inactive" },
+            { value: 'all', label: 'All Status' },
+            { value: 'active', label: 'Active' },
+            { value: 'inactive', label: 'Inactive' },
           ]}
         />
 
@@ -128,9 +108,9 @@ export default function JournalsPage() {
           label="Submissions"
           paramName="submissions"
           options={[
-            { value: "all", label: "All" },
-            { value: "accepting", label: "Accepting" },
-            { value: "not-accepting", label: "Not Accepting" },
+            { value: 'all', label: 'All' },
+            { value: 'accepting', label: 'Accepting' },
+            { value: 'not-accepting', label: 'Not Accepting' },
           ]}
         />
       </FilterToolbar>

@@ -1,18 +1,18 @@
-"use client";
+'use client';
 
-import { useRouter, useParams, useSearchParams } from "next/navigation";
-import { ArrowLeft } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent } from "@/components/ui/card";
+import { useRouter, useParams, useSearchParams } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   ErrorCard,
   LoadingScreen,
   useGetEditorSubmissionById,
   CopyeditingSuperDocEditor,
   useGetMe,
-} from "@/features";
-import { useApproveCopyeditingFile } from "@/features/panel/editor/submission/hooks";
-import { toast } from "sonner";
+} from '@/features';
+import { useApproveCopyeditingFile } from '@/features/panel/editor/submission/hooks';
+import { toast } from 'sonner';
 
 /**
  * Editor Copyediting File Editor Page
@@ -30,7 +30,7 @@ export default function CopyeditingEditPage() {
   const { data: user, isPending: isUserPending } = useGetMe();
 
   // Get readOnly from URL query parameter (defaults to true for safety)
-  const isReadOnly = searchParams?.get("readOnly") !== "false";
+  const isReadOnly = searchParams?.get('readOnly') !== 'false';
 
   // Editor uses approve endpoint
   const approveMutation = useApproveCopyeditingFile();
@@ -47,9 +47,7 @@ export default function CopyeditingEditPage() {
         },
         onError: (error) => {
           const message =
-            error?.response?.data?.detail ||
-            error?.message ||
-            "Failed to approve file";
+            error?.response?.data?.detail || error?.message || 'Failed to approve file';
           toast.error(message);
           reject(error);
         },
@@ -68,9 +66,7 @@ export default function CopyeditingEditPage() {
         </Button>
 
         <div>
-          <h1 className="text-3xl font-semibold tracking-tight">
-            Edit Copyediting File
-          </h1>
+          <h1 className="text-3xl font-semibold tracking-tight">Edit Copyediting File</h1>
         </div>
       </div>
 

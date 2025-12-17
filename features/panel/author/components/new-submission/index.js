@@ -1,1 +1,1 @@
-export { default as NewSubmissionForm } from "./NewSubmissionForm";
+export { default as NewSubmissionForm } from './NewSubmissionForm';

@@ -1,5 +1,5 @@
-import { useMutation } from "@tanstack/react-query";
-import { submitVerificationRequest } from "../../api/VerificationApiSlice";
+import { useMutation } from '@tanstack/react-query';
+import { submitVerificationRequest } from '../../api/VerificationApiSlice';
 
 export const useSubmitVerificationRequest = () => {
   return useMutation({

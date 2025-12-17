@@ -1,11 +1,5 @@
 // InfoItem component for displaying label-value pairs with an icon
-export default function InfoItem({
-  icon: Icon,
-  label,
-  value,
-  className = "",
-  paraClass = "",
-}) {
+export default function InfoItem({ icon: Icon, label, value, className = '', paraClass = '' }) {
   return (
     <div className={` ${className}`}>
       <div className="flex items-center gap-2">
@@ -15,9 +9,7 @@ export default function InfoItem({
         </label>
       </div>
       <p className={`text-sm leading-relaxed capitalize pl-6 ${paraClass}`}>
-        {value || (
-          <span className="text-muted-foreground italic">-</span>
-        )}
+        {value || <span className="text-muted-foreground italic">-</span>}
       </p>
     </div>
   );

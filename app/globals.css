@@ -1,7 +1,7 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "react-pdf/dist/Page/AnnotationLayer.css";
-@import "react-pdf/dist/Page/TextLayer.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import 'react-pdf/dist/Page/AnnotationLayer.css';
+@import 'react-pdf/dist/Page/TextLayer.css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -183,8 +183,7 @@
   z-index: 3 !important;
 }
 
-svg#freepik_stories-oops-404-error-with-a-broken-robot:not(.animated)
-  .animable {
+svg#freepik_stories-oops-404-error-with-a-broken-robot:not(.animated) .animable {
   opacity: 0;
 }
 svg#freepik_stories-oops-404-error-with-a-broken-robot.animated
@@ -192,20 +191,19 @@ svg#freepik_stories-oops-404-error-with-a-broken-robot.animated
   animation: 1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) slideRight;
   animation-delay: 0s;
 }
-svg#freepik_stories-oops-404-error-with-a-broken-robot.animated
-  #freepik--speech-bubble--inject-78 {
-  animation: 1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) zoomOut,
+svg#freepik_stories-oops-404-error-with-a-broken-robot.animated #freepik--speech-bubble--inject-78 {
+  animation:
+    1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) zoomOut,
     3s Infinite linear shake;
   animation-delay: 0s, 1.5s;
 }
-svg#freepik_stories-oops-404-error-with-a-broken-robot.animated
-  #freepik--Robot--inject-78 {
-  animation: 1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) zoomOut,
+svg#freepik_stories-oops-404-error-with-a-broken-robot.animated #freepik--Robot--inject-78 {
+  animation:
+    1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) zoomOut,
     3s Infinite linear shake;
   animation-delay: 0s, 1.5s;
 }
-svg#freepik_stories-oops-404-error-with-a-broken-robot.animated
-  #freepik--Floor--inject-78 {
+svg#freepik_stories-oops-404-error-with-a-broken-robot.animated #freepik--Floor--inject-78 {
   animation: 1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) slideUp;
   animation-delay: 0s;
 }

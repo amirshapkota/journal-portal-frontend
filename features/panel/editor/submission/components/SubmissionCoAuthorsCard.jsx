@@ -1,21 +1,12 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 /**
  * Component to display submission co-authors
  */
 export function SubmissionCoAuthorsCard({ submission }) {
-  if (
-    !submission.author_contributions ||
-    submission.author_contributions.length === 0
-  ) {
+  if (!submission.author_contributions || submission.author_contributions.length === 0) {
     return null;
   }
 
@@ -23,9 +14,7 @@ export function SubmissionCoAuthorsCard({ submission }) {
     <Card>
       <CardHeader>
         <CardTitle>Co-authors</CardTitle>
-        <CardDescription>
-          Authors contributing to this manuscript
-        </CardDescription>
+        <CardDescription>Authors contributing to this manuscript</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
@@ -35,9 +24,7 @@ export function SubmissionCoAuthorsCard({ submission }) {
               className="flex items-center justify-between p-3 border rounded-lg"
             >
               <div>
-                <p className="font-medium">
-                  {author.profile?.display_name || "Unknown Author"}
-                </p>
+                <p className="font-medium">{author.profile?.display_name || 'Unknown Author'}</p>
                 <p className="text-sm text-muted-foreground">
                   {author.contrib_role_display} • Order: {author.order}
                 </p>

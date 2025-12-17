@@ -1,7 +1,7 @@
-import { clearStoredRole } from "@/features/shared";
-import { createSlice } from "@reduxjs/toolkit";
-import persistReducer from "redux-persist/es/persistReducer";
-import storage from "redux-persist/lib/storage";
+import { clearStoredRole } from '@/features/shared';
+import { createSlice } from '@reduxjs/toolkit';
+import persistReducer from 'redux-persist/es/persistReducer';
+import storage from 'redux-persist/lib/storage';
 
 const initialState = {
   status: false,
@@ -10,7 +10,7 @@ const initialState = {
 };
 
 const authSlice = createSlice({
-  name: "auth",
+  name: 'auth',
   initialState,
   reducers: {
     login: (state, action) => {
@@ -41,25 +41,22 @@ const authSlice = createSlice({
       state.status = false;
       state.userData = null;
       state.access = null;
-      document.cookie = "auth-token=; path=/; max-age=0";
+      document.cookie = 'auth-token=; path=/; max-age=0';
       clearStoredRole();
-      if (typeof window !== "undefined") {
-        localStorage.removeItem("persist:auth");
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('persist:auth');
       }
     },
   },
 });
 
 const authPersistConfig = {
-  key: "auth",
+  key: 'auth',
   storage: storage,
   throttle: 1000, // Wait 1 second between persist operations
 };
 
-export const persistAuthReducer = persistReducer(
-  authPersistConfig,
-  authSlice.reducer
-);
+export const persistAuthReducer = persistReducer(authPersistConfig, authSlice.reducer);
 
 export const { login, logout, updateVerificationStatus } = authSlice.actions;
 export default authSlice.reducer;

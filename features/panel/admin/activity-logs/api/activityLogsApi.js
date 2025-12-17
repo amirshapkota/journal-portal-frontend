@@ -1,11 +1,11 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Activity Logs API Service
  * Handles all API calls to the activity logs endpoints
  */
 
-const ACTIVITY_LOGS_BASE = "activity-logs";
+const ACTIVITY_LOGS_BASE = 'activity-logs';
 
 /**
  * Fetch activity logs with optional filtering

@@ -148,26 +148,22 @@ All hooks include:
 ## Design Patterns Followed
 
 1. **Component Structure:**
-
    - Consistent with existing submission components
    - Card-based layouts
    - Clear headers with descriptions
    - Empty states with helpful messages
 
 2. **State Management:**
-
    - React Query for server state
    - Local useState for UI state
    - Query invalidation for cache updates
 
 3. **Error Handling:**
-
    - Try-catch blocks in mutations
    - User-friendly error messages
    - Toast notifications
 
 4. **Responsive Design:**
-
    - Mobile-first approach
    - Responsive tabs (icons only on mobile)
    - Flexible layouts with Tailwind CSS
@@ -274,14 +270,12 @@ To add the copyediting link to the submission detail page, add this button in th
 ## Next Steps
 
 1. **Backend Implementation:**
-
    - Create Django models for discussions and participants
    - Implement API endpoints
    - Add permissions and validation
    - Connect to notification system
 
 2. **Testing:**
-
    - Test all components with real data
    - Verify file upload/download
    - Test responsive design on multiple devices
@@ -289,7 +283,6 @@ To add the copyediting link to the submission detail page, add this button in th
    - Test permissions and access control
 
 3. **Integration:**
-
    - Add navigation link from submission detail page
    - Connect to notification system for discussions
    - Add email notifications for new discussions/replies

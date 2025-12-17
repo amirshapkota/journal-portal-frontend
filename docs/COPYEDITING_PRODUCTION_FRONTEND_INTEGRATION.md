@@ -20,7 +20,6 @@ This document provides a comprehensive guide for integrating the copyediting and
 **New Functions:**
 
 - **Assignments:**
-
   - `listCopyeditingAssignments(params)` - List all copyediting assignments
   - `createCopyeditingAssignment(data)` - Create new assignment
   - `getCopyeditingAssignment(assignmentId)` - Get single assignment
@@ -32,7 +31,6 @@ This document provides a comprehensive guide for integrating the copyediting and
   - `getCopyeditingAssignmentParticipants(assignmentId)` - Get participants
 
 - **Files:**
-
   - `listCopyeditingFiles(params)` - List all copyediting files
   - `uploadCopyeditingFile(formData)` - Upload new file
   - `getCopyeditingFile(fileId)` - Get single file
@@ -62,7 +60,6 @@ This document provides a comprehensive guide for integrating the copyediting and
 **Functions:**
 
 - **Assignments:**
-
   - `listProductionAssignments(params)` - List all production assignments
   - `createProductionAssignment(data)` - Create new assignment
   - `getProductionAssignment(assignmentId)` - Get single assignment
@@ -74,7 +71,6 @@ This document provides a comprehensive guide for integrating the copyediting and
   - `getProductionAssignmentParticipants(assignmentId)` - Get participants
 
 - **Files (Galleys):**
-
   - `listProductionFiles(params)` - List all production files
   - `uploadProductionFile(formData)` - Upload new galley file
   - `getProductionFile(fileId)` - Get single file
@@ -84,7 +80,6 @@ This document provides a comprehensive guide for integrating the copyediting and
   - `deleteProductionFile(fileId)` - Delete file
 
 - **Discussions:**
-
   - `listProductionDiscussions(params)` - List all discussions
   - `createProductionDiscussion(data)` - Create new discussion
   - `getProductionDiscussion(discussionId)` - Get discussion with messages
@@ -174,8 +169,8 @@ This document provides a comprehensive guide for integrating the copyediting and
 Added exports for new components:
 
 ```javascript
-export { ProductionGalleys } from "./ProductionGalleys";
-export { PublicationSchedule } from "./PublicationSchedule";
+export { ProductionGalleys } from './ProductionGalleys';
+export { PublicationSchedule } from './PublicationSchedule';
 ```
 
 #### api/index.js
@@ -183,7 +178,7 @@ export { PublicationSchedule } from "./PublicationSchedule";
 Added production API export:
 
 ```javascript
-export * from "./productionApi";
+export * from './productionApi';
 ```
 
 ---
@@ -265,9 +260,9 @@ export * from "./productionApi";
 ### 1. Create Copyediting Assignment
 
 ```javascript
-import { createCopyeditingAssignment } from "@/features/panel/editor/submission/api";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { createCopyeditingAssignment } from '@/features/panel/editor/submission/api';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
 function AssignCopyeditor() {
   const queryClient = useQueryClient();
@@ -275,24 +270,22 @@ function AssignCopyeditor() {
   const assignMutation = useMutation({
     mutationFn: (data) => createCopyeditingAssignment(data),
     onSuccess: () => {
-      toast.success("Copyeditor assigned successfully");
+      toast.success('Copyeditor assigned successfully');
       queryClient.invalidateQueries({
-        queryKey: ["copyediting-assignments"],
+        queryKey: ['copyediting-assignments'],
       });
     },
     onError: (error) => {
-      toast.error(
-        error?.response?.data?.detail || "Failed to assign copyeditor"
-      );
+      toast.error(error?.response?.data?.detail || 'Failed to assign copyeditor');
     },
   });
 
   const handleAssign = () => {
     assignMutation.mutate({
-      submission: "submission-uuid",
-      copyeditor_id: "copyeditor-profile-uuid",
-      due_date: "2025-02-15T10:00:00Z",
-      instructions: "Please focus on grammar and formatting.",
+      submission: 'submission-uuid',
+      copyeditor_id: 'copyeditor-profile-uuid',
+      due_date: '2025-02-15T10:00:00Z',
+      instructions: 'Please focus on grammar and formatting.',
     });
   };
 
@@ -303,58 +296,56 @@ function AssignCopyeditor() {
 ### 2. Upload Galley File
 
 ```javascript
-import { uploadProductionFile } from "@/features/panel/editor/submission/api";
-import { useMutation } from "@tanstack/react-query";
+import { uploadProductionFile } from '@/features/panel/editor/submission/api';
+import { useMutation } from '@tanstack/react-query';
 
 function UploadGalley() {
   const uploadMutation = useMutation({
     mutationFn: (formData) => uploadProductionFile(formData),
     onSuccess: () => {
-      toast.success("Galley uploaded successfully");
+      toast.success('Galley uploaded successfully');
     },
   });
 
   const handleUpload = (file) => {
     const formData = new FormData();
-    formData.append("submission", submissionId);
-    formData.append("assignment", assignmentId);
-    formData.append("file_type", "GALLEY");
-    formData.append("galley_format", "PDF");
-    formData.append("label", "PDF");
-    formData.append("file", file);
+    formData.append('submission', submissionId);
+    formData.append('assignment', assignmentId);
+    formData.append('file_type', 'GALLEY');
+    formData.append('galley_format', 'PDF');
+    formData.append('label', 'PDF');
+    formData.append('file', file);
 
     uploadMutation.mutate(formData);
   };
 
-  return (
-    <input type="file" onChange={(e) => handleUpload(e.target.files[0])} />
-  );
+  return <input type="file" onChange={(e) => handleUpload(e.target.files[0])} />;
 }
 ```
 
 ### 3. Schedule Publication
 
 ```javascript
-import { schedulePublication } from "@/features/panel/editor/submission/api";
-import { useMutation } from "@tanstack/react-query";
+import { schedulePublication } from '@/features/panel/editor/submission/api';
+import { useMutation } from '@tanstack/react-query';
 
 function SchedulePublication() {
   const scheduleMutation = useMutation({
     mutationFn: (data) => schedulePublication(data),
     onSuccess: () => {
-      toast.success("Publication scheduled");
+      toast.success('Publication scheduled');
     },
   });
 
   const handleSchedule = () => {
     scheduleMutation.mutate({
       submission: submissionId,
-      scheduled_date: "2025-04-01T00:00:00Z",
-      volume: "10",
-      issue: "2",
+      scheduled_date: '2025-04-01T00:00:00Z',
+      volume: '10',
+      issue: '2',
       year: 2025,
-      doi: "10.1234/journal.v10i2.123",
-      pages: "45-67",
+      doi: '10.1234/journal.v10i2.123',
+      pages: '45-67',
     });
   };
 
@@ -365,12 +356,12 @@ function SchedulePublication() {
 ### 4. List and Display Copyediting Files
 
 ```javascript
-import { listCopyeditingFiles } from "@/features/panel/editor/submission/api";
-import { useQuery } from "@tanstack/react-query";
+import { listCopyeditingFiles } from '@/features/panel/editor/submission/api';
+import { useQuery } from '@tanstack/react-query';
 
 function CopyeditingFilesList({ submissionId }) {
   const { data, isLoading } = useQuery({
-    queryKey: ["copyediting-files", submissionId],
+    queryKey: ['copyediting-files', submissionId],
     queryFn: () => listCopyeditingFiles({ submission: submissionId }),
   });
 
@@ -493,31 +484,26 @@ features/panel/editor/submission/
 ## Next Steps
 
 1. **Test with Backend:**
-
    - Ensure backend server is running
    - Test all API endpoints with real data
    - Verify authentication and permissions
 
 2. **UI Integration:**
-
    - Import new components into submission detail pages
    - Add workflow tabs for copyediting and production
    - Update navigation and routing
 
 3. **Error Handling:**
-
    - Add comprehensive error handling
    - Display user-friendly error messages
    - Handle edge cases and validation errors
 
 4. **Loading States:**
-
    - Add skeleton loaders
    - Show loading indicators during mutations
    - Implement optimistic updates where appropriate
 
 5. **Notifications:**
-
    - Add success toasts for all actions
    - Add error toasts with specific messages
    - Consider adding email notifications (backend)

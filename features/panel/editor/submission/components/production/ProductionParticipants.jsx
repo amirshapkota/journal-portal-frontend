@@ -1,18 +1,12 @@
-"use client";
+'use client';
 
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Trash2, UserPlus, Loader2 } from "lucide-react";
-import { useState } from "react";
-import { toast } from "sonner";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { User, Mail, Trash2, UserPlus, Loader2 } from 'lucide-react';
+import { useState } from 'react';
+import { toast } from 'sonner';
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,13 +16,13 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+} from '@/components/ui/alert-dialog';
 import {
   useProductionAssignmentParticipants,
   useProductionAssignments,
   useRemoveProductionParticipant,
-} from "../../hooks";
-import { AddProductionParticipantDialog } from "./AddProductionParticipantDialog";
+} from '../../hooks';
+import { AddProductionParticipantDialog } from './AddProductionParticipantDialog';
 
 const EmptyState = ({ icon: Icon, title, description }) => (
   <div className="text-center py-8 border-2 border-dashed rounded-lg">
@@ -48,8 +42,9 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
   const [isAddParticipantOpen, setIsAddParticipantOpen] = useState(false);
 
   // Get the production assignment for this submission
-  const { data: assignmentsData, isLoading: assignmentsLoading } =
-    useProductionAssignments({ submission: submissionId });
+  const { data: assignmentsData, isLoading: assignmentsLoading } = useProductionAssignments({
+    submission: submissionId,
+  });
 
   const assignment = assignmentsData?.results?.[0];
   const assignmentId = assignment?.id;
@@ -87,9 +82,9 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
 
   const ParticipantCard = ({ user, canRemove = false }) => {
     const initials =
-      (user.user?.first_name?.[0] || "") + (user.user?.last_name?.[0] || "") ||
+      (user.user?.first_name?.[0] || '') + (user.user?.last_name?.[0] || '') ||
       user.user_name?.[0] ||
-      "?";
+      '?';
 
     return (
       <div className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors">
@@ -105,13 +100,13 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
               </p>
               {user.role && (
                 <Badge variant="secondary" className="text-xs">
-                  {user.role_display || user.role.replace("_", " ")}
+                  {user.role_display || user.role.replace('_', ' ')}
                 </Badge>
               )}
             </div>
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <Mail className="h-3 w-3" />
-              {user.user?.email || user.user_email || "N/A"}
+              {user.user?.email || user.user_email || 'N/A'}
             </div>
             {user.assigned_at && (
               <p className="text-xs text-muted-foreground mt-1">
@@ -136,7 +131,7 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
 
   const canRemoveParticipant = (participant) => {
     // Can only remove participants, not core roles
-    return participant.role === "participant";
+    return participant.role === 'participant';
   };
 
   return (
@@ -148,16 +143,10 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
             <div className="flex items-start justify-between">
               <div>
                 <CardTitle>Participants</CardTitle>
-                <CardDescription>
-                  All users involved in the production workflow
-                </CardDescription>
+                <CardDescription>All users involved in the production workflow</CardDescription>
               </div>
               {assignmentId && !isAuthorView && (
-                <Button
-                  size="sm"
-                  onClick={() => setIsAddParticipantOpen(true)}
-                  className="gap-2"
-                >
+                <Button size="sm" onClick={() => setIsAddParticipantOpen(true)} className="gap-2">
                   <UserPlus className="h-4 w-4" />
                   Add Participant
                 </Button>
@@ -168,9 +157,7 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
             {isPending || assignmentsLoading ? (
               <div className="text-center py-8">
                 <Loader2 className="h-8 w-8 animate-spin mx-auto text-muted-foreground" />
-                <p className="text-sm text-muted-foreground mt-2">
-                  Loading participants...
-                </p>
+                <p className="text-sm text-muted-foreground mt-2">Loading participants...</p>
               </div>
             ) : error ? (
               <div className="text-center py-8 text-destructive">
@@ -194,9 +181,7 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
                   <ParticipantCard
                     key={`${participant.id}-${index}`}
                     user={participant}
-                    canRemove={
-                      canRemoveParticipant(participant) && !isAuthorView
-                    }
+                    canRemove={canRemoveParticipant(participant) && !isAuthorView}
                   />
                 ))}
               </div>
@@ -206,20 +191,17 @@ export function ProductionParticipants({ submissionId, isAuthorView = false }) {
       </div>
 
       {/* Remove Confirmation Dialog */}
-      <AlertDialog
-        open={isRemoveDialogOpen}
-        onOpenChange={setIsRemoveDialogOpen}
-      >
+      <AlertDialog open={isRemoveDialogOpen} onOpenChange={setIsRemoveDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Remove Participant?</AlertDialogTitle>
             <AlertDialogDescription>
-              Are you sure you want to remove{" "}
+              Are you sure you want to remove{' '}
               <strong>
                 {userToRemove?.user?.first_name} {userToRemove?.user?.last_name}
-              </strong>{" "}
-              from this production workflow? They will lose access to the
-              production files and discussions.
+              </strong>{' '}
+              from this production workflow? They will lose access to the production files and
+              discussions.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 import {
   Dialog,
   DialogContent,
@@ -8,21 +8,21 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Loader2 } from "lucide-react";
-import { toast } from "sonner";
-import { SearchableSelect } from "@/features/shared";
-import { useGetUsers } from "@/features";
-import { useAddCopyeditingParticipant } from "../../hooks";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Loader2 } from 'lucide-react';
+import { toast } from 'sonner';
+import { SearchableSelect } from '@/features/shared';
+import { useGetUsers } from '@/features';
+import { useAddCopyeditingParticipant } from '../../hooks';
 
 /**
  * Dialog to add a participant to an existing copyediting assignment
  * Uses the POST /api/v1/submissions/copyediting/assignments/{id}/add_participant/ endpoint
  */
 export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
-  const [selectedUserId, setSelectedUserId] = useState("");
+  const [selectedUserId, setSelectedUserId] = useState('');
 
   // Fetch all users (editors, reviewers, etc.)
   const {
@@ -30,7 +30,7 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
     isPending: loadingUsers,
     error: usersError,
   } = useGetUsers(
-    { userRole: "EDITOR" }, // Can be adjusted to include other roles
+    { userRole: 'EDITOR' }, // Can be adjusted to include other roles
     {
       enabled: isOpen,
     }
@@ -40,9 +40,7 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
   const userOptions =
     usersData?.results?.map((user) => ({
       value: user?.profile?.id.toString(),
-      label: `${user.profile.display_name || user.profile.user_name} (${
-        user.email
-      })`,
+      label: `${user.profile.display_name || user.profile.user_name} (${user.email})`,
     })) || [];
 
   // Use the add participant hook
@@ -52,7 +50,7 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
     e.preventDefault();
 
     if (!selectedUserId) {
-      toast.error("Please select a user");
+      toast.error('Please select a user');
       return;
     }
 
@@ -66,7 +64,7 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
       {
         onSuccess: () => {
           // Reset and close
-          setSelectedUserId("");
+          setSelectedUserId('');
           onClose();
         },
       }
@@ -74,7 +72,7 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
   };
 
   const handleClose = () => {
-    setSelectedUserId("");
+    setSelectedUserId('');
     onClose();
   };
 
@@ -84,8 +82,7 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
         <DialogHeader>
           <DialogTitle>Add Participant</DialogTitle>
           <DialogDescription>
-            Add an additional participant or collaborator to this copyediting
-            assignment
+            Add an additional participant or collaborator to this copyediting assignment
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={handleSubmit} className="space-y-4">
@@ -95,15 +92,13 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
               options={userOptions}
               value={selectedUserId}
               onChange={(value) => setSelectedUserId(value)}
-              placeholder={
-                loadingUsers ? "Loading users..." : "Select a participant"
-              }
+              placeholder={loadingUsers ? 'Loading users...' : 'Select a participant'}
               emptyText={
                 usersError
-                  ? "Error loading users"
+                  ? 'Error loading users'
                   : userOptions.length === 0
-                  ? "No users found"
-                  : "No user found."
+                    ? 'No users found'
+                    : 'No user found.'
               }
               searchPlaceholder="Search by name or email..."
               disabled={loadingUsers || addParticipant.isPending}
@@ -122,13 +117,8 @@ export function AddParticipantDialog({ isOpen, onClose, assignmentId }) {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              disabled={!selectedUserId || addParticipant.isPending}
-            >
-              {addParticipant.isPending && (
-                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              )}
+            <Button type="submit" disabled={!selectedUserId || addParticipant.isPending}>
+              {addParticipant.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
               Add Participant
             </Button>
           </DialogFooter>

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { createDocumentVersion } from "@/features/panel/author/api/superdocApi";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { createDocumentVersion } from '@/features/panel/author/api/superdocApi';
 
 /**
  * Custom hook for creating a document version with change summary.
@@ -13,11 +13,10 @@ export function useSubmitUpdatedDocument({ documentId, onSuccess, onError }) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (changeSummary) =>
-      createDocumentVersion(documentId, changeSummary),
+    mutationFn: (changeSummary) => createDocumentVersion(documentId, changeSummary),
     onSuccess: (data, ...args) => {
-      queryClient.invalidateQueries({ queryKey: ["submissions"] });
-      queryClient.invalidateQueries({ queryKey: ["document-versions"] });
+      queryClient.invalidateQueries({ queryKey: ['submissions'] });
+      queryClient.invalidateQueries({ queryKey: ['document-versions'] });
 
       if (onSuccess) onSuccess(data, ...args);
     },

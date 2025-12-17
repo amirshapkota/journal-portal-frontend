@@ -1,8 +1,5 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  fetchActivityLogs,
-  fetchActivityLogDetail,
-} from "../api/activityLogsApi";
+import { useQuery } from '@tanstack/react-query';
+import { fetchActivityLogs, fetchActivityLogDetail } from '../api/activityLogsApi';
 
 /**
  * Hook to fetch activity logs with filtering
@@ -11,7 +8,7 @@ import {
  */
 export const useActivityLogs = (params = {}) => {
   return useQuery({
-    queryKey: ["activityLogs", params],
+    queryKey: ['activityLogs', params],
     queryFn: () => fetchActivityLogs(params),
     keepPreviousData: true,
     staleTime: 1000 * 60 * 5, // 5 minutes
@@ -27,7 +24,7 @@ export const useActivityLogs = (params = {}) => {
  */
 export const useActivityLogDetail = (id, options = {}) => {
   return useQuery({
-    queryKey: ["activityLog", id],
+    queryKey: ['activityLog', id],
     queryFn: () => fetchActivityLogDetail(id),
     enabled: !!id,
     ...options,

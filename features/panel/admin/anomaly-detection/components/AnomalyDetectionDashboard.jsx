@@ -1,23 +1,23 @@
-"use client";
+'use client';
 
-import { useState, useMemo } from "react";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useAnomalyDetectionScan } from "../hooks/useAnomalyDetectionScan";
-import { DataTable, FilterToolbar, Pagination } from "@/features/shared";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { AlertTriangle, Shield, Users, Eye, RefreshCw } from "lucide-react";
-import { format } from "date-fns";
-import { AnomalySummaryCards } from "./AnomalySummaryCards";
-import { AnomalyDetailsModal } from "./AnomalyDetailsModal";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+import { useState, useMemo } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useAnomalyDetectionScan } from '../hooks/useAnomalyDetectionScan';
+import { DataTable, FilterToolbar, Pagination } from '@/features/shared';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, Shield, Users, Eye, RefreshCw } from 'lucide-react';
+import { format } from 'date-fns';
+import { AnomalySummaryCards } from './AnomalySummaryCards';
+import { AnomalyDetailsModal } from './AnomalyDetailsModal';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
 
 export const AnamolyDetectionDashboard = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const pageParam = searchParams.get("page");
-  const searchParam = searchParams.get("search");
-  const typeParam = searchParams.get("type") || "all";
+  const pageParam = searchParams.get('page');
+  const searchParam = searchParams.get('search');
+  const typeParam = searchParams.get('type') || 'all';
   const currentPage = pageParam ? parseInt(pageParam) : 1;
   const pageSize = 10;
 
@@ -28,33 +28,32 @@ export const AnamolyDetectionDashboard = () => {
       page_size: pageSize,
     };
     if (searchParam) p.search = searchParam;
-    if (typeParam && typeParam !== "all") p.type = typeParam;
+    if (typeParam && typeParam !== 'all') p.type = typeParam;
     return p;
   }, [currentPage, pageSize, searchParam, typeParam]);
 
-  const { data, isPending, error, refetch, isFetching } =
-    useAnomalyDetectionScan(params, true);
+  const { data, isPending, error, refetch, isFetching } = useAnomalyDetectionScan(params, true);
 
   const getSeverityColor = (severity) => {
     switch (severity) {
-      case "HIGH":
-        return "destructive";
-      case "MEDIUM":
-        return "default";
-      case "LOW":
-        return "secondary";
+      case 'HIGH':
+        return 'destructive';
+      case 'MEDIUM':
+        return 'default';
+      case 'LOW':
+        return 'secondary';
       default:
-        return "outline";
+        return 'outline';
     }
   };
 
   const getSeverityIcon = (severity) => {
     switch (severity) {
-      case "HIGH":
+      case 'HIGH':
         return <AlertTriangle className="h-4 w-4" />;
-      case "MEDIUM":
+      case 'MEDIUM':
         return <Shield className="h-4 w-4" />;
-      case "LOW":
+      case 'LOW':
         return <Eye className="h-4 w-4" />;
       default:
         return null;
@@ -68,26 +67,20 @@ export const AnamolyDetectionDashboard = () => {
   // Table columns - only essential data
   const columns = [
     {
-      key: "type",
-      header: "Type",
-      cellClassName: "font-medium",
-      render: (row) => (
-        <div className="max-w-[150px] truncate">
-          {row.type?.replace(/_/g, " ")}
-        </div>
-      ),
+      key: 'type',
+      header: 'Type',
+      cellClassName: 'font-medium',
+      render: (row) => <div className="max-w-[150px] truncate">{row.type?.replace(/_/g, ' ')}</div>,
     },
     {
-      key: "severity",
-      header: "Severity",
+      key: 'severity',
+      header: 'Severity',
       render: (row) => (
         <Badge
           variant={getSeverityColor(row.severity)}
-          className={`text-xs ${
-            row.severity === "HIGH" ? "animate-pulse" : ""
-          } ${
-            row.severity === "MEDIUM" &&
-            "text-yellow-700 dark:text-primary-foreground bg-yellow-100 dark:bg-yellow-600"
+          className={`text-xs ${row.severity === 'HIGH' ? 'animate-pulse' : ''} ${
+            row.severity === 'MEDIUM' &&
+            'text-yellow-700 dark:text-primary-foreground bg-yellow-100 dark:bg-yellow-600'
           }`}
         >
           <span className="flex items-center gap-1">
@@ -96,17 +89,17 @@ export const AnamolyDetectionDashboard = () => {
           </span>
         </Badge>
       ),
-      align: "center",
+      align: 'center',
     },
     {
-      key: "description",
-      header: "Description",
-      cellClassName: "text-muted-foreground",
-      render: (row) => <EllipsisTooltip text={row.description || "-"} />,
+      key: 'description',
+      header: 'Description',
+      cellClassName: 'text-muted-foreground',
+      render: (row) => <EllipsisTooltip text={row.description || '-'} />,
     },
     {
-      key: "affected_user",
-      header: "Affected User",
+      key: 'affected_user',
+      header: 'Affected User',
       render: (row) => (
         <div className="text-sm">
           {row.reviewer || row.user_email || (
@@ -116,14 +109,14 @@ export const AnamolyDetectionDashboard = () => {
       ),
     },
     {
-      key: "submission",
-      header: "Submission",
-      render: (row) => <EllipsisTooltip text={row.submission_title || "-"} />,
+      key: 'submission',
+      header: 'Submission',
+      render: (row) => <EllipsisTooltip text={row.submission_title || '-'} />,
     },
     {
-      key: "metric",
-      header: "Key Metric",
-      align: "center",
+      key: 'metric',
+      header: 'Key Metric',
+      align: 'center',
       render: (row) => {
         if (row.similarity_score !== undefined) {
           return (
@@ -157,9 +150,9 @@ export const AnamolyDetectionDashboard = () => {
       },
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (row) => (
         <Button
           variant="ghost"
@@ -181,17 +174,17 @@ export const AnamolyDetectionDashboard = () => {
   const anomalies = useMemo(() => {
     if (!data) return [];
     let arr = [];
-    if (typeParam === "all" || !typeParam) {
+    if (typeParam === 'all' || !typeParam) {
       arr = [
         ...(data.author_anomalies || []),
         ...(data.reviewer_anomalies || []),
         ...(data.review_ring_anomalies || []),
       ];
-    } else if (typeParam === "authors") {
+    } else if (typeParam === 'authors') {
       arr = data.author_anomalies || [];
-    } else if (typeParam === "reviewers") {
+    } else if (typeParam === 'reviewers') {
       arr = data.reviewer_anomalies || [];
-    } else if (typeParam === "rings") {
+    } else if (typeParam === 'rings') {
       arr = data.review_ring_anomalies || [];
     }
     return arr;
@@ -201,13 +194,13 @@ export const AnamolyDetectionDashboard = () => {
   const handleFilterChange = (param, value) => {
     const params = new URLSearchParams(searchParams.toString());
     params.set(param, value);
-    if (param !== "page") params.set("page", "1"); // Reset page on filter/search
+    if (param !== 'page') params.set('page', '1'); // Reset page on filter/search
     router.push(`?${params.toString()}`);
   };
 
   // Handle page change
   const handlePageChange = (page) => {
-    handleFilterChange("page", page.toString());
+    handleFilterChange('page', page.toString());
   };
 
   return (
@@ -218,18 +211,12 @@ export const AnamolyDetectionDashboard = () => {
           <h1 className="text-3xl font-semibold">Anomaly Detection</h1>
           <p className="text-muted-foreground">
             {data?.scan_completed_at &&
-              `Last scan: ${format(new Date(data.scan_completed_at), "PPp")}`}
+              `Last scan: ${format(new Date(data.scan_completed_at), 'PPp')}`}
           </p>
         </div>
-        <Button
-          onClick={() => refetch()}
-          disabled={isFetching}
-          className="gap-2"
-        >
-          <RefreshCw
-            className={`h-4 w-4 ${isFetching ? "animate-spin" : ""}`}
-          />
-          {isFetching ? "Scanning..." : "Refresh Scan"}
+        <Button onClick={() => refetch()} disabled={isFetching} className="gap-2">
+          <RefreshCw className={`h-4 w-4 ${isFetching ? 'animate-spin' : ''}`} />
+          {isFetching ? 'Scanning...' : 'Refresh Scan'}
         </Button>
       </div>
 
@@ -248,19 +235,19 @@ export const AnamolyDetectionDashboard = () => {
           paramName="search"
           label="Search"
           placeholder="Search anomalies..."
-          value={searchParam || ""}
-          onChange={(val) => handleFilterChange("search", val)}
+          value={searchParam || ''}
+          onChange={(val) => handleFilterChange('search', val)}
         />
         <FilterToolbar.Select
           paramName="type"
           label="Type"
           value={typeParam}
-          onChange={(val) => handleFilterChange("type", val)}
+          onChange={(val) => handleFilterChange('type', val)}
           options={[
-            { value: "all", label: "All Types" },
-            { value: "authors", label: "Authors" },
-            { value: "reviewers", label: "Reviewers" },
-            { value: "rings", label: "Review Rings" },
+            { value: 'all', label: 'All Types' },
+            { value: 'authors', label: 'Authors' },
+            { value: 'reviewers', label: 'Reviewers' },
+            { value: 'rings', label: 'Review Rings' },
           ]}
         />
       </FilterToolbar>

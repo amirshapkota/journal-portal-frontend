@@ -1,16 +1,15 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Eye, CheckCircle, Calendar } from "lucide-react";
-import { DataTable, ConfirmationPopup, useToggle } from "@/features/shared";
-import { formatDistanceToNow } from "date-fns";
-import EllipsisTooltip from "@/components/ui/EllipsisTooltip";
+import React, { useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Eye, CheckCircle, Calendar } from 'lucide-react';
+import { DataTable, ConfirmationPopup, useToggle } from '@/features/shared';
+import { formatDistanceToNow } from 'date-fns';
+import EllipsisTooltip from '@/components/ui/EllipsisTooltip';
 
 const statusBadgeColors = {
-  inactive:
-    "bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100",
+  inactive: 'bg-yellow-100 dark:bg-yellow-900 text-yellow-800 dark:text-yellow-100',
 };
 
 export default function InactiveJournalsTable({
@@ -24,43 +23,41 @@ export default function InactiveJournalsTable({
   const [selectedJournal, setSelectedJournal] = useState(null);
   const columns = [
     {
-      key: "title",
-      header: "Journal Title",
-      cellClassName: "font-medium text-foreground",
+      key: 'title',
+      header: 'Journal Title',
+      cellClassName: 'font-medium text-foreground',
     },
     {
-      key: "short_name",
-      header: "Short Name",
-      cellClassName: "text-muted-foreground",
+      key: 'short_name',
+      header: 'Short Name',
+      cellClassName: 'text-muted-foreground',
     },
     {
-      key: "publisher",
-      header: "Publisher",
-      cellClassName: "text-muted-foreground",
-      render: (row) => <EllipsisTooltip text={row.publisher || "-"} />,
+      key: 'publisher',
+      header: 'Publisher',
+      cellClassName: 'text-muted-foreground',
+      render: (row) => <EllipsisTooltip text={row.publisher || '-'} />,
     },
     {
-      key: "editor_in_chief",
-      header: "Editor-in-Chief",
+      key: 'editor_in_chief',
+      header: 'Editor-in-Chief',
       render: (row) => (
         <div className="text-sm">
-          <p className="font-medium">{row.editor_in_chief?.name || "-"}</p>
-          <p className="text-xs text-muted-foreground">
-            {row.editor_in_chief?.email || ""}
-          </p>
+          <p className="font-medium">{row.editor_in_chief?.name || '-'}</p>
+          <p className="text-xs text-muted-foreground">{row.editor_in_chief?.email || ''}</p>
         </div>
       ),
     },
     {
-      key: "submission_count",
-      header: "Submissions",
-      align: "center",
-      cellClassName: "font-medium text-center",
+      key: 'submission_count',
+      header: 'Submissions',
+      align: 'center',
+      cellClassName: 'font-medium text-center',
       render: (row) => row.submission_count || 0,
     },
     {
-      key: "created_at",
-      header: "Created",
+      key: 'created_at',
+      header: 'Created',
       render: (row) => (
         <div className="text-sm text-muted-foreground flex items-center gap-1">
           <Calendar className="h-3 w-3" />
@@ -69,18 +66,16 @@ export default function InactiveJournalsTable({
       ),
     },
     {
-      key: "is_active",
-      header: "Status",
-      align: "center",
-      render: (row) => (
-        <Badge className={statusBadgeColors.inactive}>Inactive</Badge>
-      ),
-      cellClassName: "text-center",
+      key: 'is_active',
+      header: 'Status',
+      align: 'center',
+      render: (row) => <Badge className={statusBadgeColors.inactive}>Inactive</Badge>,
+      cellClassName: 'text-center',
     },
     {
-      key: "actions",
-      header: "Actions",
-      align: "right",
+      key: 'actions',
+      header: 'Actions',
+      align: 'right',
       render: (row) => (
         <div className="flex items-center justify-end gap-2">
           <Button
@@ -127,7 +122,7 @@ export default function InactiveJournalsTable({
         description={
           selectedJournal
             ? `Are you sure you want to activate "${selectedJournal.title}"?`
-            : "Are you sure you want to activate this journal?"
+            : 'Are you sure you want to activate this journal?'
         }
         confirmText="Activate"
         cancelText="Cancel"

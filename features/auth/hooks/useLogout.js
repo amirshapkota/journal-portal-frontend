@@ -1,8 +1,8 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { logoutApi } from "../api/LogoutApiSlice";
-import { useDispatch } from "react-redux";
-import { useRouter } from "next/navigation";
-import { logout as logoutAction } from "../redux/authSlice";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { logoutApi } from '../api/LogoutApiSlice';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/navigation';
+import { logout as logoutAction } from '../redux/authSlice';
 
 /**
  * Custom hook for handling user logout
@@ -28,11 +28,11 @@ export const useLogout = () => {
       dispatch(logoutAction());
 
       // Redirect to login page
-      router.replace("/login");
+      router.replace('/login');
     },
     onError: (error) => {
       // Optionally handle error (toast, etc.)
-      console.error("Logout failed", error);
+      console.error('Logout failed', error);
     },
   });
 };

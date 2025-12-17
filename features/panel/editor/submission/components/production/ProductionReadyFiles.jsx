@@ -1,17 +1,11 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { format } from "date-fns";
-import { File, Download, Eye, Upload, Search, Loader2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import React, { useState } from 'react';
+import { format } from 'date-fns';
+import { File, Download, Eye, Upload, Search, Loader2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -19,12 +13,12 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+} from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Skeleton } from '@/components/ui/skeleton';
 
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Dialog,
   DialogContent,
@@ -32,29 +26,30 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
+} from '@/components/ui/dialog';
+import { toast } from 'sonner';
 import {
   useApproveProductionFile,
   useProductionFiles,
   useUploadProductionFile,
   useProductionAssignments,
-} from "../../hooks";
+} from '../../hooks';
 
 export function ProductionReadyFiles({ submissionId }) {
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
   const [isUploadDialogOpen, setIsUploadDialogOpen] = useState(false);
   const [uploadData, setUploadData] = useState({
-    file_type: "GALLEY",
-    galley_format: "PDF",
-    label: "",
-    description: "",
+    file_type: 'GALLEY',
+    galley_format: 'PDF',
+    label: '',
+    description: '',
     file: null,
   });
 
   // Get the production assignment for this submission
-  const { data: assignmentsData, isLoading: assignmentsLoading } =
-    useProductionAssignments({ submission: submissionId });
+  const { data: assignmentsData, isLoading: assignmentsLoading } = useProductionAssignments({
+    submission: submissionId,
+  });
 
   const assignment = assignmentsData?.results?.[0];
   const assignmentId = assignment?.id;
@@ -64,10 +59,7 @@ export function ProductionReadyFiles({ submissionId }) {
     data: filesData,
     isLoading: filesLoading,
     error,
-  } = useProductionFiles(
-    { submission: submissionId },
-    { enabled: !!submissionId }
-  );
+  } = useProductionFiles({ submission: submissionId }, { enabled: !!submissionId });
 
   // Mutations
   const uploadMutation = useUploadProductionFile();
@@ -81,7 +73,7 @@ export function ProductionReadyFiles({ submissionId }) {
   );
 
   const handleDownload = (fileUrl, fileName) => {
-    const link = document.createElement("a");
+    const link = document.createElement('a');
     link.href = fileUrl;
     link.download = fileName;
     document.body.appendChild(link);
@@ -90,7 +82,7 @@ export function ProductionReadyFiles({ submissionId }) {
   };
 
   const handleView = (fileUrl) => {
-    window.open(fileUrl, "_blank");
+    window.open(fileUrl, '_blank');
   };
 
   const handleFileSelect = (e) => {
@@ -102,40 +94,40 @@ export function ProductionReadyFiles({ submissionId }) {
 
   const handleUpload = () => {
     if (!uploadData.file) {
-      toast.error("Please select a file");
+      toast.error('Please select a file');
       return;
     }
 
     if (!uploadData.label) {
-      toast.error("Please enter a label for the galley");
+      toast.error('Please enter a label for the galley');
       return;
     }
 
     if (!assignmentId) {
-      toast.error("No production assignment found");
+      toast.error('No production assignment found');
       return;
     }
 
     const formData = new FormData();
-    formData.append("file", uploadData.file);
-    formData.append("file_type", uploadData.file_type);
-    formData.append("galley_format", uploadData.galley_format);
-    formData.append("label", uploadData.label);
-    formData.append("assignment", assignmentId);
-    formData.append("submission", submissionId);
+    formData.append('file', uploadData.file);
+    formData.append('file_type', uploadData.file_type);
+    formData.append('galley_format', uploadData.galley_format);
+    formData.append('label', uploadData.label);
+    formData.append('assignment', assignmentId);
+    formData.append('submission', submissionId);
 
     if (uploadData.description) {
-      formData.append("description", uploadData.description);
+      formData.append('description', uploadData.description);
     }
 
     uploadMutation.mutate(formData, {
       onSuccess: () => {
         setIsUploadDialogOpen(false);
         setUploadData({
-          file_type: "GALLEY",
-          galley_format: "PDF",
-          label: "",
-          description: "",
+          file_type: 'GALLEY',
+          galley_format: 'PDF',
+          label: '',
+          description: '',
           file: null,
         });
       },
@@ -158,11 +150,7 @@ export function ProductionReadyFiles({ submissionId }) {
               </CardDescription>
             </div>
             <div className="flex items-center gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setIsUploadDialogOpen(true)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setIsUploadDialogOpen(true)}>
                 <Upload className="h-4 w-4 mr-2" />
                 Upload File
               </Button>
@@ -196,8 +184,8 @@ export function ProductionReadyFiles({ submissionId }) {
               <h3 className="text-lg font-semibold mb-2">No files available</h3>
               <p className="text-sm text-muted-foreground max-w-md">
                 {searchQuery
-                  ? "No files match your search criteria."
-                  : "Production ready files will appear here once they are uploaded from the copyediting stage."}
+                  ? 'No files match your search criteria.'
+                  : 'Production ready files will appear here once they are uploaded from the copyediting stage.'}
               </p>
             </div>
           ) : (
@@ -218,7 +206,7 @@ export function ProductionReadyFiles({ submissionId }) {
                         <div className="flex items-center gap-2">
                           <File className="h-4 w-4 text-muted-foreground" />
                           <span className="truncate max-w-xs">
-                            {file.original_filename || file.label || "Untitled"}
+                            {file.original_filename || file.label || 'Untitled'}
                           </span>
                           {file.galley_format && (
                             <Badge variant="secondary" className="text-xs">
@@ -229,15 +217,15 @@ export function ProductionReadyFiles({ submissionId }) {
                       </TableCell>
                       <TableCell>
                         <span className="text-sm text-muted-foreground">
-                          {file.uploaded_by?.user?.first_name}{" "}
-                          {file.uploaded_by?.user?.last_name || "Unknown"}
+                          {file.uploaded_by?.user?.first_name}{' '}
+                          {file.uploaded_by?.user?.last_name || 'Unknown'}
                         </span>
                       </TableCell>
                       <TableCell>
                         <span className="text-sm text-muted-foreground">
                           {file.created_at
-                            ? format(new Date(file.created_at), "MMM d, yyyy")
-                            : "N/A"}
+                            ? format(new Date(file.created_at), 'MMM d, yyyy')
+                            : 'N/A'}
                         </span>
                       </TableCell>
                       <TableCell className="text-right">
@@ -255,10 +243,7 @@ export function ProductionReadyFiles({ submissionId }) {
                                 variant="ghost"
                                 size="sm"
                                 onClick={() =>
-                                  handleDownload(
-                                    file.file_url,
-                                    file.original_filename
-                                  )
+                                  handleDownload(file.file_url, file.original_filename)
                                 }
                               >
                                 <Download className="h-4 w-4" />
@@ -281,9 +266,7 @@ export function ProductionReadyFiles({ submissionId }) {
         <DialogContent className="sm:max-w-[500px]">
           <DialogHeader>
             <DialogTitle>Upload Production File (Galley)</DialogTitle>
-            <DialogDescription>
-              Upload galley files ready for publication
-            </DialogDescription>
+            <DialogDescription>Upload galley files ready for publication</DialogDescription>
           </DialogHeader>
           <div className="space-y-4 py-4">
             <div className="space-y-2">
@@ -304,13 +287,9 @@ export function ProductionReadyFiles({ submissionId }) {
                 id="label"
                 placeholder="e.g., PDF, Full Text HTML"
                 value={uploadData.label}
-                onChange={(e) =>
-                  setUploadData({ ...uploadData, label: e.target.value })
-                }
+                onChange={(e) => setUploadData({ ...uploadData, label: e.target.value })}
               />
-              <p className="text-xs text-muted-foreground">
-                Display label for this galley file
-              </p>
+              <p className="text-xs text-muted-foreground">Display label for this galley file</p>
             </div>
             <div className="space-y-2">
               <Label htmlFor="galley-format">Galley Format</Label>
@@ -339,27 +318,18 @@ export function ProductionReadyFiles({ submissionId }) {
                 id="description"
                 placeholder="Add notes about this file..."
                 value={uploadData.description}
-                onChange={(e) =>
-                  setUploadData({ ...uploadData, description: e.target.value })
-                }
+                onChange={(e) => setUploadData({ ...uploadData, description: e.target.value })}
                 rows={3}
               />
             </div>
           </div>
           <DialogFooter>
-            <Button
-              variant="outline"
-              onClick={() => setIsUploadDialogOpen(false)}
-            >
+            <Button variant="outline" onClick={() => setIsUploadDialogOpen(false)}>
               Cancel
             </Button>
             <Button
               onClick={handleUpload}
-              disabled={
-                !uploadData.file ||
-                !uploadData.label ||
-                uploadMutation.isPending
-              }
+              disabled={!uploadData.file || !uploadData.label || uploadMutation.isPending}
             >
               {uploadMutation.isPending ? (
                 <>

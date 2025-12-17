@@ -2,13 +2,7 @@
  * CoAuthorsCard - Displays co-authors/contributors for a submission
  * @module features/panel/author/components/submission/CoAuthorsCard
  */
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 /**
  * @param {Object} props
@@ -23,9 +17,7 @@ export default function CoAuthorsCard({ authorContributions }) {
     <Card>
       <CardHeader>
         <CardTitle>Co-authors</CardTitle>
-        <CardDescription>
-          Authors contributing to this manuscript
-        </CardDescription>
+        <CardDescription>Authors contributing to this manuscript</CardDescription>
       </CardHeader>
       <CardContent>
         <div className="space-y-3">
@@ -35,9 +27,7 @@ export default function CoAuthorsCard({ authorContributions }) {
               className="flex items-center justify-between p-3 border rounded-lg"
             >
               <div>
-                <p className="font-medium">
-                  {author.profile?.display_name || "Unknown Author"}
-                </p>
+                <p className="font-medium">{author.profile?.display_name || 'Unknown Author'}</p>
                 <p className="text-sm text-muted-foreground">
                   {author.contrib_role_display} • Order: {author.order}
                 </p>

@@ -1,5 +1,5 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 import {
   createProductionAssignment,
   updateProductionAssignment,
@@ -7,7 +7,7 @@ import {
   completeProductionAssignment,
   addProductionParticipant,
   removeProductionParticipant,
-} from "../../api";
+} from '../../api';
 
 /**
  * Hook to create a production assignment
@@ -18,22 +18,20 @@ export function useCreateProductionAssignment() {
   return useMutation({
     mutationFn: (data) => createProductionAssignment(data),
     onSuccess: (data) => {
-      toast.success("Production assistant assigned successfully");
+      toast.success('Production assistant assigned successfully');
       queryClient.invalidateQueries({
-        queryKey: ["production-assignments"],
+        queryKey: ['production-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-assignments", data.submission],
+        queryKey: ['production-assignments', data.submission],
       });
       queryClient.invalidateQueries({
-        queryKey: ["editor-submission", data.submission],
+        queryKey: ['editor-submission', data.submission],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to assign production assistant";
+        error?.response?.data?.detail || error?.message || 'Failed to assign production assistant';
       toast.error(message);
     },
   });
@@ -46,22 +44,19 @@ export function useUpdateProductionAssignment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ assignmentId, data }) =>
-      updateProductionAssignment(assignmentId, data),
+    mutationFn: ({ assignmentId, data }) => updateProductionAssignment(assignmentId, data),
     onSuccess: (data) => {
-      toast.success("Assignment updated successfully");
+      toast.success('Assignment updated successfully');
       queryClient.invalidateQueries({
-        queryKey: ["production-assignments"],
+        queryKey: ['production-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-assignment", data.id],
+        queryKey: ['production-assignment', data.id],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to update assignment";
+        error?.response?.data?.detail || error?.message || 'Failed to update assignment';
       toast.error(message);
     },
   });
@@ -76,19 +71,17 @@ export function useStartProductionAssignment() {
   return useMutation({
     mutationFn: (assignmentId) => startProductionAssignment(assignmentId),
     onSuccess: (data) => {
-      toast.success("Production started");
+      toast.success('Production started');
       queryClient.invalidateQueries({
-        queryKey: ["production-assignments"],
+        queryKey: ['production-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-assignment", data.id],
+        queryKey: ['production-assignment', data.id],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to start assignment";
+        error?.response?.data?.detail || error?.message || 'Failed to start assignment';
       toast.error(message);
     },
   });
@@ -101,22 +94,19 @@ export function useCompleteProductionAssignment() {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ assignmentId, data }) =>
-      completeProductionAssignment(assignmentId, data),
+    mutationFn: ({ assignmentId, data }) => completeProductionAssignment(assignmentId, data),
     onSuccess: (data) => {
-      toast.success("Production completed successfully");
+      toast.success('Production completed successfully');
       queryClient.invalidateQueries({
-        queryKey: ["production-assignments"],
+        queryKey: ['production-assignments'],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-assignment", data.id],
+        queryKey: ['production-assignment', data.id],
       });
     },
     onError: (error) => {
       const message =
-        error?.response?.data?.detail ||
-        error?.message ||
-        "Failed to complete assignment";
+        error?.response?.data?.detail || error?.message || 'Failed to complete assignment';
       toast.error(message);
     },
   });
@@ -132,15 +122,12 @@ export function useAddProductionParticipant() {
     mutationFn: ({ assignmentId, profile_id }) =>
       addProductionParticipant(assignmentId, { profile_id }),
     onSuccess: (data, variables) => {
-      toast.success("Participant added successfully");
+      toast.success('Participant added successfully');
       queryClient.invalidateQueries({
-        queryKey: [
-          "production-assignment-participants",
-          variables.assignmentId,
-        ],
+        queryKey: ['production-assignment-participants', variables.assignmentId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-assignment", variables.assignmentId],
+        queryKey: ['production-assignment', variables.assignmentId],
       });
     },
     onError: (error) => {
@@ -148,7 +135,7 @@ export function useAddProductionParticipant() {
         error?.response?.data?.error ||
         error?.response?.data?.detail ||
         error?.message ||
-        "Failed to add participant";
+        'Failed to add participant';
       toast.error(message);
     },
   });
@@ -164,15 +151,12 @@ export function useRemoveProductionParticipant() {
     mutationFn: ({ assignmentId, profile_id }) =>
       removeProductionParticipant(assignmentId, { profile_id }),
     onSuccess: (data, variables) => {
-      toast.success("Participant removed successfully");
+      toast.success('Participant removed successfully');
       queryClient.invalidateQueries({
-        queryKey: [
-          "production-assignment-participants",
-          variables.assignmentId,
-        ],
+        queryKey: ['production-assignment-participants', variables.assignmentId],
       });
       queryClient.invalidateQueries({
-        queryKey: ["production-assignment", variables.assignmentId],
+        queryKey: ['production-assignment', variables.assignmentId],
       });
     },
     onError: (error) => {
@@ -180,7 +164,7 @@ export function useRemoveProductionParticipant() {
         error?.response?.data?.error ||
         error?.response?.data?.detail ||
         error?.message ||
-        "Failed to remove participant";
+        'Failed to remove participant';
       toast.error(message);
     },
   });

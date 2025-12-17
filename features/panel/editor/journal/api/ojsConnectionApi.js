@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Get OJS connection status and configuration
@@ -6,9 +6,7 @@ import { instance } from "@/lib/instance";
  * @returns {Promise}
  */
 export async function getOJSStatus(journalId) {
-  const { data } = await instance.get(
-    `/journals/journals/${journalId}/ojs-status/`
-  );
+  const { data } = await instance.get(`/journals/journals/${journalId}/ojs-status/`);
   return data;
 }
 
@@ -32,9 +30,7 @@ export async function configureOJSConnection(journalId, connectionData) {
  * @returns {Promise}
  */
 export async function disconnectOJS(journalId) {
-  const { data } = await instance.post(
-    `/journals/journals/${journalId}/disconnect-ojs/`
-  );
+  const { data } = await instance.post(`/journals/journals/${journalId}/disconnect-ojs/`);
   return data;
 }
 
@@ -44,9 +40,7 @@ export async function disconnectOJS(journalId) {
  * @returns {Promise}
  */
 export async function importFromOJS(journalId) {
-  const { data } = await instance.post(
-    `/journals/journals/${journalId}/import-from-ojs/`
-  );
+  const { data } = await instance.post(`/journals/journals/${journalId}/import-from-ojs/`);
   return data;
 }
 
@@ -56,8 +50,6 @@ export async function importFromOJS(journalId) {
  * @returns {Promise}
  */
 export async function getImportProgress(journalId) {
-  const { data } = await instance.get(
-    `/journals/journals/${journalId}/import-progress/`
-  );
+  const { data } = await instance.get(`/journals/journals/${journalId}/import-progress/`);
   return data;
 }

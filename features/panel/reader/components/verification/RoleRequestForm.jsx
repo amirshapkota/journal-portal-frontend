@@ -1,45 +1,25 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
-  Form,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import {
-  FormInputField,
-  FormRichTextEditor,
-  MultiSelect,
-  useGetRoleList,
-} from "@/features/shared";
-import { BookOpen, Loader2 } from "lucide-react";
-import React from "react";
-import { roleRequestSchema } from "../../utils/FormSchema";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  useGetMyVerificationRequests,
-  useSubmitVerificationRequest,
-} from "../../hooks";
-import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
-import VerificationRequestList from "./VerificationRequestList";
-import { useSelector } from "react-redux";
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Form, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { FormInputField, FormRichTextEditor, MultiSelect, useGetRoleList } from '@/features/shared';
+import { BookOpen, Loader2 } from 'lucide-react';
+import React from 'react';
+import { roleRequestSchema } from '../../utils/FormSchema';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useGetMyVerificationRequests, useSubmitVerificationRequest } from '../../hooks';
+import { toast } from 'sonner';
+import { useQueryClient } from '@tanstack/react-query';
+import VerificationRequestList from './VerificationRequestList';
+import { useSelector } from 'react-redux';
 import {
   LoadingScreen,
   ErrorCard,
   CardSkeleton,
   FormTextareaField,
-} from "@/features/shared/components";
+} from '@/features/shared/components';
 
 const RoleRequestForm = () => {
   const queryClient = useQueryClient();
@@ -54,13 +34,11 @@ const RoleRequestForm = () => {
     refetch: refetchVerificationRequests,
   } = useGetMyVerificationRequests();
 
-  const { mutate: submitRequest, isPending: isSubmitting } =
-    useSubmitVerificationRequest();
+  const { mutate: submitRequest, isPending: isSubmitting } = useSubmitVerificationRequest();
 
-  const defaultRoles = ["READER", "AUTHOR", "REVIEWER", "EDITOR"];
+  const defaultRoles = ['READER', 'AUTHOR', 'REVIEWER', 'EDITOR'];
 
-  const existingRoleNames =
-    RoleLists?.map((role) => role?.trim().toUpperCase()) || [];
+  const existingRoleNames = RoleLists?.map((role) => role?.trim().toUpperCase()) || [];
 
   const availableRoles = defaultRoles
     .filter((roleName) => !existingRoleNames.includes(roleName))
@@ -73,26 +51,26 @@ const RoleRequestForm = () => {
     resolver: zodResolver(roleRequestSchema),
     defaultValues: {
       requested_roles: [],
-      affiliation_email: "",
-      research_interests: "",
-      academic_position: "",
-      supporting_letter: "",
+      affiliation_email: '',
+      research_interests: '',
+      academic_position: '',
+      supporting_letter: '',
     },
   });
 
   const onRoleSubmit = async (data) => {
     submitRequest(data, {
       onSuccess: () => {
-        toast.success("Role request submitted successfully!");
-        queryClient.invalidateQueries(["my-verification-requests"]);
+        toast.success('Role request submitted successfully!');
+        queryClient.invalidateQueries(['my-verification-requests']);
         roleForm.reset();
       },
       onError: (error) => {
-        console.error("Role request error:", error);
+        console.error('Role request error:', error);
         toast.error(
           error?.response?.data?.message ||
             error?.response?.data?.affiliation ||
-            "Failed to submit role request"
+            'Failed to submit role request'
         );
       },
     });
@@ -106,9 +84,7 @@ const RoleRequestForm = () => {
         description="Unable to fetch your verification requests. Please try again."
         details={
           verificationError?.message ||
-          (typeof verificationError === "string"
-            ? verificationError
-            : undefined)
+          (typeof verificationError === 'string' ? verificationError : undefined)
         }
         onRetry={refetchVerificationRequests}
       />
@@ -129,10 +105,10 @@ const RoleRequestForm = () => {
       {defaultRoles.every((role) => RoleLists?.includes(role)) ||
       (verificationRequests &&
         verificationRequests[0] &&
-        verificationRequests[0].status === "PENDING") ||
+        verificationRequests[0].status === 'PENDING') ||
       (verificationRequests &&
         verificationRequests[0] &&
-        verificationRequests[0].status === "INFO_REQUESTED") ? null : (
+        verificationRequests[0].status === 'INFO_REQUESTED') ? null : (
         <Card className="border-border dark:border-slate-700">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -140,8 +116,7 @@ const RoleRequestForm = () => {
               Request Additional Roles
             </CardTitle>
             <CardDescription>
-              Fill out the form below to request access to specific roles. Admin
-              approval required.
+              Fill out the form below to request access to specific roles. Admin approval required.
             </CardDescription>
           </CardHeader>
           <CardContent>
@@ -154,7 +129,7 @@ const RoleRequestForm = () => {
                   control={roleForm.control}
                   name="requested_roles"
                   render={({ field }) => (
-                    <FormItem className={"flex flex-col"}>
+                    <FormItem className={'flex flex-col'}>
                       <FormLabel>Select Role</FormLabel>
 
                       <MultiSelect
@@ -206,16 +181,9 @@ const RoleRequestForm = () => {
                 />
 
                 <div className="flex gap-3 mt-2">
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting}
-                    className="w-fit"
-                    size="md"
-                  >
-                    {isSubmitting && (
-                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    )}
-                    {isSubmitting ? "Submitting..." : "Submit Role Request"}
+                  <Button type="submit" disabled={isSubmitting} className="w-fit" size="md">
+                    {isSubmitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                    {isSubmitting ? 'Submitting...' : 'Submit Role Request'}
                   </Button>
 
                   <Button

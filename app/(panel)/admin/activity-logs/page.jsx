@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import { useMemo } from "react";
-import { Button } from "@/components/ui/button";
-import { RefreshCw, AlertCircle } from "lucide-react";
+import { useMemo } from 'react';
+import { Button } from '@/components/ui/button';
+import { RefreshCw, AlertCircle } from 'lucide-react';
 import {
   ActivityLogsTable,
   ActivityLogDetailsModal,
   useActivityLogs,
-} from "@/features/panel/admin/activity-logs";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { LoadingScreen, FilterToolbar, Pagination } from "@/features";
-import { useSearchParams, useRouter } from "next/navigation";
-import { useState } from "react";
+} from '@/features/panel/admin/activity-logs';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { LoadingScreen, FilterToolbar, Pagination } from '@/features';
+import { useSearchParams, useRouter } from 'next/navigation';
+import { useState } from 'react';
 
 export default function ActivityLogsPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
   // Get params from URL
-  const pageParam = searchParams.get("page");
+  const pageParam = searchParams.get('page');
   const currentPage = pageParam ? parseInt(pageParam) : 1;
-  const searchParam = searchParams.get("search");
-  const actionType = searchParams.get("action_type");
-  const resourceType = searchParams.get("resource_type");
-  const actorType = searchParams.get("actor_type");
+  const searchParam = searchParams.get('search');
+  const actionType = searchParams.get('action_type');
+  const resourceType = searchParams.get('resource_type');
+  const actorType = searchParams.get('actor_type');
 
   const [selectedLog, setSelectedLog] = useState(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
@@ -33,18 +33,18 @@ export default function ActivityLogsPage() {
     const params = {
       page: currentPage,
       page_size: 10,
-      ordering: "-created_at",
+      ordering: '-created_at',
     };
 
-    if (actionType && actionType !== "all") {
+    if (actionType && actionType !== 'all') {
       params.action_type = actionType;
     }
 
-    if (resourceType && resourceType !== "all") {
+    if (resourceType && resourceType !== 'all') {
       params.resource_type = resourceType;
     }
 
-    if (actorType && actorType !== "all") {
+    if (actorType && actorType !== 'all') {
       params.actor_type = actorType;
     }
 
@@ -56,12 +56,7 @@ export default function ActivityLogsPage() {
   }, [actionType, resourceType, actorType, searchParam, currentPage]);
 
   // Fetch activity logs
-  const {
-    data: logsData,
-    isLoading,
-    error,
-    refetch,
-  } = useActivityLogs(queryParams);
+  const { data: logsData, isLoading, error, refetch } = useActivityLogs(queryParams);
 
   const logs = useMemo(() => logsData?.results || [], [logsData]);
 
@@ -76,7 +71,7 @@ export default function ActivityLogsPage() {
 
   const handlePageChange = (page) => {
     const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
+    params.set('page', page.toString());
     router.push(`?${params.toString()}`, { scroll: false });
   };
 
@@ -91,13 +86,8 @@ export default function ActivityLogsPage() {
             Monitor all system events and user activities
           </p>
         </div>
-        <Button
-          onClick={handleRefresh}
-          variant="outline"
-          className="gap-2"
-          disabled={isLoading}
-        >
-          <RefreshCw className={`h-4 w-4 ${isLoading ? "animate-spin" : ""}`} />
+        <Button onClick={handleRefresh} variant="outline" className="gap-2" disabled={isLoading}>
+          <RefreshCw className={`h-4 w-4 ${isLoading ? 'animate-spin' : ''}`} />
           Refresh
         </Button>
       </div>
@@ -107,7 +97,7 @@ export default function ActivityLogsPage() {
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
           <AlertDescription>
-            {error.message || "Error loading activity logs"}. Please try again.
+            {error.message || 'Error loading activity logs'}. Please try again.
           </AlertDescription>
         </Alert>
       )}
@@ -123,45 +113,45 @@ export default function ActivityLogsPage() {
           paramName="action_type"
           label="Action"
           options={[
-            { value: "all", label: "All Actions" },
-            { value: "CREATE", label: "Create" },
-            { value: "READ", label: "Read" },
-            { value: "UPDATE", label: "Update" },
-            { value: "DELETE", label: "Delete" },
-            { value: "LOGIN", label: "Login" },
-            { value: "LOGOUT", label: "Logout" },
-            { value: "SUBMIT", label: "Submit" },
-            { value: "REVIEW", label: "Review" },
-            { value: "APPROVE", label: "Approve" },
-            { value: "REJECT", label: "Reject" },
-            { value: "PUBLISH", label: "Publish" },
-            { value: "WITHDRAW", label: "Withdraw" },
+            { value: 'all', label: 'All Actions' },
+            { value: 'CREATE', label: 'Create' },
+            { value: 'READ', label: 'Read' },
+            { value: 'UPDATE', label: 'Update' },
+            { value: 'DELETE', label: 'Delete' },
+            { value: 'LOGIN', label: 'Login' },
+            { value: 'LOGOUT', label: 'Logout' },
+            { value: 'SUBMIT', label: 'Submit' },
+            { value: 'REVIEW', label: 'Review' },
+            { value: 'APPROVE', label: 'Approve' },
+            { value: 'REJECT', label: 'Reject' },
+            { value: 'PUBLISH', label: 'Publish' },
+            { value: 'WITHDRAW', label: 'Withdraw' },
           ]}
         />
         <FilterToolbar.Select
           paramName="resource_type"
           label="Resource"
           options={[
-            { value: "all", label: "All Resources" },
-            { value: "USER", label: "User" },
-            { value: "PROFILE", label: "Profile" },
-            { value: "SUBMISSION", label: "Submission" },
-            { value: "DOCUMENT", label: "Document" },
-            { value: "REVIEW", label: "Review" },
-            { value: "JOURNAL", label: "Journal" },
-            { value: "PLAGIARISM_REPORT", label: "Plagiarism Report" },
-            { value: "FORMAT_CHECK", label: "Format Check" },
+            { value: 'all', label: 'All Resources' },
+            { value: 'USER', label: 'User' },
+            { value: 'PROFILE', label: 'Profile' },
+            { value: 'SUBMISSION', label: 'Submission' },
+            { value: 'DOCUMENT', label: 'Document' },
+            { value: 'REVIEW', label: 'Review' },
+            { value: 'JOURNAL', label: 'Journal' },
+            { value: 'PLAGIARISM_REPORT', label: 'Plagiarism Report' },
+            { value: 'FORMAT_CHECK', label: 'Format Check' },
           ]}
         />
         <FilterToolbar.Select
           paramName="actor_type"
           label="Actor"
           options={[
-            { value: "all", label: "All Actors" },
-            { value: "USER", label: "User" },
-            { value: "SYSTEM", label: "System" },
-            { value: "API", label: "API" },
-            { value: "INTEGRATION", label: "Integration" },
+            { value: 'all', label: 'All Actors' },
+            { value: 'USER', label: 'User' },
+            { value: 'SYSTEM', label: 'System' },
+            { value: 'API', label: 'API' },
+            { value: 'INTEGRATION', label: 'Integration' },
           ]}
         />
       </FilterToolbar>

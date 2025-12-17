@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 /**
  * useCurrentRole Hook
@@ -8,13 +8,13 @@
  * Automatically detects role from URL and persists user's role selection.
  */
 
-import { useState, useMemo } from "react";
-import { usePathname } from "next/navigation";
-import { useSelector } from "react-redux";
-import { useQueryClient } from "@tanstack/react-query";
+import { useState, useMemo } from 'react';
+import { usePathname } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 
-const VALID_ROLES = ["READER", "AUTHOR", "REVIEWER", "EDITOR", "ADMIN"];
-const ROLE_STORAGE_KEY = "currentRole";
+const VALID_ROLES = ['READER', 'AUTHOR', 'REVIEWER', 'EDITOR', 'ADMIN'];
+const ROLE_STORAGE_KEY = 'currentRole';
 
 /**
  * Custom hook to manage current user role
@@ -42,11 +42,11 @@ export function useCurrentRole() {
    * This derived value is the source of truth
    */
   const currentRole = useMemo(() => {
-    const pathSegments = pathname.split("/").filter(Boolean);
+    const pathSegments = pathname.split('/').filter(Boolean);
     const routeRole = pathSegments[0]?.toUpperCase();
 
     if (VALID_ROLES.includes(routeRole) && userRoles.includes(routeRole)) {
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         const savedRole = localStorage.getItem(ROLE_STORAGE_KEY);
         if (savedRole !== routeRole) {
           localStorage.setItem(ROLE_STORAGE_KEY, routeRole);
@@ -56,7 +56,7 @@ export function useCurrentRole() {
     }
 
     // 2. Try to get from localStorage
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       const savedRole = localStorage.getItem(ROLE_STORAGE_KEY);
       if (savedRole && userRoles.includes(savedRole)) {
         return savedRole;
@@ -64,7 +64,7 @@ export function useCurrentRole() {
     }
 
     // 3. Fallback to first user role
-    return userRoles[0] || "READER";
+    return userRoles[0] || 'READER';
   }, [pathname, userRoles]);
 
   const [manualRole, setManualRole] = useState(null);
@@ -83,7 +83,7 @@ export function useCurrentRole() {
       }
 
       setManualRole(newRole);
-      if (typeof window !== "undefined") {
+      if (typeof window !== 'undefined') {
         localStorage.setItem(ROLE_STORAGE_KEY, newRole);
       }
     } else {
@@ -103,7 +103,7 @@ export function useCurrentRole() {
  * Clear stored role (useful for logout)
  */
 export function clearStoredRole() {
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     localStorage.removeItem(ROLE_STORAGE_KEY);
   }
 }

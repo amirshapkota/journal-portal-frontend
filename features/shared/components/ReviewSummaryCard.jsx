@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { DecisionBadge, reviewRecommendationConfig } from "@/features";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Button } from "@/components/ui/button";
-import { Eye } from "lucide-react";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DecisionBadge, reviewRecommendationConfig } from '@/features';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Eye } from 'lucide-react';
 
 /**
  * ReviewSummaryCard Component
@@ -22,7 +22,7 @@ export function ReviewSummaryCard({
   showViewFullReview = false,
   onViewFullReview,
   showConfidentialComments = false,
-  title = "Reviews Summary",
+  title = 'Reviews Summary',
   cardPadding = true,
 }) {
   if (!reviews || reviews.length === 0) {
@@ -32,21 +32,19 @@ export function ReviewSummaryCard({
   const review = reviews[0]; // Always show the first/latest review
 
   return (
-    <Card className={`gap-4 border-none ${cardPadding ? "" : "p-0"}`}>
-      <CardHeader className={`gap-0 ${cardPadding ? "" : "p-0"}`}>
+    <Card className={`gap-4 border-none ${cardPadding ? '' : 'p-0'}`}>
+      <CardHeader className={`gap-0 ${cardPadding ? '' : 'p-0'}`}>
         <CardTitle className="text-lg">{title}</CardTitle>
       </CardHeader>
-      <CardContent className={`${cardPadding ? "" : "p-0"}`}>
+      <CardContent className={`${cardPadding ? '' : 'p-0'}`}>
         <div className="p-4 border rounded-lg space-y-3">
           {/* Review Header */}
           <div className="flex items-start justify-between">
             <div>
               <h4 className="font-semibold">Review 1 (Latest)</h4>
               <p className="text-sm text-muted-foreground">
-                Submitted on{" "}
-                {new Date(
-                  review.submitted_at || review.created_at
-                ).toLocaleDateString()}
+                Submitted on{' '}
+                {new Date(review.submitted_at || review.created_at).toLocaleDateString()}
               </p>
             </div>
             <div className="text-right">
@@ -67,41 +65,27 @@ export function ReviewSummaryCard({
           {review.scores && (
             <>
               <div>
-                <h5 className="text-sm font-semibold mb-2">
-                  Quality Assessment
-                </h5>
+                <h5 className="text-sm font-semibold mb-2">Quality Assessment</h5>
                 <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
                   <div className="text-center p-2 bg-muted/50 rounded">
                     <p className="text-xs text-muted-foreground">Novelty</p>
-                    <p className="text-lg font-semibold">
-                      {review.scores.novelty}/10
-                    </p>
+                    <p className="text-lg font-semibold">{review.scores.novelty}/10</p>
                   </div>
                   <div className="text-center p-2 bg-muted/50 rounded">
                     <p className="text-xs text-muted-foreground">Methodology</p>
-                    <p className="text-lg font-semibold">
-                      {review.scores.methodology}/10
-                    </p>
+                    <p className="text-lg font-semibold">{review.scores.methodology}/10</p>
                   </div>
                   <div className="text-center p-2 bg-muted/50 rounded">
                     <p className="text-xs text-muted-foreground">Clarity</p>
-                    <p className="text-lg font-semibold">
-                      {review.scores.clarity}/10
-                    </p>
+                    <p className="text-lg font-semibold">{review.scores.clarity}/10</p>
                   </div>
                   <div className="text-center p-2 bg-muted/50 rounded">
-                    <p className="text-xs text-muted-foreground">
-                      Significance
-                    </p>
-                    <p className="text-lg font-semibold">
-                      {review.scores.significance}/10
-                    </p>
+                    <p className="text-xs text-muted-foreground">Significance</p>
+                    <p className="text-lg font-semibold">{review.scores.significance}/10</p>
                   </div>
                   <div className="text-center p-2 bg-muted/50 rounded">
                     <p className="text-xs text-muted-foreground">Originality</p>
-                    <p className="text-lg font-semibold">
-                      {review.scores.originality}/10
-                    </p>
+                    <p className="text-lg font-semibold">{review.scores.originality}/10</p>
                   </div>
                 </div>
               </div>
@@ -147,11 +131,7 @@ export function ReviewSummaryCard({
             <>
               <div className="border-t my-2" />
               <div className="flex justify-end">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  onClick={() => onViewFullReview(review.id)}
-                >
+                <Button variant="outline" size="sm" onClick={() => onViewFullReview(review.id)}>
                   <Eye className="h-4 w-4 mr-2" />
                   View Full Review
                 </Button>

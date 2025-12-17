@@ -1,11 +1,11 @@
-"use client";
+'use client';
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Mail, Building2, BookOpen } from "lucide-react";
-import { JournalInfoCard } from "./JournalInfoCard";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Mail, Building2, BookOpen } from 'lucide-react';
+import { JournalInfoCard } from './JournalInfoCard';
 
 export function SubmissionDetailsTab({ submission, isPending }) {
   if (!submission) return null;
@@ -16,10 +16,7 @@ export function SubmissionDetailsTab({ submission, isPending }) {
       {submission.journal && (
         <Card>
           <CardContent>
-            <JournalInfoCard
-              journal={submission.journal}
-              isPending={isPending}
-            />
+            <JournalInfoCard journal={submission.journal} isPending={isPending} />
           </CardContent>
         </Card>
       )}
@@ -39,13 +36,9 @@ export function SubmissionDetailsTab({ submission, isPending }) {
             <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
               <div>
                 <div className="flex items-start gap-2 mb-2">
-                  <h3 className="font-semibold text-sm text-foreground/80">
-                    Title:
-                  </h3>
+                  <h3 className="font-semibold text-sm text-foreground/80">Title:</h3>
                 </div>
-                <p className="text-foreground font-medium pl-6">
-                  {submission.title}
-                </p>
+                <p className="text-foreground font-medium pl-6">{submission.title}</p>
               </div>
               <Separator className="bg-primary/10 lg:hidden" />
               {/* Submission Number */}
@@ -65,9 +58,7 @@ export function SubmissionDetailsTab({ submission, isPending }) {
 
             {/* Abstract */}
             <div>
-              <h3 className="font-semibold mb-3 flex items-center gap-2">
-                Abstract
-              </h3>
+              <h3 className="font-semibold mb-3 flex items-center gap-2">Abstract</h3>
               <ScrollArea className="min-h-[200px] overflow-auto max-h-[500px] w-full rounded-lg border border-border bg-white/50 dark:bg-black/20 p-4">
                 <div
                   dangerouslySetInnerHTML={{ __html: submission.abstract }}
@@ -77,43 +68,32 @@ export function SubmissionDetailsTab({ submission, isPending }) {
             </div>
 
             {/* Keywords */}
-            {submission.metadata_json?.keywords &&
-              submission.metadata_json.keywords.length > 0 && (
-                <>
-                  <Separator className="bg-primary/10" />
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center gap-2">
-                      Keywords
-                    </h3>
-                    <div className="flex flex-wrap gap-2">
-                      {submission.metadata_json.keywords.map(
-                        (keyword, index) => (
-                          <Badge
-                            key={index}
-                            variant="secondary"
-                            className="shadow-sm"
-                          >
-                            {keyword}
-                          </Badge>
-                        )
-                      )}
-                    </div>
+            {submission.metadata_json?.keywords && submission.metadata_json.keywords.length > 0 && (
+              <>
+                <Separator className="bg-primary/10" />
+                <div>
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">Keywords</h3>
+                  <div className="flex flex-wrap gap-2">
+                    {submission.metadata_json.keywords.map((keyword, index) => (
+                      <Badge key={index} variant="secondary" className="shadow-sm">
+                        {keyword}
+                      </Badge>
+                    ))}
                   </div>
-                </>
-              )}
+                </div>
+              </>
+            )}
 
             <Separator className="bg-primary/10" />
 
             {/* Corresponding Author */}
             <div>
-              <h3 className="font-semibold mb-3 flex items-center gap-2">
-                Corresponding Author
-              </h3>
+              <h3 className="font-semibold mb-3 flex items-center gap-2">Corresponding Author</h3>
               <div className="bg-white/50 dark:bg-black/20 rounded-lg p-4 border">
                 <p className="font-semibold text-foreground mb-2">
                   {submission.corresponding_author?.display_name ||
                     submission.corresponding_author?.user_name ||
-                    "N/A"}
+                    'N/A'}
                 </p>
                 {submission.corresponding_author?.user_email && (
                   <p className="text-sm text-muted-foreground flex items-center gap-2 mt-2">
@@ -136,45 +116,44 @@ export function SubmissionDetailsTab({ submission, isPending }) {
             </div>
 
             {/* Co-Authors */}
-            {submission.author_contributions &&
-              submission.author_contributions.length > 0 && (
-                <>
-                  <Separator className="bg-primary/10" />
-                  <div>
-                    <h3 className="font-semibold mb-3 flex items-center gap-2">
-                      Co-Authors
-                      <Badge variant="secondary" className="ml-1">
-                        {submission.author_contributions.length}
-                      </Badge>
-                    </h3>
-                    <div className="space-y-2">
-                      {submission.author_contributions.map((author, index) => (
-                        <div
-                          key={index}
-                          className="p-4 border rounded-lg flex items-center gap-3 bg-white/50 dark:bg-black/20 hover:shadow-md transition-shadow"
-                        >
-                          <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary font-semibold text-sm shrink-0">
-                            {index + 1}
-                          </div>
-                          <div className="flex-1">
-                            <p className="font-medium text-foreground">
-                              {author.profile?.display_name || "Unknown Author"}
-                            </p>
-                            <div className="flex items-center gap-2 mt-1 flex-wrap">
-                              <Badge variant="outline" className="text-xs">
-                                {author.contrib_role_display}
-                              </Badge>
-                              <span className="text-xs text-muted-foreground">
-                                Order: {author.order}
-                              </span>
-                            </div>
+            {submission.author_contributions && submission.author_contributions.length > 0 && (
+              <>
+                <Separator className="bg-primary/10" />
+                <div>
+                  <h3 className="font-semibold mb-3 flex items-center gap-2">
+                    Co-Authors
+                    <Badge variant="secondary" className="ml-1">
+                      {submission.author_contributions.length}
+                    </Badge>
+                  </h3>
+                  <div className="space-y-2">
+                    {submission.author_contributions.map((author, index) => (
+                      <div
+                        key={index}
+                        className="p-4 border rounded-lg flex items-center gap-3 bg-white/50 dark:bg-black/20 hover:shadow-md transition-shadow"
+                      >
+                        <div className="flex items-center justify-center w-8 h-8 rounded-full bg-primary/10 text-primary font-semibold text-sm shrink-0">
+                          {index + 1}
+                        </div>
+                        <div className="flex-1">
+                          <p className="font-medium text-foreground">
+                            {author.profile?.display_name || 'Unknown Author'}
+                          </p>
+                          <div className="flex items-center gap-2 mt-1 flex-wrap">
+                            <Badge variant="outline" className="text-xs">
+                              {author.contrib_role_display}
+                            </Badge>
+                            <span className="text-xs text-muted-foreground">
+                              Order: {author.order}
+                            </span>
                           </div>
                         </div>
-                      ))}
-                    </div>
+                      </div>
+                    ))}
                   </div>
-                </>
-              )}
+                </div>
+              </>
+            )}
           </div>
         </CardContent>
       </Card>

@@ -1,18 +1,18 @@
-import { useMutation } from "@tanstack/react-query";
-import { setupPassword } from "../../api/passwordApi";
-import { toast } from "sonner";
+import { useMutation } from '@tanstack/react-query';
+import { setupPassword } from '../../api/passwordApi';
+import { toast } from 'sonner';
 
 export const useSetupPassword = () => {
   return useMutation({
     mutationFn: setupPassword,
     onSuccess: (data) => {
-      toast.success("Password setup successfully");
+      toast.success('Password setup successfully');
     },
     onError: (error) => {
       const errorMessage =
         error?.response?.data?.message ||
         error?.response?.data?.detail ||
-        "Failed to setup password";
+        'Failed to setup password';
       toast.error(errorMessage);
     },
   });

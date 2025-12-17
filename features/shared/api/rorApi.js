@@ -1,4 +1,4 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 /**
  * Search for institutions using ROR (Research Organization Registry) API
@@ -23,11 +23,11 @@ export const searchRORInstitutions = async (query) => {
  */
 export const getRORInstitutionById = async (rorId) => {
   if (!rorId) {
-    throw new Error("ROR ID is required");
+    throw new Error('ROR ID is required');
   }
 
   // Extract just the ID if full URL is provided
-  const id = rorId.replace("https://ror.org/", "");
+  const id = rorId.replace('https://ror.org/', '');
 
   const response = await instance.get(`/integrations/ror/${id}/`);
   return response.data;

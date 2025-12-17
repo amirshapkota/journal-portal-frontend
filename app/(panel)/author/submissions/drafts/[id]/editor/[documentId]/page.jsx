@@ -1,12 +1,12 @@
-"use client";
+'use client';
 
-import { useParams, useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
-import { Button } from "@/components/ui/button";
-import { Loader2, Download, FileText, Send, ArrowLeft } from "lucide-react";
-import { useSelector } from "react-redux";
-import { useState } from "react";
-import { loadDocument } from "@/features/panel/author/api/superdocApi";
+import { useParams, useRouter } from 'next/navigation';
+import { useQuery } from '@tanstack/react-query';
+import { Button } from '@/components/ui/button';
+import { Loader2, Download, FileText, Send, ArrowLeft } from 'lucide-react';
+import { useSelector } from 'react-redux';
+import { useState } from 'react';
+import { loadDocument } from '@/features/panel/author/api/superdocApi';
 import {
   LoadingScreen,
   SuperDocEditor,
@@ -15,8 +15,8 @@ import {
   useDownloadDocument,
   ErrorCard,
   PDFViewer,
-} from "@/features";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+} from '@/features';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 
 export default function SuperDocEditorPage() {
   const params = useParams();
@@ -32,7 +32,7 @@ export default function SuperDocEditorPage() {
     error: loadError,
     refetch,
   } = useQuery({
-    queryKey: ["superdoc-document", documentId],
+    queryKey: ['superdoc-document', documentId],
     queryFn: () => loadDocument(documentId),
     enabled: !!documentId,
     // 5 minutes
@@ -46,7 +46,7 @@ export default function SuperDocEditorPage() {
   const handleDownload = () => {
     downloadMutation.mutate({
       url: `submissions/documents/${documentId}/download/`,
-      fileName: documentData?.file_name || "document.docx",
+      fileName: documentData?.file_name || 'document.docx',
     });
   };
 
@@ -58,9 +58,7 @@ export default function SuperDocEditorPage() {
     return (
       <ErrorCard
         title="Failed to Load Document"
-        description={
-          loadError?.message || "Unable to load the document. Please try again."
-        }
+        description={loadError?.message || 'Unable to load the document. Please try again.'}
         onRetry={refetch}
         onBack={() => router.push(`/author/submissions/drafts/${submissionId}`)}
       />
@@ -86,12 +84,8 @@ export default function SuperDocEditorPage() {
               <div className="flex items-center gap-2">
                 <FileText className="h-5 w-5" />
                 <div>
-                  <h1 className="font-semibold">
-                    {documentData.title || "Document Editor"}
-                  </h1>
-                  <p className="text-xs text-muted-foreground">
-                    {documentData.file_name}
-                  </p>
+                  <h1 className="font-semibold">{documentData.title || 'Document Editor'}</h1>
+                  <p className="text-xs text-muted-foreground">{documentData.file_name}</p>
                 </div>
               </div>
             </div>
@@ -121,22 +115,21 @@ export default function SuperDocEditorPage() {
             <div className="p-3 border rounded-lg bg-muted/50 mb-4">
               <div className="grid sm:grid-cols-3 gap-2 text-sm">
                 <div>
-                  <span className="font-medium">File:</span>{" "}
-                  {documentData.file_name}
+                  <span className="font-medium">File:</span> {documentData.file_name}
                 </div>
                 <div>
-                  <span className="font-medium">Size:</span>{" "}
+                  <span className="font-medium">Size:</span>{' '}
                   {(documentData.file_size / 1024).toFixed(2)} KB
                 </div>
                 <div>
-                  <span className="font-medium">Last Edited:</span>{" "}
+                  <span className="font-medium">Last Edited:</span>{' '}
                   {new Date(documentData.last_edited_at).toLocaleString()}
                 </div>
               </div>
             </div>
 
             {/* Document Viewer - PDF or SuperDoc */}
-            {documentData.file_name?.toLowerCase().endsWith(".pdf") ? (
+            {documentData.file_name?.toLowerCase().endsWith('.pdf') ? (
               <PDFViewer
                 fileUrl={documentData.file_url}
                 fileName={documentData.file_name}

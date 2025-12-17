@@ -1,8 +1,8 @@
-import { instance } from "@/lib/instance";
+import { instance } from '@/lib/instance';
 
 export const getEmailPreferences = async () => {
   try {
-    const response = await instance.get("notifications/email-preferences/");
+    const response = await instance.get('notifications/email-preferences/');
     return response.data;
   } catch (error) {
     throw error;
@@ -12,7 +12,7 @@ export const getEmailPreferences = async () => {
 export const updateEmailPreferences = async (preferences) => {
   try {
     const response = await instance.post(
-      "notifications/email-preferences/update_preferences/",
+      'notifications/email-preferences/update_preferences/',
       preferences
     );
     return response.data;
@@ -23,9 +23,7 @@ export const updateEmailPreferences = async (preferences) => {
 
 export const enableAllNotifications = async () => {
   try {
-    const response = await instance.post(
-      "notifications/email-preferences/enable_all/"
-    );
+    const response = await instance.post('notifications/email-preferences/enable_all/');
     return response.data;
   } catch (error) {
     throw error;
@@ -34,9 +32,7 @@ export const enableAllNotifications = async () => {
 
 export const disableAllNotifications = async () => {
   try {
-    const response = await instance.post(
-      "notifications/email-preferences/disable_all/"
-    );
+    const response = await instance.post('notifications/email-preferences/disable_all/');
     return response.data;
   } catch (error) {
     throw error;
