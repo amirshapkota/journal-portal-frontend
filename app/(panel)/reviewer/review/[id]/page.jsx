@@ -219,12 +219,18 @@ export default function ReviewDetailPage() {
       {/* Submission Details */}
       {submission && (
         <Tabs defaultValue="details">
-          <TabsList>
-            <TabsTrigger value="details">Submission Details</TabsTrigger>
-            <TabsTrigger value="documents">Documents</TabsTrigger>
+          <TabsList className="flex flex-col sm:flex-row h-full">
+            <TabsTrigger className="w-full" value="details">
+              Submission Details
+            </TabsTrigger>
+            <TabsTrigger className="w-full" value="documents">
+              Documents
+            </TabsTrigger>
             {assignment?.submission_details.status === 'UNDER_REVIEW' ||
             assignment?.submission_details.status === 'REVISED' ? (
-              <TabsTrigger value="review">Submit Review</TabsTrigger>
+              <TabsTrigger className="w-full" value="review">
+                Submit Review
+              </TabsTrigger>
             ) : null}
           </TabsList>
 

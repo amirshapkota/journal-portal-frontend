@@ -82,14 +82,12 @@ export default function AuthorCopyeditingPage() {
           Back to Submission
         </Button>
 
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div>
             <h1 className="text-3xl font-semibold tracking-tight">Copyediting Workflow</h1>
             <p className="text-muted-foreground mt-2">{submission?.title || 'Loading...'}</p>
-            {submission?.submission_id && (
-              <p className="text-sm text-muted-foreground mt-1">
-                Submission ID: {submission.submission_id}
-              </p>
+            {submission?.id && (
+              <p className="text-sm text-muted-foreground mt-1">Submission ID: {submission.id}</p>
             )}
           </div>
 

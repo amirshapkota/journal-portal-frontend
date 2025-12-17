@@ -169,7 +169,7 @@ export default function EditorSubmissionDetailsPage() {
   return (
     <div className=" space-y-6">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-2 sm:gap-0 sm:items-center justify-between">
         <div className="space-y-1">
           <Button
             variant="ghost"

@@ -113,7 +113,7 @@ export default function SuperDocEditorPage() {
           <div className="mt-4">
             {/* Document Info */}
             <div className="p-3 border rounded-lg bg-muted/50 mb-4">
-              <div className="grid sm:grid-cols-3 gap-2 text-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm">
                 <div>
                   <span className="font-medium">File:</span> {documentData.file_name}
                 </div>
