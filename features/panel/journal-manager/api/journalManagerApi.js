@@ -79,9 +79,9 @@ export const addJournalStaff = async ({ journalId, ...staffData }) => {
  * @param {Object} staffData - Staff member data to update
  * @returns {Promise} API response
  */
-export const updateJournalStaff = async ({ journalId, userId, ...staffData }) => {
+export const updateJournalStaff = async ({ journalId, userId, currentRole = '', ...staffData }) => {
   const response = await instance.patch(
-    `journals/journals/${journalId}/staff/${userId}/update/`,
+    `journals/journals/${journalId}/staff/${userId}/update/?current_role=${currentRole}`,
     staffData
   );
   return response.data;

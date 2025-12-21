@@ -11,21 +11,35 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { useRemoveJournalStaff } from '../../hooks';
+import { toast } from 'sonner';
 
 export function DeleteStaffDialog({ open, onOpenChange, staff }) {
   const { mutate: removeStaff, isPending } = useRemoveJournalStaff({
     onSuccess: () => {
+      toast.success('Staff member removed successfully');
       onOpenChange(false);
     },
+    onError: (error) => {
+      toast.error(error.message || 'Failed to remove staff member');
+    },
   });
+
+  console.log('DeleteStaffDialog staff prop:', staff);
 
   const handleConfirmDelete = () => {
     if (!staff) return;
 
     removeStaff({
-      journalId: staff.journal?.id,
-      userId: staff.user?.id,
+      journalId: staff.journal_id,
+      userId: staff.profile_id,
     });
+  };
+
+  const formatRole = (role) => {
+    return role
+      ?.split('_')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
   };
 
   return (
@@ -34,9 +48,12 @@ export function DeleteStaffDialog({ open, onOpenChange, staff }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This will remove <strong>{staff?.user?.name || staff?.user?.email}</strong> from their
-            role as <strong>{staff?.role}</strong> at <strong>{staff?.journal?.name}</strong>. This
-            action cannot be undone.
+            This will remove{' '}
+            <strong>
+              {staff?.first_name} {staff?.last_name}
+            </strong>{' '}
+            from their role as <strong>{formatRole(staff?.role)}</strong> at{' '}
+            <strong>{staff?.journal_title}</strong>. This action cannot be undone.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

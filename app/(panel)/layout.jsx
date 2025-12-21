@@ -23,7 +23,7 @@ export default function PanelLayout({ children }) {
   const menuItems = sidebarConfig[currentRole] || sidebarConfig.READER;
 
   // Allowed roles - user can access if they have any role
-  const allowedRoles = ['READER', 'AUTHOR', 'REVIEWER', 'EDITOR', 'ADMIN'];
+  const allowedRoles = ['READER', 'AUTHOR', 'REVIEWER', 'EDITOR', 'JOURNAL_MANAGER', 'ADMIN'];
 
   return (
     <RoleBasedRoute allowedRoles={allowedRoles}>

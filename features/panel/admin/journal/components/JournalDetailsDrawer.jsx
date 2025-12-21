@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import {
   Drawer,
   DrawerContent,
@@ -9,17 +10,63 @@ import {
 } from '@/components/ui/drawer';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import { ExternalLink } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { ExternalLink, UserPlus, Trash2, X } from 'lucide-react';
+import { useGetJournalManagers, useRemoveJournalManager } from '../hooks';
+import { AssignJournalManagerDialog } from './AssignJournalManagerDialog';
+import { ConfirmationPopup } from '@/features/shared';
 
 export function JournalDetailsDrawer({ journal, isOpen, onClose }) {
+  const [isAssignDialogOpen, setIsAssignDialogOpen] = useState(false);
+  const [isRemoveDialogOpen, setIsRemoveDialogOpen] = useState(false);
+  const [managerToRemove, setManagerToRemove] = useState(null);
+
+  const { data: managersData, isLoading: isLoadingManagers } = useGetJournalManagers(journal?.id, {
+    enabled: !!journal?.id && isOpen,
+  });
+
+  const removeManagerMutation = useRemoveJournalManager({
+    onSuccess: () => {
+      setIsRemoveDialogOpen(false);
+      setManagerToRemove(null);
+    },
+  });
+
+  const handleRemoveManager = (manager) => {
+    setManagerToRemove(manager);
+    setIsRemoveDialogOpen(true);
+  };
+
+  const confirmRemove = () => {
+    if (managerToRemove && journal?.id) {
+      removeManagerMutation.mutate({
+        journalId: journal.id,
+        userId: managerToRemove.user_id,
+      });
+    }
+  };
+
   if (!journal) return null;
+
+  const managers = managersData || [];
 
   return (
     <Drawer open={isOpen} onOpenChange={onClose} direction="right">
-      <DrawerContent className="w-full min-w-2xl max-w-4xl">
+      <DrawerContent className="w-full min-w-full sm:min-w-2xl sm:max-w-4xl ">
         <DrawerHeader>
           <DrawerTitle>{journal?.title || '-'}</DrawerTitle>
           <DrawerDescription>{journal?.publisher || '-'}</DrawerDescription>
+          {/* Close Button */}
+          <Button
+            variant="ghost"
+            size="icon"
+            aria-label="Close"
+            onClick={onClose}
+            className="absolute top-4 right-4 z-10"
+          >
+            <span className="sr-only">Close</span>
+            <X className="h-5 w-5 " />
+          </Button>
         </DrawerHeader>
 
         <div className="space-y-6 px-4 pb-6 overflow-y-auto">
@@ -92,6 +139,49 @@ export function JournalDetailsDrawer({ journal, isOpen, onClose }) {
             </CardContent>
           </Card>
 
+          {/* Journal Managers */}
+          <Card>
+            <CardContent className=" space-y-4">
+              <div className="flex items-center justify-between mb-2">
+                <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                  Journal Managers
+                </p>
+                <Button size="sm" variant="outline" onClick={() => setIsAssignDialogOpen(true)}>
+                  <UserPlus className="h-4 w-4 mr-2" />
+                  Assign Manager
+                </Button>
+              </div>
+
+              {isLoadingManagers ? (
+                <p className="text-sm text-muted-foreground">Loading managers...</p>
+              ) : managers.length === 0 ? (
+                <p className="text-sm text-muted-foreground">No managers assigned</p>
+              ) : (
+                <div className="space-y-2">
+                  {managers.map((manager) => (
+                    <div
+                      key={manager.id}
+                      className="flex items-center justify-between p-2 border rounded-lg hover:bg-accent/50 transition-colors"
+                    >
+                      <div className="flex-1">
+                        <p className="text-sm font-medium">{manager.user_name}</p>
+                        <p className="text-xs text-muted-foreground">{manager.user_email}</p>
+                      </div>
+                      <Button
+                        size="sm"
+                        variant="ghost"
+                        onClick={() => handleRemoveManager(manager)}
+                        className="text-destructive hover:text-destructive hover:bg-destructive/10"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </CardContent>
+          </Card>
+
           {/* Description */}
           <Card>
             <CardContent className=" space-y-4">
@@ -104,6 +194,27 @@ export function JournalDetailsDrawer({ journal, isOpen, onClose }) {
                   dangerouslySetInnerHTML={{
                     __html: journal?.description || '-',
                   }}
+                />
+                {/* Assign Manager Dialog */}
+                <AssignJournalManagerDialog
+                  open={isAssignDialogOpen}
+                  onOpenChange={setIsAssignDialogOpen}
+                  journalId={journal?.id}
+                />
+
+                {/* Remove Manager Confirmation */}
+                <ConfirmationPopup
+                  open={isRemoveDialogOpen}
+                  onOpenChange={setIsRemoveDialogOpen}
+                  title="Remove Journal Manager"
+                  description={`Are you sure you want to remove "${managerToRemove?.user_name}" as a journal manager? They will lose access to manage this journal.`}
+                  confirmText="Remove"
+                  cancelText="Cancel"
+                  variant="danger"
+                  onConfirm={confirmRemove}
+                  isPending={removeManagerMutation.isPending}
+                  isSuccess={removeManagerMutation.isSuccess}
+                  icon={<Trash2 className="h-6 w-6 text-destructive" />}
                 />
               </div>
             </CardContent>

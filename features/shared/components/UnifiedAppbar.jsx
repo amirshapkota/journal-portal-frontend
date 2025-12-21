@@ -22,6 +22,7 @@ const roleRouteMap = {
   READER: '/reader/dashboard',
   AUTHOR: '/author/dashboard',
   REVIEWER: '/reviewer/dashboard',
+  JOURNAL_MANAGER: '/journal_manager/dashboard',
   EDITOR: '/editor/dashboard',
   ADMIN: '/admin/dashboard',
 };
@@ -116,7 +117,11 @@ export function UnifiedAppbar({ userName, roles, userRole, setNewRole }) {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="outline" className="gap-2 bg-transparent">
-                  <span className="capitalize">{currentRole.toLowerCase()}</span>
+                  <span className="capitalize">
+                    {currentRole === 'JOURNAL_MANAGER'
+                      ? 'Journal Manager'
+                      : currentRole.toLowerCase()}
+                  </span>
                   <ChevronDown className="h-4 w-4" />
                 </Button>
               </DropdownMenuTrigger>
@@ -130,7 +135,7 @@ export function UnifiedAppbar({ userName, roles, userRole, setNewRole }) {
                     onClick={() => handleRoleChange(role)}
                     className="capitalize"
                   >
-                    {role.toLowerCase()}
+                    {role === 'JOURNAL_MANAGER' ? 'Journal Manager' : role.toLowerCase()}
                   </DropdownMenuItem>
                 ))}
               </DropdownMenuContent>

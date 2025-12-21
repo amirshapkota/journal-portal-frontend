@@ -7,8 +7,10 @@ export function StaffStatsCards({ staffMembers, isLoading }) {
   const sectionEditors = staffMembers?.filter((s) => s.role === 'SECTION_EDITOR').length || 0;
   const associateEditors = staffMembers?.filter((s) => s.role === 'ASSOCIATE_EDITOR').length || 0;
   const otherRoles =
-    staffMembers?.filter((s) => s.role !== 'SECTION_EDITOR' && s.role !== 'ASSOCIATE_EDITOR')
-      .length || 0;
+    staffMembers?.filter(
+      (s) =>
+        s.role !== 'SECTION_EDITOR' && s.role !== 'ASSOCIATE_EDITOR' && s.role !== 'EDITOR_IN_CHIEF'
+    ).length || 0;
 
   const stats = [
     {
@@ -39,7 +41,7 @@ export function StaffStatsCards({ staffMembers, isLoading }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{isLoading ? '...' : stat.value}</div>
+            <div className="text-2xl font-bold">{isLoading ? '-' : stat.value}</div>
           </CardContent>
         </Card>
       ))}

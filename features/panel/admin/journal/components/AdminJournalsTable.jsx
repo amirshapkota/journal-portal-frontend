@@ -2,7 +2,7 @@
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Eye, Edit2, Trash2, Settings, MoreVertical, ArrowUpDown, FileText } from 'lucide-react';
+import { Eye, Trash2, MoreVertical, UserPlus } from 'lucide-react';
 import { DataTable } from '@/features/shared';
 import {
   DropdownMenu,
@@ -23,6 +23,7 @@ export default function AdminJournalsTable({
   journals = [],
   onViewDrawer,
   onDelete,
+  onAssignManager,
   isPending = false,
   error = null,
   sortColumn,
@@ -101,6 +102,9 @@ export default function AdminJournalsTable({
           <DropdownMenuContent align="end">
             <DropdownMenuItem onClick={() => onViewDrawer(row)} className="gap-2">
               <Eye className="h-4 w-4" /> View Details
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={() => onAssignManager(row)} className="gap-2">
+              <UserPlus className="h-4 w-4" /> Assign Manager
             </DropdownMenuItem>
             <DropdownMenuItem onClick={() => onDelete(row.id)} className="gap-2 text-destructive">
               <Trash2 className="h-4 w-4" /> Delete

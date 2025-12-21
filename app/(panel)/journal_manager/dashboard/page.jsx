@@ -1,6 +1,6 @@
 'use client';
 
-import { LoadingScreen, ErrorCard } from '@/features';
+import { LoadingScreen, ErrorCard, useGetMyAnalytics } from '@/features';
 import {
   DashboardStatsCards,
   QuickActionsGrid,
@@ -10,30 +10,27 @@ import {
 
 export default function JournalManagerDashboard() {
   const {
-    data: journals,
-    isPending: isLoadingJournals,
-    isError,
-    error,
-    refetch,
-  } = useGetJournals();
+    data: analytics,
+    isPending: isAnalyticsPending,
+    error: analyticsError,
+    refetch: refetchAnalytics,
+  } = useGetMyAnalytics();
 
-  if (isError) {
+  if (analyticsError) {
     return (
       <ErrorCard
         title="Failed to load dashboard"
-        description={error?.message || 'Unable to fetch dashboard data'}
-        onRetry={refetch}
+        description={analyticsError?.message || 'Unable to fetch dashboard data'}
+        onRetry={refetchAnalytics}
       />
     );
-  }
-
-  if (isLoadingJournals) {
-    return <LoadingScreen />;
   }
 
   return (
     <div className="space-y-6">
       {/* Header */}
+
+      {isAnalyticsPending && <LoadingScreen />}
       <div className="space-y-2">
         <h1 className="text-3xl font-semibold">Journal Manager Dashboard</h1>
         <p className="text-muted-foreground">
@@ -42,7 +39,10 @@ export default function JournalManagerDashboard() {
       </div>
 
       {/* Stats Grid */}
-      {/* <DashboardStatsCards stats={stats} isLoading={isLoadingJournals} /> */}
+      <DashboardStatsCards
+        stats={analytics?.journal_manager_stats}
+        isLoading={isAnalyticsPending}
+      />
 
       {/* Quick Links */}
       <div className="space-y-4">
