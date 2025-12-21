@@ -2,10 +2,10 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
-export function EditorStatsCards({ journals, isLoading }) {
-  const totalJournals = journals?.length || 0;
-  const withEditor = journals?.filter((j) => j.editor_in_chief_name).length || 0;
-  const needsAssignment = totalJournals - withEditor;
+export function EditorStatsCards({ journalsData, journals, isLoading }) {
+  const totalJournals = journalsData?.count || 0;
+  const withEditor = journals?.filter((j) => j.editor_in_chief).length || 0;
+  const needsAssignment = journals?.filter((j) => !j.editor_in_chief).length || 0;
 
   const stats = [
     {
@@ -35,9 +35,7 @@ export function EditorStatsCards({ journals, isLoading }) {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className={`text-2xl font-bold ${stat.color}`}>
-              {isLoading ? '...' : stat.value}
-            </div>
+            <div className={`text-2xl font-bold ${stat.color}`}>{isLoading ? '-' : stat.value}</div>
           </CardContent>
         </Card>
       ))}

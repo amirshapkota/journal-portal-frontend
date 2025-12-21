@@ -2,14 +2,17 @@
 
 import { useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Trash2 } from 'lucide-react';
+import { Trash2, Plus } from 'lucide-react';
 import {
   AdminJournalsTable,
   JournalDetailsDrawer,
+  AdminJournalFormModal,
+  AssignJournalManagerDialog,
   useGetJournals,
   useDeleteJournal,
 } from '@/features';
 import { FilterToolbar, ConfirmationPopup, Pagination } from '@/features/shared';
+import { Button } from '@/components/ui/button';
 
 export default function JournalsPage() {
   const router = useRouter();
@@ -35,6 +38,9 @@ export default function JournalsPage() {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [journalToDelete, setJournalToDelete] = useState(null);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isAssignManagerDialogOpen, setIsAssignManagerDialogOpen] = useState(false);
+  const [journalForManager, setJournalForManager] = useState(null);
 
   const {
     data: JournalData,
@@ -55,6 +61,11 @@ export default function JournalsPage() {
     setDeleteDialogOpen(true);
   };
 
+  const handleAssignManager = (journal) => {
+    setJournalForManager(journal);
+    setIsAssignManagerDialogOpen(true);
+  };
+
   const confirmDelete = () => {
     if (journalToDelete) {
       deleteJournalMutation.mutate(journalToDelete.id, {
@@ -71,13 +82,17 @@ export default function JournalsPage() {
   return (
     <div className="space-y-5">
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row gap-3 sm:items-center justify-between">
         <div>
           <h1 className="text-3xl font-semibold text-foreground">Journal Management</h1>
           <p className="text-muted-foreground mt-1">
             Manage all academic journals and their submission settings.
           </p>
         </div>
+        <Button onClick={() => setIsCreateModalOpen(true)} className={'w-fit'}>
+          <Plus className="h-4 w-4 mr-2" />
+          Create Journal
+        </Button>
       </div>
 
       {/* Toolbar */}
@@ -117,6 +132,7 @@ export default function JournalsPage() {
           setIsDetailsOpen(true);
         }}
         onDelete={handleDelete}
+        onAssignManager={handleAssignManager}
         isPending={isJournalDataPending}
         error={JournalDataError}
       />
@@ -137,6 +153,19 @@ export default function JournalsPage() {
         journal={selectedJournal}
         isOpen={isDetailsOpen}
         onClose={() => setIsDetailsOpen(false)}
+      />
+
+      {/* Create Journal Modal */}
+      <AdminJournalFormModal
+        isOpen={isCreateModalOpen}
+        onClose={() => setIsCreateModalOpen(false)}
+      />
+
+      {/* Assign Journal Manager Dialog */}
+      <AssignJournalManagerDialog
+        open={isAssignManagerDialogOpen}
+        onOpenChange={setIsAssignManagerDialogOpen}
+        journalId={journalForManager?.id}
       />
 
       {/* Delete Confirmation Popup */}

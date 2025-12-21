@@ -44,6 +44,16 @@ const STAFF_ROLES = [
   { value: 'GUEST_EDITOR', label: 'Guest Editor' },
 ];
 
+const STAFF_ROLES_BADGE = [
+  { value: 'EDITOR_IN_CHIEF', label: 'Editor-in-Chief' },
+  { value: 'MANAGING_EDITOR', label: 'Managing Editor' },
+  { value: 'ASSOCIATE_EDITOR', label: 'Associate Editor' },
+  { value: 'SECTION_EDITOR', label: 'Section Editor' },
+  { value: 'REVIEWER', label: 'Reviewer' },
+  { value: 'GUEST_EDITOR', label: 'Guest Editor' },
+  { value: 'JOURNAL_MANAGER', label: 'Journal Manager' },
+];
+
 const ROLE_COLORS = {
   EDITOR_IN_CHIEF: 'bg-purple-100 text-purple-800 border-purple-200',
   MANAGING_EDITOR: 'bg-blue-100 text-blue-800 border-blue-200',
@@ -51,6 +61,7 @@ const ROLE_COLORS = {
   SECTION_EDITOR: 'bg-yellow-100 text-yellow-800 border-yellow-200',
   REVIEWER: 'bg-gray-100 text-gray-800 border-gray-200',
   GUEST_EDITOR: 'bg-orange-100 text-orange-800 border-orange-200',
+  JOURNAL_MANAGER: 'bg-red-100 text-red-800 border-red-200',
 };
 
 export function StaffSettings({ journalId }) {
@@ -97,13 +108,14 @@ export function StaffSettings({ journalId }) {
   };
 
   const handleRemoveStaff = (staff) => {
-    // open confirmation popup instead of native confirm()
+    // Reset mutation state before opening dialog
+    removeStaffMutation.reset();
     setStaffToDelete(staff);
     setDeleteDialogOpen(true);
   };
 
   const getRoleLabel = (role) => {
-    return STAFF_ROLES.find((r) => r.value === role)?.label || role;
+    return STAFF_ROLES_BADGE.find((r) => r.value === role)?.label || role;
   };
 
   const columns = [
@@ -235,7 +247,10 @@ export function StaffSettings({ journalId }) {
         open={deleteDialogOpen}
         onOpenChange={(open) => {
           setDeleteDialogOpen(open);
-          if (!open) setStaffToDelete(null);
+          if (!open) {
+            setStaffToDelete(null);
+            removeStaffMutation.reset();
+          }
         }}
         title="Remove Staff Member"
         description={

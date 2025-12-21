@@ -13,7 +13,7 @@ import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { useQueryClient } from '@tanstack/react-query';
 
-const VALID_ROLES = ['READER', 'AUTHOR', 'REVIEWER', 'EDITOR', 'ADMIN'];
+const VALID_ROLES = ['READER', 'AUTHOR', 'REVIEWER', 'EDITOR', 'JOURNAL_MANAGER', 'ADMIN'];
 const ROLE_STORAGE_KEY = 'currentRole';
 
 /**

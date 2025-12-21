@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSelector } from 'react-redux';
-import { PenTool, CheckCircle2, ArrowRight, FileText } from 'lucide-react';
+import { PenTool, CheckCircle2, ArrowRight, FileText, BookOpen } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 
@@ -43,6 +43,17 @@ const ROLES = [
     iconBoxColor:
       'bg-emerald-200/50 text-emerald-600 group-hover:bg-emerald-300/50 group-hover:text-emerald-700 dark:bg-emerald-700/50 dark:text-emerald-300 dark:group-hover:bg-emerald-600/50 dark:group-hover:text-emerald-200',
   },
+  {
+    id: 'JOURNAL_MANAGER',
+    title: 'Journal Manager',
+    description: 'Manage journal settings, staff members, and editor-in-chief assignments',
+    icon: BookOpen,
+    color: 'from-purple-500/20 to-purple-600/10 dark:from-purple-500/20 dark:to-purple-600/10',
+    borderColor:
+      'border-purple-400/40 hover:border-purple-500/60 dark:border-purple-500/30 dark:hover:border-purple-400/50',
+    iconBoxColor:
+      'bg-purple-200/50 text-purple-600 group-hover:bg-purple-300/50 group-hover:text-purple-700 dark:bg-purple-700/50 dark:text-purple-300 dark:group-hover:bg-purple-600/50 dark:group-hover:text-purple-200',
+  },
 ];
 
 export default function ChooseRole() {
@@ -69,13 +80,14 @@ export default function ChooseRole() {
 
     // Simulate a brief delay for smooth transition
     await new Promise((resolve) => setTimeout(resolve, 500));
+    if (!roleId) return;
 
     router.push(`/${roleId.toLowerCase()}/dashboard`);
   };
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-slate-100 to-slate-50 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 flex items-center justify-center p-4">
-      <div className="relative z-10 w-full max-w-5xl">
+      <div className="relative z-10 w-full container mx-auto ">
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-4xl pt-12 sm:pt-0 md:text-5xl font-semibold text-slate-900 dark:text-white mb-4 text-balance">

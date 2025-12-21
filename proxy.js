@@ -57,6 +57,7 @@ export function proxy(request) {
         AUTHOR: '/author/dashboard',
         REVIEWER: '/reviewer/dashboard',
         EDITOR: '/editor/dashboard',
+        JOURNAL_MANAGER: '/journal_manager/dashboard',
         ADMIN: '/admin/dashboard',
       };
 
@@ -87,6 +88,7 @@ export const config = {
     '/author/:path*',
     '/reviewer/:path*',
     '/editor/:path*',
+    '/journal_manager/:path*',
     '/admin/:path*',
     '/login',
     '/register',

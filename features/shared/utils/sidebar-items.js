@@ -226,6 +226,62 @@ export const sidebarConfig = {
       ],
     },
   ],
+  JOURNAL_MANAGER: [
+    {
+      name: 'Overview',
+      path: '/journal_manager/dashboard',
+      icon: LayoutDashboard,
+    },
+    {
+      name: 'Journal Settings',
+      path: '/journal_manager/journals',
+      icon: Book,
+    },
+    {
+      name: 'Staff Management',
+      path: '/journal_manager/staff-management',
+      icon: Users,
+      children: [
+        {
+          name: 'Editor-in-Chief',
+          path: '/journal_manager/staff-management/editor-in-chief',
+          icon: UserCheck,
+        },
+        {
+          name: 'Staff Members',
+          path: '/journal_manager/staff-management/staff-members',
+          icon: Users,
+        },
+      ],
+    },
+    {
+      name: 'Settings',
+      path: '/settings',
+      icon: Settings,
+      children: [
+        {
+          name: 'Email Preferences',
+          path: '/settings/email-preferences',
+          icon: Mail,
+        },
+        {
+          name: 'Email Logs',
+          path: '/settings/email-log',
+          icon: FileText,
+        },
+        {
+          name: 'Account',
+          path: '/settings/account',
+          icon: User,
+        },
+        {
+          name: 'Appearance',
+          path: '/settings/appearance',
+          icon: Palette,
+        },
+      ],
+    },
+  ],
   ADMIN: [
     {
       name: 'Overview',

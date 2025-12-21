@@ -195,7 +195,7 @@ export default function MyAssignedJournalsPage() {
             </CardHeader>
             <CardContent>
               <div className="text-2xl font-semibold">
-                {journals.filter((j) => j.is_active).length}
+                {journals.filter((j) => j.is_active).length || 0}
               </div>
               <p className="text-xs text-muted-foreground">Active journal assignments</p>
             </CardContent>
