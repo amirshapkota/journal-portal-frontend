@@ -93,9 +93,45 @@ export default function NewSubmissionForm() {
     defaultValue: '',
   });
 
+  // Watch section_id to get section limits
+  const sectionId = useWatch({
+    control: form.control,
+    name: 'section_id',
+    defaultValue: '',
+  });
+
+  const [sectionLimits, setSectionLimits] = useState(null);
+
   const { data: selectedJournalDetails } = useGetJournalById(journalId, {
     enabled: !!journalId,
   });
+
+  // Fetch section details when section is selected
+  useEffect(() => {
+    const fetchSectionLimits = async () => {
+      if (sectionId) {
+        try {
+          const { getSectionById } = await import('@/features/panel/editor/journal/api/journalsApi');
+          const sectionData = await getSectionById(sectionId);
+          setSectionLimits({
+            abstract_word_limit: sectionData.abstract_word_limit || 0,
+            min_authors: sectionData.min_authors || 1,
+            max_authors: sectionData.max_authors || 0,
+            max_figures: sectionData.max_figures || 0,
+            max_tables: sectionData.max_tables || 0,
+            total_word_limit: sectionData.total_word_limit || 0,
+            author_policies: sectionData.author_policies || '',
+            reviewer_policies: sectionData.reviewer_policies || '',
+          });
+        } catch (error) {
+          console.error('Failed to fetch section limits:', error);
+        }
+      } else {
+        setSectionLimits(null);
+      }
+    };
+    fetchSectionLimits();
+  }, [sectionId]);
 
   const coauthorRoles = useMemo(
     () => selectedJournalDetails?.settings?.coauthor_roles || [],
@@ -213,7 +249,7 @@ export default function NewSubmissionForm() {
               <CardDescription>Provide details about your manuscript</CardDescription>
             </CardHeader>
             <CardContent>
-              <ManuscriptInfoStep form={form} />
+              <ManuscriptInfoStep form={form} sectionLimits={sectionLimits} />
             </CardContent>
           </Card>
 
@@ -229,6 +265,7 @@ export default function NewSubmissionForm() {
                 handleAddCoauthor={handleAddCoauthor}
                 handleRemoveCoauthor={handleRemoveCoauthor}
                 coauthorRoles={coauthorRoles}
+                sectionLimits={sectionLimits}
               />
             </CardContent>
           </Card>

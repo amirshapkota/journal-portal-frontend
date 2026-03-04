@@ -363,7 +363,12 @@ export function TaxonomySettings({ journalId }) {
                       <Badge variant="outline">{section.code}</Badge>
                       <div className="text-left">
                         <p className="font-medium">{section.name}</p>
-                        <p className="text-sm text-muted-foreground">{section.description}</p>
+                        {section.instructions_for_authors && (
+                          <p className="text-sm text-muted-foreground">
+                            {section.instructions_for_authors.substring(0, 100)}
+                            {section.instructions_for_authors.length > 100 ? '...' : ''}
+                          </p>
+                        )}
                       </div>
                     </div>
                   </AccordionTrigger>
@@ -413,9 +418,10 @@ export function TaxonomySettings({ journalId }) {
                                 </Badge>
                                 <div>
                                   <p className="font-medium text-sm">{category.name}</p>
-                                  {category.description && (
+                                  {category.instructions_for_authors && (
                                     <p className="text-xs text-muted-foreground">
-                                      {category.description}
+                                      {category.instructions_for_authors.substring(0, 80)}
+                                      {category.instructions_for_authors.length > 80 ? '...' : ''}
                                     </p>
                                   )}
                                 </div>
@@ -483,7 +489,22 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddSectionOpen(false)}
         title="Add Section"
         onSubmit={handleAddSection}
-        fields={['name', 'code', 'description', 'section_editor', 'is_active']}
+        fields={[
+          'name',
+          'code',
+          'instructions_for_authors',
+          'instructions_for_reviewers',
+          'section_editor',
+          'abstract_word_limit',
+          'min_authors',
+          'max_authors',
+          'max_figures',
+          'max_tables',
+          'total_word_limit',
+          'author_policies',
+          'reviewer_policies',
+          'is_active',
+        ]}
         journalId={journalId}
         taxonomyType="section"
       />
@@ -494,7 +515,13 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddCategoryOpen(false)}
         title="Add Category"
         onSubmit={handleAddCategory}
-        fields={['name', 'code', 'description', 'is_active']}
+        fields={[
+          'name',
+          'code',
+          'instructions_for_authors',
+          'instructions_for_reviewers',
+          'is_active',
+        ]}
         taxonomyType="category"
       />
 
@@ -504,7 +531,14 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddResearchTypeOpen(false)}
         title="Add Research Type"
         onSubmit={handleAddResearchType}
-        fields={['name', 'code', 'description', 'requirements', 'is_active']}
+        fields={[
+          'name',
+          'code',
+          'instructions_for_authors',
+          'instructions_for_reviewers',
+          'requirements',
+          'is_active',
+        ]}
         taxonomyType="researchType"
       />
 
@@ -514,7 +548,14 @@ export function TaxonomySettings({ journalId }) {
         onClose={() => setIsAddAreaOpen(false)}
         title="Add Area"
         onSubmit={handleAddArea}
-        fields={['name', 'code', 'description', 'keywords', 'is_active']}
+        fields={[
+          'name',
+          'code',
+          'instructions_for_authors',
+          'instructions_for_reviewers',
+          'keywords',
+          'is_active',
+        ]}
         taxonomyType="area"
       />
 
@@ -528,7 +569,22 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Section"
           onSubmit={handleEditSection}
-          fields={['name', 'code', 'description', 'section_editor', 'is_active']}
+          fields={[
+            'name',
+            'code',
+            'instructions_for_authors',
+            'instructions_for_reviewers',
+            'section_editor',
+            'abstract_word_limit',
+            'min_authors',
+            'max_authors',
+            'max_figures',
+            'max_tables',
+            'total_word_limit',
+            'author_policies',
+            'reviewer_policies',
+            'is_active',
+          ]}
           initialData={editingSection}
           journalId={journalId}
           taxonomyType="section"
@@ -545,7 +601,13 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Category"
           onSubmit={handleEditCategory}
-          fields={['name', 'code', 'description', 'is_active']}
+          fields={[
+            'name',
+            'code',
+            'instructions_for_authors',
+            'instructions_for_reviewers',
+            'is_active',
+          ]}
           initialData={editingCategory}
           taxonomyType="category"
         />
@@ -561,7 +623,14 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Research Type"
           onSubmit={handleEditResearchType}
-          fields={['name', 'code', 'description', 'requirements', 'is_active']}
+          fields={[
+            'name',
+            'code',
+            'instructions_for_authors',
+            'instructions_for_reviewers',
+            'requirements',
+            'is_active',
+          ]}
           initialData={editingResearchType}
           taxonomyType="researchType"
         />
@@ -577,7 +646,14 @@ export function TaxonomySettings({ journalId }) {
           }}
           title="Edit Area"
           onSubmit={handleEditArea}
-          fields={['name', 'code', 'description', 'keywords', 'is_active']}
+          fields={[
+            'name',
+            'code',
+            'instructions_for_authors',
+            'instructions_for_reviewers',
+            'keywords',
+            'is_active',
+          ]}
           initialData={editingArea}
           taxonomyType="area"
         />
@@ -621,9 +697,10 @@ export function TaxonomySettings({ journalId }) {
                             <Badge variant="secondary">{researchType.code}</Badge>
                             <div className="text-left">
                               <p className="font-medium">{researchType.name}</p>
-                              {researchType.description && (
+                              {researchType.instructions_for_authors && (
                                 <p className="text-sm text-muted-foreground">
-                                  {researchType.description}
+                                  {researchType.instructions_for_authors.substring(0, 80)}
+                                  {researchType.instructions_for_authors.length > 80 ? '...' : ''}
                                 </p>
                               )}
                             </div>
@@ -765,10 +842,20 @@ function TaxonomyFormDialog({
   const [formData, setFormData] = useState({
     name: '',
     code: '',
-    description: '',
+    instructions_for_authors: '',
+    instructions_for_reviewers: '',
     keywords: '',
     is_active: true,
     section_editor: '',
+    // Section-specific limit fields
+    abstract_word_limit: 0,
+    min_authors: 1,
+    max_authors: 0,
+    max_figures: 0,
+    max_tables: 0,
+    total_word_limit: 0,
+    author_policies: '',
+    reviewer_policies: '',
     // Requirements as separate fields instead of JSON
     word_count: '',
     required_sections: '',
@@ -820,10 +907,21 @@ function TaxonomyFormDialog({
             setFormData({
               name: response.name || '',
               code: response.code || '',
-              description: response.description || '',
+              instructions_for_authors: response.instructions_for_authors || '',
+              instructions_for_reviewers: response.instructions_for_reviewers || '',
               keywords: Array.isArray(response.keywords) ? response.keywords.join(', ') : '',
               is_active: response.is_active !== undefined ? response.is_active : true,
               section_editor: sectionEditorValue,
+              // Section-specific limits
+              abstract_word_limit: response.abstract_word_limit || 0,
+              min_authors: response.min_authors || 1,
+              max_authors: response.max_authors || 0,
+              max_figures: response.max_figures || 0,
+              max_tables: response.max_tables || 0,
+              total_word_limit: response.total_word_limit || 0,
+              author_policies: response.author_policies || '',
+              reviewer_policies: response.reviewer_policies || '',
+              // Requirements
               word_count: requirements.word_count || '',
               required_sections: Array.isArray(requirements.required_sections)
                 ? requirements.required_sections.join(', ')
@@ -841,10 +939,19 @@ function TaxonomyFormDialog({
         setFormData({
           name: '',
           code: '',
-          description: '',
+          instructions_for_authors: '',
+          instructions_for_reviewers: '',
           keywords: '',
           is_active: true,
           section_editor: '',
+          abstract_word_limit: 0,
+          min_authors: 1,
+          max_authors: 0,
+          max_figures: 0,
+          max_tables: 0,
+          total_word_limit: 0,
+          author_policies: '',
+          reviewer_policies: '',
           word_count: '',
           required_sections: '',
         });
@@ -852,6 +959,7 @@ function TaxonomyFormDialog({
     };
 
     fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialData?.id, isOpen, taxonomyType]);
 
   const handleSubmit = (e) => {
@@ -898,15 +1006,39 @@ function TaxonomyFormDialog({
       delete data.section_editor;
     }
 
+    // Convert limit fields to integers
+    const limitFields = [
+      'abstract_word_limit',
+      'min_authors',
+      'max_authors',
+      'max_figures',
+      'max_tables',
+      'total_word_limit',
+    ];
+    limitFields.forEach((field) => {
+      if (fields.includes(field) && data[field] !== undefined) {
+        data[field] = parseInt(data[field]) || 0;
+      }
+    });
+
     onSubmit(data);
     if (!initialData) {
       setFormData({
         name: '',
         code: '',
-        description: '',
+        instructions_for_authors: '',
+        instructions_for_reviewers: '',
         keywords: '',
         is_active: true,
         section_editor: '',
+        abstract_word_limit: 0,
+        min_authors: 1,
+        max_authors: 0,
+        max_figures: 0,
+        max_tables: 0,
+        total_word_limit: 0,
+        author_policies: '',
+        reviewer_policies: '',
         word_count: '',
         required_sections: '',
       });
@@ -914,8 +1046,8 @@ function TaxonomyFormDialog({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-h-[90vh] overflow-y-auto">
+    <Dialog open={isOpen} onOpenChange={onClose} className=" ">
+      <DialogContent className="max-h-[90vh] sm:max-w-[60%]! overflow-y-auto">
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
@@ -958,15 +1090,38 @@ function TaxonomyFormDialog({
                 />
               </div>
             )}
-            {fields.includes('description') && (
+            {fields.includes('instructions_for_authors') && (
               <div className="space-y-2">
-                <Label htmlFor="description">Description</Label>
+                <Label htmlFor="instructions_for_authors">Instructions for Authors</Label>
                 <Textarea
-                  id="description"
-                  value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  id="instructions_for_authors"
+                  value={formData.instructions_for_authors}
+                  onChange={(e) =>
+                    setFormData({ ...formData, instructions_for_authors: e.target.value })
+                  }
                   rows={3}
+                  placeholder="Enter guidelines and instructions for authors..."
                 />
+                <p className="text-xs text-muted-foreground">
+                  These instructions will be shown to authors when submitting papers
+                </p>
+              </div>
+            )}
+            {fields.includes('instructions_for_reviewers') && (
+              <div className="space-y-2">
+                <Label htmlFor="instructions_for_reviewers">Instructions for Reviewers</Label>
+                <Textarea
+                  id="instructions_for_reviewers"
+                  value={formData.instructions_for_reviewers}
+                  onChange={(e) =>
+                    setFormData({ ...formData, instructions_for_reviewers: e.target.value })
+                  }
+                  rows={3}
+                  placeholder="Enter guidelines and instructions for reviewers..."
+                />
+                <p className="text-xs text-muted-foreground">
+                  These instructions will be shown to reviewers when evaluating submissions
+                </p>
               </div>
             )}
             {fields.includes('keywords') && (
@@ -1043,6 +1198,158 @@ function TaxonomyFormDialog({
                 </p>
               </div>
             )}
+
+            {/* Manuscript Submission Limits */}
+            {(fields.includes('abstract_word_limit') ||
+              fields.includes('min_authors') ||
+              fields.includes('max_authors') ||
+              fields.includes('max_figures') ||
+              fields.includes('max_tables') ||
+              fields.includes('total_word_limit')) && (
+              <div className="space-y-4 border-t pt-4">
+                <h4 className="font-semibold text-sm">Manuscript Submission Limits</h4>
+                <p className="text-xs text-muted-foreground">
+                  Set limits for submissions in this section. Use 0 for no limit.
+                </p>
+
+                <div className="grid grid-cols-2 gap-4">
+                  {fields.includes('abstract_word_limit') && (
+                    <div className="space-y-2">
+                      <Label htmlFor="abstract_word_limit">Abstract Word Limit</Label>
+                      <Input
+                        id="abstract_word_limit"
+                        type="number"
+                        min="0"
+                        value={formData.abstract_word_limit}
+                        onChange={(e) =>
+                          setFormData({ ...formData, abstract_word_limit: e.target.value })
+                        }
+                        placeholder="0 = no limit"
+                      />
+                    </div>
+                  )}
+
+                  {fields.includes('min_authors') && (
+                    <div className="space-y-2">
+                      <Label htmlFor="min_authors">Minimum Authors</Label>
+                      <Input
+                        id="min_authors"
+                        type="number"
+                        min="1"
+                        value={formData.min_authors}
+                        onChange={(e) => setFormData({ ...formData, min_authors: e.target.value })}
+                        placeholder="1"
+                      />
+                    </div>
+                  )}
+
+                  {fields.includes('max_authors') && (
+                    <div className="space-y-2">
+                      <Label htmlFor="max_authors">Maximum Authors</Label>
+                      <Input
+                        id="max_authors"
+                        type="number"
+                        min="0"
+                        value={formData.max_authors}
+                        onChange={(e) => setFormData({ ...formData, max_authors: e.target.value })}
+                        placeholder="0 = no limit"
+                      />
+                    </div>
+                  )}
+
+                  {fields.includes('max_figures') && (
+                    <div className="space-y-2">
+                      <Label htmlFor="max_figures">Maximum Figures</Label>
+                      <Input
+                        id="max_figures"
+                        type="number"
+                        min="0"
+                        value={formData.max_figures}
+                        onChange={(e) => setFormData({ ...formData, max_figures: e.target.value })}
+                        placeholder="0 = no limit"
+                      />
+                    </div>
+                  )}
+
+                  {fields.includes('max_tables') && (
+                    <div className="space-y-2">
+                      <Label htmlFor="max_tables">Maximum Tables</Label>
+                      <Input
+                        id="max_tables"
+                        type="number"
+                        min="0"
+                        value={formData.max_tables}
+                        onChange={(e) => setFormData({ ...formData, max_tables: e.target.value })}
+                        placeholder="0 = no limit"
+                      />
+                    </div>
+                  )}
+
+                  {fields.includes('total_word_limit') && (
+                    <div className="space-y-2">
+                      <Label htmlFor="total_word_limit">Total Word Limit</Label>
+                      <Input
+                        id="total_word_limit"
+                        type="number"
+                        min="0"
+                        value={formData.total_word_limit}
+                        onChange={(e) =>
+                          setFormData({ ...formData, total_word_limit: e.target.value })
+                        }
+                        placeholder="0 = no limit"
+                      />
+                      <p className="text-xs text-muted-foreground">
+                        Includes abstract, acknowledgements, funding, and conflict of interest
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* Section Policies */}
+            {(fields.includes('author_policies') || fields.includes('reviewer_policies')) && (
+              <div className="space-y-4 border-t pt-4">
+                <h4 className="font-semibold text-sm">Section Policies</h4>
+
+                {fields.includes('author_policies') && (
+                  <div className="space-y-2">
+                    <Label htmlFor="author_policies">Author Policies</Label>
+                    <Textarea
+                      id="author_policies"
+                      value={formData.author_policies}
+                      onChange={(e) =>
+                        setFormData({ ...formData, author_policies: e.target.value })
+                      }
+                      rows={3}
+                      placeholder="Custom policies and rules for authors in this section..."
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Additional policies specific to this section
+                    </p>
+                  </div>
+                )}
+
+                {fields.includes('reviewer_policies') && (
+                  <div className="space-y-2">
+                    <Label htmlFor="reviewer_policies">Reviewer Policies</Label>
+                    <Textarea
+                      id="reviewer_policies"
+                      value={formData.reviewer_policies}
+                      onChange={(e) =>
+                        setFormData({ ...formData, reviewer_policies: e.target.value })
+                      }
+                      rows={3}
+                      placeholder="Custom policies and rules for reviewers in this section..."
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Additional policies specific to this section
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
+
             {fields.includes('order') && (
               <div className="space-y-2">
                 <Label htmlFor="order">Display Order</Label>

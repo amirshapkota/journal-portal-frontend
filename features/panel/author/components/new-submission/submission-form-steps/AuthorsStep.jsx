@@ -1,10 +1,12 @@
 // AuthorsStep.jsx
 import { useMemo, useCallback } from 'react';
 import { Card } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { FormField, FormItem, FormLabel, FormControl, FormMessage } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Trash2, Plus } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Trash2, Plus, AlertCircle, Users } from 'lucide-react';
 import { useWatch } from 'react-hook-form';
 import {
   Select,
@@ -21,12 +23,20 @@ export default function AuthorsStep({
   handleAddCoauthor,
   handleRemoveCoauthor,
   coauthorRoles = [],
+  sectionLimits = null,
 }) {
   const coAuthors = useWatch({
     control: form.control,
     name: 'co_authors',
     defaultValue: [],
   });
+  
+  // Calculate total author count (1 corresponding + co-authors)
+  const totalAuthors = 1 + (coAuthors?.length || 0);
+  
+  // Check if we're at or over the limit
+  const isAtMaxAuthors = sectionLimits && sectionLimits.max_authors > 0 && totalAuthors >= sectionLimits.max_authors;
+  const isBelowMinAuthors = sectionLimits && totalAuthors < sectionLimits.min_authors;
 
   // Helper to handle institution selection and ROR assignment
   const handleInstitutionChange = useCallback(
@@ -57,6 +67,21 @@ export default function AuthorsStep({
 
   return (
     <div className="space-y-6">
+      {sectionLimits && (
+        <Alert variant={isBelowMinAuthors ? 'destructive' : isAtMaxAuthors ? 'default' : 'default'}>
+          <Users className="h-4 w-4" />
+          <AlertDescription className="flex items-center justify-between">
+            <div>
+              <strong>Author Requirements:</strong> Minimum {sectionLimits.min_authors} author(s)
+              {sectionLimits.max_authors > 0 && `, maximum ${sectionLimits.max_authors} author(s)`}
+            </div>
+            <Badge variant={isBelowMinAuthors || isAtMaxAuthors ? 'destructive' : 'secondary'}>
+              {totalAuthors} author(s)
+            </Badge>
+          </AlertDescription>
+        </Alert>
+      )}
+      
       <Card className="p-4 bg-muted/50 border border-border">
         <h3 className="font-semibold text-foreground">Corresponding Author</h3>
         <div className="space-y-4">
@@ -110,8 +135,10 @@ export default function AuthorsStep({
             size="sm"
             onClick={handleAddCoauthor}
             className="gap-2 bg-transparent"
+            disabled={isAtMaxAuthors}
           >
             <Plus className="h-4 w-4" /> Add Co-Author
+            {isAtMaxAuthors && ' (Limit Reached)'}
           </Button>
         </div>
         {coAuthors?.map((_, index) => (

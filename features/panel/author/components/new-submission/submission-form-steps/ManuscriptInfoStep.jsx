@@ -10,12 +10,16 @@ import {
 } from '@/components/ui/form';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
-import { X } from 'lucide-react';
+import { X, AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { FormRichTextEditor } from '@/features/shared';
+import { WordCounter } from '@/components/ui/word-counter';
 
-export default function ManuscriptInfoStep({ form }) {
+export default function ManuscriptInfoStep({ form, sectionLimits = null }) {
   const [keywordInput, setKeywordInput] = useState('');
+  
+  const abstract = form.watch('abstract');
 
   const handleAddKeyword = (field) => {
     const trimmedKeyword = keywordInput.trim();
@@ -38,6 +42,24 @@ export default function ManuscriptInfoStep({ form }) {
 
   return (
     <div className="space-y-4">
+      {sectionLimits && (
+        <Alert>
+          <AlertCircle className="h-4 w-4" />
+          <AlertDescription>
+            <strong>Section Requirements:</strong>
+            {sectionLimits.abstract_word_limit > 0 && (
+              <span> Abstract must not exceed {sectionLimits.abstract_word_limit} words.</span>
+            )}
+            {sectionLimits.max_authors > 0 && (
+              <span> Maximum {sectionLimits.max_authors} authors allowed.</span>
+            )}
+            {sectionLimits.total_word_limit > 0 && (
+              <span> Total word limit: {sectionLimits.total_word_limit} words.</span>
+            )}
+          </AlertDescription>
+        </Alert>
+      )}
+
       <FormField
         control={form.control}
         name="title"
@@ -53,14 +75,23 @@ export default function ManuscriptInfoStep({ form }) {
         )}
       />
 
-      <FormRichTextEditor
-        control={form.control}
-        autoFocus={false}
-        name="abstract"
-        label="Abstract"
-        placeholder="Enter your abstract..."
-        editor_classname="min-h-[400px]!"
-      />
+      <div className="space-y-2">
+        <FormRichTextEditor
+          control={form.control}
+          autoFocus={false}
+          name="abstract"
+          label="Abstract"
+          placeholder="Enter your abstract..."
+          editor_classname="min-h-[400px]!"
+        />
+        {sectionLimits && sectionLimits.abstract_word_limit > 0 && (
+          <WordCounter 
+            text={abstract} 
+            limit={sectionLimits.abstract_word_limit} 
+            showProgress 
+          />
+        )}
+      </div>
 
       <FormField
         control={form.control}
