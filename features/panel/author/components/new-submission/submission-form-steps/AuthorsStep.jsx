@@ -30,12 +30,13 @@ export default function AuthorsStep({
     name: 'co_authors',
     defaultValue: [],
   });
-  
+
   // Calculate total author count (1 corresponding + co-authors)
   const totalAuthors = 1 + (coAuthors?.length || 0);
-  
+
   // Check if we're at or over the limit
-  const isAtMaxAuthors = sectionLimits && sectionLimits.max_authors > 0 && totalAuthors >= sectionLimits.max_authors;
+  const isAtMaxAuthors =
+    sectionLimits && sectionLimits.max_authors > 0 && totalAuthors >= sectionLimits.max_authors;
   const isBelowMinAuthors = sectionLimits && totalAuthors < sectionLimits.min_authors;
 
   // Helper to handle institution selection and ROR assignment
@@ -81,7 +82,7 @@ export default function AuthorsStep({
           </AlertDescription>
         </Alert>
       )}
-      
+
       <Card className="p-4 bg-muted/50 border border-border">
         <h3 className="font-semibold text-foreground">Corresponding Author</h3>
         <div className="space-y-4">

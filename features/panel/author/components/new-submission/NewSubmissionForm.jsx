@@ -111,7 +111,8 @@ export default function NewSubmissionForm() {
     const fetchSectionLimits = async () => {
       if (sectionId) {
         try {
-          const { getSectionById } = await import('@/features/panel/editor/journal/api/journalsApi');
+          const { getSectionById } =
+            await import('@/features/panel/editor/journal/api/journalsApi');
           const sectionData = await getSectionById(sectionId);
           setSectionLimits({
             abstract_word_limit: sectionData.abstract_word_limit || 0,

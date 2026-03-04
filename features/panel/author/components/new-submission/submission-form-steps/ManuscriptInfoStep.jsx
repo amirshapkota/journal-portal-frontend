@@ -18,7 +18,7 @@ import { WordCounter } from '@/components/ui/word-counter';
 
 export default function ManuscriptInfoStep({ form, sectionLimits = null }) {
   const [keywordInput, setKeywordInput] = useState('');
-  
+
   const abstract = form.watch('abstract');
 
   const handleAddKeyword = (field) => {
@@ -85,11 +85,7 @@ export default function ManuscriptInfoStep({ form, sectionLimits = null }) {
           editor_classname="min-h-[400px]!"
         />
         {sectionLimits && sectionLimits.abstract_word_limit > 0 && (
-          <WordCounter 
-            text={abstract} 
-            limit={sectionLimits.abstract_word_limit} 
-            showProgress 
-          />
+          <WordCounter text={abstract} limit={sectionLimits.abstract_word_limit} showProgress />
         )}
       </div>
 
